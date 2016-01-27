@@ -428,17 +428,6 @@
 			</repository> <repository> <id>spring-snapshot</id> <url>http://repo.springsource.org/libs-snapshot</url> </repository> -->
 	</repositories>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>**/*.jsx</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
-
 	<modules>
 		<module>smartas-core</module>
 		<module>smartas-workflow</module>
@@ -448,7 +437,6 @@
 		<module>smartas-demo</module>
 		<module>smartas-web</module>
 		<module>smartas-env</module>
-
 	</modules>
 
 	<profiles>
@@ -460,10 +448,17 @@
 		</profile>
 		<profile>
 			<id>deploy</id>
-			<modules>
-				<module>modules/smartas-core</module>
-				<module>modules/smartas-web</module>
-			</modules>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.jsx</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+
 		</profile>
 	</profiles>
 	<organization>
