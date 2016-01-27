@@ -19,7 +19,13 @@
 		<spring.framework.session.version>1.0.2.RELEASE</spring.framework.session.version>
 		<!-- JVM params for test execution -->
 		<argLine>-Duser.language=en</argLine>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.testSource>1.8</maven.compiler.testSource>
+		<maven.compiler.testTarget>1.8</maven.compiler.testTarget>
 	</properties>
+
+
 
 	<dependencyManagement>
 		<dependencies>
@@ -422,6 +428,17 @@
 			</repository> <repository> <id>spring-snapshot</id> <url>http://repo.springsource.org/libs-snapshot</url> </repository> -->
 	</repositories>
 
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*.jsx</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+
 	<modules>
 		<module>smartas-core</module>
 		<module>smartas-workflow</module>
@@ -431,7 +448,7 @@
 		<module>smartas-demo</module>
 		<module>smartas-web</module>
 		<module>smartas-env</module>
-		
+
 	</modules>
 
 	<profiles>
