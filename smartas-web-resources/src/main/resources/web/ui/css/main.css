@@ -108,9 +108,21 @@
 }
 
 
-
-
-
 .smart-btn > span{
 	cursor: pointer;
+}
+
+
+
+/* antd扩展 */
+
+.ant-radio-group-small label.ant-radio-button {
+    height: 22px;
+    line-height: 20px;
+    padding: 0 12px;
+}
+
+.ant-radio-group-large label.ant-radio-button {
+    height: 32px;
+    line-height: 30px;
 }

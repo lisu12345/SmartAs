@@ -1,26 +1,9 @@
-'use strict';
+"use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
++(function (UI) {
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-exports.default = function (props) {
-  var type = props.type;
-  var _props$className = props.className;
-  var className = _props$className === undefined ? '' : _props$className;
-
-  var other = _objectWithoutProperties(props, ['type', 'className']);
-
-  className += ' anticon anticon-' + type;
-  return _react2.default.createElement('i', _extends({ className: className }, other));
-};
+	UI.Icon = function (props) {
+		var className = classNames(props.className, " anticon anticon-" + props.type);
+		return React.createElement("i", _.assign({}, props, { className: className }));
+	};
+})(Smart.UI);

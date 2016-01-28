@@ -1,7 +1,7 @@
 'use strict';
 
 +(function (Namespace) {
-	var UI = Namespace.register("Smart.UI"),
+	var UI = Namespace.register("Smart.LigerUI"),
 	    AT = Smart.UI.ActionTypes;
 	UI.Radio = React.createClass({
 		displayName: 'Radio',

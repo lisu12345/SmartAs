@@ -1,7 +1,8 @@
-import React from 'react';
++ function(UI) {
 
-export default props => {
-  let { type, className = '', ...other } = props;
-  className += ` anticon anticon-${type}`;
-  return <i className={className} {...other} />;
-};
+	UI.Icon = props => {
+		const className = classNames(props.className, ` anticon anticon-${props.type}`);
+		return <i {..._.assign({}, props, {className})}/>;
+	};
+
+}(Smart.UI);

@@ -1,5 +1,5 @@
 + function(Namespace) {
-	var UI = Namespace.register("Smart.UI");
+	var UI = Namespace.register("Smart.LigerUI");
 	UI.Checkbox = React.createClass({
 		propTypes: {
 			name: React.PropTypes.string,

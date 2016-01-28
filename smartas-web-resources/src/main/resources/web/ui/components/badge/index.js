@@ -107,7 +107,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var position = this.getPositionByNum(num, i);
 				var height = this.props.height;
 				var removeTransition = this.state.animateStarted || getNumberArray(this.lastCount)[i] === undefined;
-				return createElement('span', {
+				return React.createElement('span', {
 					className: this.props.prefixCls + '-only',
 					style: {
 						transition: removeTransition && 'none',
@@ -138,9 +138,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 				var isBrowser = typeof document !== 'undefined' && typeof window !== 'undefined';
 				if (isBrowser && isCssAnimationSupported) {
-					return createElement(this.props.component, props, this.renderNumberElement());
+					return React.createElement(this.props.component, props, this.renderNumberElement());
 				} else {
-					return createElement(this.props.component, props, props.count);
+					return React.createElement(this.props.component, props, props.count);
 				}
 			}
 		}]);

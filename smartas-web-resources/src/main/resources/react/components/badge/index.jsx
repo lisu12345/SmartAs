@@ -76,7 +76,7 @@
 			const height = this.props.height;
 			const removeTransition = this.state.animateStarted ||
 				(getNumberArray(this.lastCount)[i] === undefined);
-			return createElement('span', {
+			return React.createElement('span', {
 				className: `${this.props.prefixCls}-only`,
 				style: {
 					transition: removeTransition && 'none',
@@ -102,13 +102,13 @@
 			});
 			const isBrowser = (typeof document !== 'undefined' && typeof window !== 'undefined');
 			if (isBrowser && isCssAnimationSupported) {
-				return createElement(
+				return React.createElement(
 					this.props.component,
 					props,
 					this.renderNumberElement()
 				);
 			} else {
-				return createElement(
+				return React.createElement(
 					this.props.component,
 					props,
 					props.count
