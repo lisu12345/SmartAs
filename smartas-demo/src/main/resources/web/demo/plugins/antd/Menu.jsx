@@ -3,13 +3,27 @@
 ]]*/
 install("web.demo.plugins.antd.Switch",function($S){
 	var pkg = this,U = Smart.UI;
-	const Menu = U.Menu,Icon = U.Icon,Button=U.Button;
+	const {Menu , Icon ,Button,Dropdown} = U;
 	const SubMenu = Menu.SubMenu;
 	const MenuItemGroup = Menu.ItemGroup;
+	const DropdownButton = Dropdown.Button;
 	function onChange(checkedValues) {
 		  console.log('checked = ', checkedValues);
 	}
 
+	const menu = (
+			  <Menu>
+			    <Menu.Item>
+			      <a target="_blank" href="#!">第一个菜单项</a>
+			    </Menu.Item>
+			    <Menu.Item>
+			      <a target="_blank" href="#!">第二个菜单项</a>
+			    </Menu.Item>
+			    <Menu.Item>
+			      <a target="_blank" href="#!">第三个菜单项</a>
+			    </Menu.Item>
+			  </Menu>
+			);
 	const Sider = React.createClass({
 	  getInitialState() {
 	    return {
@@ -91,6 +105,10 @@ install("web.demo.plugins.antd.Switch",function($S){
 					    </div><br/><br/>
 						<Sider/>
 						
+						<DropdownButton overlay={menu} type="primary">
+					    	某功能按钮
+					    </DropdownButton>
+						
 						<div className="code-box-meta markdown">
 				    	<p>子菜单是弹出的形式。</p>
 				    	</div><br/><br/>
@@ -120,7 +138,8 @@ install("web.demo.plugins.antd.Switch",function($S){
 					      <Menu.Item key="12">选项12</Menu.Item>
 					    </SubMenu>
 					  </Menu>
-  						</div>
+					  
+  					</div>
 			}
 		}
 	);

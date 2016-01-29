@@ -945,4 +945,6 @@ AntSelect.Option = Option;
 AntSelect.OptGroup = OptGroup;
 
 UI.Select = AntSelect;
+UI.Option = Option;
+UI.OptGroup = OptGroup;
 }(Smart.UI)

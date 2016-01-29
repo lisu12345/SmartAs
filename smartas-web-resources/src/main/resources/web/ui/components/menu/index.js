@@ -1253,4 +1253,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   AntMenu.SubMenu = SubMenu;
   AntMenu.ItemGroup = MenuItemGroup;
   UI.Menu = AntMenu;
+  UI.MenuItem = MenuItem;
+  UI.SubMenu = SubMenu;
+  UI.MenuItemGroup = MenuItemGroup;
 })(Smart.UI);

@@ -1277,4 +1277,7 @@
   AntMenu.SubMenu = SubMenu;
   AntMenu.ItemGroup = MenuItemGroup;
   UI.Menu = AntMenu;
+  UI.MenuItem = MenuItem;
+  UI.SubMenu = SubMenu;
+  UI.MenuItemGroup = MenuItemGroup;
 }(Smart.UI)

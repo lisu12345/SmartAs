@@ -3,6 +3,7 @@
 ]]*/
 install("web.demo.plugins.antd",function($S){
 	var logger = Log.getLogger('web.demo.plugins.antd'),pkg = this,U = Smart.UI;
+	const {Badge, Breadcrumb,Affix,Row,Col,Radio,Button,Alert} = U; 
 	var Node = React.createClass({
 		  getInitialState() {
 		    return {
@@ -17,38 +18,45 @@ install("web.demo.plugins.antd",function($S){
 			render: function() {
 				var linkState = _.bind(Smart.Store.linkState,this);
 				return <div>
-						<U.Badge count={5}>
+						<Badge count={5}>
 				  			<a href="#" className="head-example"></a>
-					  	</U.Badge>
+					  	</Badge>
 					  	<br/><br/>
-					  	<U.Breadcrumb>
-						    <U.Breadcrumb.Item>首页</U.Breadcrumb.Item>
-						    <U.Breadcrumb.Item href="">应用中心</U.Breadcrumb.Item>
-						    <U.Breadcrumb.Item href="">应用列表</U.Breadcrumb.Item>
-						    <U.Breadcrumb.Item>某应用</U.Breadcrumb.Item>
-					    </U.Breadcrumb>
+					  	<Breadcrumb>
+						    <Breadcrumb.Item>首页</Breadcrumb.Item>
+						    <Breadcrumb.Item href="">应用中心</Breadcrumb.Item>
+						    <Breadcrumb.Item href="">应用列表</Breadcrumb.Item>
+						    <Breadcrumb.Item>某应用</Breadcrumb.Item>
+					    </Breadcrumb>
 						<div className="panel panel-default" style={{marginTop : '5px'}}>
   						<div className="panel-body" style={{padding:0,borderWidth:0,borderRightWidth:'1px',overflow:'auto',height:'380px'}}>
-							<U.Affix offset={75}>
-						    	<U.Button type="primary">固定在距离顶部 75px 的位置</U.Button>
-						    </U.Affix>
-	  						<U.Alert message="成功提示的文案" type="success" showIcon={true} closable={true}></U.Alert>
-	  						<U.Alert message="成功提示的文案" type="info" closeText="OK"></U.Alert>
-	  						<U.Alert message="成功提示的文案" type="warn"></U.Alert>
-	  						<U.Alert message="成功提示的文案" type="error"></U.Alert>
+							<Affix offset={75}>
+						    	<Button type="primary">固定在距离顶部 75px 的位置</Button>
+						    </Affix>
+	  						<Alert message="成功提示的文案" type="success" showIcon={true} closable={true}></Alert>
+	  						<Alert message="成功提示的文案" type="info" closeText="OK"></Alert>
+	  						<Alert message="成功提示的文案" type="warn"></Alert>
+	  						<Alert message="成功提示的文案" type="error"></Alert>
 	  						<br/>
-	  						<U.Radio>Radio</U.Radio>
+	  						<Radio>Radio</Radio>
 	  						
 	  						<div>
-		  				        <U.Radio defaultChecked={false} disabled={this.state.disabled}>不可用</U.Radio>
+		  				        <Radio defaultChecked={false} disabled={this.state.disabled}>不可用</Radio>
 		  				        <br />
-		  				        <U.Radio defaultChecked disabled={this.state.disabled}>不可用</U.Radio>
+		  				        <Radio defaultChecked disabled={this.state.disabled}>不可用</Radio>
 		  				        <div style={{ marginTop: 20 }}>
-		  				          <U.Button type="primary" onClick={this.toggleDisabled}>
+		  				          <Button type="primary" onClick={this.toggleDisabled}>
 		  				            Toggle disabled
-		  				          </U.Button>
+		  				          </Button>
 		  				        </div>
 	  				        </div>
+	  				        
+	  				      <Row type="flex">
+		  				      <Col span="6" order="4">1 col-order-4</Col>
+		  				      <Col span="6" order="3">2 col-order-3</Col>
+		  				      <Col span="6" order="2">3 col-order-2</Col>
+		  				      <Col span="6" order="1">4 col-order-1</Col>
+		  				    </Row>
   						</div>
 					</div>
 					</div>

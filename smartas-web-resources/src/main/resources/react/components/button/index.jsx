@@ -96,6 +96,7 @@
 	ButtonGroup.propTypes = {
 	  size: React.PropTypes.string,
 	};
-	UI.Button = Button;
 	Button.Group = ButtonGroup;
+	UI.Button = Button;
+	UI.ButtonGroup = ButtonGroup;
 }(Smart.UI);

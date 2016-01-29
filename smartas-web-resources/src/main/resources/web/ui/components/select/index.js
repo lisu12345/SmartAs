@@ -1010,4 +1010,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
   AntSelect.OptGroup = OptGroup;
 
   UI.Select = AntSelect;
+  UI.Option = Option;
+  UI.OptGroup = OptGroup;
 })(Smart.UI);
