@@ -213,4 +213,5 @@
 	Form.Form = Form;
 	Form.Input = UI.Input;
 	UI.Form = Form;
+	UI.FormItem = FormItem;
 }(Smart.UI)

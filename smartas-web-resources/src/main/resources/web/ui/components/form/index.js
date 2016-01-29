@@ -264,4 +264,5 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	Form.Form = Form;
 	Form.Input = UI.Input;
 	UI.Form = Form;
+	UI.FormItem = FormItem;
 })(Smart.UI);
