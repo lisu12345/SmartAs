@@ -8,7 +8,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var Icon = UI.Icon;
   var Animate = UI.Animate;
 
-  var util = RC.util,
+  var util = RC.Util,
       createChainedFunction = util.createChainedFunction,
       guid = util.guid;
 

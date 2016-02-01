@@ -4,7 +4,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
 +(function (RC) {
   var util = {};
-  RC.util = util;
+  RC.Util = util;
   /**
    * @ignore
    * some key-codes definition and utils from closure-library

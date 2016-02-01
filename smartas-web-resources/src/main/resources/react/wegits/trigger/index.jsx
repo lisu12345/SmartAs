@@ -1,14 +1,10 @@
 + function(UI,RC) {
 
-const noop = _.noop,
-    rcUtil = RC.util,
-    Dom = rcUtil.Dom,
-    Align = RC.Align,
-    createChainedFunction = rcUtil.createChainedFunction,
-    PropTypes = React.PropTypes,
+const PropTypes = React.PropTypes,
     findDOMNode = ReactDOM.findDOMNode,
-    assign = _.assign,
-    Animate = UI.Animate;
+    {noop,assign} = _,
+    {Util,Align,Animate} = RC,
+    {Dom,createChainedFunction} = Util;
 
 	function isPointsEq(a1, a2) {
 		return a1[0] === a2[0] && a1[1] === a2[1];

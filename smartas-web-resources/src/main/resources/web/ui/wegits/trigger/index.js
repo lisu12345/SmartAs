@@ -5,16 +5,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 +(function (UI, RC) {
-
-  var noop = _.noop,
-      rcUtil = RC.util,
-      Dom = rcUtil.Dom,
-      Align = RC.Align,
-      createChainedFunction = rcUtil.createChainedFunction,
-      PropTypes = React.PropTypes,
-      findDOMNode = ReactDOM.findDOMNode,
-      assign = _.assign,
-      Animate = UI.Animate;
+  var PropTypes = React.PropTypes;
+  var findDOMNode = ReactDOM.findDOMNode;
+  var _ref = _;
+  var noop = _ref.noop;
+  var assign = _ref.assign;
+  var Util = RC.Util;
+  var Align = RC.Align;
+  var Animate = RC.Animate;
+  var Dom = Util.Dom;
+  var createChainedFunction = Util.createChainedFunction;
 
   function isPointsEq(a1, a2) {
     return a1[0] === a2[0] && a1[1] === a2[1];

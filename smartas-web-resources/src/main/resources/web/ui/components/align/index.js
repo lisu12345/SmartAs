@@ -3,7 +3,7 @@
 // export this package's api
 +(function (RC) {
 	var noop = _.noop,
-	    rcUtil = RC.util,
+	    rcUtil = RC.Util,
 	    Dom = rcUtil.Dom,
 	    align = Dom.align,
 	    PropTypes = React.PropTypes,

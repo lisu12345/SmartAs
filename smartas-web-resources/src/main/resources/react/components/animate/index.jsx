@@ -1,4 +1,4 @@
-+ function(UI) {
++ function(RC) {
 
 	const Css = {
 		addClass(elem, className) {
@@ -242,7 +242,7 @@
 	cssAnimation.addClass = Css.addClass;
 	cssAnimation.removeClass = Css.removeClass;
 	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
-	UI.cssAnimation = cssAnimation;
+	RC.cssAnimation = cssAnimation;
 
 
 
@@ -728,11 +728,11 @@
 				return <Component {...this.props
 				} > {
 					children
-				} < /Component>;
+				} </Component>;
 			}
 			return children[0] || null;
 		},
 	});
 
-	UI.Animate = Animate;
-}(Smart.UI);
+	RC.Animate = Animate;
+}(Smart.RC);

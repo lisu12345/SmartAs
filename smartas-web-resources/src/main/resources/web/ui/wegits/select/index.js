@@ -14,7 +14,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI, RC) {
   var noop = _.noop,
-      rcUtil = RC.util,
+      rcUtil = RC.Util,
       isWindow = rcUtil.isWindow,
       PropTypes = React.PropTypes,
       cloneElement = React.cloneElement,

@@ -8,7 +8,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 +(function (UI, RC) {
   var noop = _.noop,
-      rcUtil = RC.util,
+      rcUtil = RC.Util,
       guid = rcUtil.guid,
       createChainedFunction = rcUtil.createChainedFunction,
       KeyCode = rcUtil.KeyCode,
