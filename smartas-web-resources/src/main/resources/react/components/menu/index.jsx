@@ -4,6 +4,7 @@
     PropTypes = React.PropTypes,
     assign = _.assign,
     animation = UI.Animation,
+    DOMWrap = UI.DOMWrap,
     Animate = UI.Animate,
     guid = rcUtil.guid,
     createChainedFunction = rcUtil.createChainedFunction,
@@ -320,29 +321,6 @@
       }
     },
   };
-
-  const DOMWrap = React.createClass({
-    propTypes: {
-      tag: React.PropTypes.string,
-    },
-
-    getDefaultProps() {
-      return {
-        tag: 'div',
-      };
-    },
-
-    render() {
-      const props = assign({}, this.props);
-      if (!props.visible) {
-        props.className = props.className || '';
-        props.className += ' ' + props.hiddenClassName;
-      }
-      const Tag = props.tag;
-      return <Tag {...props}></Tag>;
-    },
-  });
-
 
   const Menu = React.createClass({
     propTypes: {

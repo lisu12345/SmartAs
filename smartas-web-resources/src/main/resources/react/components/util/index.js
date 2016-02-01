@@ -982,7 +982,7 @@
   var utils = {
     getWindow: function(node) {
       var doc = node.ownerDocument || node;
-      return doc.defaultView || doc.parentWindow;
+      return doc.defaultView || doc.parentWindow || node;
     },
     offset: function(el, value) {
       if (typeof value !== 'undefined') {

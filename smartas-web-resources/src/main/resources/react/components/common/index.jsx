@@ -1,0 +1,25 @@
++ function(UI) {
+	const assign = _.assign;
+	const DOMWrap = React.createClass({
+		propTypes: {
+			tag: React.PropTypes.string,
+		},
+
+		getDefaultProps() {
+			return {
+				tag: 'div',
+			};
+		},
+
+		render() {
+			const props = assign({}, this.props);
+			if (!props.visible) {
+				props.className = props.className || '';
+				props.className += ' ' + props.hiddenClassName;
+			}
+			const Tag = props.tag;
+			return <Tag {...props}></Tag>;
+		},
+	});
+	UI.DOMWrap = DOMWrap;
+}(Smart.UI)

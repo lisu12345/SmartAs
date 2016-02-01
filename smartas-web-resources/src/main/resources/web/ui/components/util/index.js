@@ -975,7 +975,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var utils = {
     getWindow: function getWindow(node) {
       var doc = node.ownerDocument || node;
-      return doc.defaultView || doc.parentWindow;
+      return doc.defaultView || doc.parentWindow || node;
     },
     offset: function offset(el, value) {
       if (typeof value !== 'undefined') {
