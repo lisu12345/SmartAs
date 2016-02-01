@@ -1,9 +1,9 @@
 + function(Namespace) {
-	var RC = Namespace.register("Smart.RC");
-	const assign = _.assign;
-	
-	
+	var UI = Namespace.register("Smart.UI");
+
+
 	let velocity = $.Velocity;
+
 	function animate(node, show, transitionName, done) {
 		let ok;
 
@@ -41,29 +41,6 @@
 			},
 	};
 
-	RC.Animation = animation;
-
-	const DOMWrap = React.createClass({
-		propTypes: {
-			tag: React.PropTypes.string,
-		},
-
-		getDefaultProps() {
-			return {
-				tag: 'div',
-			};
-		},
-
-		render() {
-			const props = assign({}, this.props);
-			if (!props.visible) {
-				props.className = props.className || '';
-				props.className += ' ' + props.hiddenClassName;
-			}
-			const Tag = props.tag;
-			return <Tag {...props}></Tag>;
-		},
-	});
-	RC.DOMWrap = DOMWrap;
+	UI.Animation = animation;
 
 }(Smart.Namespace)

@@ -2,9 +2,9 @@
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-+(function (UI) {
++(function (RC) {
   var util = {};
-  UI.util = util;
+  RC.util = util;
   /**
    * @ignore
    * some key-codes definition and utils from closure-library
@@ -1561,4 +1561,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   domAlign.__getVisibleRectForElement = getVisibleRectForElement;
 
   util.Dom.align = domAlign;
-})(Smart.UI);
+})(Smart.RC);

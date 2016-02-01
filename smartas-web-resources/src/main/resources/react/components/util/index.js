@@ -1,6 +1,6 @@
-+ function(UI) {
++ function(RC) {
   const util = {};
-  UI.util = util;
+  RC.util = util;
   /**
    * @ignore
    * some key-codes definition and utils from closure-library
@@ -1598,4 +1598,4 @@
 
   util.Dom.align = domAlign;
 
-}(Smart.UI)
+}(Smart.RC)

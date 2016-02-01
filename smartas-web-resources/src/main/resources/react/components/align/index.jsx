@@ -1,7 +1,7 @@
 // export this package's api
-+ function(UI) {
++ function(RC) {
 	const noop = _.noop,
-		rcUtil = UI.util,
+		rcUtil = RC.util,
 		Dom = rcUtil.Dom,
 		align = Dom.align,
 		PropTypes = React.PropTypes,
@@ -128,5 +128,5 @@
 			return child;
 		},
 	});
-	UI.Align = Align
-}(Smart.UI);
+	RC.Align = Align
+}(Smart.RC);

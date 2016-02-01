@@ -1,9 +1,9 @@
 'use strict';
 
 // export this package's api
-+(function (RC) {
++(function (UI) {
 	var noop = _.noop,
-	    rcUtil = RC.util,
+	    rcUtil = UI.util,
 	    Dom = rcUtil.Dom,
 	    align = Dom.align,
 	    PropTypes = React.PropTypes,
@@ -126,5 +126,5 @@
 			return child;
 		}
 	});
-	RC.Align = Align;
-})(Smart.RC);
+	UI.Align = Align;
+})(Smart.UI);

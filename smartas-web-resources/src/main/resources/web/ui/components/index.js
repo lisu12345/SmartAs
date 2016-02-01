@@ -1,10 +1,10 @@
 'use strict';
 
 +(function (Namespace) {
-	var UI = Namespace.register("Smart.UI");
+	var RC = Namespace.register("Smart.RC");
+	var assign = _.assign;
 
 	var velocity = $.Velocity;
-
 	function animate(node, show, transitionName, done) {
 		var ok = undefined;
 
@@ -42,5 +42,29 @@
 		}
 	};
 
-	UI.Animation = animation;
+	RC.Animation = animation;
+
+	var DOMWrap = React.createClass({
+		displayName: 'DOMWrap',
+
+		propTypes: {
+			tag: React.PropTypes.string
+		},
+
+		getDefaultProps: function getDefaultProps() {
+			return {
+				tag: 'div'
+			};
+		},
+		render: function render() {
+			var props = assign({}, this.props);
+			if (!props.visible) {
+				props.className = props.className || '';
+				props.className += ' ' + props.hiddenClassName;
+			}
+			var Tag = props.tag;
+			return React.createElement(Tag, props);
+		}
+	});
+	RC.DOMWrap = DOMWrap;
 })(Smart.Namespace);
