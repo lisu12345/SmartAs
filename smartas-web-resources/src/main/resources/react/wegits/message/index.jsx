@@ -2,7 +2,7 @@
   const {
     Icon, Animate
   } = UI;
- const util = RC.util,
+ const util = RC.Util,
     createChainedFunction = util.createChainedFunction,
     guid = util.guid;
 

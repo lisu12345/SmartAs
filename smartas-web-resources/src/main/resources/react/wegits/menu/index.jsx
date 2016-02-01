@@ -1,6 +1,6 @@
 + function(UI,RC) {
   const noop = _.noop,
-    rcUtil = RC.util,
+    rcUtil = RC.Util,
     guid = rcUtil.guid,
     createChainedFunction = rcUtil.createChainedFunction,
     KeyCode = rcUtil.KeyCode,

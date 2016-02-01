@@ -1,6 +1,6 @@
 + function(UI,RC) {
   const noop = _.noop,
-    rcUtil = RC.util,
+    rcUtil = RC.Util,
     isWindow = rcUtil.isWindow,
     PropTypes = React.PropTypes,
     cloneElement = React.cloneElement,

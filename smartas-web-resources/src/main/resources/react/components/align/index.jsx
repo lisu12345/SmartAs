@@ -1,7 +1,7 @@
 // export this package's api
 + function(RC) {
 	const noop = _.noop,
-		rcUtil = RC.util,
+		rcUtil = RC.Util,
 		Dom = rcUtil.Dom,
 		align = Dom.align,
 		PropTypes = React.PropTypes,

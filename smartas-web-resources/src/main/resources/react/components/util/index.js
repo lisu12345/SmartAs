@@ -1,6 +1,6 @@
 + function(RC) {
   const util = {};
-  RC.util = util;
+  RC.Util = util;
   /**
    * @ignore
    * some key-codes definition and utils from closure-library
