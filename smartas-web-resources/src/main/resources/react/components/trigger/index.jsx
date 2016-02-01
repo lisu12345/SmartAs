@@ -1,6 +1,5 @@
-+ function(UI,RC) {
-
-const PropTypes = React.PropTypes,
++ function(RC) {
+	const PropTypes = React.PropTypes,
     findDOMNode = ReactDOM.findDOMNode,
     {noop,assign} = _,
     {Util,Align,Animate} = RC,
@@ -466,5 +465,5 @@ const Trigger = React.createClass({
   },
 });
 
-UI.Trigger = Trigger;
-}(Smart.UI,Smart.RC)
+RC.Trigger = Trigger;
+}(Smart.RC)

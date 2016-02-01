@@ -1,5 +1,5 @@
-+function(UI){
-	let Animate = UI.Animate;
++function(UI,RC){
+	let Animate = RC.Animate;
 	let Icon = UI.Icon;
 	UI.Alert = React.createClass({
 		  getDefaultProps() {
@@ -92,6 +92,6 @@
 		    );
 		  }
 		});
-}(Smart.UI);
+}(Smart.UI,Smart.RC);
 
 

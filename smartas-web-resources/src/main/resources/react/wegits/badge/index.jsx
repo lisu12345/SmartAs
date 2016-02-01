@@ -1,5 +1,5 @@
-+ function(UI) {
-	let Animate = UI.Animate;
++ function(UI,RC) {
+	let Animate = RC.Animate;
 	let assign = _.assign;
 	let isCssAnimationSupported = Animate.isCssAnimationSupported;
 
@@ -195,4 +195,4 @@
 		overflowCount: React.PropTypes.number,
 	};
 	UI.Badge = AntBadge;
-}(Smart.UI);
+}(Smart.UI,Smart.RC);
