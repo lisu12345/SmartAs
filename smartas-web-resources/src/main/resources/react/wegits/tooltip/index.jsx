@@ -44,11 +44,11 @@
 
       return (
          <Tooltip transitionName={transitionName}
-          overlay={this.props.title}
-          visible={visible}
-          onVisibleChange={this.onVisibleChange}
-          {...this.props}>
-          {this.props.children}
+            overlay={this.props.title}
+            visible={visible}
+            onVisibleChange={this.onVisibleChange}
+            {...this.props}>
+            {this.props.children}
         </Tooltip>
       );
     }

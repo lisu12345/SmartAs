@@ -1,11 +1,7 @@
 + function(RC) {
-  const {
-    noop
-  } = _, {
-    Trigger
-  } = RC, {
-    PropTypes
-  } = React;
+  const {noop} = _, 
+    {Trigger} = RC, 
+    {PropTypes} = React;
 
   const autoAdjustOverflow = {
     adjustX: 1,
