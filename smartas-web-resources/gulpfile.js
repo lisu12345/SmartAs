@@ -30,8 +30,9 @@ const scripts = {
 			'src/main/resources/web/ui/components/dialog/index.js',
 			'src/main/resources/web/ui/components/tabs/index.js',
 			'src/main/resources/web/ui/components/upload/index.js',
-			'src/main/resources/validator/index.js',
 			'src/main/resources/web/ui/components/form/index.js',
+			'src/main/resources/web/ui/components/pagination/index.js',
+			'src/main/resources/web/ui/components/table/index.js',
 		],
 		wegits: [
 			'src/main/resources/web/ui/wegits/index.js',
@@ -61,7 +62,9 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/upload/index.js',
 			'src/main/resources/web/ui/wegits/tag/index.js',
 			'src/main/resources/web/ui/wegits/spin/index.js',
-			'src/main/resources/web/ui/wegits/popover/index.js'
+			'src/main/resources/web/ui/wegits/popover/index.js',
+			'src/main/resources/web/ui/wegits/pagination/index.js',
+			'src/main/resources/web/ui/wegits/table/index.js',
 		]
 	},
 	core: [

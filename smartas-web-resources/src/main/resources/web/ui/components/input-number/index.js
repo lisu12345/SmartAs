@@ -3,10 +3,9 @@
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 +(function (RC) {
-	var Util = RC.Util;
+	var classNames = RC.classNames;
 	var _ref = _;
 	var noop = _ref.noop;
-	var classNames = Util.classNames;
 
 	function preventDefault(e) {
 		e.preventDefault();

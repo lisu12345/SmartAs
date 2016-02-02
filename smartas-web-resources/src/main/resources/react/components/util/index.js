@@ -522,7 +522,7 @@
   };
 
   util.KeyCode = KeyCode;
-
+  RC.KeyCode = KeyCode;
 
   /**
    * Safe chained function
@@ -1313,6 +1313,6 @@
 
 		return classes.join(' ');
 	}
-	util.classnames = util.classNames = classNames;
+	RC.classnames = RC.classNames = classNames;
 	window.classnames = window.classNames = classNames;
 }(Smart.RC)

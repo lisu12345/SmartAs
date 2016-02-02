@@ -1,7 +1,6 @@
 + function(UI,RC) {
-  const {Util,InputNumber} = RC,
-    {noop} = _,
-    {classNames} = Util;
+  const {InputNumber,classNames} = RC,
+    {noop} = _;
 
   const AntInputNumber = React.createClass({
     getDefaultProps() {

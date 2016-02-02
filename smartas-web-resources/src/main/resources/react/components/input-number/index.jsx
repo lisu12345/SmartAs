@@ -1,7 +1,6 @@
 + function(RC) {
-	const {Util} = RC,
-		{noop} = _,
-		{classNames} = Util;
+	const {classNames} = RC,
+		{noop} = _;
 	
 	function preventDefault(e) {
 	  e.preventDefault();
