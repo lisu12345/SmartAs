@@ -50,16 +50,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				if (this.state.count > this.lastCount) {
 					if (currentDigit >= lastDigit) {
 						return 10 + num;
-					} else {
-						return 20 + num;
 					}
-				} else {
-					if (currentDigit <= lastDigit) {
-						return 10 + num;
-					} else {
-						return num;
-					}
+					return 20 + num;
 				}
+				if (currentDigit <= lastDigit) {
+					return 10 + num;
+				}
+				return num;
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -139,9 +136,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var isBrowser = typeof document !== 'undefined' && typeof window !== 'undefined';
 				if (isBrowser && isCssAnimationSupported) {
 					return React.createElement(this.props.component, props, this.renderNumberElement());
-				} else {
-					return React.createElement(this.props.component, props, props.count);
 				}
+				return React.createElement(this.props.component, props, props.count);
 			}
 		}]);
 

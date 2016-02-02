@@ -4,11 +4,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI) {
++(function (UI, RC) {
 	var PropTypes = React.PropTypes;
+	var Trigger = RC.Trigger;
 	var Button = UI.Button;
 	var ButtonGroup = UI.ButtonGroup;
-	var Trigger = UI.Trigger;
 	var Icon = UI.Icon;
 
 	var autoAdjustOverflow = {
@@ -205,7 +205,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 	var AntDropdown = React.createClass({
 		displayName: 'AntDropdown',
-
 		getDefaultProps: function getDefaultProps() {
 			return {
 				transitionName: 'slide-up',
@@ -228,4 +227,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 	UI.Dropdown = AntDropdown;
 	UI.DropdownButton = DropdownButton;
-})(Smart.UI);
+})(Smart.UI, Smart.RC);

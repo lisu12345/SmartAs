@@ -1,174 +1,189 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
++(function (UI, RC) {
+  var _ref = _;
+  var assign = _ref.assign;
+  var Icon = UI.Icon;
+  var Progress = RC.Progress;
+  var Progresscircle = Progress.Circle;
 
-var _rcProgress = require('rc-progress');
+  var prefixCls = 'ant-progress';
 
-var _react = require('react');
+  var statusColorMap = {
+    normal: '#2db7f5',
+    exception: '#ff6600',
+    success: '#87d068'
+  };
 
-var _react2 = _interopRequireDefault(_react);
+  var Line = React.createClass({
+    displayName: 'Line',
 
-var _objectAssign = require('object-assign');
+    propTypes: {
+      status: React.PropTypes.oneOf(['normal', 'exception', 'active', 'success']),
+      showInfo: React.PropTypes.bool,
+      percent: React.PropTypes.number,
+      strokeWidth: React.PropTypes.number,
+      trailColor: React.PropTypes.string,
+      format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        percent: 0,
+        strokeWidth: 10,
+        status: 'normal', // exception active
+        showInfo: true,
+        trailColor: '#e9e9e9'
+      };
+    },
+    render: function render() {
+      var props = assign({}, this.props);
 
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
+      if (parseInt(props.percent, 10) === 100) {
+        props.status = 'success';
+      }
 
-var _icon = require('../icon');
+      var progressInfo = undefined;
+      var fullCls = '';
 
-var _icon2 = _interopRequireDefault(_icon);
+      if (props.format) {
+        warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
+      }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+      var text = props.format || props.percent + '%';
+      if (typeof props.format === 'string') {
+        // 向下兼容原来的字符串替换方式
+        text = props.format.replace('${percent}', props.percent);
+      } else if (typeof props.format === 'function') {
+        text = props.format(props.percent);
+      }
 
-var prefixCls = 'ant-progress';
+      if (props.showInfo === true) {
+        if (props.status === 'exception') {
+          progressInfo = React.createElement(
+            'span',
+            { className: prefixCls + '-line-text' },
+            props.format ? text : React.createElement(Icon, { type: 'exclamation' })
+          );
+        } else if (props.status === 'success') {
+          progressInfo = React.createElement(
+            'span',
+            { className: prefixCls + '-line-text' },
+            props.format ? text : React.createElement(Icon, { type: 'check' })
+          );
+        } else {
+          progressInfo = React.createElement(
+            'span',
+            { className: prefixCls + '-line-text' },
+            text
+          );
+        }
+      } else {
+        fullCls = ' ' + prefixCls + '-line-wrap-full';
+      }
+      var percentStyle = {
+        width: props.percent + '%',
+        height: props.strokeWidth
+      };
 
-var statusColorMap = {
-  'normal': '#2db7f5',
-  'exception': '#ff6600',
-  'success': '#87d068'
-};
-
-var Line = _react2.default.createClass({
-  displayName: 'Line',
-
-  propTypes: {
-    status: _react2.default.PropTypes.oneOf(['normal', 'exception', 'active', 'success']),
-    showInfo: _react2.default.PropTypes.bool,
-    percent: _react2.default.PropTypes.number,
-    strokeWidth: _react2.default.PropTypes.number
-  },
-  getDefaultProps: function getDefaultProps() {
-    return {
-      percent: 0,
-      strokeWidth: 10,
-      status: 'normal', // exception active
-      format: '${percent}%',
-      showInfo: true
-    };
-  },
-  render: function render() {
-    var props = (0, _objectAssign2.default)({}, this.props);
-
-    if (parseInt(props.percent, 10) === 100) {
-      props.status = 'success';
+      return React.createElement(
+        'div',
+        { className: prefixCls + '-line-wrap clearfix status-' + props.status + fullCls, style: props.style },
+        progressInfo,
+        React.createElement(
+          'div',
+          { className: prefixCls + '-line-outer' },
+          React.createElement(
+            'div',
+            { className: prefixCls + '-line-inner' },
+            React.createElement('div', { className: prefixCls + '-line-bg', style: percentStyle })
+          )
+        )
+      );
     }
+  });
 
-    var progressInfo = undefined;
-    var fullCls = '';
-    var text = typeof props.format === 'string' ? props.format.replace('${percent}', props.percent) : props.format;
+  var Circle = React.createClass({
+    displayName: 'Circle',
 
-    if (props.showInfo === true) {
+    propTypes: {
+      status: React.PropTypes.oneOf(['normal', 'exception', 'success']),
+      percent: React.PropTypes.number,
+      strokeWidth: React.PropTypes.number,
+      width: React.PropTypes.number,
+      trailColor: React.PropTypes.string,
+      format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        width: 132,
+        percent: 0,
+        strokeWidth: 6,
+        status: 'normal', // exception
+        trailColor: '#f9f9f9'
+      };
+    },
+    render: function render() {
+      var props = assign({}, this.props);
+
+      if (parseInt(props.percent, 10) === 100) {
+        props.status = 'success';
+      }
+
+      var style = {
+        width: props.width,
+        height: props.width,
+        fontSize: props.width * 0.16 + 6
+      };
+      var progressInfo = undefined;
+      var text = props.format || props.percent + '%';
+
+      if (props.format) {
+        warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
+      }
+
+      if (typeof props.format === 'string') {
+        // 向下兼容原来的字符串替换方式
+        text = props.format.replace('${percent}', props.percent);
+      } else if (typeof props.format === 'function') {
+        text = props.format(props.percent);
+      }
+
       if (props.status === 'exception') {
-        progressInfo = _react2.default.createElement(
+        progressInfo = React.createElement(
           'span',
-          { className: prefixCls + '-line-text' },
-          text
+          { className: prefixCls + '-circle-text' },
+          props.format ? text : React.createElement(Icon, { type: 'exclamation' })
         );
       } else if (props.status === 'success') {
-        progressInfo = _react2.default.createElement(
+        progressInfo = React.createElement(
           'span',
-          { className: prefixCls + '-line-text' },
-          _react2.default.createElement(_icon2.default, { type: 'check' })
+          { className: prefixCls + '-circle-text' },
+          props.format ? text : React.createElement(Icon, { type: 'check' })
         );
       } else {
-        progressInfo = _react2.default.createElement(
+        progressInfo = React.createElement(
           'span',
-          { className: prefixCls + '-line-text' },
+          { className: prefixCls + '-circle-text' },
           text
         );
       }
-    } else {
-      fullCls = ' ' + prefixCls + '-line-wrap-full';
-    }
-    var percentStyle = {
-      width: props.percent + '%',
-      height: props.strokeWidth
-    };
 
-    return _react2.default.createElement(
-      'div',
-      { className: prefixCls + '-line-wrap clearfix status-' + props.status + fullCls },
-      progressInfo,
-      _react2.default.createElement(
+      return React.createElement(
         'div',
-        { className: prefixCls + '-line-outer' },
-        _react2.default.createElement(
+        { className: prefixCls + '-circle-wrap status-' + props.status, style: props.style },
+        React.createElement(
           'div',
-          { className: prefixCls + '-line-inner' },
-          _react2.default.createElement('div', { className: prefixCls + '-line-bg', style: percentStyle })
+          { className: prefixCls + '-circle-inner', style: style },
+          React.createElement(Progresscircle, { percent: props.percent, strokeWidth: props.strokeWidth,
+            strokeColor: statusColorMap[props.status], trailColor: props.trailColor }),
+          progressInfo
         )
-      )
-    );
-  }
-});
-
-var Circle = _react2.default.createClass({
-  displayName: 'Circle',
-
-  propTypes: {
-    status: _react2.default.PropTypes.oneOf(['normal', 'exception', 'success']),
-    percent: _react2.default.PropTypes.number,
-    strokeWidth: _react2.default.PropTypes.number,
-    width: _react2.default.PropTypes.number
-  },
-  getDefaultProps: function getDefaultProps() {
-    return {
-      width: 132,
-      percent: 0,
-      strokeWidth: 6,
-      format: '${percent}%',
-      status: 'normal' };
-  },
-  // exception
-  render: function render() {
-    var props = (0, _objectAssign2.default)({}, this.props);
-
-    if (parseInt(props.percent, 10) === 100) {
-      props.status = 'success';
-    }
-
-    var style = {
-      'width': props.width,
-      'height': props.width,
-      'fontSize': props.width * 0.16 + 6
-    };
-    var progressInfo = undefined;
-    var text = typeof props.format === 'string' ? props.format.replace('${percent}', props.percent) : props.format;
-    if (props.status === 'exception') {
-      progressInfo = _react2.default.createElement(
-        'span',
-        { className: prefixCls + '-circle-text' },
-        text
-      );
-    } else if (props.status === 'success') {
-      progressInfo = _react2.default.createElement(
-        'span',
-        { className: prefixCls + '-circle-text' },
-        _react2.default.createElement(_icon2.default, { type: 'check' })
-      );
-    } else {
-      progressInfo = _react2.default.createElement(
-        'span',
-        { className: prefixCls + '-circle-text' },
-        text
       );
     }
+  });
 
-    return _react2.default.createElement(
-      'div',
-      { className: prefixCls + '-circle-wrap status-' + props.status },
-      _react2.default.createElement(
-        'div',
-        { className: prefixCls + '-circle-inner', style: style },
-        _react2.default.createElement(_rcProgress.Circle, { percent: props.percent, strokeWidth: props.strokeWidth,
-          strokeColor: statusColorMap[props.status], trailColor: '#e9e9e9' }),
-        progressInfo
-      )
-    );
-  }
-});
-
-exports.default = {
-  Line: Line,
-  Circle: Circle
-};
+  UI.Progress = {
+    Line: Line,
+    Circle: Circle
+  };
+})(Smart.UI, Smart.RC);

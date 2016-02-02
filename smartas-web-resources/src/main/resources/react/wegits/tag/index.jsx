@@ -1,60 +1,73 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Animate from 'rc-animate';
-import Icon from '../icon';
++ function(UI, RC) {
 
-class AntTag extends React.Component {
-  constructor(props) {
-    super(props);
+  const {Animate} = RC,
+    {Icon} = UI;
 
-    this.state = {
-      closing: false,
-      closed: false
-    };
+  class AntTag extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        closing: false,
+        closed: false,
+      };
+    }
+
+    close(e) {
+      const dom = ReactDOM.findDOMNode(this);
+      dom.style.width = dom.offsetWidth + 'px';
+      // It's Magic Code, don't know why
+      dom.style.width = dom.offsetWidth + 'px';
+      this.setState({
+        closing: true,
+      });
+      this.props.onClose(e);
+    }
+
+    animationEnd(key, existed) {
+      if (!existed) {
+        this.setState({
+          closed: true,
+          closing: false,
+        });
+        this.props.afterClose();
+      }
+    }
+
+    render() {
+      const { prefixCls, closable, color, ...restProps } = this.props;
+      const close = closable ? <Icon type="cross" onClick={this.close.bind(this)} /> : '';
+      const className = classNames({
+        [prefixCls]: true,
+        [prefixCls + '-' + color]: !!color,
+        [prefixCls + '-close']: this.state.closing,
+      });
+      return (
+        <Animate component=""
+          showProp="data-show"
+          transitionName={prefixCls + '-zoom'}
+          transitionAppear
+          onEnd={this.animationEnd.bind(this)}>
+          {this.state.closed ? null : (
+            <div data-show={!this.state.closing} className={className}>
+              <span className={prefixCls + '-text'} {...restProps} />
+              {close}
+            </div>
+          )}
+        </Animate>
+      );
+    }
   }
 
-  close(e) {
-    let dom = ReactDOM.findDOMNode(this);
-    dom.style.width = dom.offsetWidth + 'px';
-    // It's Magic Code, don't know why
-    dom.style.width = dom.offsetWidth + 'px';
-    this.setState({
-      closing: true
-    });
-    this.props.onClose.call(this, e);
-  }
+  AntTag.defaultProps = {
+    prefixCls: 'ant-tag',
+    closable: false,
+    onClose() {},
+    afterClose() {},
+  };
 
-  animationEnd() {
-    this.setState({
-      closed: true,
-      closing: false
-    });
-  }
 
-  render() {
-    let close = this.props.closable ?
-      <Icon type="cross" onClick={this.close.bind(this)} /> : '';
-    let colorClass = this.props.color ? this.props.prefixCls + '-' + this.props.color : '';
-    let className = this.props.prefixCls + ' ' + colorClass;
-    className = this.state.closing ? className + ' ' + this.props.prefixCls + '-close' : className;
 
-    return this.state.closed ? null
-      : <Animate component=""
-                 showProp="data-show"
-                 transitionName={this.props.prefixCls + '-zoom'}
-                 onEnd={this.animationEnd.bind(this)}>
-        <div data-show={!this.state.closing} className={className}>
-          <a className={this.props.prefixCls + '-text'} {...this.props} />
-          {close}
-        </div>
-      </Animate>;
-  }
-}
+  UI.Tag = AntTag;
 
-AntTag.defaultProps = {
-  prefixCls: 'ant-tag',
-  closable: false,
-  onClose: function() {}
-};
-
-export default AntTag;
+}(Smart.UI, Smart.RC);

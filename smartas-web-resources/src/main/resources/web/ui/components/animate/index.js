@@ -3,6 +3,8 @@
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 +(function (RC) {
+	var _ref = _;
+	var noop = _ref.noop;
 
 	var Css = {
 		addClass: function addClass(elem, className) {
@@ -438,8 +440,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		}
 		return children;
 	}
-
-	function noop() {}
 
 	var Animate = React.createClass({
 		displayName: 'Animate',

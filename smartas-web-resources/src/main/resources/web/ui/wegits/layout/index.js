@@ -64,7 +64,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       var others = _objectWithoutProperties(_props2, ['type', 'justify', 'align', 'className']);
 
       var classes = classNames((_classNames2 = {
-        'row': true
+        row: true
       }, _defineProperty(_classNames2, 'row-' + type, type), _defineProperty(_classNames2, 'row-' + type + '-' + justify, justify), _defineProperty(_classNames2, 'row-' + type + '-' + align, align), _defineProperty(_classNames2, className, className), _classNames2));
       return React.createElement(
         'div',

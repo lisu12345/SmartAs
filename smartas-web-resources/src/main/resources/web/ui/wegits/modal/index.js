@@ -41,7 +41,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return;
       }
       // 只有点击事件支持从鼠标位置动画展开
-      Dom.addEventListener(document.body, 'click', function onDocumentMousemove(e) {
+      Dom.addEventListener(document.documentElement, 'click', function (e) {
         mousePosition = {
           x: e.pageX,
           y: e.pageY

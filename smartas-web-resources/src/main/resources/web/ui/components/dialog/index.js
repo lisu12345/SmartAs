@@ -17,7 +17,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var noop = _ref.noop;var Align = RC.Align;
   var Animate = RC.Animate;
   var DOMWrap = RC.DOMWrap;
-  var Util = RC.Util;var KeyCod = Util.KeyCod;var _React = React;
+  var Util = RC.Util;var KeyCode = Util.KeyCode;var _React = React;
   var PropTypes = _React.PropTypes;
 
   function getScroll(w, top) {

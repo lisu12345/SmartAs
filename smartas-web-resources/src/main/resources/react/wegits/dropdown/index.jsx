@@ -1,6 +1,7 @@
-+function(UI){
-	const PropTypes = React.PropTypes;
-	const {Button,ButtonGroup,Trigger,Icon} = UI;
++function(UI,RC){
+	const PropTypes = React.PropTypes,
+		{Trigger} = RC,
+	 	{Button,ButtonGroup,Icon} = UI;
 
 	const autoAdjustOverflow = {
 	  adjustX: 1,
@@ -186,13 +187,13 @@
 	});
 
 	const AntDropdown = React.createClass({
-		getDefaultProps: function() {
+		getDefaultProps() {
 			return {
 				transitionName: 'slide-up',
 				prefixCls: 'ant-dropdown',
 			};
 		},
-		render: function() {
+		render() {
 			const {
 				overlay, ...otherProps
 			} = this.props;
@@ -206,6 +207,6 @@
 
 	UI.Dropdown = AntDropdown;
 	UI.DropdownButton = DropdownButton;
-}(Smart.UI);
+}(Smart.UI,Smart.RC);
 
 

@@ -1,9 +1,9 @@
 + function(Namespace) {
 	var RC = Namespace.register("Smart.RC");
 	const assign = _.assign;
-	
-	
+
 	let velocity = $.Velocity;
+
 	function animate(node, show, transitionName, done) {
 		let ok;
 
@@ -31,17 +31,18 @@
 
 	const animation = {
 		enter(node, done) {
-				return animate(node, false, 'slideDown', done);
-			},
-			leave(node, done) {
-				return animate(node, true, 'slideUp', done);
-			},
-			appear(node, done) {
-				return animate(node, false, 'slideDown', done);
-			},
+			return animate(node, false, 'slideDown', done);
+		},
+		leave(node, done) {
+			return animate(node, true, 'slideUp', done);
+		},
+		appear(node, done) {
+			return animate(node, false, 'slideDown', done);
+		},
 	};
 
 	RC.Animation = animation;
+	RC.animation = animation;
 
 	const DOMWrap = React.createClass({
 		propTypes: {

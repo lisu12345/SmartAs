@@ -6,8 +6,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -15,7 +13,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //export default Form;
-+(function (UI) {
++(function (UI, RC) {
+	var createForm = RC.createForm;
 
 	function merge() {
 		var ret = {};
@@ -80,34 +79,79 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				return col + offsetCol;
 			}
 		}, {
+			key: 'getHelpMsg',
+			value: function getHelpMsg() {
+				var context = this.context;
+				var props = this.props;
+				if (props.help === undefined && context.form) {
+					return (context.form.getFieldError(this.getId()) || []).join(', ');
+				}
+
+				return props.help;
+			}
+		}, {
+			key: 'getId',
+			value: function getId() {
+				return this.props.children.props && this.props.children.props.id;
+			}
+		}, {
+			key: 'getMeta',
+			value: function getMeta() {
+				return this.props.children.props && this.props.children.props.__meta;
+			}
+		}, {
 			key: 'renderHelp',
 			value: function renderHelp() {
-				var prefixCls = this.props.prefixCls;
+				var props = this.props;
+				var prefixCls = props.prefixCls;
+				var help = this.getHelpMsg();
 				return React.createElement(
 					'div',
-					{ className: this.props.help ? prefixClsFn(prefixCls, 'explain') : '', key: 'help' },
-					this.props.help
+					{ className: !!help ? prefixClsFn(prefixCls, 'explain') : '', key: 'help' },
+					help
 				);
 			}
 		}, {
+			key: 'getValidateStatus',
+			value: function getValidateStatus() {
+				var _context$form = this.context.form;
+				var isFieldValidating = _context$form.isFieldValidating;
+				var getFieldError = _context$form.getFieldError;
+				var getFieldValue = _context$form.getFieldValue;
+
+				var field = this.getId();
+
+				if (isFieldValidating(field)) {
+					return 'validating';
+				} else if (!!getFieldError(field)) {
+					return 'error';
+				} else if (getFieldValue(field) !== undefined) {
+					return 'success';
+				}
+			}
+		}, {
 			key: 'renderValidateWrapper',
-			value: function renderValidateWrapper(c1, c2) {
+			value: function renderValidateWrapper(c1, c2, c3) {
 				var classes = '';
-				if (this.props.validateStatus) {
+				var form = this.context.form;
+				var props = this.props;
+				var validateStatus = props.validateStatus === undefined && form ? this.getValidateStatus() : props.validateStatus;
+
+				if (validateStatus) {
 					classes = classNames({
-						'has-feedback': this.props.hasFeedback,
-						'has-success': this.props.validateStatus === 'success',
-						'has-warning': this.props.validateStatus === 'warning',
-						'has-error': this.props.validateStatus === 'error',
-						'is-validating': this.props.validateStatus === 'validating'
+						'has-feedback': props.hasFeedback,
+						'has-success': validateStatus === 'success',
+						'has-warning': validateStatus === 'warning',
+						'has-error': validateStatus === 'error',
+						'is-validating': validateStatus === 'validating'
 					});
 				}
 				return React.createElement(
 					'div',
-					{ className: classes },
+					{ className: this.props.prefixCls + '-item-control ' + classes },
 					c1,
-					' ',
-					c2
+					c2,
+					c3
 				);
 			}
 		}, {
@@ -121,49 +165,47 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				);
 			}
 		}, {
+			key: 'isRequired',
+			value: function isRequired() {
+				if (this.context.form) {
+					var meta = this.getMeta() || {};
+					var validate = meta.validate || [];
+
+					return validate.filter(function (item) {
+						return !!item.rules;
+					}).some(function (item) {
+						return item.rules.some(function (rule) {
+							return rule.required;
+						});
+					});
+				}
+				return false;
+			}
+		}, {
 			key: 'renderLabel',
 			value: function renderLabel() {
-				var labelCol = this.props.labelCol;
-				var required = this.props.required ? 'required' : '';
+				var props = this.props;
+				var labelCol = props.labelCol;
+				var required = props.required === undefined ? this.isRequired() : props.required;
 
-				return this.props.label ? React.createElement(
+				return props.label ? React.createElement(
 					'label',
-					{ htmlFor: this.props.id, className: this._getLayoutClass(labelCol), required: required, key: 'label' },
-					this.props.label
+					{ htmlFor: props.id || this.getId(), className: this._getLayoutClass(labelCol), required: required, key: 'label' },
+					props.label
 				) : null;
 			}
 		}, {
 			key: 'renderChildren',
 			value: function renderChildren() {
-				return [this.renderLabel(), this.renderWrapper(this.renderValidateWrapper(this.props.children, this.renderHelp()))];
-			}
-
-			// 判断是否要 `.ant-form-item-compact` 样式类
-
-		}, {
-			key: '_isCompact',
-			value: function _isCompact(children) {
-				var _this2 = this;
-
-				var compactControls = ['checkbox', 'radio', 'radio-group', 'static', 'file'];
-				var isCompact = false;
-
-				if (!Array.isArray(children)) {
-					children = [children];
-				}
-				children.map(function (child) {
-					var type = child.props && child.props.type;
-					var prefixCls = child.props && child.props.prefixCls;
-					prefixCls = prefixCls ? prefixCls.substring(prefixCls.indexOf('-') + 1) : '';
-
-					if (type && compactControls.indexOf(type) > -1 || prefixCls && compactControls.indexOf(prefixCls) > -1) {
-						isCompact = true;
-					} else if (child.props && _typeof(child.props.children) === 'object') {
-						isCompact = _this2._isCompact(child.props.children);
+				var props = this.props;
+				var children = React.Children.map(props.children, function (child) {
+					if (typeof child.type === 'function' && !child.props.size) {
+						return React.cloneElement(child, { size: 'large' });
 					}
-				});
 
-				return isCompact;
+					return child;
+				});
+				return [this.renderLabel(), this.renderWrapper(this.renderValidateWrapper(children, this.renderHelp(), props.extra))];
 			}
 		}, {
 			key: 'renderFormItem',
@@ -172,7 +214,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				var props = this.props;
 				var prefixCls = props.prefixCls;
-				var itemClassName = (_itemClassName = {}, _defineProperty(_itemClassName, prefixCls + '-item', true), _defineProperty(_itemClassName, prefixCls + '-item-compact', this._isCompact(props.children)), _defineProperty(_itemClassName, prefixCls + '-item-with-help', !!props.help), _itemClassName);
+				var itemClassName = (_itemClassName = {}, _defineProperty(_itemClassName, prefixCls + '-item', true), _defineProperty(_itemClassName, prefixCls + '-item-with-help', !!this.getHelpMsg()), _defineProperty(_itemClassName, '' + props.className, !!props.className), _itemClassName);
 
 				return React.createElement(
 					'div',
@@ -195,18 +237,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		prefixCls: React.PropTypes.string,
 		label: React.PropTypes.node,
 		labelCol: React.PropTypes.object,
-		help: React.PropTypes.node,
+		help: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.bool]),
 		validateStatus: React.PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
 		hasFeedback: React.PropTypes.bool,
 		wrapperCol: React.PropTypes.object,
 		className: React.PropTypes.string,
+		id: React.PropTypes.string,
 		children: React.PropTypes.node
 	};
 
 	FormItem.defaultProps = {
 		hasFeedback: false,
-		required: false,
 		prefixCls: 'ant-form'
+	};
+
+	FormItem.contextTypes = {
+		form: React.PropTypes.object
 	};
 
 	var Form = (function (_React$Component2) {
@@ -219,6 +265,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}
 
 		_createClass(Form, [{
+			key: 'getChildContext',
+			value: function getChildContext() {
+				return {
+					form: this.props.form
+				};
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _classNames;
@@ -233,9 +286,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					'form',
 					_extends({}, this.props, {
 						className: formClassName }),
-					' ',
-					this.props.children,
-					' '
+					this.props.children
 				);
 			}
 		}]);
@@ -247,6 +298,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		prefixCls: React.PropTypes.string,
 		horizontal: React.PropTypes.bool,
 		inline: React.PropTypes.bool,
+		form: React.PropTypes.object,
 		children: React.PropTypes.any,
 		onSubmit: React.PropTypes.func
 	};
@@ -255,7 +307,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		prefixCls: 'ant-form'
 	};
 
+	Form.childContextTypes = {
+		form: React.PropTypes.object
+	};
+
+	Form.create = function () {
+		var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		var options = _extends({}, o, {
+			fieldNameProp: 'id',
+			fieldMetaProp: '__meta'
+		});
+
+		return createForm(options);
+	};
 	Form.Item = FormItem;
+
+	// @Deprecated
 	Form.ValueMixin = ValueMixin;
 
 	// 对于 import { Form, Input } from 'antd/lib/form/';
@@ -265,4 +333,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	Form.Input = UI.Input;
 	UI.Form = Form;
 	UI.FormItem = FormItem;
-})(Smart.UI);
+})(Smart.UI, Smart.RC);

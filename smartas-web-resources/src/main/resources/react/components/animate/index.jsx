@@ -1,5 +1,7 @@
 + function(RC) {
 
+	const {noop} = _;
+	
 	const Css = {
 		addClass(elem, className) {
 				$(elem).addClass(className);
@@ -448,8 +450,6 @@
 		}
 		return children;
 	}
-
-	function noop() {}
 
 	const Animate = React.createClass({
 		propTypes: {

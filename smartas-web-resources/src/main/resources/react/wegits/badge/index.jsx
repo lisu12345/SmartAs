@@ -27,16 +27,13 @@
 			if (this.state.count > this.lastCount) {
 				if (currentDigit >= lastDigit) {
 					return 10 + num;
-				} else {
-					return 20 + num;
-				}
-			} else {
-				if (currentDigit <= lastDigit) {
-					return 10 + num;
-				} else {
-					return num;
-				}
-			}
+				} 
+				return 20 + num;
+			}  
+			if (currentDigit <= lastDigit) {
+				return 10 + num;
+			} 
+			return num;
 		}
 
 		componentWillReceiveProps(nextProps) {
@@ -107,13 +104,12 @@
 					props,
 					this.renderNumberElement()
 				);
-			} else {
-				return React.createElement(
-					this.props.component,
-					props,
-					props.count
-				);
-			}
+			} 
+			return React.createElement(
+				this.props.component,
+				props,
+				props.count
+			);
 		}
 	}
 

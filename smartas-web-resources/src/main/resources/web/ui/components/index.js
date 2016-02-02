@@ -5,6 +5,7 @@
 	var assign = _.assign;
 
 	var velocity = $.Velocity;
+
 	function animate(node, show, transitionName, done) {
 		var ok = undefined;
 
@@ -43,6 +44,7 @@
 	};
 
 	RC.Animation = animation;
+	RC.animation = animation;
 
 	var DOMWrap = React.createClass({
 		displayName: 'DOMWrap',

@@ -3,7 +3,7 @@
 ]]*/
 install("web.demo.plugins.antd.Switch",function($S){
 	var pkg = this,U = Smart.UI;
-	const {Menu , Icon ,Button,Dropdown} = U;
+	const {Menu ,Icon ,Button,Dropdown} = U;
 	const SubMenu = Menu.SubMenu;
 	const MenuItemGroup = Menu.ItemGroup;
 	const DropdownButton = Dropdown.Button;

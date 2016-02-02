@@ -21,7 +21,7 @@ const Col = React.createClass({
       ['col-pull-' + pull]: pull,
       [className]: className,
     });
-    return <div {...others} className={classes}>{ this.props.children }</div>;
+    return <div {...others} className={classes}>{this.props.children}</div>;
   },
 });
 
@@ -37,13 +37,13 @@ const Row = React.createClass({
   render() {
     const { type, justify, align, className, ...others } = this.props;
     const classes = classNames({
-      'row': true,
+      row: true,
       ['row-' + type]: type,
       ['row-' + type + '-' + justify]: justify,
       ['row-' + type + '-' + align]: align,
       [className]: className,
     });
-    return <div {...others} className={classes}>{ this.props.children }</div>;
+    return <div {...others} className={classes}>{this.props.children}</div>;
   },
 });
 

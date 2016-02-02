@@ -51,5 +51,5 @@
 
 		return classes.join(' ');
 	}
-	window.classNames = classNames;
+	window.classnames = window.classNames = classNames;
 }(Smart.Namespace, Smart.EventBus, Smart.Resource, Smart.UI.ActionTypes);

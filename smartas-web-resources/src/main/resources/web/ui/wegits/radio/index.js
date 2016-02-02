@@ -2,41 +2,35 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+(function (UI) {
-	var Radio = React.createClass({
-		displayName: 'Radio',
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
++(function (UI, RC) {
+	var Radio = RC.Radio;
+
+	var AntRadio = React.createClass({
+		displayName: 'AntRadio',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				prefixCls: 'ant-radio',
-				type: 'radio'
+				prefixCls: 'ant-radio'
 			};
 		},
 		render: function render() {
-			var classString = this.props.className;
-			if (classString) {
-				classString += this.props.checked ? ' ' + classString + '-checked' : '';
-			}
-			if (this.props.disabled) {
-				classString += ' ' + this.props.className + '-disabled';
-			}
+			var _classNames;
+
+			var _props = this.props;
+			var prefixCls = _props.prefixCls;
+			var children = _props.children;
+			var checked = _props.checked;
+			var disabled = _props.disabled;
+			var className = _props.className;
+
+			var classString = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _classNames));
 			return React.createElement(
 				'label',
 				{ className: classString },
-				React.createElement(UI.Checkbox, _extends({}, this.props, { children: null })),
-				this.props.children
+				React.createElement(Radio, _extends({}, this.props, { children: null })),
+				children
 			);
-		}
-	});
-
-	var RadioButton = React.createClass({
-		displayName: 'RadioButton',
-		getDefaultProps: function getDefaultProps() {
-			return {
-				className: 'ant-radio-button'
-			};
-		},
-		render: function render() {
-			return React.createElement(Radio, this.props);
 		}
 	});
 
@@ -50,14 +44,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 		return checkedValue;
 	}
 
-	var Group = React.createClass({
-		displayName: 'Group',
-
+	var RadioGroup = React.createClass({
+		displayName: 'RadioGroup',
 		getDefaultProps: function getDefaultProps() {
 			return {
 				prefixCls: 'ant-radio-group',
 				disabled: false,
-				size: 'default',
 				onChange: function onChange() {}
 			};
 		},
@@ -74,15 +66,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 				});
 			}
 		},
-
+		onRadioChange: function onRadioChange(ev) {
+			this.setState({
+				value: ev.target.value
+			});
+			this.props.onChange(ev);
+		},
 		render: function render() {
 			var _this = this;
 
 			var props = this.props;
 			var children = React.Children.map(props.children, function (radio) {
 				if (radio.props) {
-					return React.createElement(Radio, _extends({
-						key: radio.props.value }, radio.props, {
+					return React.cloneElement(radio, _extends({
+						key: radio.props.value
+					}, radio.props, {
 						onChange: _this.onRadioChange,
 						checked: _this.state.value === radio.props.value,
 						disabled: radio.props.disabled || _this.props.disabled
@@ -90,22 +88,27 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 				}
 				return radio;
 			});
-			var className = classNames(props.prefixCls, props.prefixCls + '-' + props.size);
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: props.prefixCls + ' ' + props.prefixCls + '-' + props.size },
 				children
 			);
-		},
-		onRadioChange: function onRadioChange(ev) {
-			this.setState({
-				value: ev.target.value
-			});
-			this.props.onChange(ev);
 		}
 	});
 
-	Radio.Button = RadioButton;
-	Radio.Group = Group;
-	UI.Radio = Radio;
-})(Smart.UI);
+	var RadioButton = React.createClass({
+		displayName: 'RadioButton',
+		getDefaultProps: function getDefaultProps() {
+			return {
+				prefixCls: 'ant-radio-button'
+			};
+		},
+		render: function render() {
+			return React.createElement(AntRadio, this.props);
+		}
+	});
+
+	AntRadio.Button = RadioButton;
+	AntRadio.Group = RadioGroup;
+	UI.Radio = AntRadio;
+})(Smart.UI, Smart.RC);

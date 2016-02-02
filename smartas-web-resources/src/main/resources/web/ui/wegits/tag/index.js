@@ -4,27 +4,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _rcAnimate = require('rc-animate');
-
-var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
-
-var _icon = require('../icon');
-
-var _icon2 = _interopRequireDefault(_icon);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -32,72 +14,88 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AntTag = (function (_React$Component) {
-  _inherits(AntTag, _React$Component);
++(function (UI, RC) {
+  var Animate = RC.Animate;
+  var Icon = UI.Icon;
 
-  function AntTag(props) {
-    _classCallCheck(this, AntTag);
+  var AntTag = (function (_React$Component) {
+    _inherits(AntTag, _React$Component);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AntTag).call(this, props));
+    function AntTag(props) {
+      _classCallCheck(this, AntTag);
 
-    _this.state = {
-      closing: false,
-      closed: false
-    };
-    return _this;
-  }
+      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AntTag).call(this, props));
 
-  _createClass(AntTag, [{
-    key: 'close',
-    value: function close(e) {
-      var dom = _reactDom2.default.findDOMNode(this);
-      dom.style.width = dom.offsetWidth + 'px';
-      // It's Magic Code, don't know why
-      dom.style.width = dom.offsetWidth + 'px';
-      this.setState({
-        closing: true
-      });
-      this.props.onClose.call(this, e);
+      _this.state = {
+        closing: false,
+        closed: false
+      };
+      return _this;
     }
-  }, {
-    key: 'animationEnd',
-    value: function animationEnd() {
-      this.setState({
-        closed: true,
-        closing: false
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var close = this.props.closable ? _react2.default.createElement(_icon2.default, { type: 'cross', onClick: this.close.bind(this) }) : '';
-      var colorClass = this.props.color ? this.props.prefixCls + '-' + this.props.color : '';
-      var className = this.props.prefixCls + ' ' + colorClass;
-      className = this.state.closing ? className + ' ' + this.props.prefixCls + '-close' : className;
 
-      return this.state.closed ? null : _react2.default.createElement(
-        _rcAnimate2.default,
-        { component: '',
-          showProp: 'data-show',
-          transitionName: this.props.prefixCls + '-zoom',
-          onEnd: this.animationEnd.bind(this) },
-        _react2.default.createElement(
-          'div',
-          { 'data-show': !this.state.closing, className: className },
-          _react2.default.createElement('a', _extends({ className: this.props.prefixCls + '-text' }, this.props)),
-          close
-        )
-      );
-    }
-  }]);
+    _createClass(AntTag, [{
+      key: 'close',
+      value: function close(e) {
+        var dom = ReactDOM.findDOMNode(this);
+        dom.style.width = dom.offsetWidth + 'px';
+        // It's Magic Code, don't know why
+        dom.style.width = dom.offsetWidth + 'px';
+        this.setState({
+          closing: true
+        });
+        this.props.onClose(e);
+      }
+    }, {
+      key: 'animationEnd',
+      value: function animationEnd(key, existed) {
+        if (!existed) {
+          this.setState({
+            closed: true,
+            closing: false
+          });
+          this.props.afterClose();
+        }
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _classNames;
 
-  return AntTag;
-})(_react2.default.Component);
+        var _props = this.props;
+        var prefixCls = _props.prefixCls;
+        var closable = _props.closable;
+        var color = _props.color;
 
-AntTag.defaultProps = {
-  prefixCls: 'ant-tag',
-  closable: false,
-  onClose: function onClose() {}
-};
+        var restProps = _objectWithoutProperties(_props, ['prefixCls', 'closable', 'color']);
 
-exports.default = AntTag;
+        var close = closable ? React.createElement(Icon, { type: 'cross', onClick: this.close.bind(this) }) : '';
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-' + color, !!color), _defineProperty(_classNames, prefixCls + '-close', this.state.closing), _classNames));
+        return React.createElement(
+          Animate,
+          { component: '',
+            showProp: 'data-show',
+            transitionName: prefixCls + '-zoom',
+            transitionAppear: true,
+            onEnd: this.animationEnd.bind(this) },
+          this.state.closed ? null : React.createElement(
+            'div',
+            { 'data-show': !this.state.closing, className: className },
+            React.createElement('span', _extends({ className: prefixCls + '-text' }, restProps)),
+            close
+          )
+        );
+      }
+    }]);
+
+    return AntTag;
+  })(React.Component);
+
+  AntTag.defaultProps = {
+    prefixCls: 'ant-tag',
+    closable: false,
+    onClose: function onClose() {},
+    afterClose: function afterClose() {}
+  };
+
+  UI.Tag = AntTag;
+})(Smart.UI, Smart.RC);

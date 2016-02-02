@@ -4,7 +4,7 @@
   } = _, {
     Align, Animate, DOMWrap, Util
   } = RC, {
-    KeyCod
+    KeyCode
   } = Util, {
     PropTypes
   } = React;

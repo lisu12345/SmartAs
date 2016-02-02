@@ -1,5 +1,7 @@
 //export default Form;
-+ function(UI) {
++ function(UI,RC) {
+
+	const {createForm} = RC;
 
 	function merge() {
 		const ret = {};
@@ -51,102 +53,147 @@
 			const offsetCol = offset ? ' col-offset-' + offset : '';
 			return col + offsetCol;
 		}
+		
+		  getHelpMsg() {
+		    const context = this.context;
+		    const props = this.props;
+		    if (props.help === undefined && context.form) {
+		      return (context.form.getFieldError(this.getId()) || []).join(', ');
+		    }
+
+		    return props.help;
+		  }
+
+		  getId() {
+		    return this.props.children.props && this.props.children.props.id;
+		  }
+
+		  getMeta() {
+		    return this.props.children.props && this.props.children.props.__meta;
+		  }
 
 		renderHelp() {
-			const prefixCls = this.props.prefixCls;
-			return (
-				<div className={this.props.help ? prefixClsFn(prefixCls, 'explain') : ''} key="help">
-        {this.props.help}
-      </div>
-			);
+			const props = this.props;
+		    const prefixCls = props.prefixCls;
+		    const help = this.getHelpMsg();
+		    return (
+		      <div className={!!help ? prefixClsFn(prefixCls, 'explain') : ''} key="help">
+		        { help }
+		      </div>
+		    );
+		}
+		
+		getValidateStatus() {
+		    const { isFieldValidating, getFieldError, getFieldValue } = this.context.form;
+		    const field = this.getId();
+
+		    if (isFieldValidating(field)) {
+		      return 'validating';
+		    } else if (!!getFieldError(field)) {
+		      return 'error';
+		    } else if (getFieldValue(field) !== undefined) {
+		      return 'success';
+		    }
 		}
 
-		renderValidateWrapper(c1, c2) {
-			let classes = '';
-			if (this.props.validateStatus) {
-				classes = classNames({
-					'has-feedback': this.props.hasFeedback,
-					'has-success': this.props.validateStatus === 'success',
-					'has-warning': this.props.validateStatus === 'warning',
-					'has-error': this.props.validateStatus === 'error',
-					'is-validating': this.props.validateStatus === 'validating',
-				});
-			}
-			return (
-				<div className={classes}>
-        {c1} {c2}
-      </div>
-			);
+		renderValidateWrapper(c1, c2, c3) {
+		    let classes = '';
+		    const form = this.context.form;
+		    const props = this.props;
+		    const validateStatus = (props.validateStatus === undefined && form) ?
+		      this.getValidateStatus() :
+		      props.validateStatus;
+
+		    if (validateStatus) {
+		      classes = classNames(
+		        {
+		          'has-feedback': props.hasFeedback,
+		          'has-success': validateStatus === 'success',
+		          'has-warning': validateStatus === 'warning',
+		          'has-error': validateStatus === 'error',
+		          'is-validating': validateStatus === 'validating',
+		        }
+		      );
+		    }
+		    return (
+		      <div className={this.props.prefixCls + '-item-control ' + classes}>
+		        {c1}{c2}{c3}
+		      </div>
+		    );
 		}
 
 		renderWrapper(children) {
-			const wrapperCol = this.props.wrapperCol;
-			return (
-				<div className={this._getLayoutClass(wrapperCol)} key="wrapper">
-        {children}
-      </div>
-			);
+		    const wrapperCol = this.props.wrapperCol;
+		    return (
+		      <div className={this._getLayoutClass(wrapperCol)} key="wrapper">
+		        {children}
+		      </div>
+		    );
 		}
 
-		renderLabel() {
-			const labelCol = this.props.labelCol;
-			const required = this.props.required ? 'required' : '';
+		isRequired() {
+		    if (this.context.form) {
+		      const meta = this.getMeta() || {};
+		      const validate = (meta.validate || []);
 
-			return this.props.label ? (
-				<label htmlFor={this.props.id} className={this._getLayoutClass(labelCol)} required={required} key="label">
-        {this.props.label}
-      </label>
-			) : null;
-		}
+		      return validate.filter((item) => !!item.rules).some((item) => {
+		        return item.rules.some((rule) => rule.required);
+		      });
+		    }
+		    return false;
+		  }
 
-		renderChildren() {
-			return [
-				this.renderLabel(),
-				this.renderWrapper(
-					this.renderValidateWrapper(
-						this.props.children,
-						this.renderHelp()
-					)
-				),
-			];
-		}
+		  renderLabel() {
+		    const props = this.props;
+		    const labelCol = props.labelCol;
+		    const required = props.required === undefined ?
+		      this.isRequired() :
+		      props.required;
 
-		// 判断是否要 `.ant-form-item-compact` 样式类
-		_isCompact(children) {
-			const compactControls = ['checkbox', 'radio', 'radio-group', 'static', 'file'];
-			let isCompact = false;
+		    return props.label ? (
+		      <label htmlFor={props.id || this.getId()} className={this._getLayoutClass(labelCol)} required={required} key="label">
+		        {props.label}
+		      </label>
+		    ) : null;
+		 }
 
-			if (!Array.isArray(children)) {
-				children = [children];
-			}
-			children.map((child) => {
-				const type = child.props && child.props.type;
-				let prefixCls = child.props && child.props.prefixCls;
-				prefixCls = prefixCls ? prefixCls.substring(prefixCls.indexOf('-') + 1) : '';
+		  renderChildren() {
+			    const props = this.props;
+			    const children = React.Children.map(props.children, (child) => {
+			      if (typeof child.type === 'function' && !child.props.size) {
+			        return React.cloneElement(child, { size: 'large' });
+			      }
 
-				if ((type && compactControls.indexOf(type) > -1) || (prefixCls && compactControls.indexOf(prefixCls) > -1)) {
-					isCompact = true;
-				} else if (child.props && typeof child.props.children === 'object') {
-					isCompact = this._isCompact(child.props.children);
-				}
-			});
+			      return child;
+			    });
+			    return [
+			      this.renderLabel(),
+			      this.renderWrapper(
+			        this.renderValidateWrapper(
+			          children,
+			          this.renderHelp(),
+			          props.extra
+			        )
+			      ),
+			    ];
+		 }
+ 
 
-			return isCompact;
-		}
+		  renderFormItem(children) {
+			    const props = this.props;
+			    const prefixCls = props.prefixCls;
+			    const itemClassName = {
+			      [`${prefixCls}-item`]: true,
+			      [`${prefixCls}-item-with-help`]: !!this.getHelpMsg(),
+			      [`${props.className}`]: !!props.className,
+			    };
 
-		renderFormItem(children) {
-			const props = this.props;
-			const prefixCls = props.prefixCls;
-			const itemClassName = {
-				[`${prefixCls}-item`]: true, [`${prefixCls}-item-compact`]: this._isCompact(props.children), [`${prefixCls}-item-with-help`]: !!props.help,
-			};
-
-			return (
-				<div className={classNames(itemClassName)}>
-        {children}
-      </div>
-			);
-		}
+			    return (
+			      <div className={classNames(itemClassName)}>
+			        {children}
+			      </div>
+			    );
+			  }
 
 		render() {
 			const children = this.renderChildren();
@@ -155,24 +202,34 @@
 	}
 
 	FormItem.propTypes = {
-		prefixCls: React.PropTypes.string,
-		label: React.PropTypes.node,
-		labelCol: React.PropTypes.object,
-		help: React.PropTypes.node,
-		validateStatus: React.PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
-		hasFeedback: React.PropTypes.bool,
-		wrapperCol: React.PropTypes.object,
-		className: React.PropTypes.string,
-		children: React.PropTypes.node,
+		  prefixCls: React.PropTypes.string,
+		  label: React.PropTypes.node,
+		  labelCol: React.PropTypes.object,
+		  help: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.bool]),
+		  validateStatus: React.PropTypes.oneOf(['', 'success', 'warning', 'error', 'validating']),
+		  hasFeedback: React.PropTypes.bool,
+		  wrapperCol: React.PropTypes.object,
+		  className: React.PropTypes.string,
+		  id: React.PropTypes.string,
+		  children: React.PropTypes.node,
 	};
 
 	FormItem.defaultProps = {
-		hasFeedback: false,
-		required: false,
-		prefixCls: 'ant-form',
+	  hasFeedback: false,
+	  prefixCls: 'ant-form',
+	};
+
+	FormItem.contextTypes = {
+	  form: React.PropTypes.object,
 	};
 
 	class Form extends React.Component {
+		getChildContext() {
+			    return {
+			      form: this.props.form,
+			    };
+		}
+		
 		render() {
 			const {
 				prefixCls, className
@@ -181,13 +238,13 @@
 				[className]: !!className, [`${prefixCls}-horizontal`]: this.props.horizontal, [`${prefixCls}-inline`]: this.props.inline,
 			});
 
-			return ( < form {...this.props
+			return (<form {...this.props
 				}
 				className = {
 					formClassName
-				} > {
+				}>{
 					this.props.children
-				} < /form>
+				}</form>
 			);
 		}
 	}
@@ -196,6 +253,7 @@
 		prefixCls: React.PropTypes.string,
 		horizontal: React.PropTypes.bool,
 		inline: React.PropTypes.bool,
+		form: React.PropTypes.object,
 		children: React.PropTypes.any,
 		onSubmit: React.PropTypes.func,
 	};
@@ -203,8 +261,23 @@
 	Form.defaultProps = {
 		prefixCls: 'ant-form',
 	};
+	
+	Form.childContextTypes = {
+	  form: React.PropTypes.object,
+	};
 
+	Form.create = (o = {}) => {
+	  const options = {
+	    ...o,
+	    fieldNameProp: 'id',
+	    fieldMetaProp: '__meta',
+	  };
+
+	  return createForm(options);
+	};
 	Form.Item = FormItem;
+
+	// @Deprecated
 	Form.ValueMixin = ValueMixin;
 
 	// 对于 import { Form, Input } from 'antd/lib/form/';
@@ -214,4 +287,4 @@
 	Form.Input = UI.Input;
 	UI.Form = Form;
 	UI.FormItem = FormItem;
-}(Smart.UI)
+}(Smart.UI,Smart.RC)

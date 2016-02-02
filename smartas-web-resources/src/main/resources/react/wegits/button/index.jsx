@@ -50,9 +50,11 @@
 
 	    const kids = React.Children.map(children, insertSpace);
 
-	    return <button {...others} type={htmlType || 'button'} className={classes} onClick={onClick}>
-	      {kids}
-	    </button>;
+	    return (
+		    <button {...others} type={htmlType || 'button'} className={classes} onClick={onClick}>
+		      {kids}
+		    </button>
+	    );
 	  }
 	}
 
