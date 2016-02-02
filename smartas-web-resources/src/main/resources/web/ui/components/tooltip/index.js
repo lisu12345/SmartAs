@@ -6,7 +6,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 +(function (RC) {
   var _ref = _;
-  var noop = _ref.noop;var Trigger = RC.Trigger;var _React = React;
+  var noop = _ref.noop;
+  var Trigger = RC.Trigger;
+  var _React = React;
   var PropTypes = _React.PropTypes;
 
   var autoAdjustOverflow = {

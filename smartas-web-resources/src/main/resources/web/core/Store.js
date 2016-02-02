@@ -1,5 +1,4 @@
 (function($, Namespace, AT) {
-	'use strict';
 	var logger = Log.getLogger("core.store");
 	function thunkMiddleware(_ref) {
 		var dispatch = _ref.dispatch;
@@ -45,16 +44,16 @@
 		}
 	};
 
-	var defaultGlobal = function(global, action) {
+	function defaultGlobal(global, action) {
 		return global;
-	};
+	}
 	
 	function isDomainMap(map) {
 	    return _.every(map, _.isPlainObject);
-	};
+	}
 	function isActionMap(map) {
 		return _.every(map, _.isFunction);
-	};
+	}
 
 	function getStore() {
 		return store;
@@ -176,35 +175,28 @@
 		}
 	};
 
-	/*
-	 * function combineReducers(reducers, namespace) { reducers =
-	 * compose(defaultReducers, reducers); var _global,_ns,_local; return
-	 * function(state, action) { var global = defaultGlobal(state.global,
-	 * action); var ns = reducers(state[namespace] || Immutable.Map({}),
-	 * action); if(_global !== global || _ns !== ns){ _global = global; _ns =
-	 * ns; _local = _.extend({}, state); _local['global'] = _global;
-	 * _local[namespace] = _ns; } return _local; } }
-	 */
+	 
 
 	function replaceReducer(reducers, ns) {
 		store.replaceReducer(combineReducers(reducers, ns));
 		return store;
-	};
+	}
 	
-	function linkState(key){
+	function linkState(key) {
 		var props = this.props;
 		return {
 			value: props.local.getIn(key),
-			requestChange: function(value,checked,input) {
+			requestChange: function(value, checked, input) {
 				store.dispatch({
-					type : AT.LINK.INPUT_CHANGE,
-					key : key,
-					value : value,
-					input : input || 'input',
-					checked,checked
-			})}
+					type: AT.LINK.INPUT_CHANGE,
+					key: key,
+					value: value,
+					input: input || 'input',
+					checked : checked
+				});
+			}
 		};
-	};
+	}
 	
 	var ImmutableMethod = {
 		get:function(key){
@@ -236,7 +228,7 @@
 				withRef : true
 			});
 		}
-	};
+	}
 
 	_.extend(Namespace.register("Smart.Store"), {
 		getStore : getStore,
