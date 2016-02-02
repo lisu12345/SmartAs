@@ -1,11 +1,10 @@
 // export this package's api
 + function(RC) {
-	const noop = _.noop,
-		rcUtil = RC.Util,
-		Dom = rcUtil.Dom,
-		align = Dom.align,
-		PropTypes = React.PropTypes,
-		isWindow = rcUtil.isWindow;
+	const {noop} = _,
+		{Util} = RC,
+		{Dom,isWindow} = Util,
+		align = RC.domAlign,
+		{PropTypes} = React;
 
 	function buffer(fn, ms) {
 		let timer;

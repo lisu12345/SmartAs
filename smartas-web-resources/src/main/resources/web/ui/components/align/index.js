@@ -2,12 +2,14 @@
 
 // export this package's api
 +(function (RC) {
-	var noop = _.noop,
-	    rcUtil = RC.Util,
-	    Dom = rcUtil.Dom,
-	    align = Dom.align,
-	    PropTypes = React.PropTypes,
-	    isWindow = rcUtil.isWindow;
+	var _ref = _;
+	var noop = _ref.noop;
+	var Util = RC.Util;
+	var Dom = Util.Dom;
+	var isWindow = Util.isWindow;
+	var align = RC.domAlign;
+	var _React = React;
+	var PropTypes = _React.PropTypes;
 
 	function buffer(fn, ms) {
 		var timer = undefined;

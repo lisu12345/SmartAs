@@ -5,244 +5,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 +(function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
-
-	var Css = {
-		addClass: function addClass(elem, className) {
-			$(elem).addClass(className);
-		},
-		removeClass: function removeClass(elem, n) {
-			$(elem).addClass(n);
-		}
-	};
-
-	var EVENT_NAME_MAP = {
-		transitionend: {
-			transition: 'transitionend',
-			WebkitTransition: 'webkitTransitionEnd',
-			MozTransition: 'mozTransitionEnd',
-			OTransition: 'oTransitionEnd',
-			msTransition: 'MSTransitionEnd'
-		},
-
-		animationend: {
-			animation: 'animationend',
-			WebkitAnimation: 'webkitAnimationEnd',
-			MozAnimation: 'mozAnimationEnd',
-			OAnimation: 'oAnimationEnd',
-			msAnimation: 'MSAnimationEnd'
-		}
-	};
-
-	var endEvents = [];
-
-	function detectEvents() {
-		var testEl = document.createElement('div');
-		var style = testEl.style;
-
-		if (!('AnimationEvent' in window)) {
-			delete EVENT_NAME_MAP.animationend.animation;
-		}
-
-		if (!('TransitionEvent' in window)) {
-			delete EVENT_NAME_MAP.transitionend.transition;
-		}
-
-		for (var baseEventName in EVENT_NAME_MAP) {
-			if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
-				var baseEvents = EVENT_NAME_MAP[baseEventName];
-				for (var styleName in baseEvents) {
-					if (styleName in style) {
-						endEvents.push(baseEvents[styleName]);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	if (typeof window !== 'undefined') {
-		detectEvents();
-	}
-
-	function addEventListener(node, eventName, eventListener) {
-		node.addEventListener(eventName, eventListener, false);
-	}
-
-	function removeEventListener(node, eventName, eventListener) {
-		node.removeEventListener(eventName, eventListener, false);
-	}
-
-	var TransitionEvents = {
-		addEndEventListener: function addEndEventListener(node, eventListener) {
-			if (endEvents.length === 0) {
-				window.setTimeout(eventListener, 0);
-				return;
-			}
-			endEvents.forEach(function (endEvent) {
-				addEventListener(node, endEvent, eventListener);
-			});
-		},
-
-		endEvents: endEvents,
-
-		removeEndEventListener: function removeEndEventListener(node, eventListener) {
-			if (endEvents.length === 0) {
-				return;
-			}
-			endEvents.forEach(function (endEvent) {
-				removeEventListener(node, endEvent, eventListener);
-			});
-		}
-	};
-
-	var isCssAnimationSupported = TransitionEvents.endEvents.length !== 0;
-
-	function getDuration(node, name) {
-		var style = window.getComputedStyle(node);
-		var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
-		var ret = '';
-		for (var i = 0; i < prefixes.length; i++) {
-			ret = style.getPropertyValue(prefixes[i] + name);
-			if (ret) {
-				break;
-			}
-		}
-		return ret;
-	}
-
-	function fixBrowserByTimeout(node) {
-		if (isCssAnimationSupported) {
-			var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
-			var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
-			var time = Math.max(transitionDuration, animationDuration);
-			// sometimes, browser bug
-			node.rcEndAnimTimeout = setTimeout(function () {
-				node.rcEndAnimTimeout = null;
-				if (node.rcEndListener) {
-					node.rcEndListener();
-				}
-			}, time * 1000 + 200);
-		}
-	}
-
-	function clearBrowserBugTimeout(node) {
-		if (node.rcEndAnimTimeout) {
-			clearTimeout(node.rcEndAnimTimeout);
-			node.rcEndAnimTimeout = null;
-		}
-	}
-
-	var cssAnimation = function cssAnimation(node, transitionName, callback) {
-		var className = transitionName;
-		var activeClassName = className + '-active';
-
-		if (node.rcEndListener) {
-			node.rcEndListener();
-		}
-
-		node.rcEndListener = function (e) {
-			if (e && e.target !== node) {
-				return;
-			}
-
-			if (node.rcAnimTimeout) {
-				clearTimeout(node.rcAnimTimeout);
-				node.rcAnimTimeout = null;
-			}
-
-			clearBrowserBugTimeout(node);
-
-			Css.removeClass(node, className);
-			Css.removeClass(node, activeClassName);
-
-			TransitionEvents.removeEndEventListener(node, node.rcEndListener);
-			node.rcEndListener = null;
-
-			// Usually this optional callback is used for informing an owner of
-			// a leave animation and telling it to remove the child.
-			if (callback) {
-				callback();
-			}
-		};
-
-		TransitionEvents.addEndEventListener(node, node.rcEndListener);
-
-		Css.addClass(node, className);
-
-		node.rcAnimTimeout = setTimeout(function () {
-			node.rcAnimTimeout = null;
-			Css.addClass(node, activeClassName);
-			fixBrowserByTimeout(node);
-		}, 0);
-
-		return {
-			stop: function stop() {
-				if (node.rcEndListener) {
-					node.rcEndListener();
-				}
-			}
-		};
-	};
-
-	cssAnimation.style = function (node, style, callback) {
-		if (node.rcEndListener) {
-			node.rcEndListener();
-		}
-
-		node.rcEndListener = function (e) {
-			if (e && e.target !== node) {
-				return;
-			}
-
-			if (node.rcAnimTimeout) {
-				clearTimeout(node.rcAnimTimeout);
-				node.rcAnimTimeout = null;
-			}
-
-			clearBrowserBugTimeout(node);
-
-			Event.removeEndEventListener(node, node.rcEndListener);
-			node.rcEndListener = null;
-
-			// Usually this optional callback is used for informing an owner of
-			// a leave animation and telling it to remove the child.
-			if (callback) {
-				callback();
-			}
-		};
-
-		Event.addEndEventListener(node, node.rcEndListener);
-
-		node.rcAnimTimeout = setTimeout(function () {
-			for (var s in style) {
-				if (style.hasOwnProperty(s)) {
-					node.style[s] = style[s];
-				}
-			}
-			node.rcAnimTimeout = null;
-			fixBrowserByTimeout(node);
-		}, 0);
-	};
-
-	cssAnimation.setTransition = function (node, p, value) {
-		var property = p;
-		var v = value;
-		if (value === undefined) {
-			v = property;
-			property = '';
-		}
-		property = property || '';
-		['Webkit', 'Moz', 'O',
-		// ms is special .... !
-		'ms'].forEach(function (prefix) {
-			node.style[prefix + 'Transition' + property] = v;
-		});
-	};
-
-	cssAnimation.addClass = Css.addClass;
-	cssAnimation.removeClass = Css.removeClass;
-	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
-	RC.cssAnimation = cssAnimation;
+	var cssAnimate = RC.cssAnimate;
+	var isCssAnimationSupported = cssAnimate.isCssAnimationSupported;
 
 	var animUtil = {
 		isAppearSupported: function isAppearSupported(props) {
@@ -264,72 +28,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return props.transitionLeave || props.animation.leave;
 		}
 	};
-
-	var transitionMap = {
-		enter: 'transitionEnter',
-		appear: 'transitionAppear',
-		leave: 'transitionLeave'
-	};
-
-	var AnimateChild = React.createClass({
-		displayName: 'AnimateChild',
-
-		propTypes: {
-			children: React.PropTypes.any
-		},
-
-		componentWillUnmount: function componentWillUnmount() {
-			this.stop();
-		},
-		componentWillEnter: function componentWillEnter(done) {
-			if (animUtil.isEnterSupported(this.props)) {
-				this.transition('enter', done);
-			} else {
-				done();
-			}
-		},
-		componentWillAppear: function componentWillAppear(done) {
-			if (animUtil.isAppearSupported(this.props)) {
-				this.transition('appear', done);
-			} else {
-				done();
-			}
-		},
-		componentWillLeave: function componentWillLeave(done) {
-			if (animUtil.isLeaveSupported(this.props)) {
-				this.transition('leave', done);
-			} else {
-				done();
-			}
-		},
-		transition: function transition(animationType, finishCallback) {
-			var _this = this;
-
-			var node = ReactDOM.findDOMNode(this);
-			var props = this.props;
-			var transitionName = props.transitionName;
-			this.stop();
-			var end = function end() {
-				_this.stopper = null;
-				finishCallback();
-			};
-			if ((isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
-				this.stopper = cssAnimation(node, transitionName + '-' + animationType, end);
-			} else {
-				this.stopper = props.animation[animationType](node, end);
-			}
-		},
-		stop: function stop() {
-			var stopper = this.stopper;
-			if (stopper) {
-				this.stopper = null;
-				stopper.stop();
-			}
-		},
-		render: function render() {
-			return this.props.children;
-		}
-	});
 
 	function toArrayChildren(children) {
 		var ret = [];
@@ -426,6 +124,72 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 		return ret;
 	}
+
+	var transitionMap = {
+		enter: 'transitionEnter',
+		appear: 'transitionAppear',
+		leave: 'transitionLeave'
+	};
+
+	var AnimateChild = React.createClass({
+		displayName: 'AnimateChild',
+
+		propTypes: {
+			children: React.PropTypes.any
+		},
+
+		componentWillUnmount: function componentWillUnmount() {
+			this.stop();
+		},
+		componentWillEnter: function componentWillEnter(done) {
+			if (animUtil.isEnterSupported(this.props)) {
+				this.transition('enter', done);
+			} else {
+				done();
+			}
+		},
+		componentWillAppear: function componentWillAppear(done) {
+			if (animUtil.isAppearSupported(this.props)) {
+				this.transition('appear', done);
+			} else {
+				done();
+			}
+		},
+		componentWillLeave: function componentWillLeave(done) {
+			if (animUtil.isLeaveSupported(this.props)) {
+				this.transition('leave', done);
+			} else {
+				done();
+			}
+		},
+		transition: function transition(animationType, finishCallback) {
+			var _this = this;
+
+			var node = ReactDOM.findDOMNode(this);
+			var props = this.props;
+			var transitionName = props.transitionName;
+			this.stop();
+			var end = function end() {
+				_this.stopper = null;
+				finishCallback();
+			};
+			if ((isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
+				this.stopper = cssAnimate(node, transitionName + '-' + animationType, end);
+			} else {
+				this.stopper = props.animation[animationType](node, end);
+			}
+		},
+		stop: function stop() {
+			var stopper = this.stopper;
+			if (stopper) {
+				this.stopper = null;
+				stopper.stop();
+			}
+		},
+		render: function render() {
+			return this.props.children;
+		}
+	});
 
 	var defaultKey = 'rc_animate_' + Date.now();
 
@@ -705,9 +469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				return React.createElement(
 					Component,
 					this.props,
-					' ',
-					children,
-					' '
+					children
 				);
 			}
 			return children[0] || null;

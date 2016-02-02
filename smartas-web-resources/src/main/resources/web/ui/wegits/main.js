@@ -1133,248 +1133,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI) {
-  var noop = _.noop;
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-  function preventDefault(e) {
-    e.preventDefault();
-  }
-
-  var InputNumber = React.createClass({
-    displayName: 'InputNumber',
-
-    propTypes: {
-      onChange: React.PropTypes.func,
-      step: React.PropTypes.number
-    },
-
-    getDefaultProps: function getDefaultProps() {
-      return {
-        prefixCls: 'rc-input-number',
-        max: Infinity,
-        min: -Infinity,
-        step: 1,
-        style: {},
-        defaultValue: '',
-        onChange: noop
-      };
-    },
-    getInitialState: function getInitialState() {
-      var value = undefined;
-      var props = this.props;
-      if ('value' in props) {
-        value = props.value;
-      } else {
-        value = props.defaultValue;
-      }
-      value = this.toPrecisionAsStep(value);
-      return {
-        inputValue: value,
-        value: value,
-        focused: props.autoFocus
-      };
-    },
-    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-      if ('value' in nextProps) {
-        var value = this.toPrecisionAsStep(nextProps.value);
-        this.setState({
-          inputValue: value,
-          value: value
-        });
-      }
-    },
-    onChange: function onChange(event) {
-      this.setInputValue(event.target.value.trim());
-    },
-    onKeyDown: function onKeyDown(e) {
-      if (e.keyCode === 38) {
-        this.up(e);
-      } else if (e.keyCode === 40) {
-        this.down(e);
-      }
-    },
-    onFocus: function onFocus() {
-      this.setState({
-        focused: true
-      });
-    },
-    onBlur: function onBlur(event) {
-      var props = this.props;
-      var val = event.target.value.trim();
-      this.setState({
-        focused: false
-      });
-      if (val === '') {
-        val = '';
-      } else if (!isNaN(val)) {
-        val = Number(val);
-        if (val < props.min) {
-          val = props.min;
-        }
-        if (val > props.max) {
-          val = props.max;
-        }
-      } else {
-        val = this.state.value;
-      }
-      this.setValue(val);
-    },
-    setValue: function setValue(v) {
-      if (!('value' in this.props)) {
-        this.setState({
-          value: v,
-          inputValue: v
-        });
-      }
-      this.props.onChange(v);
-    },
-    setInputValue: function setInputValue(v) {
-      this.setState({
-        inputValue: v
-      });
-    },
-    getPrecision: function getPrecision() {
-      var props = this.props;
-      var stepString = props.step.toString();
-      if (stepString.indexOf('e-') >= 0) {
-        return parseInt(stepString.slice(stepString.indexOf('-e')), 10);
-      }
-      var precision = 0;
-      if (stepString.indexOf('.') >= 0) {
-        precision = stepString.length - stepString.indexOf('.') - 1;
-      }
-      return precision;
-    },
-    getPrecisionFactor: function getPrecisionFactor() {
-      var precision = this.getPrecision();
-      return Math.pow(10, precision);
-    },
-    toPrecisionAsStep: function toPrecisionAsStep(num) {
-      if (isNaN(num) || num === '') {
-        return num;
-      }
-      var precision = this.getPrecision();
-      return Number(Number(num).toFixed(precision));
-    },
-    upStep: function upStep(val) {
-      var stepNum = this.props.step;
-      var precisionFactor = this.getPrecisionFactor();
-      return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
-    },
-    downStep: function downStep(val) {
-      var stepNum = this.props.step;
-      var precisionFactor = this.getPrecisionFactor();
-      return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
-    },
-    step: function step(type, e) {
-      if (e) {
-        e.preventDefault();
-      }
-      var props = this.props;
-      if (props.disabled) {
-        return;
-      }
-      var value = this.state.value;
-      if (isNaN(value)) {
-        return;
-      }
-      var val = this[type + 'Step'](value);
-      if (val > props.max || val < props.min) {
-        return;
-      }
-      this.setValue(val);
-      this.refs.input.focus();
-    },
-    down: function down(e) {
-      this.step('down', e);
-    },
-    up: function up(e) {
-      this.step('up', e);
-    },
-    render: function render() {
-      var _classNames;
-
-      var props = this.props;
-      var prefixCls = props.prefixCls;
-      var classes = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, props.className, !!props.className), _defineProperty(_classNames, prefixCls + '-disabled', props.disabled), _defineProperty(_classNames, prefixCls + '-focused', this.state.focused), _classNames));
-      var upDisabledClass = '';
-      var downDisabledClass = '';
-      var value = this.state.value;
-      if (!isNaN(value)) {
-        var val = Number(value);
-        if (val >= props.max) {
-          upDisabledClass = prefixCls + '-handler-up-disabled';
-        }
-        if (val <= props.min) {
-          downDisabledClass = prefixCls + '-handler-up-disabled';
-        }
-      } else {
-        upDisabledClass = prefixCls + '-handler-up-disabled';
-        downDisabledClass = prefixCls + '-handler-up-disabled';
-      }
-
-      // focus state, show input value
-      // unfocus state, show valid value
-      var inputDisplayValue = undefined;
-      if (this.state.focused) {
-        inputDisplayValue = this.state.inputValue;
-      } else {
-        inputDisplayValue = this.state.value;
-      }
-
-      // ref for test
-      return React.createElement(
-        'div',
-        { className: classes, style: props.style },
-        React.createElement(
-          'div',
-          { className: prefixCls + '-handler-wrap' },
-          React.createElement(
-            'a',
-            { unselectable: 'unselectable',
-              ref: 'up',
-              onClick: upDisabledClass ? noop : this.up,
-              onMouseDown: preventDefault,
-              className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass },
-            React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-up-inner',
-              onClick: preventDefault })
-          ),
-          React.createElement(
-            'a',
-            { unselectable: 'unselectable',
-              ref: 'down',
-              onMouseDown: preventDefault,
-              onClick: downDisabledClass ? noop : this.down,
-              className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass },
-            React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-down-inner',
-              onClick: preventDefault })
-          )
-        ),
-        React.createElement(
-          'div',
-          { className: prefixCls + '-input-wrap' },
-          React.createElement('input', { className: prefixCls + '-input',
-            autoComplete: 'off',
-            onFocus: this.onFocus,
-            onBlur: this.onBlur,
-            onKeyDown: this.onKeyDown,
-            autoFocus: props.autoFocus,
-            readOnly: props.readOnly,
-            disabled: props.disabled,
-            max: props.max,
-            min: props.min,
-            name: props.name,
-            onChange: this.onChange,
-            ref: 'input',
-            value: inputDisplayValue })
-        )
-      );
-    }
-  });
++(function (UI, RC) {
+  var Util = RC.Util;
+  var InputNumber = RC.InputNumber;
+  var _ref = _;
+  var noop = _ref.noop;
+  var classNames = Util.classNames;
 
   var AntInputNumber = React.createClass({
     displayName: 'AntInputNumber',
@@ -1399,8 +1167,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return React.createElement(InputNumber, _extends({ className: inputNumberClass }, other));
     }
   });
+
   UI.InputNumber = AntInputNumber;
-})(Smart.UI);
+})(Smart.UI, Smart.RC);
 'use strict';
 
 +(function (UI, RC) {
@@ -1499,6 +1268,167 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   };
 
   UI.message = message;
+})(Smart.UI, Smart.RC);
+'use strict';
+
++(function (UI, RC) {
+  var Notification = RC.Notification;
+  var Icon = UI.Icon;
+  var _ref = _;
+  var assign = _ref.assign;
+
+  var top = 24;
+  var notificationInstance = undefined;
+
+  function getNotificationInstance() {
+    if (notificationInstance) {
+      return notificationInstance;
+    }
+    notificationInstance = Notification.newInstance({
+      prefixCls: 'ant-notification',
+      style: {
+        top: top,
+        right: 0
+      }
+    });
+    return notificationInstance;
+  }
+
+  function notice(args) {
+    var duration = undefined;
+    if (args.duration === undefined) {
+      duration = 4.5;
+    } else {
+      duration = args.duration;
+    }
+
+    if (args.icon) {
+      var prefixCls = ' ant-notification-notice-content-icon-';
+      var iconType = '';
+      switch (args.icon) {
+        case 'success':
+          iconType = 'check-circle-o';
+          break;
+        case 'info':
+          iconType = 'info-circle-o';
+          break;
+        case 'error':
+          iconType = 'exclamation-circle-o';
+          break;
+        case 'warn':
+          iconType = 'question-circle-o';
+          break;
+        default:
+          iconType = 'info-circle';
+      }
+
+      getNotificationInstance().notice({
+        content: React.createElement(
+          'div',
+          null,
+          React.createElement(Icon, { className: prefixCls + 'icon-' + args.icon + prefixCls + 'icon', type: iconType }),
+          React.createElement(
+            'div',
+            { className: prefixCls + 'message' },
+            args.message
+          ),
+          React.createElement(
+            'div',
+            { className: prefixCls + 'description' },
+            args.description
+          )
+        ),
+        duration: duration,
+        closable: true,
+        onClose: args.onClose,
+        key: args.key,
+        style: {}
+      });
+    } else {
+      var prefixCls = 'ant-notification-notice-content-';
+      if (!args.btn) {
+        getNotificationInstance().notice({
+          content: React.createElement(
+            'div',
+            null,
+            React.createElement(
+              'div',
+              { className: prefixCls + 'message' },
+              args.message
+            ),
+            React.createElement(
+              'div',
+              { className: prefixCls + 'description' },
+              args.description
+            )
+          ),
+          duration: duration,
+          closable: true,
+          onClose: args.onClose,
+          key: args.key,
+          style: {}
+        });
+      } else {
+        getNotificationInstance().notice({
+          content: React.createElement(
+            'div',
+            null,
+            React.createElement(
+              'div',
+              { className: prefixCls + 'message' },
+              args.message
+            ),
+            React.createElement(
+              'div',
+              { className: prefixCls + 'description' },
+              args.description
+            ),
+            React.createElement(
+              'span',
+              { className: prefixCls + 'btn' },
+              args.btn
+            )
+          ),
+          duration: duration,
+          closable: true,
+          onClose: args.onClose,
+          key: args.key,
+          style: {}
+        });
+      }
+    }
+  }
+
+  var api = {
+    open: function open(args) {
+      notice(args);
+    },
+    close: function close(key) {
+      if (notificationInstance) {
+        notificationInstance.removeNotice(key);
+      }
+    },
+    config: function config(options) {
+      top = isNaN(options.top) ? 24 : options.top;
+    },
+    destroy: function destroy() {
+      if (notificationInstance) {
+        notificationInstance.destroy();
+        notificationInstance = null;
+      }
+    }
+  };
+
+  ['success', 'info', 'warn', 'error'].forEach(function (type) {
+    api[type] = function (args) {
+      var newArgs = assign({}, args, {
+        icon: type
+      });
+      return api.open(newArgs);
+    };
+  });
+
+  UI.notification = api;
 })(Smart.UI, Smart.RC);
 'use strict';
 
@@ -2266,161 +2196,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 +(function (UI, RC) {
-	var PropTypes = React.PropTypes;
-	var Trigger = RC.Trigger;
+	var Dropdown = RC.Dropdown;
 	var Button = UI.Button;
 	var ButtonGroup = UI.ButtonGroup;
 	var Icon = UI.Icon;
 
-	var autoAdjustOverflow = {
-		adjustX: 1,
-		adjustY: 1
-	};
-
-	var targetOffset = [0, 0];
-
-	var placements = {
-		topLeft: {
-			points: ['bl', 'tl'],
-			overflow: autoAdjustOverflow,
-			offset: [0, -3],
-			targetOffset: targetOffset
-		},
-		bottomLeft: {
-			points: ['tl', 'bl'],
-			overflow: autoAdjustOverflow,
-			offset: [0, 3],
-			targetOffset: targetOffset
-		}
-	};
-
-	/*
-  var MenuItem = Menu.Item;
-  var menu = <Menu><MenuItem>1</MenuItem></Menu>;
-  <DropDown trigger="click" animationName="" overlay={<>} onSelect={}>
- <button>open</button>
- </DropDown>
- */
-
-	var Dropdown = React.createClass({
-		displayName: 'Dropdown',
-
-		propTypes: {
-			minOverlayWidthMatchTrigger: PropTypes.bool,
-			onVisibleChange: PropTypes.func,
-			prefixCls: PropTypes.string,
-			children: PropTypes.any,
-			transitionName: PropTypes.string,
-			overlayClassName: PropTypes.string,
-			animation: PropTypes.any,
-			align: PropTypes.object,
-			overlayStyle: PropTypes.object,
-			placement: PropTypes.string,
-			trigger: PropTypes.array
-		},
-
+	var AntDropdown = React.createClass({
+		displayName: 'AntDropdown',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				minOverlayWidthMatchTrigger: true,
-				prefixCls: 'ant-dropdown',
-				trigger: ['hover'],
-				overlayClassName: '',
-				overlayStyle: {},
-				defaultVisible: false,
-				onVisibleChange: function onVisibleChange() {},
-
-				placement: 'bottomLeft'
+				transitionName: 'slide-up',
+				prefixCls: 'ant-dropdown'
 			};
-		},
-		getInitialState: function getInitialState() {
-			var props = this.props;
-			if ('visible' in props) {
-				return {
-					visible: props.visible
-				};
-			}
-			return {
-				visible: props.defaultVisible
-			};
-		},
-		componentWillReceiveProps: function componentWillReceiveProps(props) {
-			if ('visible' in props) {
-				this.setState({
-					visible: props.visible
-				});
-			}
-		},
-		onClick: function onClick(e) {
-			var props = this.props;
-			var overlayProps = props.overlay.props;
-			if (!('visible' in props)) {
-				this.setState({
-					visible: false
-				});
-			}
-			if (overlayProps.onClick) {
-				overlayProps.onClick(e);
-			}
-		},
-		onVisibleChange: function onVisibleChange(v) {
-			var props = this.props;
-			if (!('visible' in props)) {
-				this.setState({
-					visible: v
-				});
-			}
-			props.onVisibleChange(v);
-		},
-		getMenuElement: function getMenuElement() {
-			var props = this.props;
-			return React.cloneElement(props.overlay, {
-				prefixCls: props.prefixCls + '-menu',
-				onClick: this.onClick
-			});
-		},
-		getPopupDomNode: function getPopupDomNode() {
-			return this.refs.trigger.getPopupDomNode();
-		},
-		afterVisibleChange: function afterVisibleChange(visible) {
-			if (visible && this.props.minOverlayWidthMatchTrigger) {
-				var overlayNode = this.getPopupDomNode();
-				var rootNode = ReactDOM.findDOMNode(this);
-				if (rootNode.offsetWidth > overlayNode.offsetWidth) {
-					overlayNode.style.width = rootNode.offsetWidth + 'px';
-				}
-			}
 		},
 		render: function render() {
 			var _props = this.props;
-			var prefixCls = _props.prefixCls;
-			var children = _props.children;
-			var transitionName = _props.transitionName;
-			var animation = _props.animation;
-			var align = _props.align;
-			var placement = _props.placement;
-			var overlayClassName = _props.overlayClassName;
-			var overlayStyle = _props.overlayStyle;
-			var trigger = _props.trigger;
+			var overlay = _props.overlay;
 
-			return React.createElement(
-				Trigger,
-				{ prefixCls: prefixCls,
-					ref: 'trigger',
-					popupClassName: overlayClassName,
-					popupStyle: overlayStyle,
-					builtinPlacements: placements,
-					action: trigger,
-					popupPlacement: placement,
-					popupAlign: align,
-					popupTransitionName: transitionName,
-					popupAnimation: animation,
-					popupVisible: this.state.visible,
-					afterPopupVisibleChange: this.afterVisibleChange,
-					popup: this.getMenuElement(),
-					onPopupVisibleChange: this.onVisibleChange
-				},
-				children
-			);
+			var otherProps = _objectWithoutProperties(_props, ['overlay']);
+
+			var menu = React.cloneElement(overlay, {
+				openTransitionName: 'zoom-big'
+			});
+			return React.createElement(Dropdown, _extends({}, otherProps, { overlay: menu }));
 		}
 	});
 
@@ -2452,7 +2250,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					this.props.children
 				),
 				React.createElement(
-					Dropdown,
+					AntDropdown,
 					this.props,
 					React.createElement(
 						Button,
@@ -2464,26 +2262,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 
-	var AntDropdown = React.createClass({
-		displayName: 'AntDropdown',
-		getDefaultProps: function getDefaultProps() {
-			return {
-				transitionName: 'slide-up',
-				prefixCls: 'ant-dropdown'
-			};
-		},
-		render: function render() {
-			var _props2 = this.props;
-			var overlay = _props2.overlay;
-
-			var otherProps = _objectWithoutProperties(_props2, ['overlay']);
-
-			var menu = React.cloneElement(overlay, {
-				openTransitionName: 'zoom-big'
-			});
-			return React.createElement(Dropdown, _extends({}, otherProps, { overlay: menu }));
-		}
-	});
 	AntDropdown.Button = DropdownButton;
 
 	UI.Dropdown = AntDropdown;

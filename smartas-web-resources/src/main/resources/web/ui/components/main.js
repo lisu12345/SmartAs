@@ -1301,7 +1301,570 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }
   };
 
-  ////dom-align
+  var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+  };
+
+  var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    arguments: true,
+    arity: true
+  };
+
+  function hoistNonReactStatics(targetComponent, sourceComponent) {
+    var keys = Object.getOwnPropertyNames(sourceComponent);
+    for (var i = 0; i < keys.length; ++i) {
+      if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
+        targetComponent[keys[i]] = sourceComponent[keys[i]];
+      }
+    }
+
+    return targetComponent;
+  };
+
+  util.hoistStatics = hoistNonReactStatics;
+
+  var hasOwn = ({}).hasOwnProperty;
+
+  function classNames() {
+    var classes = [];
+    for (var i = 0; i < arguments.length; i++) {
+      var arg = arguments[i];
+      if (!arg) continue;
+
+      var argType = typeof arg === 'undefined' ? 'undefined' : _typeof(arg);
+
+      if (argType === 'string' || argType === 'number') {
+        classes.push(arg);
+      } else if (Array.isArray(arg)) {
+        classes.push(classNames.apply(null, arg));
+      } else if (argType === 'object') {
+        for (var key in arg) {
+          if (hasOwn.call(arg, key) && arg[key]) {
+            classes.push(key);
+          }
+        }
+      }
+    }
+
+    return classes.join(' ');
+  }
+  util.classnames = util.classNames = classNames;
+  window.classnames = window.classNames = classNames;
+})(Smart.RC);
+'use strict';
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+/**
+ * align dom node flexibly
+ * @author yiminghe@gmail.com
+ */
+
++(function (RC) {
+
+  var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
+
+  var getComputedStyleX = undefined;
+
+  function css(el, name, v) {
+    var value = v;
+    if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+      for (var i in name) {
+        if (name.hasOwnProperty(i)) {
+          css(el, i, name[i]);
+        }
+      }
+      return undefined;
+    }
+    if (typeof value !== 'undefined') {
+      if (typeof value === 'number') {
+        value = value + 'px';
+      }
+      el.style[name] = value;
+      return undefined;
+    }
+    return getComputedStyleX(el, name);
+  }
+
+  function getClientPosition(elem) {
+    var box = undefined;
+    var x = undefined;
+    var y = undefined;
+    var doc = elem.ownerDocument;
+    var body = doc.body;
+    var docElem = doc && doc.documentElement;
+    // 根据 GBS 最新数据，A-Grade Browsers 都已支持 getBoundingClientRect 方法，不用再考虑传统的实现方式
+    box = elem.getBoundingClientRect();
+
+    // 注：jQuery 还考虑减去 docElem.clientLeft/clientTop
+    // 但测试发现，这样反而会导致当 html 和 body 有边距/边框样式时，获取的值不正确
+    // 此外，ie6 会忽略 html 的 margin 值，幸运地是没有谁会去设置 html 的 margin
+
+    x = box.left;
+    y = box.top;
+
+    // In IE, most of the time, 2 extra pixels are added to the top and left
+    // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
+    // IE6 standards mode, this border can be overridden by setting the
+    // document element's border to zero -- thus, we cannot rely on the
+    // offset always being 2 pixels.
+
+    // In quirks mode, the offset can be determined by querying the body's
+    // clientLeft/clientTop, but in standards mode, it is found by querying
+    // the document element's clientLeft/clientTop.  Since we already called
+    // getClientBoundingRect we have already forced a reflow, so it is not
+    // too expensive just to query them all.
+
+    // ie 下应该减去窗口的边框吧，毕竟默认 absolute 都是相对窗口定位的
+    // 窗口边框标准是设 documentElement ,quirks 时设置 body
+    // 最好禁止在 body 和 html 上边框 ，但 ie < 9 html 默认有 2px ，减去
+    // 但是非 ie 不可能设置窗口边框，body html 也不是窗口 ,ie 可以通过 html,body 设置
+    // 标准 ie 下 docElem.clientTop 就是 border-top
+    // ie7 html 即窗口边框改变不了。永远为 2
+    // 但标准 firefox/chrome/ie9 下 docElem.clientTop 是窗口边框，即使设了 border-top 也为 0
+
+    x -= docElem.clientLeft || body.clientLeft || 0;
+    y -= docElem.clientTop || body.clientTop || 0;
+
+    return { left: x, top: y };
+  }
+
+  function getScroll(w, top) {
+    var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
+    var method = 'scroll' + (top ? 'Top' : 'Left');
+    if (typeof ret !== 'number') {
+      var d = w.document;
+      // ie6,7,8 standard mode
+      ret = d.documentElement[method];
+      if (typeof ret !== 'number') {
+        // quirks mode
+        ret = d.body[method];
+      }
+    }
+    return ret;
+  }
+
+  function getScrollLeft(w) {
+    return getScroll(w);
+  }
+
+  function getScrollTop(w) {
+    return getScroll(w, true);
+  }
+
+  function getOffset(el) {
+    var pos = getClientPosition(el);
+    var doc = el.ownerDocument;
+    var w = doc.defaultView || doc.parentWindow;
+    pos.left += getScrollLeft(w);
+    pos.top += getScrollTop(w);
+    return pos;
+  }
+  function _getComputedStyle(elem, name, cs) {
+    var computedStyle = cs;
+    var val = '';
+    var d = elem.ownerDocument;
+    computedStyle = computedStyle || d.defaultView.getComputedStyle(elem, null);
+
+    // https://github.com/kissyteam/kissy/issues/61
+    if (computedStyle) {
+      val = computedStyle.getPropertyValue(name) || computedStyle[name];
+    }
+
+    return val;
+  }
+
+  var _RE_NUM_NO_PX = new RegExp('^(' + RE_NUM + ')(?!px)[a-z%]+$', 'i');
+  var RE_POS = /^(top|right|bottom|left)$/;
+  var CURRENT_STYLE = 'currentStyle';
+  var RUNTIME_STYLE = 'runtimeStyle';
+  var LEFT = 'left';
+  var PX = 'px';
+
+  function _getComputedStyleIE(elem, name) {
+    // currentStyle maybe null
+    // http://msdn.microsoft.com/en-us/library/ms535231.aspx
+    var ret = elem[CURRENT_STYLE] && elem[CURRENT_STYLE][name];
+
+    // 当 width/height 设置为百分比时，通过 pixelLeft 方式转换的 width/height 值
+    // 一开始就处理了! CUSTOM_STYLE.height,CUSTOM_STYLE.width ,cssHook 解决@2011-08-19
+    // 在 ie 下不对，需要直接用 offset 方式
+    // borderWidth 等值也有问题，但考虑到 borderWidth 设为百分比的概率很小，这里就不考虑了
+
+    // From the awesome hack by Dean Edwards
+    // http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
+    // If we're not dealing with a regular pixel number
+    // but a number that has a weird ending, we need to convert it to pixels
+    // exclude left right for relativity
+    if (_RE_NUM_NO_PX.test(ret) && !RE_POS.test(name)) {
+      // Remember the original values
+      var style = elem.style;
+      var left = style[LEFT];
+      var rsLeft = elem[RUNTIME_STYLE][LEFT];
+
+      // prevent flashing of content
+      elem[RUNTIME_STYLE][LEFT] = elem[CURRENT_STYLE][LEFT];
+
+      // Put in the new values to get a computed value out
+      style[LEFT] = name === 'fontSize' ? '1em' : ret || 0;
+      ret = style.pixelLeft + PX;
+
+      // Revert the changed values
+      style[LEFT] = left;
+
+      elem[RUNTIME_STYLE][LEFT] = rsLeft;
+    }
+    return ret === '' ? 'auto' : ret;
+  }
+
+  if (typeof window !== 'undefined') {
+    getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
+  }
+
+  function getOffsetDirection(dir, option) {
+    if (dir === 'left') {
+      return option.useCssRight ? 'right' : dir;
+    }
+    return option.useCssBottom ? 'bottom' : dir;
+  }
+
+  function oppositeOffsetDirection(dir) {
+    if (dir === 'left') {
+      return 'right';
+    } else if (dir === 'right') {
+      return 'left';
+    } else if (dir === 'top') {
+      return 'bottom';
+    } else if (dir === 'bottom') {
+      return 'top';
+    }
+  }
+
+  // 设置 elem 相对 elem.ownerDocument 的坐标
+  function setOffset(elem, offset, option) {
+    // set position first, in-case top/left are set even on static elem
+    if (css(elem, 'position') === 'static') {
+      elem.style.position = 'relative';
+    }
+    var presetH = -999;
+    var presetV = -999;
+    var horizontalProperty = getOffsetDirection('left', option);
+    var verticalProperty = getOffsetDirection('top', option);
+    var oppositeHorizontalProperty = oppositeOffsetDirection(horizontalProperty);
+    var oppositeVerticalProperty = oppositeOffsetDirection(verticalProperty);
+
+    if (horizontalProperty !== 'left') {
+      presetH = 999;
+    }
+
+    if (verticalProperty !== 'top') {
+      presetV = 999;
+    }
+
+    if ('left' in offset) {
+      elem.style[oppositeHorizontalProperty] = '';
+      elem.style[horizontalProperty] = presetH + 'px';
+    }
+    if ('top' in offset) {
+      elem.style[oppositeVerticalProperty] = '';
+      elem.style[verticalProperty] = presetV + 'px';
+    }
+    var old = getOffset(elem);
+    var ret = {};
+    var key = undefined;
+    for (key in offset) {
+      if (offset.hasOwnProperty(key)) {
+        var dir = getOffsetDirection(key, option);
+        var preset = key === 'left' ? presetH : presetV;
+        if (dir === key) {
+          ret[dir] = preset + offset[key] - old[key];
+        } else {
+          ret[dir] = preset + old[key] - offset[key];
+        }
+      }
+    }
+    css(elem, ret);
+  }
+
+  function each(arr, fn) {
+    for (var i = 0; i < arr.length; i++) {
+      fn(arr[i]);
+    }
+  }
+
+  function isBorderBoxFn(elem) {
+    return getComputedStyleX(elem, 'boxSizing') === 'border-box';
+  }
+
+  var BOX_MODELS = ['margin', 'border', 'padding'];
+  var CONTENT_INDEX = -1;
+  var PADDING_INDEX = 2;
+  var BORDER_INDEX = 1;
+  var MARGIN_INDEX = 0;
+
+  function swap(elem, options, callback) {
+    var old = {};
+    var style = elem.style;
+    var name = undefined;
+
+    // Remember the old values, and insert the new ones
+    for (name in options) {
+      if (options.hasOwnProperty(name)) {
+        old[name] = style[name];
+        style[name] = options[name];
+      }
+    }
+
+    callback.call(elem);
+
+    // Revert the old values
+    for (name in options) {
+      if (options.hasOwnProperty(name)) {
+        style[name] = old[name];
+      }
+    }
+  }
+
+  function getPBMWidth(elem, props, which) {
+    var value = 0;
+    var prop = undefined;
+    var j = undefined;
+    var i = undefined;
+    for (j = 0; j < props.length; j++) {
+      prop = props[j];
+      if (prop) {
+        for (i = 0; i < which.length; i++) {
+          var cssProp = undefined;
+          if (prop === 'border') {
+            cssProp = prop + which[i] + 'Width';
+          } else {
+            cssProp = prop + which[i];
+          }
+          value += parseFloat(getComputedStyleX(elem, cssProp)) || 0;
+        }
+      }
+    }
+    return value;
+  }
+
+  /**
+   * A crude way of determining if an object is a window
+   * @member util
+   */
+  function isWindow(obj) {
+    // must use == for ie8
+    /* eslint eqeqeq:0 */
+    return obj !== null && obj !== undefined && obj == obj.window;
+  }
+
+  var domUtils = {};
+
+  each(['Width', 'Height'], function (name) {
+    domUtils['doc' + name] = function (refWin) {
+      var d = refWin.document;
+      return Math.max(
+      // firefox chrome documentElement.scrollHeight< body.scrollHeight
+      // ie standard mode : documentElement.scrollHeight> body.scrollHeight
+      d.documentElement['scroll' + name],
+      // quirks : documentElement.scrollHeight 最大等于可视窗口多一点？
+      d.body['scroll' + name], domUtils['viewport' + name](d));
+    };
+
+    domUtils['viewport' + name] = function (win) {
+      // pc browser includes scrollbar in window.innerWidth
+      var prop = 'client' + name;
+      var doc = win.document;
+      var body = doc.body;
+      var documentElement = doc.documentElement;
+      var documentElementProp = documentElement[prop];
+      // 标准模式取 documentElement
+      // backcompat 取 body
+      return doc.compatMode === 'CSS1Compat' && documentElementProp || body && body[prop] || documentElementProp;
+    };
+  });
+
+  /*
+   得到元素的大小信息
+   @param elem
+   @param name
+   @param {String} [extra]  'padding' : (css width) + padding
+   'border' : (css width) + padding + border
+   'margin' : (css width) + padding + border + margin
+   */
+  function getWH(elem, name, ex) {
+    var extra = ex;
+    if (isWindow(elem)) {
+      return name === 'width' ? domUtils.viewportWidth(elem) : domUtils.viewportHeight(elem);
+    } else if (elem.nodeType === 9) {
+      return name === 'width' ? domUtils.docWidth(elem) : domUtils.docHeight(elem);
+    }
+    var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+    var borderBoxValue = name === 'width' ? elem.offsetWidth : elem.offsetHeight;
+    var computedStyle = getComputedStyleX(elem);
+    var isBorderBox = isBorderBoxFn(elem, computedStyle);
+    var cssBoxValue = 0;
+    if (borderBoxValue === null || borderBoxValue === undefined || borderBoxValue <= 0) {
+      borderBoxValue = undefined;
+      // Fall back to computed then un computed css if necessary
+      cssBoxValue = getComputedStyleX(elem, name);
+      if (cssBoxValue === null || cssBoxValue === undefined || Number(cssBoxValue) < 0) {
+        cssBoxValue = elem.style[name] || 0;
+      }
+      // Normalize '', auto, and prepare for extra
+      cssBoxValue = parseFloat(cssBoxValue) || 0;
+    }
+    if (extra === undefined) {
+      extra = isBorderBox ? BORDER_INDEX : CONTENT_INDEX;
+    }
+    var borderBoxValueOrIsBorderBox = borderBoxValue !== undefined || isBorderBox;
+    var val = borderBoxValue || cssBoxValue;
+    if (extra === CONTENT_INDEX) {
+      if (borderBoxValueOrIsBorderBox) {
+        return val - getPBMWidth(elem, ['border', 'padding'], which, computedStyle);
+      }
+      return cssBoxValue;
+    } else if (borderBoxValueOrIsBorderBox) {
+      if (extra === BORDER_INDEX) {
+        return val;
+      }
+      return val + (extra === PADDING_INDEX ? -getPBMWidth(elem, ['border'], which, computedStyle) : getPBMWidth(elem, ['margin'], which, computedStyle));
+    }
+    return cssBoxValue + getPBMWidth(elem, BOX_MODELS.slice(extra), which, computedStyle);
+  }
+
+  var cssShow = { position: 'absolute', visibility: 'hidden', display: 'block' };
+
+  // fix #119 : https://github.com/kissyteam/kissy/issues/119
+  function getWHIgnoreDisplay() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var val = undefined;
+    var elem = args[0];
+    // in case elem is window
+    // elem.offsetWidth === undefined
+    if (elem.offsetWidth !== 0) {
+      val = getWH.apply(undefined, args);
+    } else {
+      swap(elem, cssShow, function () {
+        val = getWH.apply(undefined, args);
+      });
+    }
+    return val;
+  }
+
+  each(['width', 'height'], function (name) {
+    var first = name.charAt(0).toUpperCase() + name.slice(1);
+    domUtils['outer' + first] = function (el, includeMargin) {
+      return el && getWHIgnoreDisplay(el, name, includeMargin ? MARGIN_INDEX : BORDER_INDEX);
+    };
+    var which = name === 'width' ? ['Left', 'Right'] : ['Top', 'Bottom'];
+
+    domUtils[name] = function (elem, v) {
+      var val = v;
+      if (val !== undefined) {
+        if (elem) {
+          var computedStyle = getComputedStyleX(elem);
+          var isBorderBox = isBorderBoxFn(elem);
+          if (isBorderBox) {
+            val += getPBMWidth(elem, ['padding', 'border'], which, computedStyle);
+          }
+          return css(elem, name, val);
+        }
+        return undefined;
+      }
+      return elem && getWHIgnoreDisplay(elem, name, CONTENT_INDEX);
+    };
+  });
+
+  function mix(to, from) {
+    for (var i in from) {
+      if (from.hasOwnProperty(i)) {
+        to[i] = from[i];
+      }
+    }
+    return to;
+  }
+
+  var utils = {
+    getWindow: function getWindow(node) {
+      if (node && node.document && node.setTimeout) {
+        return node;
+      }
+      var doc = node.ownerDocument || node;
+      return doc.defaultView || doc.parentWindow;
+    },
+    offset: function offset(el, value, option) {
+      if (typeof value !== 'undefined') {
+        setOffset(el, value, option || {});
+      } else {
+        return getOffset(el);
+      }
+    },
+
+    isWindow: isWindow,
+    each: each,
+    css: css,
+    clone: function clone(obj) {
+      var i = undefined;
+      var ret = {};
+      for (i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          ret[i] = obj[i];
+        }
+      }
+      var overflow = obj.overflow;
+      if (overflow) {
+        for (i in obj) {
+          if (obj.hasOwnProperty(i)) {
+            ret.overflow[i] = obj.overflow[i];
+          }
+        }
+      }
+      return ret;
+    },
+
+    mix: mix,
+    getWindowScrollLeft: function getWindowScrollLeft(w) {
+      return getScrollLeft(w);
+    },
+    getWindowScrollTop: function getWindowScrollTop(w) {
+      return getScrollTop(w);
+    },
+    merge: function merge() {
+      var ret = {};
+
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      for (var i = 0; i < args.length; i++) {
+        utils.mix(ret, args[i]);
+      }
+      return ret;
+    },
+
+    viewportWidth: 0,
+    viewportHeight: 0
+  };
+
+  mix(utils, domUtils);
+
+  /**
+   * 得到会导致元素显示不全的祖先元素
+   */
 
   function getOffsetParent(element) {
     // ie 这个也不是完全可行
@@ -1336,6 +1899,47 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
     }
     return null;
+  }
+
+  function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
+    var pos = utils.clone(elFuturePos);
+    var size = {
+      width: elRegion.width,
+      height: elRegion.height
+    };
+
+    if (overflow.adjustX && pos.left < visibleRect.left) {
+      pos.left = visibleRect.left;
+    }
+
+    // Left edge inside and right edge outside viewport, try to resize it.
+    if (overflow.resizeWidth && pos.left >= visibleRect.left && pos.left + size.width > visibleRect.right) {
+      size.width -= pos.left + size.width - visibleRect.right;
+    }
+
+    // Right edge outside viewport, try to move it.
+    if (overflow.adjustX && pos.left + size.width > visibleRect.right) {
+      // 保证左边界和可视区域左边界对齐
+      pos.left = Math.max(visibleRect.right - size.width, visibleRect.left);
+    }
+
+    // Top edge outside viewport, try to move it.
+    if (overflow.adjustY && pos.top < visibleRect.top) {
+      pos.top = visibleRect.top;
+    }
+
+    // Top edge inside and bottom edge outside viewport, try to resize it.
+    if (overflow.resizeHeight && pos.top >= visibleRect.top && pos.top + size.height > visibleRect.bottom) {
+      size.height -= pos.top + size.height - visibleRect.bottom;
+    }
+
+    // Bottom edge outside viewport, try to move it.
+    if (overflow.adjustY && pos.top + size.height > visibleRect.bottom) {
+      // 保证上边界和可视区域上边界对齐
+      pos.top = Math.max(visibleRect.bottom - size.height, visibleRect.top);
+    }
+
+    return utils.mix(pos, size);
   }
 
   /**
@@ -1396,47 +2000,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     return visibleRect.top >= 0 && visibleRect.left >= 0 && visibleRect.bottom > visibleRect.top && visibleRect.right > visibleRect.left ? visibleRect : null;
   }
 
-  function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
-    var pos = utils.clone(elFuturePos);
-    var size = {
-      width: elRegion.width,
-      height: elRegion.height
-    };
-
-    if (overflow.adjustX && pos.left < visibleRect.left) {
-      pos.left = visibleRect.left;
-    }
-
-    // Left edge inside and right edge outside viewport, try to resize it.
-    if (overflow.resizeWidth && pos.left >= visibleRect.left && pos.left + size.width > visibleRect.right) {
-      size.width -= pos.left + size.width - visibleRect.right;
-    }
-
-    // Right edge outside viewport, try to move it.
-    if (overflow.adjustX && pos.left + size.width > visibleRect.right) {
-      // 保证左边界和可视区域左边界对齐
-      pos.left = Math.max(visibleRect.right - size.width, visibleRect.left);
-    }
-
-    // Top edge outside viewport, try to move it.
-    if (overflow.adjustY && pos.top < visibleRect.top) {
-      pos.top = visibleRect.top;
-    }
-
-    // Top edge inside and bottom edge outside viewport, try to resize it.
-    if (overflow.resizeHeight && pos.top >= visibleRect.top && pos.top + size.height > visibleRect.bottom) {
-      size.height -= pos.top + size.height - visibleRect.bottom;
-    }
-
-    // Bottom edge outside viewport, try to move it.
-    if (overflow.adjustY && pos.top + size.height > visibleRect.bottom) {
-      // 保证上边界和可视区域上边界对齐
-      pos.top = Math.max(visibleRect.bottom - size.height, visibleRect.top);
-    }
-
-    return utils.mix(pos, size);
-  }
-
   function getRegion(node) {
     var offset = undefined;
     var w = undefined;
@@ -1460,8 +2023,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   }
 
   /**
-   * 获取 node 上的 align 对齐点 相对于页面的坐标
-   */
+  * 获取 node 上的 align 对齐点 相对于页面的坐标
+  */
 
   function getAlignOffset(region, align) {
     var V = align.charAt(0);
@@ -1664,81 +2227,287 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   domAlign.__getVisibleRectForElement = getVisibleRectForElement;
 
-  util.Dom.align = domAlign;
+  RC.domAlign = domAlign;
 
-  ////////////////////////////////
+  /**
+   *  2012-04-26 yiminghe@gmail.com
+   *   - 优化智能对齐算法
+   *   - 慎用 resizeXX
+   *
+   *  2011-07-13 yiminghe@gmail.com note:
+   *   - 增加智能对齐，以及大小调整选项
+   **/
+})(Smart.RC);
+'use strict';
 
-  var REACT_STATICS = {
-    childContextTypes: true,
-    contextTypes: true,
-    defaultProps: true,
-    displayName: true,
-    getDefaultProps: true,
-    mixins: true,
-    propTypes: true,
-    type: true
++(function (RC) {
+  var EVENT_NAME_MAP = {
+    transitionend: {
+      transition: 'transitionend',
+      WebkitTransition: 'webkitTransitionEnd',
+      MozTransition: 'mozTransitionEnd',
+      OTransition: 'oTransitionEnd',
+      msTransition: 'MSTransitionEnd'
+    },
+
+    animationend: {
+      animation: 'animationend',
+      WebkitAnimation: 'webkitAnimationEnd',
+      MozAnimation: 'mozAnimationEnd',
+      OAnimation: 'oAnimationEnd',
+      msAnimation: 'MSAnimationEnd'
+    }
   };
 
-  var KNOWN_STATICS = {
-    name: true,
-    length: true,
-    prototype: true,
-    caller: true,
-    arguments: true,
-    arity: true
-  };
+  var endEvents = [];
 
-  function hoistNonReactStatics(targetComponent, sourceComponent) {
-    var keys = Object.getOwnPropertyNames(sourceComponent);
-    for (var i = 0; i < keys.length; ++i) {
-      if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
-        targetComponent[keys[i]] = sourceComponent[keys[i]];
-      }
+  function detectEvents() {
+    var testEl = document.createElement('div');
+    var style = testEl.style;
+
+    if (!('AnimationEvent' in window)) {
+      delete EVENT_NAME_MAP.animationend.animation;
     }
 
-    return targetComponent;
-  };
+    if (!('TransitionEvent' in window)) {
+      delete EVENT_NAME_MAP.transitionend.transition;
+    }
 
-  util.hoistStatics = hoistNonReactStatics;
-
-  var hasOwn = ({}).hasOwnProperty;
-
-  function classNames() {
-    var classes = [];
-    for (var i = 0; i < arguments.length; i++) {
-      var arg = arguments[i];
-      if (!arg) continue;
-
-      var argType = typeof arg === 'undefined' ? 'undefined' : _typeof(arg);
-
-      if (argType === 'string' || argType === 'number') {
-        classes.push(arg);
-      } else if (Array.isArray(arg)) {
-        classes.push(classNames.apply(null, arg));
-      } else if (argType === 'object') {
-        for (var key in arg) {
-          if (hasOwn.call(arg, key) && arg[key]) {
-            classes.push(key);
+    for (var baseEventName in EVENT_NAME_MAP) {
+      if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
+        var baseEvents = EVENT_NAME_MAP[baseEventName];
+        for (var styleName in baseEvents) {
+          if (styleName in style) {
+            endEvents.push(baseEvents[styleName]);
+            break;
           }
         }
       }
     }
-
-    return classes.join(' ');
   }
-  util.classnames = util.classNames = classNames;
-  window.classnames = window.classNames = classNames;
+
+  if (typeof window !== 'undefined') {
+    detectEvents();
+  }
+
+  function addEventListener(node, eventName, eventListener) {
+    node.addEventListener(eventName, eventListener, false);
+  }
+
+  function removeEventListener(node, eventName, eventListener) {
+    node.removeEventListener(eventName, eventListener, false);
+  }
+
+  var Event = {
+    addEndEventListener: function addEndEventListener(node, eventListener) {
+      if (endEvents.length === 0) {
+        window.setTimeout(eventListener, 0);
+        return;
+      }
+      endEvents.forEach(function (endEvent) {
+        addEventListener(node, endEvent, eventListener);
+      });
+    },
+
+    endEvents: endEvents,
+
+    removeEndEventListener: function removeEndEventListener(node, eventListener) {
+      if (endEvents.length === 0) {
+        return;
+      }
+      endEvents.forEach(function (endEvent) {
+        removeEventListener(node, endEvent, eventListener);
+      });
+    }
+  };
+
+  var SPACE = ' ';
+  var RE_CLASS = /[\n\t\r]/g;
+
+  function norm(elemClass) {
+    return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
+  }
+
+  var Css = {
+    addClass: function addClass(elem, className) {
+      elem.className += ' ' + className;
+    },
+    removeClass: function removeClass(elem, n) {
+      var elemClass = elem.className.trim();
+      var className = norm(elemClass);
+      var needle = n.trim();
+      needle = SPACE + needle + SPACE;
+      // 一个 cls 有可能多次出现：'link link2 link link3 link'
+      while (className.indexOf(needle) >= 0) {
+        className = className.replace(needle, SPACE);
+      }
+      elem.className = className.trim();
+    }
+  };
+
+  var isCssAnimationSupported = Event.endEvents.length !== 0;
+
+  function getDuration(node, name) {
+    var style = window.getComputedStyle(node);
+    var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
+    var ret = '';
+    for (var i = 0; i < prefixes.length; i++) {
+      ret = style.getPropertyValue(prefixes[i] + name);
+      if (ret) {
+        break;
+      }
+    }
+    return ret;
+  }
+
+  function fixBrowserByTimeout(node) {
+    if (isCssAnimationSupported) {
+      var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
+      var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
+      var time = Math.max(transitionDuration, animationDuration);
+      // sometimes, browser bug
+      node.rcEndAnimTimeout = setTimeout(function () {
+        node.rcEndAnimTimeout = null;
+        if (node.rcEndListener) {
+          node.rcEndListener();
+        }
+      }, time * 1000 + 200);
+    }
+  }
+
+  function clearBrowserBugTimeout(node) {
+    if (node.rcEndAnimTimeout) {
+      clearTimeout(node.rcEndAnimTimeout);
+      node.rcEndAnimTimeout = null;
+    }
+  }
+
+  var cssAnimation = function cssAnimation(node, transitionName, callback) {
+    var className = transitionName;
+    var activeClassName = className + '-active';
+
+    if (node.rcEndListener) {
+      node.rcEndListener();
+    }
+
+    node.rcEndListener = function (e) {
+      if (e && e.target !== node) {
+        return;
+      }
+
+      if (node.rcAnimTimeout) {
+        clearTimeout(node.rcAnimTimeout);
+        node.rcAnimTimeout = null;
+      }
+
+      clearBrowserBugTimeout(node);
+
+      Css.removeClass(node, className);
+      Css.removeClass(node, activeClassName);
+
+      Event.removeEndEventListener(node, node.rcEndListener);
+      node.rcEndListener = null;
+
+      // Usually this optional callback is used for informing an owner of
+      // a leave animation and telling it to remove the child.
+      if (callback) {
+        callback();
+      }
+    };
+
+    Event.addEndEventListener(node, node.rcEndListener);
+
+    Css.addClass(node, className);
+
+    node.rcAnimTimeout = setTimeout(function () {
+      node.rcAnimTimeout = null;
+      Css.addClass(node, activeClassName);
+      fixBrowserByTimeout(node);
+    }, 0);
+
+    return {
+      stop: function stop() {
+        if (node.rcEndListener) {
+          node.rcEndListener();
+        }
+      }
+    };
+  };
+
+  cssAnimation.style = function (node, style, callback) {
+    if (node.rcEndListener) {
+      node.rcEndListener();
+    }
+
+    node.rcEndListener = function (e) {
+      if (e && e.target !== node) {
+        return;
+      }
+
+      if (node.rcAnimTimeout) {
+        clearTimeout(node.rcAnimTimeout);
+        node.rcAnimTimeout = null;
+      }
+
+      clearBrowserBugTimeout(node);
+
+      Event.removeEndEventListener(node, node.rcEndListener);
+      node.rcEndListener = null;
+
+      // Usually this optional callback is used for informing an owner of
+      // a leave animation and telling it to remove the child.
+      if (callback) {
+        callback();
+      }
+    };
+
+    Event.addEndEventListener(node, node.rcEndListener);
+
+    node.rcAnimTimeout = setTimeout(function () {
+      for (var s in style) {
+        if (style.hasOwnProperty(s)) {
+          node.style[s] = style[s];
+        }
+      }
+      node.rcAnimTimeout = null;
+      fixBrowserByTimeout(node);
+    }, 0);
+  };
+
+  cssAnimation.setTransition = function (node, p, value) {
+    var property = p;
+    var v = value;
+    if (value === undefined) {
+      v = property;
+      property = '';
+    }
+    property = property || '';
+    ['Webkit', 'Moz', 'O',
+    // ms is special .... !
+    'ms'].forEach(function (prefix) {
+      node.style[prefix + 'Transition' + property] = v;
+    });
+  };
+
+  cssAnimation.addClass = Css.addClass;
+  cssAnimation.removeClass = Css.removeClass;
+  cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
+
+  RC.cssAnimation = cssAnimation;
+  RC.cssAnimate = cssAnimation;
 })(Smart.RC);
 'use strict';
 
 // export this package's api
 +(function (RC) {
-	var noop = _.noop,
-	    rcUtil = RC.Util,
-	    Dom = rcUtil.Dom,
-	    align = Dom.align,
-	    PropTypes = React.PropTypes,
-	    isWindow = rcUtil.isWindow;
+	var _ref = _;
+	var noop = _ref.noop;
+	var Util = RC.Util;
+	var Dom = Util.Dom;
+	var isWindow = Util.isWindow;
+	var align = RC.domAlign;
+	var _React = React;
+	var PropTypes = _React.PropTypes;
 
 	function buffer(fn, ms) {
 		var timer = undefined;
@@ -1866,244 +2635,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 +(function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
-
-	var Css = {
-		addClass: function addClass(elem, className) {
-			$(elem).addClass(className);
-		},
-		removeClass: function removeClass(elem, n) {
-			$(elem).addClass(n);
-		}
-	};
-
-	var EVENT_NAME_MAP = {
-		transitionend: {
-			transition: 'transitionend',
-			WebkitTransition: 'webkitTransitionEnd',
-			MozTransition: 'mozTransitionEnd',
-			OTransition: 'oTransitionEnd',
-			msTransition: 'MSTransitionEnd'
-		},
-
-		animationend: {
-			animation: 'animationend',
-			WebkitAnimation: 'webkitAnimationEnd',
-			MozAnimation: 'mozAnimationEnd',
-			OAnimation: 'oAnimationEnd',
-			msAnimation: 'MSAnimationEnd'
-		}
-	};
-
-	var endEvents = [];
-
-	function detectEvents() {
-		var testEl = document.createElement('div');
-		var style = testEl.style;
-
-		if (!('AnimationEvent' in window)) {
-			delete EVENT_NAME_MAP.animationend.animation;
-		}
-
-		if (!('TransitionEvent' in window)) {
-			delete EVENT_NAME_MAP.transitionend.transition;
-		}
-
-		for (var baseEventName in EVENT_NAME_MAP) {
-			if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
-				var baseEvents = EVENT_NAME_MAP[baseEventName];
-				for (var styleName in baseEvents) {
-					if (styleName in style) {
-						endEvents.push(baseEvents[styleName]);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	if (typeof window !== 'undefined') {
-		detectEvents();
-	}
-
-	function addEventListener(node, eventName, eventListener) {
-		node.addEventListener(eventName, eventListener, false);
-	}
-
-	function removeEventListener(node, eventName, eventListener) {
-		node.removeEventListener(eventName, eventListener, false);
-	}
-
-	var TransitionEvents = {
-		addEndEventListener: function addEndEventListener(node, eventListener) {
-			if (endEvents.length === 0) {
-				window.setTimeout(eventListener, 0);
-				return;
-			}
-			endEvents.forEach(function (endEvent) {
-				addEventListener(node, endEvent, eventListener);
-			});
-		},
-
-		endEvents: endEvents,
-
-		removeEndEventListener: function removeEndEventListener(node, eventListener) {
-			if (endEvents.length === 0) {
-				return;
-			}
-			endEvents.forEach(function (endEvent) {
-				removeEventListener(node, endEvent, eventListener);
-			});
-		}
-	};
-
-	var isCssAnimationSupported = TransitionEvents.endEvents.length !== 0;
-
-	function getDuration(node, name) {
-		var style = window.getComputedStyle(node);
-		var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
-		var ret = '';
-		for (var i = 0; i < prefixes.length; i++) {
-			ret = style.getPropertyValue(prefixes[i] + name);
-			if (ret) {
-				break;
-			}
-		}
-		return ret;
-	}
-
-	function fixBrowserByTimeout(node) {
-		if (isCssAnimationSupported) {
-			var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
-			var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
-			var time = Math.max(transitionDuration, animationDuration);
-			// sometimes, browser bug
-			node.rcEndAnimTimeout = setTimeout(function () {
-				node.rcEndAnimTimeout = null;
-				if (node.rcEndListener) {
-					node.rcEndListener();
-				}
-			}, time * 1000 + 200);
-		}
-	}
-
-	function clearBrowserBugTimeout(node) {
-		if (node.rcEndAnimTimeout) {
-			clearTimeout(node.rcEndAnimTimeout);
-			node.rcEndAnimTimeout = null;
-		}
-	}
-
-	var cssAnimation = function cssAnimation(node, transitionName, callback) {
-		var className = transitionName;
-		var activeClassName = className + '-active';
-
-		if (node.rcEndListener) {
-			node.rcEndListener();
-		}
-
-		node.rcEndListener = function (e) {
-			if (e && e.target !== node) {
-				return;
-			}
-
-			if (node.rcAnimTimeout) {
-				clearTimeout(node.rcAnimTimeout);
-				node.rcAnimTimeout = null;
-			}
-
-			clearBrowserBugTimeout(node);
-
-			Css.removeClass(node, className);
-			Css.removeClass(node, activeClassName);
-
-			TransitionEvents.removeEndEventListener(node, node.rcEndListener);
-			node.rcEndListener = null;
-
-			// Usually this optional callback is used for informing an owner of
-			// a leave animation and telling it to remove the child.
-			if (callback) {
-				callback();
-			}
-		};
-
-		TransitionEvents.addEndEventListener(node, node.rcEndListener);
-
-		Css.addClass(node, className);
-
-		node.rcAnimTimeout = setTimeout(function () {
-			node.rcAnimTimeout = null;
-			Css.addClass(node, activeClassName);
-			fixBrowserByTimeout(node);
-		}, 0);
-
-		return {
-			stop: function stop() {
-				if (node.rcEndListener) {
-					node.rcEndListener();
-				}
-			}
-		};
-	};
-
-	cssAnimation.style = function (node, style, callback) {
-		if (node.rcEndListener) {
-			node.rcEndListener();
-		}
-
-		node.rcEndListener = function (e) {
-			if (e && e.target !== node) {
-				return;
-			}
-
-			if (node.rcAnimTimeout) {
-				clearTimeout(node.rcAnimTimeout);
-				node.rcAnimTimeout = null;
-			}
-
-			clearBrowserBugTimeout(node);
-
-			Event.removeEndEventListener(node, node.rcEndListener);
-			node.rcEndListener = null;
-
-			// Usually this optional callback is used for informing an owner of
-			// a leave animation and telling it to remove the child.
-			if (callback) {
-				callback();
-			}
-		};
-
-		Event.addEndEventListener(node, node.rcEndListener);
-
-		node.rcAnimTimeout = setTimeout(function () {
-			for (var s in style) {
-				if (style.hasOwnProperty(s)) {
-					node.style[s] = style[s];
-				}
-			}
-			node.rcAnimTimeout = null;
-			fixBrowserByTimeout(node);
-		}, 0);
-	};
-
-	cssAnimation.setTransition = function (node, p, value) {
-		var property = p;
-		var v = value;
-		if (value === undefined) {
-			v = property;
-			property = '';
-		}
-		property = property || '';
-		['Webkit', 'Moz', 'O',
-		// ms is special .... !
-		'ms'].forEach(function (prefix) {
-			node.style[prefix + 'Transition' + property] = v;
-		});
-	};
-
-	cssAnimation.addClass = Css.addClass;
-	cssAnimation.removeClass = Css.removeClass;
-	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
-	RC.cssAnimation = cssAnimation;
+	var cssAnimate = RC.cssAnimate;
+	var isCssAnimationSupported = cssAnimate.isCssAnimationSupported;
 
 	var animUtil = {
 		isAppearSupported: function isAppearSupported(props) {
@@ -2125,72 +2658,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return props.transitionLeave || props.animation.leave;
 		}
 	};
-
-	var transitionMap = {
-		enter: 'transitionEnter',
-		appear: 'transitionAppear',
-		leave: 'transitionLeave'
-	};
-
-	var AnimateChild = React.createClass({
-		displayName: 'AnimateChild',
-
-		propTypes: {
-			children: React.PropTypes.any
-		},
-
-		componentWillUnmount: function componentWillUnmount() {
-			this.stop();
-		},
-		componentWillEnter: function componentWillEnter(done) {
-			if (animUtil.isEnterSupported(this.props)) {
-				this.transition('enter', done);
-			} else {
-				done();
-			}
-		},
-		componentWillAppear: function componentWillAppear(done) {
-			if (animUtil.isAppearSupported(this.props)) {
-				this.transition('appear', done);
-			} else {
-				done();
-			}
-		},
-		componentWillLeave: function componentWillLeave(done) {
-			if (animUtil.isLeaveSupported(this.props)) {
-				this.transition('leave', done);
-			} else {
-				done();
-			}
-		},
-		transition: function transition(animationType, finishCallback) {
-			var _this = this;
-
-			var node = ReactDOM.findDOMNode(this);
-			var props = this.props;
-			var transitionName = props.transitionName;
-			this.stop();
-			var end = function end() {
-				_this.stopper = null;
-				finishCallback();
-			};
-			if ((isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
-				this.stopper = cssAnimation(node, transitionName + '-' + animationType, end);
-			} else {
-				this.stopper = props.animation[animationType](node, end);
-			}
-		},
-		stop: function stop() {
-			var stopper = this.stopper;
-			if (stopper) {
-				this.stopper = null;
-				stopper.stop();
-			}
-		},
-		render: function render() {
-			return this.props.children;
-		}
-	});
 
 	function toArrayChildren(children) {
 		var ret = [];
@@ -2287,6 +2754,72 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 		return ret;
 	}
+
+	var transitionMap = {
+		enter: 'transitionEnter',
+		appear: 'transitionAppear',
+		leave: 'transitionLeave'
+	};
+
+	var AnimateChild = React.createClass({
+		displayName: 'AnimateChild',
+
+		propTypes: {
+			children: React.PropTypes.any
+		},
+
+		componentWillUnmount: function componentWillUnmount() {
+			this.stop();
+		},
+		componentWillEnter: function componentWillEnter(done) {
+			if (animUtil.isEnterSupported(this.props)) {
+				this.transition('enter', done);
+			} else {
+				done();
+			}
+		},
+		componentWillAppear: function componentWillAppear(done) {
+			if (animUtil.isAppearSupported(this.props)) {
+				this.transition('appear', done);
+			} else {
+				done();
+			}
+		},
+		componentWillLeave: function componentWillLeave(done) {
+			if (animUtil.isLeaveSupported(this.props)) {
+				this.transition('leave', done);
+			} else {
+				done();
+			}
+		},
+		transition: function transition(animationType, finishCallback) {
+			var _this = this;
+
+			var node = ReactDOM.findDOMNode(this);
+			var props = this.props;
+			var transitionName = props.transitionName;
+			this.stop();
+			var end = function end() {
+				_this.stopper = null;
+				finishCallback();
+			};
+			if ((isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
+				this.stopper = cssAnimate(node, transitionName + '-' + animationType, end);
+			} else {
+				this.stopper = props.animation[animationType](node, end);
+			}
+		},
+		stop: function stop() {
+			var stopper = this.stopper;
+			if (stopper) {
+				this.stopper = null;
+				stopper.stop();
+			}
+		},
+		render: function render() {
+			return this.props.children;
+		}
+	});
 
 	var defaultKey = 'rc_animate_' + Date.now();
 
@@ -2566,9 +3099,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				return React.createElement(
 					Component,
 					this.props,
-					' ',
-					children,
-					' '
+					children
 				);
 			}
 			return children[0] || null;
@@ -3351,6 +3882,418 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	RC.Checkbox = Checkbox;
+})(Smart.RC);
+'use strict';
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
++(function (RC) {
+	var Util = RC.Util;
+	var _ref = _;
+	var noop = _ref.noop;
+	var classNames = Util.classNames;
+
+	function preventDefault(e) {
+		e.preventDefault();
+	}
+
+	var InputNumber = React.createClass({
+		displayName: 'InputNumber',
+
+		propTypes: {
+			onChange: React.PropTypes.func,
+			step: React.PropTypes.number
+		},
+
+		getDefaultProps: function getDefaultProps() {
+			return {
+				prefixCls: 'rc-input-number',
+				max: Infinity,
+				min: -Infinity,
+				step: 1,
+				style: {},
+				defaultValue: '',
+				onChange: noop
+			};
+		},
+		getInitialState: function getInitialState() {
+			var value = undefined;
+			var props = this.props;
+			if ('value' in props) {
+				value = props.value;
+			} else {
+				value = props.defaultValue;
+			}
+			value = this.toPrecisionAsStep(value);
+			return {
+				inputValue: value,
+				value: value,
+				focused: props.autoFocus
+			};
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			if ('value' in nextProps) {
+				var value = this.toPrecisionAsStep(nextProps.value);
+				this.setState({
+					inputValue: value,
+					value: value
+				});
+			}
+		},
+		onChange: function onChange(event) {
+			this.setInputValue(event.target.value.trim());
+		},
+		onKeyDown: function onKeyDown(e) {
+			if (e.keyCode === 38) {
+				this.up(e);
+			} else if (e.keyCode === 40) {
+				this.down(e);
+			}
+		},
+		onFocus: function onFocus() {
+			this.setState({
+				focused: true
+			});
+		},
+		onBlur: function onBlur(event) {
+			var props = this.props;
+			var val = event.target.value.trim();
+			this.setState({
+				focused: false
+			});
+			if (val === '') {
+				val = '';
+			} else if (!isNaN(val)) {
+				val = Number(val);
+				if (val < props.min) {
+					val = props.min;
+				}
+				if (val > props.max) {
+					val = props.max;
+				}
+			} else {
+				val = this.state.value;
+			}
+			this.setValue(val);
+		},
+		setValue: function setValue(v) {
+			if (!('value' in this.props)) {
+				this.setState({
+					value: v,
+					inputValue: v
+				});
+			}
+			this.props.onChange(v);
+		},
+		setInputValue: function setInputValue(v) {
+			this.setState({
+				inputValue: v
+			});
+		},
+		getPrecision: function getPrecision() {
+			var props = this.props;
+			var stepString = props.step.toString();
+			if (stepString.indexOf('e-') >= 0) {
+				return parseInt(stepString.slice(stepString.indexOf('-e')), 10);
+			}
+			var precision = 0;
+			if (stepString.indexOf('.') >= 0) {
+				precision = stepString.length - stepString.indexOf('.') - 1;
+			}
+			return precision;
+		},
+		getPrecisionFactor: function getPrecisionFactor() {
+			var precision = this.getPrecision();
+			return Math.pow(10, precision);
+		},
+		toPrecisionAsStep: function toPrecisionAsStep(num) {
+			if (isNaN(num) || num === '') {
+				return num;
+			}
+			var precision = this.getPrecision();
+			return Number(Number(num).toFixed(precision));
+		},
+		upStep: function upStep(val) {
+			var stepNum = this.props.step;
+			var precisionFactor = this.getPrecisionFactor();
+			return (precisionFactor * val + precisionFactor * stepNum) / precisionFactor;
+		},
+		downStep: function downStep(val) {
+			var stepNum = this.props.step;
+			var precisionFactor = this.getPrecisionFactor();
+			return (precisionFactor * val - precisionFactor * stepNum) / precisionFactor;
+		},
+		step: function step(type, e) {
+			if (e) {
+				e.preventDefault();
+			}
+			var props = this.props;
+			if (props.disabled) {
+				return;
+			}
+			var value = this.state.value;
+			if (isNaN(value)) {
+				return;
+			}
+			var val = this[type + 'Step'](value);
+			if (val > props.max || val < props.min) {
+				return;
+			}
+			this.setValue(val);
+			this.refs.input.focus();
+		},
+		down: function down(e) {
+			this.step('down', e);
+		},
+		up: function up(e) {
+			this.step('up', e);
+		},
+		render: function render() {
+			var _classNames;
+
+			var props = this.props;
+			var prefixCls = props.prefixCls;
+			var classes = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, props.className, !!props.className), _defineProperty(_classNames, prefixCls + '-disabled', props.disabled), _defineProperty(_classNames, prefixCls + '-focused', this.state.focused), _classNames));
+			var upDisabledClass = '';
+			var downDisabledClass = '';
+			var value = this.state.value;
+			if (!isNaN(value)) {
+				var val = Number(value);
+				if (val >= props.max) {
+					upDisabledClass = prefixCls + '-handler-up-disabled';
+				}
+				if (val <= props.min) {
+					downDisabledClass = prefixCls + '-handler-up-disabled';
+				}
+			} else {
+				upDisabledClass = prefixCls + '-handler-up-disabled';
+				downDisabledClass = prefixCls + '-handler-up-disabled';
+			}
+
+			// focus state, show input value
+			// unfocus state, show valid value
+			var inputDisplayValue = undefined;
+			if (this.state.focused) {
+				inputDisplayValue = this.state.inputValue;
+			} else {
+				inputDisplayValue = this.state.value;
+			}
+
+			// ref for test
+			return React.createElement(
+				'div',
+				{ className: classes, style: props.style },
+				React.createElement(
+					'div',
+					{ className: prefixCls + '-handler-wrap' },
+					React.createElement(
+						'a',
+						{ unselectable: 'unselectable',
+							ref: 'up',
+							onClick: upDisabledClass ? noop : this.up,
+							onMouseDown: preventDefault,
+							className: prefixCls + '-handler ' + prefixCls + '-handler-up ' + upDisabledClass },
+						React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-up-inner',
+							onClick: preventDefault })
+					),
+					React.createElement(
+						'a',
+						{ unselectable: 'unselectable',
+							ref: 'down',
+							onMouseDown: preventDefault,
+							onClick: downDisabledClass ? noop : this.down,
+							className: prefixCls + '-handler ' + prefixCls + '-handler-down ' + downDisabledClass },
+						React.createElement('span', { unselectable: 'unselectable', className: prefixCls + '-handler-down-inner',
+							onClick: preventDefault })
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: prefixCls + '-input-wrap' },
+					React.createElement('input', { className: prefixCls + '-input',
+						autoComplete: 'off',
+						onFocus: this.onFocus,
+						onBlur: this.onBlur,
+						onKeyDown: this.onKeyDown,
+						autoFocus: props.autoFocus,
+						readOnly: props.readOnly,
+						disabled: props.disabled,
+						max: props.max,
+						min: props.min,
+						name: props.name,
+						onChange: this.onChange,
+						ref: 'input',
+						value: inputDisplayValue })
+				)
+			);
+		}
+	});
+
+	RC.InputNumber = InputNumber;
+})(Smart.RC);
+'use strict';
+
++(function (RC) {
+	var Trigger = RC.Trigger;
+	var _React = React;
+	var PropTypes = _React.PropTypes;
+
+	var autoAdjustOverflow = {
+		adjustX: 1,
+		adjustY: 1
+	};
+
+	var targetOffset = [0, 0];
+
+	var placements = {
+		topLeft: {
+			points: ['bl', 'tl'],
+			overflow: autoAdjustOverflow,
+			offset: [0, -3],
+			targetOffset: targetOffset
+		},
+		bottomLeft: {
+			points: ['tl', 'bl'],
+			overflow: autoAdjustOverflow,
+			offset: [0, 3],
+			targetOffset: targetOffset
+		}
+	};
+
+	/*
+ 
+  var MenuItem = Menu.Item;
+ 
+  var menu = <Menu><MenuItem>1</MenuItem></Menu>;
+ 
+  <DropDown trigger="click" animationName="" overlay={<>} onSelect={}>
+  <button>open</button>
+  </DropDown>
+  */
+
+	var Dropdown = React.createClass({
+		displayName: 'Dropdown',
+
+		propTypes: {
+			minOverlayWidthMatchTrigger: PropTypes.bool,
+			onVisibleChange: PropTypes.func,
+			prefixCls: PropTypes.string,
+			children: PropTypes.any,
+			transitionName: PropTypes.string,
+			overlayClassName: PropTypes.string,
+			animation: PropTypes.any,
+			align: PropTypes.object,
+			overlayStyle: PropTypes.object,
+			placement: PropTypes.string,
+			trigger: PropTypes.array
+		},
+
+		getDefaultProps: function getDefaultProps() {
+			return {
+				minOverlayWidthMatchTrigger: true,
+				prefixCls: 'rc-dropdown',
+				trigger: ['hover'],
+				overlayClassName: '',
+				overlayStyle: {},
+				defaultVisible: false,
+				onVisibleChange: function onVisibleChange() {},
+
+				placement: 'bottomLeft'
+			};
+		},
+		getInitialState: function getInitialState() {
+			var props = this.props;
+			if ('visible' in props) {
+				return {
+					visible: props.visible
+				};
+			}
+			return {
+				visible: props.defaultVisible
+			};
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(props) {
+			if ('visible' in props) {
+				this.setState({
+					visible: props.visible
+				});
+			}
+		},
+		onClick: function onClick(e) {
+			var props = this.props;
+			var overlayProps = props.overlay.props;
+			if (!('visible' in props)) {
+				this.setState({
+					visible: false
+				});
+			}
+			if (overlayProps.onClick) {
+				overlayProps.onClick(e);
+			}
+		},
+		onVisibleChange: function onVisibleChange(v) {
+			var props = this.props;
+			if (!('visible' in props)) {
+				this.setState({
+					visible: v
+				});
+			}
+			props.onVisibleChange(v);
+		},
+		getMenuElement: function getMenuElement() {
+			var props = this.props;
+			return React.cloneElement(props.overlay, {
+				prefixCls: props.prefixCls + '-menu',
+				onClick: this.onClick
+			});
+		},
+		getPopupDomNode: function getPopupDomNode() {
+			return this.refs.trigger.getPopupDomNode();
+		},
+		afterVisibleChange: function afterVisibleChange(visible) {
+			if (visible && this.props.minOverlayWidthMatchTrigger) {
+				var overlayNode = this.getPopupDomNode();
+				var rootNode = ReactDOM.findDOMNode(this);
+				if (rootNode.offsetWidth > overlayNode.offsetWidth) {
+					overlayNode.style.width = rootNode.offsetWidth + 'px';
+				}
+			}
+		},
+		render: function render() {
+			var _props = this.props;
+			var prefixCls = _props.prefixCls;
+			var children = _props.children;
+			var transitionName = _props.transitionName;
+			var animation = _props.animation;
+			var align = _props.align;
+			var placement = _props.placement;
+			var overlayClassName = _props.overlayClassName;
+			var overlayStyle = _props.overlayStyle;
+			var trigger = _props.trigger;
+
+			return React.createElement(
+				Trigger,
+				{ prefixCls: prefixCls,
+					ref: 'trigger',
+					popupClassName: overlayClassName,
+					popupStyle: overlayStyle,
+					builtinPlacements: placements,
+					action: trigger,
+					popupPlacement: placement,
+					popupAlign: align,
+					popupTransitionName: transitionName,
+					popupAnimation: animation,
+					popupVisible: this.state.visible,
+					afterPopupVisibleChange: this.afterVisibleChange,
+					popup: this.getMenuElement(),
+					onPopupVisibleChange: this.onVisibleChange
+				},
+				children
+			);
+		}
+	});
+
+	RC.Dropdown = Dropdown;
 })(Smart.RC);
 'use strict';
 

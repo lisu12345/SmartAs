@@ -12,11 +12,15 @@ const scripts = {
 		components: [
 			'src/main/resources/web/ui/components/index.js',
 			'src/main/resources/web/ui/components/util/index.js',
+			'src/main/resources/web/ui/components/dom-align/index.js',
+			'src/main/resources/web/ui/components/css-animation/index.js',
 			'src/main/resources/web/ui/components/align/index.js',
 			'src/main/resources/web/ui/components/animate/index.js',
 			'src/main/resources/web/ui/components/trigger/index.js',
 			'src/main/resources/web/ui/components/notification/index.js',
 			'src/main/resources/web/ui/components/checkbox/index.js',
+			'src/main/resources/web/ui/components/input-number/index.js',
+			'src/main/resources/web/ui/components/dropdown/index.js',
 			'src/main/resources/web/ui/components/radio/index.js',
 			'src/main/resources/web/ui/components/menu/index.js',
 			'src/main/resources/web/ui/components/select/index.js',
@@ -42,6 +46,7 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/form/index.js',
 			'src/main/resources/web/ui/wegits/input-number/index.js',
 			'src/main/resources/web/ui/wegits/message/index.js',
+			'src/main/resources/web/ui/wegits/notification/index.js',
 			'src/main/resources/web/ui/wegits/affix/index.js',
 			'src/main/resources/web/ui/wegits/alert/index.js',
 			'src/main/resources/web/ui/wegits/badge/index.js',
@@ -89,7 +94,7 @@ gulp.task('minifycss', function() {
 gulp.task('less', function() {
 	// 1. 找到 less 文件
 	gulp.src('src/main/resources/style/**.less')
-		.pipe(concat('smart.mini.css')) //合并CSS文件
+		.pipe(concat('smart.css')) //合并CSS文件
 		// 2. 编译为css
 		.pipe(less())
 		// 3. 另存文件

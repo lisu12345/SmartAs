@@ -19,3 +19,6 @@ ant-design 样式库
 各个组件中如要自定义类名前缀，请误重名变量，可参照如下定义：
 
 `@btn-prefix-cls: ~"@{css-prefix}btn";`
+
+## 修改
+notification.less z-index = 1040

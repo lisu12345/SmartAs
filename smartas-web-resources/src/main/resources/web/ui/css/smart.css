@@ -8053,7 +8053,7 @@ label.ant-radio-button-disabled.ant-radio-button-checked {
 }
 .ant-notification {
   position: fixed;
-  z-index: 1000;
+  z-index: 1040;
   width: 335px;
   margin-right: 24px;
 }
