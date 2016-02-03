@@ -33,6 +33,7 @@ const scripts = {
 			'src/main/resources/web/ui/components/form/index.js',
 			'src/main/resources/web/ui/components/pagination/index.js',
 			'src/main/resources/web/ui/components/table/index.js',
+			'src/main/resources/web/ui/components/steps/index.js',
 		],
 		wegits: [
 			'src/main/resources/web/ui/wegits/index.js',
@@ -65,6 +66,7 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/popover/index.js',
 			'src/main/resources/web/ui/wegits/pagination/index.js',
 			'src/main/resources/web/ui/wegits/table/index.js',
+			'src/main/resources/web/ui/wegits/steps/index.js',
 		]
 	},
 	core: [
