@@ -1,58 +1,73 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _rcCalendar = require('rc-calendar');
-
-var _rcCalendar2 = _interopRequireDefault(_rcCalendar);
-
-var _MonthCalendar = require('rc-calendar/lib/MonthCalendar');
-
-var _MonthCalendar2 = _interopRequireDefault(_MonthCalendar);
-
-var _Picker = require('rc-calendar/lib/Picker');
-
-var _Picker2 = _interopRequireDefault(_Picker);
-
-var _gregorianCalendar = require('gregorian-calendar');
-
-var _gregorianCalendar2 = _interopRequireDefault(_gregorianCalendar);
-
-var _zh_CN = require('rc-calendar/lib/locale/zh_CN');
-
-var _zh_CN2 = _interopRequireDefault(_zh_CN);
-
-var _RangePicker = require('./RangePicker');
-
-var _RangePicker2 = _interopRequireDefault(_RangePicker);
-
-var _PickerMixin = require('./PickerMixin');
-
-var _PickerMixin2 = _interopRequireDefault(_PickerMixin);
-
-var _rcTimePicker = require('rc-time-picker');
-
-var _rcTimePicker2 = _interopRequireDefault(_rcTimePicker);
-
-var _classnames = require('classnames');
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function createPicker(TheCalendar, defaultFormat) {
-  return _react2.default.createClass({
++(function (UI, RC) {
+  var DatePicker = RC.DatePicker;
+  var TimePicker = RC.TimePicker;
+  var DateTimeFormat = RC.DateTimeFormat;
+  var classNames = RC.classNames;
+  var GregorianCalendar = RC.GregorianCalendar;
+  var Calendar = RC.Calendar;
+  var MonthCalendar = RC.MonthCalendar;
+  var RangeCalendar = RC.RangeCalendar;
+  var Locale = UI.Locale;
+  var objectAssign = _.assign;
+  var defaultLocale = Locale.Calendar;
+  var _React = React;
+  var PropTypes = _React.PropTypes;
+  var Component = _React.Component;
+
+  var PickerMixin = {
+    getLocale: function getLocale() {
+      // 统一合并为完整的 Locale
+      var locale = objectAssign({}, defaultLocale, this.props.locale);
+      locale.lang = objectAssign({}, defaultLocale.lang, this.props.locale.lang);
+      return locale;
+    },
+    getFormatter: function getFormatter() {
+      var formats = this.formats = this.formats || {};
+      var format = this.props.format;
+      // Remove time format text when has time-picker in calendar
+      if (this.props.showTime) {
+        format = format.replace('HH:mm:ss', '');
+      }
+      if (formats[format]) {
+        return formats[format];
+      }
+      formats[format] = new DateTimeFormat(format, this.getLocale().lang.format);
+      return formats[format];
+    },
+    parseDateFromValue: function parseDateFromValue(value) {
+      if (value) {
+        if (typeof value === 'string') {
+          return this.getFormatter().parse(value, { locale: this.getLocale() });
+        } else if (value instanceof Date) {
+          var date = new GregorianCalendar(this.getLocale());
+          date.setTime(+value);
+          return date;
+        }
+      }
+      return value;
+    },
+
+    // remove input readonly warning
+    handleInputChange: function handleInputChange() {},
+    toggleOpen: function toggleOpen(e) {
+      this.setState({
+        open: e.open
+      });
+    }
+  };
+
+  var AntRangePicker = React.createClass({
+    displayName: 'AntRangePicker',
     getDefaultProps: function getDefaultProps() {
       return {
-        format: defaultFormat || 'yyyy-MM-dd',
+        defaultValue: [],
+        format: 'yyyy-MM-dd',
+        startPlaceholder: '开始日期',
+        endPlaceholder: '结束日期',
         transitionName: 'slide-up',
         popupStyle: {},
         onChange: function onChange() {},
@@ -65,16 +80,25 @@ function createPicker(TheCalendar, defaultFormat) {
       };
     },
     getInitialState: function getInitialState() {
+      var _props = this.props;
+      var value = _props.value;
+      var defaultValue = _props.defaultValue;
+
+      var start = value && value[0] || defaultValue[0];
+      var end = value && value[1] || defaultValue[1];
       return {
-        value: this.parseDateFromValue(this.props.value || this.props.defaultValue)
+        value: [this.parseDateFromValue(start), this.parseDateFromValue(end)]
       };
     },
 
-    mixins: [_PickerMixin2.default],
+    mixins: [PickerMixin],
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
       if ('value' in nextProps) {
+        var value = nextProps.value || [];
+        var start = this.parseDateFromValue(value[0]);
+        var end = this.parseDateFromValue(value[1]);
         this.setState({
-          value: this.parseDateFromValue(nextProps.value)
+          value: [start, end]
         });
       }
     },
@@ -82,106 +106,247 @@ function createPicker(TheCalendar, defaultFormat) {
       if (!('value' in this.props)) {
         this.setState({ value: value });
       }
-      var timeValue = value ? new Date(value.getTime()) : null;
-      this.props.onChange(timeValue);
+      var startTime = value[0] ? new Date(value[0].getTime()) : null;
+      var endTime = value[1] ? new Date(value[1].getTime()) : null;
+      this.props.onChange([startTime, endTime]);
     },
     render: function render() {
-      var _classNames,
-          _this = this;
+      var _this = this;
 
       var locale = this.getLocale();
       // 以下两行代码
       // 给没有初始值的日期选择框提供本地化信息
       // 否则会以周日开始排
-      var defaultCalendarValue = new _gregorianCalendar2.default(locale);
+      var defaultCalendarValue = new GregorianCalendar(locale);
       defaultCalendarValue.setTime(Date.now());
 
-      var placeholder = 'placeholder' in this.props ? this.props.placeholder : locale.lang.placeholder;
+      var _props2 = this.props;
+      var disabledDate = _props2.disabledDate;
+      var showTime = _props2.showTime;
+      var size = _props2.size;
+      var startPlaceholder = _props2.startPlaceholder;
+      var endPlaceholder = _props2.endPlaceholder;
+      var transitionName = _props2.transitionName;
+      var disabled = _props2.disabled;
+      var popupStyle = _props2.popupStyle;
+      var align = _props2.align;
+      var style = _props2.style;
 
-      var timePicker = this.props.showTime ? _react2.default.createElement(_rcTimePicker2.default, { prefixCls: 'ant-time-picker',
+      var state = this.state;
+
+      var timePicker = showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
         placeholder: locale.lang.timePlaceholder,
         transitionName: 'slide-up' }) : null;
 
-      var calendarClassName = (0, _classnames2.default)((_classNames = {}, _defineProperty(_classNames, 'ant-calendar-time', this.props.showTime), _defineProperty(_classNames, 'ant-calendar-month', _MonthCalendar2.default === TheCalendar), _classNames));
+      var calendarClassName = classNames(_defineProperty({}, 'ant-calendar-time', this.props.showTime));
 
-      var calendar = _react2.default.createElement(TheCalendar, {
-        disabledDate: this.props.disabledDate,
-        locale: locale.lang,
-        timePicker: timePicker,
-        defaultValue: defaultCalendarValue,
-        dateInputPlaceholder: placeholder,
-        prefixCls: 'ant-calendar',
+      var calendar = React.createElement(RangeCalendar, { prefixCls: 'ant-calendar',
+        formatter: this.getFormatter(),
         className: calendarClassName,
-        showOk: this.props.showTime,
+        timePicker: timePicker,
+        disabledDate: disabledDate,
+        dateInputPlaceholder: [startPlaceholder, endPlaceholder],
+        locale: locale.lang,
+        defaultValue: [defaultCalendarValue, defaultCalendarValue],
         showClear: true });
 
-      var sizeClass = '';
-      if (this.props.size === 'large') {
-        sizeClass = ' ant-input-lg';
-      } else if (this.props.size === 'small') {
-        sizeClass = ' ant-input-sm';
-      }
+      var pickerClass = classNames({
+        'ant-calendar-picker': true,
+        'ant-calendar-picker-open': state.open
+      });
 
-      var pickerClass = 'ant-calendar-picker';
-      if (this.state.open) {
-        pickerClass += ' ant-calendar-picker-open';
-      }
+      var pickerInputClass = classNames({
+        'ant-calendar-range-picker': true,
+        'ant-input': true,
+        'ant-input-lg': size === 'large',
+        'ant-input-sm': size === 'small'
+      });
 
-      return _react2.default.createElement(
+      return React.createElement(
         'span',
-        { className: pickerClass },
-        _react2.default.createElement(
-          _Picker2.default,
+        { className: pickerClass, style: style },
+        React.createElement(
+          DatePicker,
           {
-            transitionName: this.props.transitionName,
-            disabled: this.props.disabled,
+            transitionName: transitionName,
+            disabled: disabled,
             calendar: calendar,
-            value: this.state.value,
+            value: state.value,
             prefixCls: 'ant-calendar-picker-container',
-            style: this.props.popupStyle,
-            align: this.props.align,
+            style: popupStyle,
+            align: align,
             onOpen: this.toggleOpen,
             onClose: this.toggleOpen,
             onChange: this.handleChange },
           function (_ref) {
             var value = _ref.value;
 
-            return _react2.default.createElement(
+            var start = value[0];
+            var end = value[1];
+            return React.createElement(
               'span',
-              null,
-              _react2.default.createElement('input', { disabled: _this.props.disabled,
+              { className: pickerInputClass, disabled: disabled },
+              React.createElement('input', { disabled: disabled,
                 onChange: _this.handleInputChange,
-                value: value && _this.getFormatter().format(value),
-                placeholder: placeholder,
-                style: _this.props.style,
-                className: 'ant-calendar-picker-input ant-input' + sizeClass }),
-              _react2.default.createElement('span', { className: 'ant-calendar-picker-icon' })
+                value: start && _this.getFormatter().format(start),
+                placeholder: startPlaceholder,
+                className: 'ant-calendar-range-picker-input' }),
+              React.createElement(
+                'span',
+                { className: 'ant-calendar-range-picker-separator' },
+                ' ~ '
+              ),
+              React.createElement('input', { disabled: disabled,
+                onChange: _this.handleInputChange,
+                value: end && _this.getFormatter().format(end),
+                placeholder: endPlaceholder,
+                className: 'ant-calendar-range-picker-input' }),
+              React.createElement('span', { className: 'ant-calendar-picker-icon' })
             );
           }
         )
       );
     }
   });
-}
 
-var AntDatePicker = createPicker(_rcCalendar2.default);
-var AntMonthPicker = createPicker(_MonthCalendar2.default, 'yyyy-MM');
+  function createPicker(TheCalendar, defaultFormat) {
+    return React.createClass({
+      getDefaultProps: function getDefaultProps() {
+        return {
+          format: defaultFormat || 'yyyy-MM-dd',
+          transitionName: 'slide-up',
+          popupStyle: {},
+          onChange: function onChange() {},
+          // onChange 可用于 Validator
+          locale: {},
+          align: {
+            offset: [0, -9]
+          },
+          open: false
+        };
+      },
+      getInitialState: function getInitialState() {
+        return {
+          value: this.parseDateFromValue(this.props.value || this.props.defaultValue)
+        };
+      },
 
-var AntCalendar = _react2.default.createClass({
-  displayName: 'AntCalendar',
-  getDefaultProps: function getDefaultProps() {
-    return {
-      locale: _zh_CN2.default,
-      prefixCls: 'ant-calendar'
-    };
-  },
-  render: function render() {
-    return _react2.default.createElement(_rcCalendar2.default, this.props);
+      mixins: [PickerMixin],
+      componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if ('value' in nextProps) {
+          this.setState({
+            value: this.parseDateFromValue(nextProps.value)
+          });
+        }
+      },
+      handleChange: function handleChange(value) {
+        if (!('value' in this.props)) {
+          this.setState({ value: value });
+        }
+        var timeValue = value ? new Date(value.getTime()) : null;
+        this.props.onChange(timeValue);
+      },
+      render: function render() {
+        var _classNames2,
+            _this2 = this;
+
+        var locale = this.getLocale();
+        // 以下两行代码
+        // 给没有初始值的日期选择框提供本地化信息
+        // 否则会以周日开始排
+        var defaultCalendarValue = new GregorianCalendar(locale);
+        defaultCalendarValue.setTime(Date.now());
+
+        var placeholder = 'placeholder' in this.props ? this.props.placeholder : locale.lang.placeholder;
+
+        var timePicker = this.props.showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
+          placeholder: locale.lang.timePlaceholder,
+          transitionName: 'slide-up' }) : null;
+
+        var disabledTime = this.props.showTime ? this.props.disabledTime : null;
+
+        var calendarClassName = classNames((_classNames2 = {}, _defineProperty(_classNames2, 'ant-calendar-time', this.props.showTime), _defineProperty(_classNames2, 'ant-calendar-month', MonthCalendar === TheCalendar), _classNames2));
+
+        var calendar = React.createElement(TheCalendar, {
+          formatter: this.getFormatter(),
+          disabledDate: this.props.disabledDate,
+          disabledTime: disabledTime,
+          locale: locale.lang,
+          timePicker: timePicker,
+          defaultValue: defaultCalendarValue,
+          dateInputPlaceholder: placeholder,
+          prefixCls: 'ant-calendar',
+          className: calendarClassName,
+          showOk: this.props.showTime,
+          showClear: true });
+
+        var sizeClass = '';
+        if (this.props.size === 'large') {
+          sizeClass = ' ant-input-lg';
+        } else if (this.props.size === 'small') {
+          sizeClass = ' ant-input-sm';
+        }
+
+        var pickerClass = 'ant-calendar-picker';
+        if (this.state.open) {
+          pickerClass += ' ant-calendar-picker-open';
+        }
+
+        return React.createElement(
+          'span',
+          { className: pickerClass },
+          React.createElement(
+            DatePicker,
+            { transitionName: this.props.transitionName,
+              disabled: this.props.disabled,
+              calendar: calendar,
+              value: this.state.value,
+              prefixCls: 'ant-calendar-picker-container',
+              style: this.props.popupStyle,
+              align: this.props.align,
+              onOpen: this.toggleOpen,
+              onClose: this.toggleOpen,
+              onChange: this.handleChange },
+            function (_ref2) {
+              var value = _ref2.value;
+
+              return React.createElement(
+                'span',
+                null,
+                React.createElement('input', { disabled: _this2.props.disabled,
+                  onChange: _this2.handleInputChange,
+                  value: value && _this2.getFormatter().format(value),
+                  placeholder: placeholder,
+                  style: _this2.props.style,
+                  className: 'ant-calendar-picker-input ant-input' + sizeClass }),
+                React.createElement('span', { className: 'ant-calendar-picker-icon' })
+              );
+            }
+          )
+        );
+      }
+    });
   }
-});
 
-AntDatePicker.Calendar = AntCalendar;
-AntDatePicker.RangePicker = _RangePicker2.default;
-AntDatePicker.MonthPicker = AntMonthPicker;
+  var AntDatePicker = createPicker(Calendar);
+  var AntMonthPicker = createPicker(MonthCalendar, 'yyyy-MM');
 
-exports.default = AntDatePicker;
+  var AntCalendar = React.createClass({
+    displayName: 'AntCalendar',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        locale: Locale.Calendar,
+        prefixCls: 'ant-calendar'
+      };
+    },
+    render: function render() {
+      return React.createElement(Calendar, this.props);
+    }
+  });
+
+  AntDatePicker.Calendar = AntCalendar;
+  AntDatePicker.RangePicker = AntRangePicker;
+  AntDatePicker.MonthPicker = AntMonthPicker;
+
+  UI.DatePicker = AntDatePicker;
+})(Smart.UI, Smart.RC);

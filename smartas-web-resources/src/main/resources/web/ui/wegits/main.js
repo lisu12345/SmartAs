@@ -3507,7 +3507,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI, RC) {
   var Pagination = RC.Pagination;
-  var locale = RC.locale;
+  var Locale = RC.Locale;
   var Select = UI.Select;
 
   var MiniSelect = (function (_React$Component) {
@@ -3562,7 +3562,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
   })(React.Component);
 
   AntPagination.defaultProps = {
-    locale: locale.pagination,
+    locale: Locale.Pagination,
     className: '',
     prefixCls: 'ant-pagination'
   };
@@ -3585,7 +3585,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var classNames = RC.classNames;
   var Menu = RC.Menu;
   var SubMenu = RC.SubMenu;
-  var locale = RC.locale;
+  var Locale = RC.Locale;
   var Radio = UI.Radio;
   var Pagination = UI.Pagination;
   var Icon = UI.Icon;
@@ -3593,7 +3593,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
 
-  var defaultLocale = locale.table;
+  var defaultLocale = Locale.Table;
 
   var FilterMenu = React.createClass({
     displayName: 'FilterMenu',
@@ -4593,4 +4593,810 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	UI.Cascader = AntCascader;
+})(Smart.UI, Smart.RC);
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
++(function (UI, RC) {
+  var DateTimeFormat = RC.DateTimeFormat;
+  var TimePicker = RC.TimePicker;
+  var classNames = RC.classNames;
+  var Locale = UI.Locale;
+  var objectAssign = _.assign;
+
+  var defaultLocale = Locale.TimePicker;
+
+  var AntTimePicker = React.createClass({
+    displayName: 'AntTimePicker',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        format: 'HH:mm:ss',
+        prefixCls: 'ant-time-picker',
+        onChange: function onChange() {},
+
+        locale: {},
+        align: {
+          offset: [0, -2]
+        },
+        disabled: false,
+        disabledHours: undefined,
+        disabledMinutes: undefined,
+        disabledSeconds: undefined,
+        hideDisabledOptions: false,
+        size: 'default',
+        placement: 'bottomLeft',
+        transitionName: 'slide-up'
+      };
+    },
+    getFormatter: function getFormatter() {
+      return new DateTimeFormat(this.props.format);
+    },
+
+    /**
+     * 获得输入框的 className
+     */
+    getSizeClass: function getSizeClass() {
+      var sizeClass = '';
+      if (this.props.size === 'large') {
+        sizeClass = ' ant-input-lg';
+      } else if (this.props.size === 'small') {
+        sizeClass = ' ant-input-sm';
+      }
+      return sizeClass;
+    },
+
+    /**
+     * 获得输入框的默认值
+     */
+    parseTimeFromValue: function parseTimeFromValue(value) {
+      if (value) {
+        return this.getFormatter().parse(value, {
+          locale: this.getLocale(),
+          obeyCount: true
+        });
+      }
+      return undefined;
+    },
+    handleChange: function handleChange(value) {
+      this.props.onChange(value ? new Date(value.getTime()) : null);
+    },
+    getLocale: function getLocale() {
+      // 统一合并为完整的 Locale
+      var locale = objectAssign({}, defaultLocale, this.props.locale);
+      locale.lang = objectAssign({}, defaultLocale.lang, this.props.locale.lang);
+      return locale;
+    },
+    render: function render() {
+      var _classNames;
+
+      var props = objectAssign({}, this.props);
+      props.placeholder = 'placeholder' in this.props ? props.placeholder : this.getLocale().lang.placeholder;
+      if (props.defaultValue) {
+        props.defaultValue = this.parseTimeFromValue(props.defaultValue);
+      } else {
+        delete props.defaultValue;
+      }
+      if (props.value) {
+        props.value = this.parseTimeFromValue(props.value);
+      } else {
+        delete props.value;
+      }
+      var className = classNames((_classNames = {}, _defineProperty(_classNames, props.className, !!props.className), _defineProperty(_classNames, props.prefixCls + '-' + props.size, true), _classNames));
+      if (props.format.indexOf('ss') < 0) {
+        props.showSecond = false;
+      }
+      if (props.format.indexOf('HH') < 0) {
+        props.showHour = false;
+      }
+
+      return React.createElement(TimePicker, _extends({}, props, {
+        className: className,
+        gregorianCalendarLocale: this.getLocale(),
+        formatter: this.getFormatter(),
+        onChange: this.handleChange
+      }));
+    }
+  });
+  UI.TimePicker = AntTimePicker;
+})(Smart.UI, Smart.RC);
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
++(function (UI, RC) {
+  var _ref = _;
+  var noop = _ref.noop;
+  var GregorianCalendar = RC.GregorianCalendar;
+  var FullCalendar = RC.FullCalendar;
+  var Select = UI.Select;
+  var Radio = UI.Radio;
+  var Locale = UI.Locale;
+  var Group = Radio.Group;
+  var Button = Radio.Button;
+  var _React = React;
+  var PropTypes = _React.PropTypes;
+  var Component = _React.Component;
+
+  var PREFIX_CLS = 'ant-fullcalendar';
+
+  var Header = (function (_Component) {
+    _inherits(Header, _Component);
+
+    function Header() {
+      _classCallCheck(this, Header);
+
+      return _possibleConstructorReturn(this, Object.getPrototypeOf(Header).apply(this, arguments));
+    }
+
+    _createClass(Header, [{
+      key: 'getYearSelectElement',
+      value: function getYearSelectElement(year) {
+        var _props = this.props;
+        var yearSelectOffset = _props.yearSelectOffset;
+        var yearSelectTotal = _props.yearSelectTotal;
+        var locale = _props.locale;
+        var prefixCls = _props.prefixCls;
+        var fullscreen = _props.fullscreen;
+
+        var start = year - yearSelectOffset;
+        var end = start + yearSelectTotal;
+        var suffix = locale.year === '年' ? '年' : '';
+
+        var options = [];
+        for (var index = start; index < end; index++) {
+          options.push(React.createElement(
+            Option,
+            { key: '' + index },
+            index + suffix
+          ));
+        }
+        return React.createElement(
+          Select,
+          {
+            style: { width: 75 },
+            size: fullscreen ? null : 'small',
+            dropdownMatchSelectWidth: false,
+            dropdownMenuStyle: { minWidth: 103 },
+            className: prefixCls + '-year-select',
+            onChange: this.onYearChange.bind(this),
+            value: String(year) },
+          options
+        );
+      }
+    }, {
+      key: 'getMonthSelectElement',
+      value: function getMonthSelectElement(month) {
+        var props = this.props;
+        var months = props.locale.format.months;
+        var prefixCls = props.prefixCls;
+        var fullscreen = props.fullscreen;
+
+        var options = [];
+
+        for (var index = 0; index < 12; index++) {
+          options.push(React.createElement(
+            Option,
+            { key: '' + index },
+            months[index]
+          ));
+        }
+
+        return React.createElement(
+          Select,
+          {
+            style: { minWidth: 70 },
+            dropdownMenuStyle: { minWidth: 125 },
+            size: fullscreen ? null : 'small',
+            dropdownMatchSelectWidth: false,
+            className: prefixCls + '-month-select',
+            value: String(month),
+            onChange: this.onMonthChange.bind(this) },
+          options
+        );
+      }
+    }, {
+      key: 'onYearChange',
+      value: function onYearChange(year) {
+        var newValue = this.props.value.clone();
+        newValue.setYear(parseInt(year, 10));
+        this.props.onValueChange(newValue);
+      }
+    }, {
+      key: 'onMonthChange',
+      value: function onMonthChange(month) {
+        var newValue = this.props.value.clone();
+        newValue.setMonth(parseInt(month, 10));
+        this.props.onValueChange(newValue);
+      }
+    }, {
+      key: 'onTypeChange',
+      value: function onTypeChange(e) {
+        this.props.onTypeChange(e.target.value);
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _props2 = this.props;
+        var type = _props2.type;
+        var value = _props2.value;
+        var prefixCls = _props2.prefixCls;
+        var locale = _props2.locale;
+
+        var yearSelect = this.getYearSelectElement(value.getYear());
+
+        var monthSelect = type === 'date' ? this.getMonthSelectElement(value.getMonth()) : null;
+
+        var typeSwitch = React.createElement(
+          Group,
+          { onChange: this.onTypeChange.bind(this), value: type },
+          React.createElement(
+            Button,
+            { value: 'date' },
+            locale.month
+          ),
+          React.createElement(
+            Button,
+            { value: 'month' },
+            locale.year
+          )
+        );
+
+        return React.createElement(
+          'div',
+          { className: prefixCls + '-header' },
+          yearSelect,
+          monthSelect,
+          typeSwitch
+        );
+      }
+    }]);
+
+    return Header;
+  })(Component);
+
+  Header.propTypes = {
+    value: PropTypes.object,
+    locale: PropTypes.object,
+    yearSelectOffset: PropTypes.number,
+    yearSelectTotal: PropTypes.number,
+    onValueChange: PropTypes.func,
+    onTypeChange: PropTypes.func,
+    prefixCls: PropTypes.string,
+    selectPrefixCls: PropTypes.string,
+    type: PropTypes.string
+  };
+
+  Header.defaultProps = {
+    prefixCls: PREFIX_CLS + '-header',
+    yearSelectOffset: 10,
+    yearSelectTotal: 20,
+    onValueChange: noop,
+    onTypeChange: noop
+  };
+
+  function zerofixed(v) {
+    if (v < 10) return '0' + v;
+    return v + '';
+  }
+
+  var Calendar = (function (_Component2) {
+    _inherits(Calendar, _Component2);
+
+    function Calendar(props) {
+      _classCallCheck(this, Calendar);
+
+      var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Calendar).call(this, props));
+
+      _this2.state = {
+        value: _this2.parseDateFromValue(props.value || new Date()),
+        mode: props.mode
+      };
+      return _this2;
+    }
+
+    _createClass(Calendar, [{
+      key: 'parseDateFromValue',
+      value: function parseDateFromValue(value) {
+        var date = new GregorianCalendar(this.props.locale);
+        date.setTime(+value);
+        return date;
+      }
+    }, {
+      key: 'componentWillReceiveProps',
+      value: function componentWillReceiveProps(nextProps) {
+        if ('value' in nextProps) {
+          this.setState({
+            value: this.parseDateFromValue(nextProps.value)
+          });
+        }
+      }
+    }, {
+      key: 'monthCellRender',
+      value: function monthCellRender(value, locale) {
+        var prefixCls = this.props.prefixCls;
+        var month = value.getMonth();
+        return React.createElement(
+          'div',
+          { className: prefixCls + '-month' },
+          React.createElement(
+            'div',
+            { className: prefixCls + '-value' },
+            locale.format.shortMonths[month]
+          ),
+          React.createElement(
+            'div',
+            { className: prefixCls + '-content' },
+            this.props.monthCellRender(value)
+          )
+        );
+      }
+    }, {
+      key: 'dateCellRender',
+      value: function dateCellRender(value) {
+        var prefixCls = this.props.prefixCls;
+        return React.createElement(
+          'div',
+          { className: prefixCls + '-date' },
+          React.createElement(
+            'div',
+            { className: prefixCls + '-value' },
+            zerofixed(value.getDayOfMonth())
+          ),
+          React.createElement(
+            'div',
+            { className: prefixCls + '-content' },
+            this.props.dateCellRender(value)
+          )
+        );
+      }
+    }, {
+      key: 'setValue',
+      value: function setValue(value) {
+        if (!('value' in this.props) && this.state.value !== value) {
+          this.setState({ value: value });
+        }
+        this.props.onPanelChange(value, this.state.mode);
+      }
+    }, {
+      key: 'setType',
+      value: function setType(type) {
+        var mode = type === 'date' ? 'month' : 'year';
+        if (this.state.mode !== mode) {
+          this.setState({ mode: mode });
+          this.props.onPanelChange(this.state.value, mode);
+        }
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var props = this.props;
+        var _state = this.state;
+        var value = _state.value;
+        var mode = _state.mode;
+        var locale = props.locale;
+        var prefixCls = props.prefixCls;
+        var style = props.style;
+        var className = props.className;
+        var fullscreen = props.fullscreen;
+
+        var type = mode === 'year' ? 'month' : 'date';
+
+        var cls = className || '';
+        if (fullscreen) {
+          cls += ' ' + prefixCls + '-fullscreen';
+        }
+
+        return React.createElement(
+          'div',
+          { className: cls, style: style },
+          React.createElement(Header, {
+            fullscreen: fullscreen,
+            type: type,
+            value: value,
+            locale: locale.lang,
+            prefixCls: prefixCls,
+            onTypeChange: this.setType.bind(this),
+            onValueChange: this.setValue.bind(this) }),
+          React.createElement(FullCalendar, _extends({}, props, {
+            Select: noop,
+            locale: locale.lang,
+            type: type,
+            prefixCls: prefixCls,
+            showHeader: false,
+            value: value,
+            monthCellRender: this.monthCellRender.bind(this),
+            dateCellRender: this.dateCellRender.bind(this) }))
+        );
+      }
+    }]);
+
+    return Calendar;
+  })(Component);
+
+  Calendar.propTypes = {
+    monthCellRender: PropTypes.func,
+    dateCellRender: PropTypes.func,
+    fullscreen: PropTypes.bool,
+    locale: PropTypes.object,
+    prefixCls: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    onPanelChange: PropTypes.func,
+    value: PropTypes.instanceOf(Date)
+  };
+
+  Calendar.defaultProps = {
+    monthCellRender: noop,
+    dateCellRender: noop,
+    locale: Locale.Calendar,
+    fullscreen: true,
+    prefixCls: PREFIX_CLS,
+    onPanelChange: noop,
+    mode: 'month'
+  };
+
+  UI.Calendar = Calendar;
+})(Smart.UI, Smart.RC);
+'use strict';
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
++(function (UI, RC) {
+  var DatePicker = RC.DatePicker;
+  var TimePicker = RC.TimePicker;
+  var DateTimeFormat = RC.DateTimeFormat;
+  var classNames = RC.classNames;
+  var GregorianCalendar = RC.GregorianCalendar;
+  var Calendar = RC.Calendar;
+  var MonthCalendar = RC.MonthCalendar;
+  var RangeCalendar = RC.RangeCalendar;
+  var Locale = UI.Locale;
+  var objectAssign = _.assign;
+  var defaultLocale = Locale.Calendar;
+  var _React = React;
+  var PropTypes = _React.PropTypes;
+  var Component = _React.Component;
+
+  var PickerMixin = {
+    getLocale: function getLocale() {
+      // 统一合并为完整的 Locale
+      var locale = objectAssign({}, defaultLocale, this.props.locale);
+      locale.lang = objectAssign({}, defaultLocale.lang, this.props.locale.lang);
+      return locale;
+    },
+    getFormatter: function getFormatter() {
+      var formats = this.formats = this.formats || {};
+      var format = this.props.format;
+      // Remove time format text when has time-picker in calendar
+      if (this.props.showTime) {
+        format = format.replace('HH:mm:ss', '');
+      }
+      if (formats[format]) {
+        return formats[format];
+      }
+      formats[format] = new DateTimeFormat(format, this.getLocale().lang.format);
+      return formats[format];
+    },
+    parseDateFromValue: function parseDateFromValue(value) {
+      if (value) {
+        if (typeof value === 'string') {
+          return this.getFormatter().parse(value, { locale: this.getLocale() });
+        } else if (value instanceof Date) {
+          var date = new GregorianCalendar(this.getLocale());
+          date.setTime(+value);
+          return date;
+        }
+      }
+      return value;
+    },
+
+    // remove input readonly warning
+    handleInputChange: function handleInputChange() {},
+    toggleOpen: function toggleOpen(e) {
+      this.setState({
+        open: e.open
+      });
+    }
+  };
+
+  var AntRangePicker = React.createClass({
+    displayName: 'AntRangePicker',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        defaultValue: [],
+        format: 'yyyy-MM-dd',
+        startPlaceholder: '开始日期',
+        endPlaceholder: '结束日期',
+        transitionName: 'slide-up',
+        popupStyle: {},
+        onChange: function onChange() {},
+        // onChange 可用于 Validator
+        locale: {},
+        align: {
+          offset: [0, -9]
+        },
+        open: false
+      };
+    },
+    getInitialState: function getInitialState() {
+      var _props = this.props;
+      var value = _props.value;
+      var defaultValue = _props.defaultValue;
+
+      var start = value && value[0] || defaultValue[0];
+      var end = value && value[1] || defaultValue[1];
+      return {
+        value: [this.parseDateFromValue(start), this.parseDateFromValue(end)]
+      };
+    },
+
+    mixins: [PickerMixin],
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+      if ('value' in nextProps) {
+        var value = nextProps.value || [];
+        var start = this.parseDateFromValue(value[0]);
+        var end = this.parseDateFromValue(value[1]);
+        this.setState({
+          value: [start, end]
+        });
+      }
+    },
+    handleChange: function handleChange(value) {
+      if (!('value' in this.props)) {
+        this.setState({ value: value });
+      }
+      var startTime = value[0] ? new Date(value[0].getTime()) : null;
+      var endTime = value[1] ? new Date(value[1].getTime()) : null;
+      this.props.onChange([startTime, endTime]);
+    },
+    render: function render() {
+      var _this = this;
+
+      var locale = this.getLocale();
+      // 以下两行代码
+      // 给没有初始值的日期选择框提供本地化信息
+      // 否则会以周日开始排
+      var defaultCalendarValue = new GregorianCalendar(locale);
+      defaultCalendarValue.setTime(Date.now());
+
+      var _props2 = this.props;
+      var disabledDate = _props2.disabledDate;
+      var showTime = _props2.showTime;
+      var size = _props2.size;
+      var startPlaceholder = _props2.startPlaceholder;
+      var endPlaceholder = _props2.endPlaceholder;
+      var transitionName = _props2.transitionName;
+      var disabled = _props2.disabled;
+      var popupStyle = _props2.popupStyle;
+      var align = _props2.align;
+      var style = _props2.style;
+
+      var state = this.state;
+
+      var timePicker = showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
+        placeholder: locale.lang.timePlaceholder,
+        transitionName: 'slide-up' }) : null;
+
+      var calendarClassName = classNames(_defineProperty({}, 'ant-calendar-time', this.props.showTime));
+
+      var calendar = React.createElement(RangeCalendar, { prefixCls: 'ant-calendar',
+        formatter: this.getFormatter(),
+        className: calendarClassName,
+        timePicker: timePicker,
+        disabledDate: disabledDate,
+        dateInputPlaceholder: [startPlaceholder, endPlaceholder],
+        locale: locale.lang,
+        defaultValue: [defaultCalendarValue, defaultCalendarValue],
+        showClear: true });
+
+      var pickerClass = classNames({
+        'ant-calendar-picker': true,
+        'ant-calendar-picker-open': state.open
+      });
+
+      var pickerInputClass = classNames({
+        'ant-calendar-range-picker': true,
+        'ant-input': true,
+        'ant-input-lg': size === 'large',
+        'ant-input-sm': size === 'small'
+      });
+
+      return React.createElement(
+        'span',
+        { className: pickerClass, style: style },
+        React.createElement(
+          DatePicker,
+          {
+            transitionName: transitionName,
+            disabled: disabled,
+            calendar: calendar,
+            value: state.value,
+            prefixCls: 'ant-calendar-picker-container',
+            style: popupStyle,
+            align: align,
+            onOpen: this.toggleOpen,
+            onClose: this.toggleOpen,
+            onChange: this.handleChange },
+          function (_ref) {
+            var value = _ref.value;
+
+            var start = value[0];
+            var end = value[1];
+            return React.createElement(
+              'span',
+              { className: pickerInputClass, disabled: disabled },
+              React.createElement('input', { disabled: disabled,
+                onChange: _this.handleInputChange,
+                value: start && _this.getFormatter().format(start),
+                placeholder: startPlaceholder,
+                className: 'ant-calendar-range-picker-input' }),
+              React.createElement(
+                'span',
+                { className: 'ant-calendar-range-picker-separator' },
+                ' ~ '
+              ),
+              React.createElement('input', { disabled: disabled,
+                onChange: _this.handleInputChange,
+                value: end && _this.getFormatter().format(end),
+                placeholder: endPlaceholder,
+                className: 'ant-calendar-range-picker-input' }),
+              React.createElement('span', { className: 'ant-calendar-picker-icon' })
+            );
+          }
+        )
+      );
+    }
+  });
+
+  function createPicker(TheCalendar, defaultFormat) {
+    return React.createClass({
+      getDefaultProps: function getDefaultProps() {
+        return {
+          format: defaultFormat || 'yyyy-MM-dd',
+          transitionName: 'slide-up',
+          popupStyle: {},
+          onChange: function onChange() {},
+          // onChange 可用于 Validator
+          locale: {},
+          align: {
+            offset: [0, -9]
+          },
+          open: false
+        };
+      },
+      getInitialState: function getInitialState() {
+        return {
+          value: this.parseDateFromValue(this.props.value || this.props.defaultValue)
+        };
+      },
+
+      mixins: [PickerMixin],
+      componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if ('value' in nextProps) {
+          this.setState({
+            value: this.parseDateFromValue(nextProps.value)
+          });
+        }
+      },
+      handleChange: function handleChange(value) {
+        if (!('value' in this.props)) {
+          this.setState({ value: value });
+        }
+        var timeValue = value ? new Date(value.getTime()) : null;
+        this.props.onChange(timeValue);
+      },
+      render: function render() {
+        var _classNames2,
+            _this2 = this;
+
+        var locale = this.getLocale();
+        // 以下两行代码
+        // 给没有初始值的日期选择框提供本地化信息
+        // 否则会以周日开始排
+        var defaultCalendarValue = new GregorianCalendar(locale);
+        defaultCalendarValue.setTime(Date.now());
+
+        var placeholder = 'placeholder' in this.props ? this.props.placeholder : locale.lang.placeholder;
+
+        var timePicker = this.props.showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
+          placeholder: locale.lang.timePlaceholder,
+          transitionName: 'slide-up' }) : null;
+
+        var disabledTime = this.props.showTime ? this.props.disabledTime : null;
+
+        var calendarClassName = classNames((_classNames2 = {}, _defineProperty(_classNames2, 'ant-calendar-time', this.props.showTime), _defineProperty(_classNames2, 'ant-calendar-month', MonthCalendar === TheCalendar), _classNames2));
+
+        var calendar = React.createElement(TheCalendar, {
+          formatter: this.getFormatter(),
+          disabledDate: this.props.disabledDate,
+          disabledTime: disabledTime,
+          locale: locale.lang,
+          timePicker: timePicker,
+          defaultValue: defaultCalendarValue,
+          dateInputPlaceholder: placeholder,
+          prefixCls: 'ant-calendar',
+          className: calendarClassName,
+          showOk: this.props.showTime,
+          showClear: true });
+
+        var sizeClass = '';
+        if (this.props.size === 'large') {
+          sizeClass = ' ant-input-lg';
+        } else if (this.props.size === 'small') {
+          sizeClass = ' ant-input-sm';
+        }
+
+        var pickerClass = 'ant-calendar-picker';
+        if (this.state.open) {
+          pickerClass += ' ant-calendar-picker-open';
+        }
+
+        return React.createElement(
+          'span',
+          { className: pickerClass },
+          React.createElement(
+            DatePicker,
+            { transitionName: this.props.transitionName,
+              disabled: this.props.disabled,
+              calendar: calendar,
+              value: this.state.value,
+              prefixCls: 'ant-calendar-picker-container',
+              style: this.props.popupStyle,
+              align: this.props.align,
+              onOpen: this.toggleOpen,
+              onClose: this.toggleOpen,
+              onChange: this.handleChange },
+            function (_ref2) {
+              var value = _ref2.value;
+
+              return React.createElement(
+                'span',
+                null,
+                React.createElement('input', { disabled: _this2.props.disabled,
+                  onChange: _this2.handleInputChange,
+                  value: value && _this2.getFormatter().format(value),
+                  placeholder: placeholder,
+                  style: _this2.props.style,
+                  className: 'ant-calendar-picker-input ant-input' + sizeClass }),
+                React.createElement('span', { className: 'ant-calendar-picker-icon' })
+              );
+            }
+          )
+        );
+      }
+    });
+  }
+
+  var AntDatePicker = createPicker(Calendar);
+  var AntMonthPicker = createPicker(MonthCalendar, 'yyyy-MM');
+
+  var AntCalendar = React.createClass({
+    displayName: 'AntCalendar',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        locale: Locale.Calendar,
+        prefixCls: 'ant-calendar'
+      };
+    },
+    render: function render() {
+      return React.createElement(Calendar, this.props);
+    }
+  });
+
+  AntDatePicker.Calendar = AntCalendar;
+  AntDatePicker.RangePicker = AntRangePicker;
+  AntDatePicker.MonthPicker = AntMonthPicker;
+
+  UI.DatePicker = AntDatePicker;
 })(Smart.UI, Smart.RC);

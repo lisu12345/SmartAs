@@ -1,5 +1,5 @@
 +function(UI,RC) {
-  const {Pagination,locale} = RC,
+  const {Pagination,Locale} = RC,
     {Select} = UI;
 
 
@@ -31,7 +31,7 @@
   }
 
   AntPagination.defaultProps = {
-    locale: locale.pagination,
+    locale: Locale.Pagination,
     className: '',
     prefixCls: 'ant-pagination',
   };  

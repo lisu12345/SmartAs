@@ -1,6 +1,6 @@
 + function(RC) {
 	const KEYCODE = RC.KeyCode,
-		LOCALE = RC.locale.pagination,
+		LOCALE = RC.Locale.Pagination,
 		{noop} = _;
 
 	class Pager extends React.Component {

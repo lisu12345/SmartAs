@@ -35,6 +35,9 @@ const scripts = {
 			'src/main/resources/web/ui/components/table/index.js',
 			'src/main/resources/web/ui/components/steps/index.js',
 			'src/main/resources/web/ui/components/cascader/index.js',
+			'src/main/resources/web/ui/components/gregorian-calendar/index.js',
+			'src/main/resources/web/ui/components/time-picker/index.js',
+			'src/main/resources/web/ui/components/calendar/index.js',
 		],
 		wegits: [
 			'src/main/resources/web/ui/wegits/index.js',
@@ -70,6 +73,9 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/steps/index.js',
 			'src/main/resources/web/ui/wegits/timeline/index.js',
 			'src/main/resources/web/ui/wegits/cascader/index.js',
+			'src/main/resources/web/ui/wegits/time-picker/index.js',
+			'src/main/resources/web/ui/wegits/calendar/index.js',
+			'src/main/resources/web/ui/wegits/date-picker/index.js',
 		]
 	},
 	core: [

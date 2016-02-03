@@ -12,7 +12,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI, RC) {
   var Pagination = RC.Pagination;
-  var locale = RC.locale;
+  var Locale = RC.Locale;
   var Select = UI.Select;
 
   var MiniSelect = (function (_React$Component) {
@@ -67,7 +67,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
   })(React.Component);
 
   AntPagination.defaultProps = {
-    locale: locale.pagination,
+    locale: Locale.Pagination,
     className: '',
     prefixCls: 'ant-pagination'
   };

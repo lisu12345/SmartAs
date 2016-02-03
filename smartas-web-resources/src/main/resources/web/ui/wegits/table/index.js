@@ -14,7 +14,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var classNames = RC.classNames;
   var Menu = RC.Menu;
   var SubMenu = RC.SubMenu;
-  var locale = RC.locale;
+  var Locale = RC.Locale;
   var Radio = UI.Radio;
   var Pagination = UI.Pagination;
   var Icon = UI.Icon;
@@ -22,7 +22,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
 
-  var defaultLocale = locale.table;
+  var defaultLocale = Locale.Table;
 
   var FilterMenu = React.createClass({
     displayName: 'FilterMenu',

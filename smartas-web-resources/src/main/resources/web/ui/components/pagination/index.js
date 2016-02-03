@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (RC) {
 	var KEYCODE = RC.KeyCode;
-	var LOCALE = RC.locale.pagination;
+	var LOCALE = RC.Locale.Pagination;
 	var _ref = _;
 	var noop = _ref.noop;
 

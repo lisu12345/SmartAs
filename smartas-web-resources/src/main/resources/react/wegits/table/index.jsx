@@ -1,12 +1,12 @@
 + function(UI,RC) {
   const {noop} = _,
     objectAssign = _.assign,
-    {Table,classNames,Menu,SubMenu,locale} = RC,
+    {Table,classNames,Menu,SubMenu,Locale} = RC,
     {Radio,Pagination,Icon,Spin,Dropdown,Checkbox} = UI;
 
 
 
-  const defaultLocale =  locale.table;
+  const defaultLocale =  Locale.Table;
 
   let FilterMenu = React.createClass({
     getInitialState() {
