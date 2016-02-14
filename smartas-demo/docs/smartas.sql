@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2016-02-03 16:38:11
+Date: 2016-02-14 15:47:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -826,7 +826,7 @@ CREATE TABLE `tpl_menu_t` (
   `sn` int(11) DEFAULT NULL,
   `publish` char(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tpl_menu_t
@@ -890,37 +890,43 @@ INSERT INTO `tpl_menu_t` VALUES ('62', '', 'contextmenu', '#!web/demo/easyui/dat
 INSERT INTO `tpl_menu_t` VALUES ('63', '', 'Plugins', '', '', '', '44', '5', '1');
 INSERT INTO `tpl_menu_t` VALUES ('64', '', 'Form', '#!web/demo/plugins/Form/index.jsx', '', '', '63', '0', '1');
 INSERT INTO `tpl_menu_t` VALUES ('65', '', 'Antd', '#!web/demo/plugins/antd/index.jsx', '', '', '44', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('66', '', 'Form', '#!web/demo/plugins/antd/from.jsx', '', '', '89', '1', '1');
-INSERT INTO `tpl_menu_t` VALUES ('67', '', 'Radio', '#!web/demo/plugins/antd/Radio.jsx', '', '', '89', '2', '1');
-INSERT INTO `tpl_menu_t` VALUES ('68', '', 'Checkbox', '#!web/demo/plugins/antd/Checkbox.jsx', '', '', '89', '3', '1');
-INSERT INTO `tpl_menu_t` VALUES ('69', null, 'Button', '#!web/demo/plugins/antd/Button.jsx', null, null, '88', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('70', '', 'Switch', '#!web/demo/plugins/antd/Switch.jsx', '', '', '89', '4', '1');
-INSERT INTO `tpl_menu_t` VALUES ('71', '', 'Select', '#!web/demo/plugins/antd/Select.jsx', '', '', '89', '5', '1');
-INSERT INTO `tpl_menu_t` VALUES ('72', null, 'Menu', '#!web/demo/plugins/antd/Menu.jsx', null, null, '91', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('73', '', 'InputNumber', '#!web/demo/plugins/antd/InputNumber.jsx', '', '', '89', '6', '1');
-INSERT INTO `tpl_menu_t` VALUES ('74', null, 'Message', '#!web/demo/plugins/antd/Message.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('75', null, 'Model', '#!web/demo/plugins/antd/Model.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('76', null, 'Tooltip', '#!web/demo/plugins/antd/Tooltip.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('77', null, 'Tabs', '#!web/demo/plugins/antd/Tabs.jsx', null, null, '91', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('78', null, 'Table', '#!web/demo/plugins/antd/Table.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('79', null, 'Popconfirm', '#!web/demo/plugins/antd/Popconfirm.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('80', '', 'Upload', '#!web/demo/plugins/antd/Upload.jsx', '', '', '89', '7', '1');
-INSERT INTO `tpl_menu_t` VALUES ('81', null, 'Tag', '#!web/demo/plugins/antd/Tag.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('82', null, 'Progress', '#!web/demo/plugins/antd/Progress.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('83', null, 'Spin', '#!web/demo/plugins/antd/Spin.jsx', null, null, '92', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('84', null, 'Popover', '#!web/demo/plugins/antd/Popover.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('85', null, 'Notification', '#!web/demo/plugins/antd/Notification.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('86', null, 'Steps', '#!web/demo/plugins/antd/Steps.jsx', null, null, '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('66', '', 'Form 表单', '#!web/demo/plugins/antd/from.jsx', '', '', '89', '1', '1');
+INSERT INTO `tpl_menu_t` VALUES ('67', '', 'Radio 单选框', '#!web/demo/plugins/antd/Radio.jsx', '', '', '89', '2', '1');
+INSERT INTO `tpl_menu_t` VALUES ('68', '', 'Checkbox 多选框', '#!web/demo/plugins/antd/Checkbox.jsx', '', '', '89', '3', '1');
+INSERT INTO `tpl_menu_t` VALUES ('69', '', 'Button  按钮', '#!web/demo/plugins/antd/Button.jsx', '', '', '88', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('70', '', 'Switch 开关', '#!web/demo/plugins/antd/Switch.jsx', '', '', '89', '4', '1');
+INSERT INTO `tpl_menu_t` VALUES ('71', '', 'Select 选择器', '#!web/demo/plugins/antd/Select.jsx', '', '', '89', '5', '1');
+INSERT INTO `tpl_menu_t` VALUES ('72', '', 'Menu 导航菜单', '#!web/demo/plugins/antd/Menu.jsx', '', '', '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('73', '', 'InputNumber 数字输入框', '#!web/demo/plugins/antd/InputNumber.jsx', '', '', '89', '6', '1');
+INSERT INTO `tpl_menu_t` VALUES ('74', '', 'Message 全局提示', '#!web/demo/plugins/antd/Message.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('75', '', 'Model 对话框', '#!web/demo/plugins/antd/Model.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('76', '', 'Tooltip 文字提示', '#!web/demo/plugins/antd/Tooltip.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('77', '', 'Tabs 标签页', '#!web/demo/plugins/antd/Tabs.jsx', '', '', '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('78', '', 'Table 表格', '#!web/demo/plugins/antd/Table.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('79', '', 'Popconfirm 气泡确认框', '#!web/demo/plugins/antd/Popconfirm.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('80', '', 'Upload 文件上传', '#!web/demo/plugins/antd/Upload.jsx', '', '', '89', '7', '1');
+INSERT INTO `tpl_menu_t` VALUES ('81', '', 'Tag 标签', '#!web/demo/plugins/antd/Tag.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('82', '', 'Progress 进度条', '#!web/demo/plugins/antd/Progress.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('83', '', 'Spin 加载中', '#!web/demo/plugins/antd/Spin.jsx', '', '', '92', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('84', '', 'Popover 气泡卡片', '#!web/demo/plugins/antd/Popover.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('85', '', 'Notification 通知提醒框', '#!web/demo/plugins/antd/Notification.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('86', '', 'Steps 步骤条', '#!web/demo/plugins/antd/Steps.jsx', '', '', '91', '0', '1');
 INSERT INTO `tpl_menu_t` VALUES ('87', null, 'Components', null, null, null, '43', '0', '1');
 INSERT INTO `tpl_menu_t` VALUES ('88', null, '基本', null, null, null, '87', '1', '1');
 INSERT INTO `tpl_menu_t` VALUES ('89', null, '表单', null, null, null, '87', '3', '1');
 INSERT INTO `tpl_menu_t` VALUES ('90', null, '展示', null, null, null, '87', '5', '1');
 INSERT INTO `tpl_menu_t` VALUES ('91', null, '导航', null, null, null, '87', '7', '1');
 INSERT INTO `tpl_menu_t` VALUES ('92', null, '其他', null, null, null, '87', '11', '1');
-INSERT INTO `tpl_menu_t` VALUES ('93', null, 'Timeline', '#!web/demo/plugins/antd/Timeline.jsx', null, null, '90', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('94', null, 'Cascader', '#!web/demo/plugins/antd/Cascader.jsx', null, null, '89', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('95', null, 'DatePicker', '#!web/demo/plugins/antd/DatePicker.jsx', null, null, '89', '0', '1');
-INSERT INTO `tpl_menu_t` VALUES ('96', null, 'Calendar', '!web/demo/plugins/antd/Calendar.jsx', null, null, '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('93', '', 'Timeline 时间轴', '#!web/demo/plugins/antd/Timeline.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('94', '', 'Cascader 级联选择', '#!web/demo/plugins/antd/Cascader.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('95', '', 'DatePicker 日期选择框', '#!web/demo/plugins/antd/DatePicker.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('96', '', 'Calendar 日历', '#!web/demo/plugins/antd/Calendar.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('97', '', 'Slider 滑动输入条', '#!web/demo/plugins/antd/Slider.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('98', '', 'Tree 树形控件', '#!web/demo/plugins/antd/Tree.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('99', '', 'TimePicker 时间选择框', '#!web/demo/plugins/antd/TimePicker.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('100', '', 'Carousel 走马灯', '#!web/demo/plugins/antd/Carousel.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('101', '', 'TreeSelect 树选择', '#!web/demo/plugins/antd/TreeSelect.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('102', null, 'Transfer 穿梭框', '#!web/demo/plugins/antd/Transfer.jsx', null, null, '89', '0', '1');
 
 -- ----------------------------
 -- Table structure for tpl_user_t
