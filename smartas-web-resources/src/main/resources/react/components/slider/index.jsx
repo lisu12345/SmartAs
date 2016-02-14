@@ -1,4 +1,4 @@
-//2016.2.14
+//v3.3.2 - 2016.2.14
 + function(RC) {
 	const {noop} = _,
 		objectAssign = _.assign,
