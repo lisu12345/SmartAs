@@ -133,7 +133,8 @@ $(function() {
 		spanObj.before(switchObj);
 		if (treeNode.level > 0) {
 			spanObj.parent().css('padding-left',
-					10 + (spaceWidth * treeNode.level) + 'px');
+					//10 + (spaceWidth * treeNode.level) + 'px');
+					(spaceWidth * treeNode.level) + 'px');
 		}
 		// treeNode.iconClass && $("#" + id + "_ico").before("<i class='" +
 		// treeNode.iconClass +"'></i>");;

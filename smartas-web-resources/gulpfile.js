@@ -41,6 +41,7 @@ const scripts = {
 			'src/main/resources/web/ui/components/calendar/index.js',
 			'src/main/resources/web/ui/components/slider/index.js',
 			'src/main/resources/web/ui/components/tree/index.js',
+			'src/main/resources/web/ui/components/tree-select/index.js',
 		],
 		wegits: [
 			'src/main/resources/web/ui/wegits/index.js',
@@ -82,6 +83,7 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/date-picker/index.js',
 			'src/main/resources/web/ui/wegits/slider/index.js',
 			'src/main/resources/web/ui/wegits/tree/index.js',
+			'src/main/resources/web/ui/wegits/tree-select/index.js',
 			'src/main/resources/web/ui/wegits/carousel/index.js',
 		]
 	},
