@@ -1,5 +1,6 @@
 'use strict';
 
+//2016.2.1
 +(function (Namespace) {
 	var RC = Namespace.register("Smart.RC");
 	var assign = _.assign;

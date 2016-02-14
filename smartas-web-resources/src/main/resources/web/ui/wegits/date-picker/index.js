@@ -71,7 +71,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         transitionName: 'slide-up',
         popupStyle: {},
         onChange: function onChange() {},
-        // onChange 可用于 Validator
+        onOk: function onOk() {},
+
         locale: {},
         align: {
           offset: [0, -9]
@@ -126,11 +127,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var size = _props2.size;
       var startPlaceholder = _props2.startPlaceholder;
       var endPlaceholder = _props2.endPlaceholder;
+      var getCalendarContainer = _props2.getCalendarContainer;
       var transitionName = _props2.transitionName;
       var disabled = _props2.disabled;
       var popupStyle = _props2.popupStyle;
       var align = _props2.align;
       var style = _props2.style;
+      var onOk = _props2.onOk;
 
       var state = this.state;
 
@@ -147,6 +150,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         disabledDate: disabledDate,
         dateInputPlaceholder: [startPlaceholder, endPlaceholder],
         locale: locale.lang,
+        onOk: onOk,
         defaultValue: [defaultCalendarValue, defaultCalendarValue],
         showClear: true });
 
@@ -175,6 +179,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             prefixCls: 'ant-calendar-picker-container',
             style: popupStyle,
             align: align,
+            getCalendarContainer: getCalendarContainer,
             onOpen: this.toggleOpen,
             onClose: this.toggleOpen,
             onChange: this.handleChange },
@@ -217,7 +222,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           transitionName: 'slide-up',
           popupStyle: {},
           onChange: function onChange() {},
-          // onChange 可用于 Validator
+          onOk: function onOk() {},
+
           locale: {},
           align: {
             offset: [0, -9]
@@ -278,6 +284,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           prefixCls: 'ant-calendar',
           className: calendarClassName,
           showOk: this.props.showTime,
+          onOk: this.props.onOk,
           showClear: true });
 
         var sizeClass = '';
@@ -304,6 +311,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               prefixCls: 'ant-calendar-picker-container',
               style: this.props.popupStyle,
               align: this.props.align,
+              getCalendarContainer: this.props.getCalendarContainer,
               onOpen: this.toggleOpen,
               onClose: this.toggleOpen,
               onChange: this.handleChange },

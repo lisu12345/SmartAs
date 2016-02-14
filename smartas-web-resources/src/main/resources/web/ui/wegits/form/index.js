@@ -184,13 +184,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}, {
 			key: 'renderLabel',
 			value: function renderLabel() {
+				var _classNames;
+
 				var props = this.props;
 				var labelCol = props.labelCol;
 				var required = props.required === undefined ? this.isRequired() : props.required;
 
+				var className = classNames((_classNames = {}, _defineProperty(_classNames, this._getLayoutClass(labelCol), true), _defineProperty(_classNames, props.prefixCls + '-item-required', required), _classNames));
+
 				return props.label ? React.createElement(
 					'label',
-					{ htmlFor: props.id || this.getId(), className: this._getLayoutClass(labelCol), required: required, key: 'label' },
+					{ htmlFor: props.id || this.getId(), className: className, required: required, key: 'label' },
 					props.label
 				) : null;
 			}
@@ -274,13 +278,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}, {
 			key: 'render',
 			value: function render() {
-				var _classNames;
+				var _classNames2;
 
 				var _props = this.props;
 				var prefixCls = _props.prefixCls;
 				var className = _props.className;
 
-				var formClassName = classNames((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls + '-horizontal', this.props.horizontal), _defineProperty(_classNames, prefixCls + '-inline', this.props.inline), _classNames));
+				var formClassName = classNames((_classNames2 = {}, _defineProperty(_classNames2, className, !!className), _defineProperty(_classNames2, prefixCls + '-horizontal', this.props.horizontal), _defineProperty(_classNames2, prefixCls + '-inline', this.props.inline), _classNames2));
 
 				return React.createElement(
 					'form',

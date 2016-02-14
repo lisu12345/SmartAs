@@ -63,8 +63,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function componentWillReceiveProps(nextProps) {
 				var _this2 = this;
 
-				if ('count' in nextProps && nextProps.count) {
-					if (this.lastCount === this.state.count) {
+				if ('count' in nextProps) {
+					if (this.state.count === nextProps.count) {
 						return;
 					}
 					this.lastCount = this.state.count;

@@ -30,8 +30,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
-    handleCancel: function handleCancel() {
-      this.props.onCancel();
+    handleCancel: function handleCancel(e) {
+      this.props.onCancel(e);
     },
     handleOk: function handleOk() {
       this.props.onOk();

@@ -1,3 +1,4 @@
+//2016.2.1
 + function(Namespace) {
 	var RC = Namespace.register("Smart.RC");
 	const assign = _.assign;

@@ -62,8 +62,8 @@
         endPlaceholder: '结束日期',
         transitionName: 'slide-up',
         popupStyle: {},
-        onChange() {
-        },  // onChange 可用于 Validator
+        onChange() {},
+        onOk() {},
         locale: {},
         align: {
           offset: [0, -9],
@@ -109,8 +109,8 @@
       let defaultCalendarValue = new GregorianCalendar(locale);
       defaultCalendarValue.setTime(Date.now());
 
-      const { disabledDate, showTime, size, startPlaceholder, endPlaceholder,
-              transitionName, disabled, popupStyle, align, style } = this.props;
+      const { disabledDate, showTime, size, startPlaceholder, endPlaceholder,getCalendarContainer,
+              transitionName, disabled, popupStyle, align, style ,onOk} = this.props;
       const state = this.state;
 
       const timePicker = showTime
@@ -131,6 +131,7 @@
           disabledDate={disabledDate}
           dateInputPlaceholder={[startPlaceholder, endPlaceholder]}
           locale={locale.lang}
+          onOk={onOk}
           defaultValue={[defaultCalendarValue, defaultCalendarValue]}
           showClear />
       );
@@ -156,6 +157,7 @@
           prefixCls="ant-calendar-picker-container"
           style={popupStyle}
           align={align}
+          getCalendarContainer={getCalendarContainer}
           onOpen={this.toggleOpen}
           onClose={this.toggleOpen}
           onChange={this.handleChange}>
@@ -193,8 +195,8 @@
           format: defaultFormat || 'yyyy-MM-dd',
           transitionName: 'slide-up',
           popupStyle: {},
-          onChange() {
-          },  // onChange 可用于 Validator
+          onChange() {},
+          onOk() {},
           locale: {},
           align: {
             offset: [0, -9],
@@ -258,6 +260,7 @@
             prefixCls="ant-calendar"
             className={calendarClassName}
             showOk={this.props.showTime}
+            onOk={this.props.onOk}
             showClear />
         );
 
@@ -282,6 +285,7 @@
               prefixCls="ant-calendar-picker-container"
               style={this.props.popupStyle}
               align={this.props.align}
+              getCalendarContainer={this.props.getCalendarContainer}
               onOpen={this.toggleOpen}
               onClose={this.toggleOpen}
               onChange={this.handleChange}>

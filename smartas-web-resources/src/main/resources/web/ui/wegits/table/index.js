@@ -14,6 +14,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var classNames = RC.classNames;
   var Menu = RC.Menu;
   var SubMenu = RC.SubMenu;
+  var MenuItem = RC.MenuItem;
   var Locale = RC.Locale;
   var Radio = UI.Radio;
   var Pagination = UI.Pagination;
@@ -71,7 +72,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     },
     renderMenuItem: function renderMenuItem(item) {
       return React.createElement(
-        Menu.Item,
+        MenuItem,
         { key: item.value },
         React.createElement(Checkbox, { checked: this.state.selectedKeys.indexOf(item.value) >= 0 }),
         item.text

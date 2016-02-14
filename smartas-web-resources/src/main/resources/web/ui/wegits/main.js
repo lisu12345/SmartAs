@@ -979,13 +979,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}, {
 			key: 'renderLabel',
 			value: function renderLabel() {
+				var _classNames;
+
 				var props = this.props;
 				var labelCol = props.labelCol;
 				var required = props.required === undefined ? this.isRequired() : props.required;
 
+				var className = classNames((_classNames = {}, _defineProperty(_classNames, this._getLayoutClass(labelCol), true), _defineProperty(_classNames, props.prefixCls + '-item-required', required), _classNames));
+
 				return props.label ? React.createElement(
 					'label',
-					{ htmlFor: props.id || this.getId(), className: this._getLayoutClass(labelCol), required: required, key: 'label' },
+					{ htmlFor: props.id || this.getId(), className: className, required: required, key: 'label' },
 					props.label
 				) : null;
 			}
@@ -1069,13 +1073,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}, {
 			key: 'render',
 			value: function render() {
-				var _classNames;
+				var _classNames2;
 
 				var _props = this.props;
 				var prefixCls = _props.prefixCls;
 				var className = _props.className;
 
-				var formClassName = classNames((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls + '-horizontal', this.props.horizontal), _defineProperty(_classNames, prefixCls + '-inline', this.props.inline), _classNames));
+				var formClassName = classNames((_classNames2 = {}, _defineProperty(_classNames2, className, !!className), _defineProperty(_classNames2, prefixCls + '-horizontal', this.props.horizontal), _defineProperty(_classNames2, prefixCls + '-inline', this.props.inline), _classNames2));
 
 				return React.createElement(
 					'form',
@@ -1711,8 +1715,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function componentWillReceiveProps(nextProps) {
 				var _this2 = this;
 
-				if ('count' in nextProps && nextProps.count) {
-					if (this.lastCount === this.state.count) {
+				if ('count' in nextProps) {
+					if (this.state.count === nextProps.count) {
 						return;
 					}
 					this.lastCount = this.state.count;
@@ -2298,8 +2302,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
-    handleCancel: function handleCancel() {
-      this.props.onCancel();
+    handleCancel: function handleCancel(e) {
+      this.props.onCancel(e);
     },
     handleOk: function handleOk() {
       this.props.onOk();
@@ -2694,6 +2698,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 })(Smart.UI, Smart.RC);
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
   var _ref = _;
@@ -2768,6 +2776,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
       var overlayStyle = _props.overlayStyle;
       var trigger = _props.trigger;
 
+      var restProps = _objectWithoutProperties(_props, ['title', 'okText', 'cancelText', 'placement', 'overlayStyle', 'trigger']);
+
       var overlay = React.createElement(
         'div',
         null,
@@ -2801,14 +2811,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
       return React.createElement(
         Tooltip,
-        { placement: placement,
+        _extends({}, restProps, { placement: placement,
           overlayStyle: overlayStyle,
           prefixCls: prefixCls,
           onVisibleChange: this.onVisibleChange,
           transitionName: transitionName,
           visible: this.state.visible,
           trigger: trigger,
-          overlay: overlay },
+          overlay: overlay }),
         this.props.children
       );
     }
@@ -3585,6 +3595,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var classNames = RC.classNames;
   var Menu = RC.Menu;
   var SubMenu = RC.SubMenu;
+  var MenuItem = RC.MenuItem;
   var Locale = RC.Locale;
   var Radio = UI.Radio;
   var Pagination = UI.Pagination;
@@ -3642,7 +3653,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     },
     renderMenuItem: function renderMenuItem(item) {
       return React.createElement(
-        Menu.Item,
+        MenuItem,
         { key: item.value },
         React.createElement(Checkbox, { checked: this.state.selectedKeys.indexOf(item.value) >= 0 }),
         item.text
@@ -5121,7 +5132,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         transitionName: 'slide-up',
         popupStyle: {},
         onChange: function onChange() {},
-        // onChange 可用于 Validator
+        onOk: function onOk() {},
+
         locale: {},
         align: {
           offset: [0, -9]
@@ -5176,11 +5188,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var size = _props2.size;
       var startPlaceholder = _props2.startPlaceholder;
       var endPlaceholder = _props2.endPlaceholder;
+      var getCalendarContainer = _props2.getCalendarContainer;
       var transitionName = _props2.transitionName;
       var disabled = _props2.disabled;
       var popupStyle = _props2.popupStyle;
       var align = _props2.align;
       var style = _props2.style;
+      var onOk = _props2.onOk;
 
       var state = this.state;
 
@@ -5197,6 +5211,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         disabledDate: disabledDate,
         dateInputPlaceholder: [startPlaceholder, endPlaceholder],
         locale: locale.lang,
+        onOk: onOk,
         defaultValue: [defaultCalendarValue, defaultCalendarValue],
         showClear: true });
 
@@ -5225,6 +5240,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             prefixCls: 'ant-calendar-picker-container',
             style: popupStyle,
             align: align,
+            getCalendarContainer: getCalendarContainer,
             onOpen: this.toggleOpen,
             onClose: this.toggleOpen,
             onChange: this.handleChange },
@@ -5267,7 +5283,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           transitionName: 'slide-up',
           popupStyle: {},
           onChange: function onChange() {},
-          // onChange 可用于 Validator
+          onOk: function onOk() {},
+
           locale: {},
           align: {
             offset: [0, -9]
@@ -5328,6 +5345,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           prefixCls: 'ant-calendar',
           className: calendarClassName,
           showOk: this.props.showTime,
+          onOk: this.props.onOk,
           showClear: true });
 
         var sizeClass = '';
@@ -5354,6 +5372,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               prefixCls: 'ant-calendar-picker-container',
               style: this.props.popupStyle,
               align: this.props.align,
+              getCalendarContainer: this.props.getCalendarContainer,
               onOpen: this.toggleOpen,
               onClose: this.toggleOpen,
               onChange: this.handleChange },
@@ -5399,4 +5418,70 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   AntDatePicker.MonthPicker = AntMonthPicker;
 
   UI.DatePicker = AntDatePicker;
+})(Smart.UI, Smart.RC);
+'use strict';
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _rcSlider = require('rc-slider');
+
+var _rcSlider2 = _interopRequireDefault(_rcSlider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
++(function (UI, RC) {
+  var Slider = RC.Slider;
+
+  var AntSlider = _react2.default.createClass({
+    displayName: 'AntSlider',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        prefixCls: 'ant-slider',
+        tipTransitionName: 'zoom-down'
+      };
+    },
+    render: function render() {
+      var _props = this.props;
+      var isIncluded = _props.isIncluded;
+      var marks = _props.marks;
+      var index = _props.index;
+      var defaultIndex = _props.defaultIndex;
+
+      var rest = _objectWithoutProperties(_props, ['isIncluded', 'marks', 'index', 'defaultIndex']);
+
+      if (isIncluded !== undefined) {
+        // 兼容 `isIncluded`
+        rest.included = isIncluded;
+      }
+
+      if (Array.isArray(marks)) {
+        // 兼容当 marks 为数组的情况
+        rest.min = 0;
+        rest.max = marks.length - 1;
+        rest.step = 1;
+
+        if (index !== undefined) {
+          rest.value = index;
+        }
+        if (defaultIndex !== undefined) {
+          rest.defaultValue = defaultIndex;
+        }
+
+        rest.marks = {};
+        marks.forEach(function (val, idx) {
+          rest.marks[idx] = val;
+        });
+      } else {
+        rest.marks = marks;
+      }
+
+      return _react2.default.createElement(Slider, rest);
+    }
+  });
+
+  UI.Slider = AntSlider;
 })(Smart.UI, Smart.RC);

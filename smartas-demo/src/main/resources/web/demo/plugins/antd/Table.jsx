@@ -39,17 +39,17 @@ install("web.demo.plugins.antd.Model",function($S){
 	  }
 	}];
 	const data = [{
-	  key: '1',
+	  key: 'a1',
 	  name: '胡彦斌',
 	  age: 32,
 	  address: '西湖区湖底公园1号'
 	}, {
-	  key: '2',
+	  key: 'a2',
 	  name: '胡彦祖',
 	  age: 42,
 	  address: '西湖区湖底公园1号'
 	}, {
-	  key: '3',
+	  key: 'a3',
 	  name: '李大嘴',
 	  age: 32,
 	  address: '西湖区湖底公园1号'

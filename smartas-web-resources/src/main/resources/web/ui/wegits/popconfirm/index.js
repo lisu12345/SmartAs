@@ -1,5 +1,9 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
   var _ref = _;
@@ -74,6 +78,8 @@
       var overlayStyle = _props.overlayStyle;
       var trigger = _props.trigger;
 
+      var restProps = _objectWithoutProperties(_props, ['title', 'okText', 'cancelText', 'placement', 'overlayStyle', 'trigger']);
+
       var overlay = React.createElement(
         'div',
         null,
@@ -107,14 +113,14 @@
 
       return React.createElement(
         Tooltip,
-        { placement: placement,
+        _extends({}, restProps, { placement: placement,
           overlayStyle: overlayStyle,
           prefixCls: prefixCls,
           onVisibleChange: this.onVisibleChange,
           transitionName: transitionName,
           visible: this.state.visible,
           trigger: trigger,
-          overlay: overlay },
+          overlay: overlay }),
         this.props.children
       );
     }

@@ -146,12 +146,15 @@
 		  renderLabel() {
 		    const props = this.props;
 		    const labelCol = props.labelCol;
-		    const required = props.required === undefined ?
-		      this.isRequired() :
-		      props.required;
+		    const required = props.required === undefined ? this.isRequired() : props.required;
+
+		      const className = classNames({
+			      [this._getLayoutClass(labelCol)]: true,
+			      [`${props.prefixCls}-item-required`]: required,
+			    });
 
 		    return props.label ? (
-		      <label htmlFor={props.id || this.getId()} className={this._getLayoutClass(labelCol)} required={required} key="label">
+		      <label htmlFor={props.id || this.getId()} className={className} required={required} key="label">
 		        {props.label}
 		      </label>
 		    ) : null;

@@ -37,10 +37,10 @@
 		}
 
 		componentWillReceiveProps(nextProps) {
-			if ('count' in nextProps && nextProps.count) {
-				if (this.lastCount === this.state.count) {
-					return;
-				}
+			if ('count' in nextProps) {
+		      	if (this.state.count === nextProps.count) {
+		        	return;
+		      	}
 				this.lastCount = this.state.count;
 				// 复原数字初始位置
 				this.setState({

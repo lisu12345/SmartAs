@@ -1,7 +1,7 @@
 + function(UI,RC) {
   const {noop} = _,
     objectAssign = _.assign,
-    {Table,classNames,Menu,SubMenu,Locale} = RC,
+    {Table,classNames,Menu,SubMenu,MenuItem,Locale} = RC,
     {Radio,Pagination,Icon,Spin,Dropdown,Checkbox} = UI;
 
 
@@ -51,10 +51,10 @@
     },
     renderMenuItem(item) {
       return (
-        <Menu.Item key={item.value}>
+        <MenuItem key={item.value}>
           <Checkbox checked={this.state.selectedKeys.indexOf(item.value) >= 0} />
           {item.text}
-        </Menu.Item>
+        </MenuItem>
       );
     },
     renderMenus(items) {
