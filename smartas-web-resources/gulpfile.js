@@ -85,6 +85,7 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/tree/index.js',
 			'src/main/resources/web/ui/wegits/tree-select/index.js',
 			'src/main/resources/web/ui/wegits/carousel/index.js',
+			'src/main/resources/web/ui/wegits/transfer/index.js',
 		]
 	},
 	core: [

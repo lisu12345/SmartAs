@@ -1,78 +1,397 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _list = require('./list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _operation = require('./operation');
-
-var _operation2 = _interopRequireDefault(_operation);
-
-var _search = require('./search');
-
-var _search2 = _interopRequireDefault(_search);
-
-var _classnames = require('classnames');
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
++(function (UI, RC) {
+  var _ref = _;
+  var noop = _ref.noop;
+  var classNames = RC.classNames;
+  var Animate = RC.Animate;
+  var Icon = UI.Icon;
+  var Button = UI.Button;
+  var Checkbox = UI.Checkbox;
+  var _React = React;
+  var Component = _React.Component;
+  var PropTypes = _React.PropTypes;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+  var Operation = React.createClass({
+    displayName: 'Operation',
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function noop() {}
-
-var Transfer = (function (_Component) {
-  _inherits(Transfer, _Component);
-
-  function Transfer(props) {
-    _classCallCheck(this, Transfer);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Transfer).call(this, props));
-
-    _this.state = {
-      leftFilter: '',
-      rightFilter: '',
-      leftCheckedKeys: [],
-      rightCheckedKeys: []
-    };
-    return _this;
-  }
-
-  _createClass(Transfer, [{
-    key: 'splitDataSource',
-    value: function splitDataSource() {
+    propTypes: {
+      className: PropTypes.string,
+      leftArrowText: PropTypes.string,
+      rightArrowText: PropTypes.string,
+      moveToLeft: PropTypes.func,
+      moveToRight: PropTypes.func
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        leftArrowText: '',
+        rightArrowText: '',
+        moveToLeft: noop,
+        moveToRight: noop
+      };
+    },
+    render: function render() {
       var _props = this.props;
-      var targetKeys = _props.targetKeys;
-      var dataSource = _props.dataSource;
+      var moveToLeft = _props.moveToLeft;
+      var moveToRight = _props.moveToRight;
+      var leftArrowText = _props.leftArrowText;
+      var rightArrowText = _props.rightArrowText;
+      var leftActive = _props.leftActive;
+      var rightActive = _props.rightActive;
+      var className = _props.className;
+
+      var moveToLeftButton = React.createElement(
+        Button,
+        { type: 'primary', size: 'small', disabled: !leftActive, onClick: moveToLeft },
+        React.createElement(
+          'span',
+          null,
+          React.createElement(Icon, { type: 'left' }),
+          leftArrowText
+        )
+      );
+      var moveToRightButton = React.createElement(
+        Button,
+        { type: 'primary', size: 'small', disabled: !rightActive, onClick: moveToRight },
+        React.createElement(
+          'span',
+          null,
+          rightArrowText,
+          React.createElement(Icon, { type: 'right' })
+        )
+      );
+      return React.createElement(
+        'div',
+        { className: className },
+        moveToLeftButton,
+        moveToRightButton
+      );
+    }
+  });
+
+  var Search = React.createClass({
+    displayName: 'Search',
+
+    /*constructor(props) {
+      super(props);
+    }*/
+    propTypes: {
+      prefixCls: PropTypes.string,
+      placeholder: PropTypes.string,
+      onChange: PropTypes.func,
+      handleClear: PropTypes.func
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        placeholder: '请输入搜索内容',
+        onChange: noop,
+        handleClear: noop
+      };
+    },
+    handleChange: function handleChange(e) {
+      this.props.onChange(e);
+    },
+
+    handleClear: function handleClear(e) {
+      e.preventDefault();
+      this.props.handleClear(e);
+    },
+
+    render: function render() {
+      var _props2 = this.props;
+      var placeholder = _props2.placeholder;
+      var value = _props2.value;
+      var prefixCls = _props2.prefixCls;
+
+      return React.createElement(
+        'div',
+        null,
+        React.createElement('input', { placeholder: placeholder, className: prefixCls + ' ant-input', value: value, ref: 'input',
+          onChange: this.handleChange }),
+        value && value.length > 0 ? React.createElement(
+          'a',
+          { href: '#', className: prefixCls + '-action', onClick: this.handleClear },
+          React.createElement(Icon, { type: 'cross-circle' })
+        ) : React.createElement(
+          'span',
+          { className: prefixCls + '-action' },
+          React.createElement(Icon, { type: 'search' })
+        )
+      );
+    }
+  });
+
+  var List = React.createClass({
+    displayName: 'List',
+
+    /*constructor(props) {
+      super(props);
+      this.state = {
+        mounted: false,
+      };
+    }*/
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      dataSource: PropTypes.array,
+      showSearch: PropTypes.bool,
+      searchPlaceholder: PropTypes.string,
+      titleText: PropTypes.string,
+      style: PropTypes.object,
+      handleFilter: PropTypes.func,
+      handleSelect: PropTypes.func,
+      handleSelectAll: PropTypes.func,
+      render: PropTypes.func,
+      body: PropTypes.func,
+      footer: PropTypes.func
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        dataSource: [],
+        titleText: '',
+        showSearch: false,
+        searchPlaceholder: '',
+        handleFilter: noop,
+        handleSelect: noop,
+        handleSelectAll: noop,
+        render: noop,
+        // advanced
+        body: noop,
+        footer: noop
+      };
+    },
+    getInitialState: function getInitialState() {
+      return {
+        mounted: false
+      };
+    },
+    componentDidMount: function componentDidMount() {
+      var _this = this;
+
+      setTimeout(function () {
+        _this.setState({
+          mounted: true
+        });
+      }, 0);
+    },
+
+    handleSelectALl: function handleSelectALl() {
+      this.props.handleSelectAll();
+    },
+
+    handleSelect: function handleSelect(selectedItem) {
+      var checkedKeys = this.props.checkedKeys;
+
+      var result = checkedKeys.some(function (key) {
+        return key === selectedItem.key;
+      });
+      this.props.handleSelect(selectedItem, !result);
+    },
+
+    handleFilter: function handleFilter(e) {
+      this.props.handleFilter(e);
+    },
+
+    handleClear: function handleClear() {
+      this.props.handleClear();
+    },
+
+    renderCheckbox: function renderCheckbox(props) {
+      var _classNames;
+
+      var prefixCls = props.prefixCls;
+
+      var checkboxCls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-checkbox', true), _defineProperty(_classNames, prefixCls + '-checkbox-indeterminate', props.checkPart), _defineProperty(_classNames, prefixCls + '-checkbox-checked', !props.checkPart && props.checked), _defineProperty(_classNames, prefixCls + '-checkbox-disabled', !!props.disabled), _classNames));
+      var customEle = null;
+      if (typeof props.checkable !== 'boolean') {
+        customEle = props.checkable;
+      }
+      return React.createElement(
+        'span',
+        { ref: 'checkbox',
+          className: checkboxCls,
+          onClick: !props.disabled && this.handleSelectALl },
+        customEle
+      );
+    },
+
+    matchFilter: function matchFilter(text, filterText) {
+      var regex = new RegExp(filterText);
+      return text.match(regex);
+    },
+
+    render: function render() {
+      var _classNames2,
+          _this2 = this;
+
+      var _props3 = this.props;
+      var prefixCls = _props3.prefixCls;
+      var dataSource = _props3.dataSource;
+      var titleText = _props3.titleText;
+      var filter = _props3.filter;
+      var checkedKeys = _props3.checkedKeys;
+      var checkStatus = _props3.checkStatus;
+      var body = _props3.body;
+      var footer = _props3.footer;
+      var showSearch = _props3.showSearch;
+
+      // Custom Layout
+
+      var footerDom = footer(_extends({}, this.props));
+      var bodyDom = body(_extends({}, this.props));
+
+      var listCls = classNames((_classNames2 = {}, _defineProperty(_classNames2, prefixCls, true), _defineProperty(_classNames2, prefixCls + '-with-footer', !!footerDom), _classNames2));
+
+      var showItems = dataSource.map(function (item) {
+        // apply filter
+        var itemText = _this2.props.render(item);
+        var filterResult = _this2.matchFilter(itemText, filter);
+        var renderedText = _this2.props.render(item);
+
+        if (filterResult) {
+          return React.createElement(
+            'li',
+            { onClick: _this2.handleSelect.bind(_this2, item), key: item.key, title: renderedText },
+            React.createElement(Checkbox, { checked: checkedKeys.some(function (key) {
+                return key === item.key;
+              }) }),
+            renderedText
+          );
+        }
+      }).filter(function (item) {
+        return !!item;
+      });
+
+      return React.createElement(
+        'div',
+        _extends({ className: listCls }, this.props),
+        React.createElement(
+          'div',
+          { className: prefixCls + '-header' },
+          this.renderCheckbox({
+            prefixCls: 'ant-transfer',
+            checked: checkStatus === 'all',
+            checkPart: checkStatus === 'part',
+            checkable: React.createElement('span', { className: 'ant-transfer-checkbox-inner' })
+          }),
+          React.createElement(
+            'span',
+            { className: prefixCls + '-header-selected' },
+            React.createElement(
+              'span',
+              null,
+              (checkedKeys.length > 0 ? checkedKeys.length + '/' : '') + dataSource.length,
+              ' 条'
+            ),
+            React.createElement(
+              'span',
+              { className: prefixCls + '-header-title' },
+              titleText
+            )
+          )
+        ),
+        bodyDom || React.createElement(
+          'div',
+          { className: showSearch ? prefixCls + '-body ' + prefixCls + '-body-with-search' : prefixCls + '-body' },
+          showSearch ? React.createElement(
+            'div',
+            { className: prefixCls + '-body-search-wrapper' },
+            React.createElement(Search, { prefixCls: prefixCls + '-search', onChange: this.handleFilter, handleClear: this.handleClear, value: filter })
+          ) : null,
+          React.createElement(
+            Animate,
+            { component: 'ul',
+              transitionName: this.state.mounted ? prefixCls + '-highlight' : '',
+              transitionLeave: false },
+            showItems.length > 0 ? showItems : React.createElement(
+              'div',
+              { className: prefixCls + '-body-not-found' },
+              'Not Found'
+            )
+          )
+        ),
+        footerDom ? React.createElement(
+          'div',
+          { className: prefixCls + '-footer' },
+          footerDom
+        ) : null
+      );
+    }
+  });
+
+  var Transfer = React.createClass({
+    displayName: 'Transfer',
+
+    /*constructor(props) {
+      super(props);
+        this.state = {
+        leftFilter: '',
+        rightFilter: '',
+        leftCheckedKeys: [],
+        rightCheckedKeys: [],
+      };
+    }*/
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      dataSource: PropTypes.array,
+      render: PropTypes.func,
+      targetKeys: PropTypes.array,
+      onChange: PropTypes.func,
+      height: PropTypes.number,
+      listStyle: PropTypes.object,
+      className: PropTypes.string,
+      titles: PropTypes.array,
+      operations: PropTypes.array,
+      showSearch: PropTypes.bool,
+      searchPlaceholder: PropTypes.string,
+      body: PropTypes.func,
+      footer: PropTypes.func
+    },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        prefixCls: 'ant-transfer',
+        dataSource: [],
+        render: noop,
+        targetKeys: [],
+        onChange: noop,
+        titles: ['源列表', '目的列表'],
+        operations: [],
+        showSearch: false,
+        searchPlaceholder: '请输入搜索内容',
+        body: noop,
+        footer: noop
+      };
+    },
+    getInitialState: function getInitialState() {
+      return {
+        leftFilter: '',
+        rightFilter: '',
+        leftCheckedKeys: [],
+        rightCheckedKeys: []
+      };
+    },
+
+    splitDataSource: function splitDataSource() {
+      var _props4 = this.props;
+      var targetKeys = _props4.targetKeys;
+      var dataSource = _props4.dataSource;
 
       var leftDataSource = Object.assign([], dataSource);
       var rightDataSource = [];
 
       if (targetKeys.length > 0) {
         targetKeys.forEach(function (targetKey) {
-          rightDataSource.push(leftDataSource.find(function (data, index) {
+          rightDataSource.push(leftDataSource.filter(function (data, index) {
             if (data.key === targetKey) {
               leftDataSource.splice(index, 1);
               return true;
             }
-          }));
+          })[0]);
         });
       }
 
@@ -80,18 +399,18 @@ var Transfer = (function (_Component) {
         leftDataSource: leftDataSource,
         rightDataSource: rightDataSource
       };
-    }
-  }, {
-    key: 'moveTo',
-    value: function moveTo(direction) {
+    },
+
+    moveTo: function moveTo(direction) {
       var targetKeys = this.props.targetKeys;
       var _state = this.state;
       var leftCheckedKeys = _state.leftCheckedKeys;
       var rightCheckedKeys = _state.rightCheckedKeys;
-      // move items to target box
 
-      var newTargetKeys = direction === 'right' ? leftCheckedKeys.concat(targetKeys) : targetKeys.filter(function (targetKey) {
-        return !rightCheckedKeys.some(function (checkedKey) {
+      var moveKeys = direction === 'right' ? leftCheckedKeys : rightCheckedKeys;
+      // move items to target box
+      var newTargetKeys = direction === 'right' ? moveKeys.concat(targetKeys) : targetKeys.filter(function (targetKey) {
+        return !moveKeys.some(function (checkedKey) {
           return targetKey === checkedKey;
         });
       });
@@ -99,11 +418,10 @@ var Transfer = (function (_Component) {
       // empty checked keys
       this.setState(_defineProperty({}, direction === 'right' ? 'leftCheckedKeys' : 'rightCheckedKeys', []));
 
-      this.props.onChange(newTargetKeys);
-    }
-  }, {
-    key: 'getGlobalCheckStatus',
-    value: function getGlobalCheckStatus(direction) {
+      this.props.onChange(newTargetKeys, direction, moveKeys);
+    },
+
+    getGlobalCheckStatus: function getGlobalCheckStatus(direction) {
       var _splitDataSource = this.splitDataSource();
 
       var leftDataSource = _splitDataSource.leftDataSource;
@@ -131,26 +449,23 @@ var Transfer = (function (_Component) {
         globalCheckStatus = 'none';
       }
       return globalCheckStatus;
-    }
-  }, {
-    key: 'filterDataSource',
-    value: function filterDataSource(dataSource, filter) {
-      var _this2 = this;
+    },
+
+    filterDataSource: function filterDataSource(dataSource, filter) {
+      var _this3 = this;
 
       return dataSource.filter(function (item) {
-        var itemText = _this2.props.render(item);
-        return _this2.matchFilter(itemText, filter);
+        var itemText = _this3.props.render(item);
+        return _this3.matchFilter(itemText, filter);
       });
-    }
-  }, {
-    key: 'matchFilter',
-    value: function matchFilter(text, filterText) {
+    },
+
+    matchFilter: function matchFilter(text, filterText) {
       var regex = new RegExp(filterText);
       return text.match(regex);
-    }
-  }, {
-    key: 'handleSelectAll',
-    value: function handleSelectAll(direction) {
+    },
+
+    handleSelectAll: function handleSelectAll(direction) {
       var _splitDataSource2 = this.splitDataSource();
 
       var leftDataSource = _splitDataSource2.leftDataSource;
@@ -162,40 +477,34 @@ var Transfer = (function (_Component) {
       var dataSource = direction === 'left' ? leftDataSource : rightDataSource;
       var filter = direction === 'left' ? leftFilter : rightFilter;
       var checkStatus = this.getGlobalCheckStatus(direction);
-      var holder = [];
-
-      if (checkStatus === 'all') {
-        holder = [];
-      } else {
-        holder = this.filterDataSource(dataSource, filter).map(function (item) {
-          return item.key;
-        });
-      }
+      var holder = checkStatus === 'all' ? [] : this.filterDataSource(dataSource, filter).map(function (item) {
+        return item.key;
+      });
 
       this.setState(_defineProperty({}, direction + 'CheckedKeys', holder));
-    }
-  }, {
-    key: 'handleFilter',
-    value: function handleFilter(direction, e) {
+    },
+
+    handleFilter: function handleFilter(direction, e) {
       var _setState3;
 
       this.setState((_setState3 = {}, _defineProperty(_setState3, direction + 'CheckedKeys', []), _defineProperty(_setState3, direction + 'Filter', e.target.value), _setState3));
-    }
-  }, {
-    key: 'handleClear',
-    value: function handleClear(direction) {
+    },
+
+    handleClear: function handleClear(direction) {
       this.setState(_defineProperty({}, direction + 'Filter', ''));
-    }
-  }, {
-    key: 'handleSelect',
-    value: function handleSelect(direction, selectedItem, checked) {
+    },
+
+    handleSelect: function handleSelect(direction, selectedItem, checked) {
       var _state4 = this.state;
       var leftCheckedKeys = _state4.leftCheckedKeys;
       var rightCheckedKeys = _state4.rightCheckedKeys;
 
       var holder = direction === 'left' ? leftCheckedKeys : rightCheckedKeys;
-      var index = holder.findIndex(function (key) {
-        return key === selectedItem.key;
+      var index = undefined;
+      holder.forEach(function (key, i) {
+        if (key === selectedItem.key) {
+          index = i;
+        }
       });
       if (index > -1) {
         holder.splice(index, 1);
@@ -204,22 +513,21 @@ var Transfer = (function (_Component) {
         holder.push(selectedItem.key);
       }
       this.setState(_defineProperty({}, direction + 'CheckedKeys', holder));
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _classNames;
+    },
 
-      var _props2 = this.props;
-      var prefixCls = _props2.prefixCls;
-      var titles = _props2.titles;
-      var operations = _props2.operations;
-      var showSearch = _props2.showSearch;
-      var searchPlaceholder = _props2.searchPlaceholder;
-      var body = _props2.body;
-      var footer = _props2.footer;
-      var listStyle = _props2.listStyle;
-      var className = _props2.className;
+    render: function render() {
+      var _classNames3;
+
+      var _props5 = this.props;
+      var prefixCls = _props5.prefixCls;
+      var titles = _props5.titles;
+      var operations = _props5.operations;
+      var showSearch = _props5.showSearch;
+      var searchPlaceholder = _props5.searchPlaceholder;
+      var body = _props5.body;
+      var footer = _props5.footer;
+      var listStyle = _props5.listStyle;
+      var className = _props5.className;
       var _state5 = this.state;
       var leftFilter = _state5.leftFilter;
       var rightFilter = _state5.rightFilter;
@@ -237,12 +545,12 @@ var Transfer = (function (_Component) {
       var leftCheckStatus = this.getGlobalCheckStatus('left');
       var rightCheckStatus = this.getGlobalCheckStatus('right');
 
-      var cls = (0, _classnames2.default)((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, 'prefixCls', true), _classNames));
+      var cls = classNames((_classNames3 = {}, _defineProperty(_classNames3, className, !!className), _defineProperty(_classNames3, 'prefixCls', true), _classNames3));
 
-      return _react2.default.createElement(
+      return React.createElement(
         'div',
         { className: cls },
-        _react2.default.createElement(_list2.default, { titleText: titles[0],
+        React.createElement(List, { titleText: titles[0],
           dataSource: leftDataSource,
           filter: leftFilter,
           style: listStyle,
@@ -258,17 +566,15 @@ var Transfer = (function (_Component) {
           searchPlaceholder: searchPlaceholder,
           body: body,
           footer: footer,
-          prefixCls: prefixCls + '-list'
-        }),
-        _react2.default.createElement(_operation2.default, { rightActive: rightActive,
+          prefixCls: prefixCls + '-list' }),
+        React.createElement(Operation, { rightActive: rightActive,
           rightArrowText: operations[0],
           moveToRight: this.moveTo.bind(this, 'right'),
           leftActive: leftActive,
           leftArrowText: operations[1],
           moveToLeft: this.moveTo.bind(this, 'left'),
-          className: prefixCls + '-operation'
-        }),
-        _react2.default.createElement(_list2.default, { titleText: titles[1],
+          className: prefixCls + '-operation' }),
+        React.createElement(List, { titleText: titles[1],
           dataSource: rightDataSource,
           filter: rightFilter,
           style: listStyle,
@@ -284,48 +590,14 @@ var Transfer = (function (_Component) {
           searchPlaceholder: searchPlaceholder,
           body: body,
           footer: footer,
-          prefixCls: prefixCls + '-list'
-        })
+          prefixCls: prefixCls + '-list' })
       );
     }
-  }]);
+  });
 
-  return Transfer;
-})(_react.Component);
+  Transfer.List = List;
+  Transfer.Operation = Operation;
+  Transfer.Search = Search;
 
-Transfer.defaultProps = {
-  prefixCls: 'ant-transfer',
-  dataSource: [],
-  render: noop,
-  targetKeys: [],
-  onChange: noop,
-  titles: ['源列表', '目的列表'],
-  operations: [],
-  showSearch: false,
-  searchPlaceholder: '请输入搜索内容',
-  body: noop,
-  footer: noop
-};
-
-Transfer.propTypes = {
-  prefixCls: _react.PropTypes.string,
-  dataSource: _react.PropTypes.array,
-  render: _react.PropTypes.func,
-  targetKeys: _react.PropTypes.array,
-  onChange: _react.PropTypes.func,
-  height: _react.PropTypes.number,
-  listStyle: _react.PropTypes.object,
-  className: _react.PropTypes.string,
-  titles: _react.PropTypes.array,
-  operations: _react.PropTypes.array,
-  showSearch: _react.PropTypes.bool,
-  searchPlaceholder: _react.PropTypes.string,
-  body: _react.PropTypes.func,
-  footer: _react.PropTypes.func
-};
-
-Transfer.List = _list2.default;
-Transfer.Operation = _operation2.default;
-Transfer.Search = _search2.default;
-
-exports.default = Transfer;
+  UI.Transfer = Transfer;
+})(Smart.UI, Smart.RC);
