@@ -10,7 +10,7 @@
 
 	var locale = {
 		// 统一合并为完整的 Locale
-		Timepicker: assign({}, GregorianCalendar, {
+		TimePicker: assign({}, GregorianCalendar, {
 			lang: assign({
 				placeholder: 'Select a time'
 			}, Timepicker)

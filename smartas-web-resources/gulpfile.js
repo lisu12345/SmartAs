@@ -11,6 +11,7 @@ const scripts = {
 	react: {
 		components: [
 			'src/main/resources/web/ui/components/index.js',
+			'src/main/resources/web/ui/components/react-slick.js',
 			'src/main/resources/web/ui/components/util/index.js',
 			'src/main/resources/web/ui/components/dom-align/index.js',
 			'src/main/resources/web/ui/components/css-animation/index.js',
@@ -39,8 +40,10 @@ const scripts = {
 			'src/main/resources/web/ui/components/time-picker/index.js',
 			'src/main/resources/web/ui/components/calendar/index.js',
 			'src/main/resources/web/ui/components/slider/index.js',
+			'src/main/resources/web/ui/components/tree/index.js',
 		],
 		wegits: [
+			'src/main/resources/web/ui/wegits/index.js',
 			'src/main/resources/web/ui/wegits/index.js',
 			'src/main/resources/web/ui/wegits/layout/index.js',
 			'src/main/resources/web/ui/wegits/icon/index.js',
@@ -78,6 +81,8 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/calendar/index.js',
 			'src/main/resources/web/ui/wegits/date-picker/index.js',
 			'src/main/resources/web/ui/wegits/slider/index.js',
+			'src/main/resources/web/ui/wegits/tree/index.js',
+			'src/main/resources/web/ui/wegits/carousel/index.js',
 		]
 	},
 	core: [

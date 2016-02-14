@@ -1,7 +1,21 @@
 "use strict";
 
+//v0.12.1 - 2016.2.14
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
+
+	// matchMedia polyfill for
+	// https://github.com/WickyNilliams/enquire.js/issues/82
+	if (typeof window !== 'undefined') {
+		var matchMediaPolyfill = function matchMediaPolyfill() {
+			return {
+				matches: false,
+				addListener: function addListener() {},
+				removeListener: function removeListener() {}
+			};
+		};
+		window.matchMedia = window.matchMedia || matchMediaPolyfill;
+	}
 })(Smart.Namespace);
 'use strict';
 
@@ -5421,22 +5435,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 })(Smart.UI, Smart.RC);
 'use strict';
 
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _rcSlider = require('rc-slider');
-
-var _rcSlider2 = _interopRequireDefault(_rcSlider);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 +(function (UI, RC) {
   var Slider = RC.Slider;
 
-  var AntSlider = _react2.default.createClass({
+  var AntSlider = React.createClass({
     displayName: 'AntSlider',
     getDefaultProps: function getDefaultProps() {
       return {
@@ -5479,9 +5483,83 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         rest.marks = marks;
       }
 
-      return _react2.default.createElement(Slider, rest);
+      return React.createElement(Slider, rest);
     }
   });
 
   UI.Slider = AntSlider;
+})(Smart.UI, Smart.RC);
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
++(function (UI, RC) {
+  var Tree = RC.Tree;
+  var animation = RC.animation;
+
+  var AntTree = React.createClass({
+    displayName: 'AntTree',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        prefixCls: 'ant-tree',
+        checkable: false,
+        showIcon: false,
+        openAnimation: animation
+      };
+    },
+    render: function render() {
+      var props = this.props;
+      var checkable = props.checkable;
+      if (checkable) {
+        checkable = React.createElement('span', { className: props.prefixCls + '-checkbox-inner' });
+      }
+      return React.createElement(
+        Tree,
+        _extends({}, props, { checkable: checkable }),
+        this.props.children
+      );
+    }
+  });
+
+  AntTree.TreeNode = Tree.TreeNode;
+  UI.Tree = AntTree;
+  UI.TreeNode = Tree.TreeNode;
+})(Smart.UI, Smart.RC);
+'use strict';
+
++(function (UI, RC) {
+  var Carousel = Slider;
+  var _ref = _;
+  var assign = _ref.assign;
+
+  var AntCarousel = React.createClass({
+    displayName: 'AntCarousel',
+    getDefaultProps: function getDefaultProps() {
+      return {
+        dots: true,
+        arrows: false
+      };
+    },
+    render: function render() {
+      var props = assign({}, this.props);
+
+      if (props.effect === 'fade') {
+        props.fade = true;
+        props.draggable = false;
+      }
+
+      var className = 'ant-carousel';
+      if (props.vertical) {
+        className = className + ' ant-carousel-vertical';
+      }
+
+      return React.createElement(
+        'div',
+        { className: className },
+        React.createElement(Carousel, props)
+      );
+    }
+  });
+
+  UI.Carousel = AntCarousel;
 })(Smart.UI, Smart.RC);

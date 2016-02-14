@@ -6,7 +6,7 @@
 
   const locale = {
     // 统一合并为完整的 Locale
-    Timepicker: assign({}, GregorianCalendar, {
+	TimePicker: assign({}, GregorianCalendar, {
       lang: assign({
         placeholder: '请选择时间',
       }, Timepicker)

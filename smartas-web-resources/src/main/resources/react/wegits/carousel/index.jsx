@@ -1,48 +1,37 @@
-// matchMedia polyfill for
-// https://github.com/WickyNilliams/enquire.js/issues/82
-if (typeof window !== 'undefined') {
-  const matchMediaPolyfill = function matchMediaPolyfill() {
-    return {
-      matches: false,
-      addListener: function () {
-      },
-      removeListener: function () {
++(function(UI,RC) {
+  const Carousel = Slider,
+    {assign} = _;
+
+  const AntCarousel = React.createClass({
+    getDefaultProps() {
+      return {
+        dots: true,
+        arrows: false
+      };
+    },
+    render() {
+      let props = assign({}, this.props);
+
+      if (props.effect === 'fade') {
+        props.fade = true;
+        props.draggable = false;
       }
-    };
-  };
-  window.matchMedia = window.matchMedia || matchMediaPolyfill;
-}
 
-import Carousel from 'react-slick';
-import React from 'react';
-import assign from 'object-assign';
+      let className = 'ant-carousel';
+      if (props.vertical) {
+        className = className + ' ant-carousel-vertical';
+      }
 
-const AntCarousel = React.createClass({
-  getDefaultProps() {
-    return {
-      dots: true,
-      arrows: false
-    };
-  },
-  render() {
-    let props = assign({}, this.props);
-
-    if (props.effect === 'fade') {
-      props.fade = true;
-      props.draggable = false;
+      return (
+        <div className={className}>
+          <Carousel {...props} />
+        </div>
+      );
     }
+  });
 
-    let className = 'ant-carousel';
-    if (props.vertical) {
-      className = className + ' ant-carousel-vertical';
-    }
+  UI.Carousel = AntCarousel;
 
-    return (
-      <div className={className}>
-        <Carousel {...props} />
-      </div>
-    );
-  }
-});
+})(Smart.UI,Smart.RC);
 
-export default AntCarousel;
+
