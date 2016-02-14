@@ -1,4 +1,4 @@
-(function($, Namespace, Env, EventBus, Store) {
+(function($, Namespace, EventBus, Store) {
 	// Bind an event handler.
 	var logger = Log.getLogger("core.resource.control");
 	var context = $("#content"), lifecycle = EventBus.New(true), qs = {}, info = Env.getInfo();
@@ -189,4 +189,4 @@
 			Resource.uninstall();
 		});
 	});
-})($, Smart.Namespace, Smart.Env, Smart.EventBus, Smart.Store);
+})($, Smart.Namespace, Smart.EventBus, Smart.Store);

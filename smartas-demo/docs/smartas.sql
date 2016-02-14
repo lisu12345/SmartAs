@@ -10,10 +10,641 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2016-01-21 16:59:44
+Date: 2016-02-14 15:47:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for act_evt_log
+-- ----------------------------
+DROP TABLE IF EXISTS `act_evt_log`;
+CREATE TABLE `act_evt_log` (
+  `LOG_NR_` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TYPE_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TIME_STAMP_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `DATA_` longblob,
+  `LOCK_OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `LOCK_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `IS_PROCESSED_` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`LOG_NR_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_evt_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ge_bytearray
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ge_bytearray`;
+CREATE TABLE `act_ge_bytearray` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `BYTES_` longblob,
+  `GENERATED_` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_FK_BYTEARR_DEPL` (`DEPLOYMENT_ID_`),
+  CONSTRAINT `ACT_FK_BYTEARR_DEPL` FOREIGN KEY (`DEPLOYMENT_ID_`) REFERENCES `act_re_deployment` (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ge_bytearray
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ge_property
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ge_property`;
+CREATE TABLE `act_ge_property` (
+  `NAME_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `VALUE_` varchar(300) COLLATE utf8_bin DEFAULT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  PRIMARY KEY (`NAME_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ge_property
+-- ----------------------------
+INSERT INTO `act_ge_property` VALUES ('next.dbid', '1', '1');
+INSERT INTO `act_ge_property` VALUES ('schema.history', 'create(6.0.0.1)', '1');
+INSERT INTO `act_ge_property` VALUES ('schema.version', '6.0.0.1', '1');
+
+-- ----------------------------
+-- Table structure for act_hi_actinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_actinst`;
+CREATE TABLE `act_hi_actinst` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `ACT_ID_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CALL_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ACT_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `ACT_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `START_TIME_` datetime(3) NOT NULL,
+  `END_TIME_` datetime(3) DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_ACT_INST_START` (`START_TIME_`),
+  KEY `ACT_IDX_HI_ACT_INST_END` (`END_TIME_`),
+  KEY `ACT_IDX_HI_ACT_INST_PROCINST` (`PROC_INST_ID_`,`ACT_ID_`),
+  KEY `ACT_IDX_HI_ACT_INST_EXEC` (`EXECUTION_ID_`,`ACT_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_actinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_attachment
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_attachment`;
+CREATE TABLE `act_hi_attachment` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `URL_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `CONTENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TIME_` datetime(3) DEFAULT NULL,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_attachment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_comment`;
+CREATE TABLE `act_hi_comment` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TIME_` datetime(3) NOT NULL,
+  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ACTION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `MESSAGE_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `FULL_MSG_` longblob,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_comment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_detail`;
+CREATE TABLE `act_hi_detail` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ACT_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `VAR_TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `TIME_` datetime(3) NOT NULL,
+  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DOUBLE_` double DEFAULT NULL,
+  `LONG_` bigint(20) DEFAULT NULL,
+  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_DETAIL_PROC_INST` (`PROC_INST_ID_`),
+  KEY `ACT_IDX_HI_DETAIL_ACT_INST` (`ACT_INST_ID_`),
+  KEY `ACT_IDX_HI_DETAIL_TIME` (`TIME_`),
+  KEY `ACT_IDX_HI_DETAIL_NAME` (`NAME_`),
+  KEY `ACT_IDX_HI_DETAIL_TASK_ID` (`TASK_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_identitylink
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_identitylink`;
+CREATE TABLE `act_hi_identitylink` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `GROUP_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_IDENT_LNK_USER` (`USER_ID_`),
+  KEY `ACT_IDX_HI_IDENT_LNK_TASK` (`TASK_ID_`),
+  KEY `ACT_IDX_HI_IDENT_LNK_PROCINST` (`PROC_INST_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_identitylink
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_procinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_procinst`;
+CREATE TABLE `act_hi_procinst` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `START_TIME_` datetime(3) NOT NULL,
+  `END_TIME_` datetime(3) DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `START_USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `START_ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `END_ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `SUPER_PROCESS_INSTANCE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DELETE_REASON_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  UNIQUE KEY `PROC_INST_ID_` (`PROC_INST_ID_`),
+  KEY `ACT_IDX_HI_PRO_INST_END` (`END_TIME_`),
+  KEY `ACT_IDX_HI_PRO_I_BUSKEY` (`BUSINESS_KEY_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_procinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_taskinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_taskinst`;
+CREATE TABLE `act_hi_taskinst` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PARENT_TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `START_TIME_` datetime(3) NOT NULL,
+  `CLAIM_TIME_` datetime(3) DEFAULT NULL,
+  `END_TIME_` datetime(3) DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `DELETE_REASON_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `PRIORITY_` int(11) DEFAULT NULL,
+  `DUE_DATE_` datetime(3) DEFAULT NULL,
+  `FORM_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_TASK_INST_PROCINST` (`PROC_INST_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_taskinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_hi_varinst
+-- ----------------------------
+DROP TABLE IF EXISTS `act_hi_varinst`;
+CREATE TABLE `act_hi_varinst` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DOUBLE_` double DEFAULT NULL,
+  `LONG_` bigint(20) DEFAULT NULL,
+  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `CREATE_TIME_` datetime(3) DEFAULT NULL,
+  `LAST_UPDATED_TIME_` datetime(3) DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_HI_PROCVAR_PROC_INST` (`PROC_INST_ID_`),
+  KEY `ACT_IDX_HI_PROCVAR_NAME_TYPE` (`NAME_`,`VAR_TYPE_`),
+  KEY `ACT_IDX_HI_PROCVAR_TASK_ID` (`TASK_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_hi_varinst
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_group
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_group`;
+CREATE TABLE `act_id_group` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_id_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_info
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_info`;
+CREATE TABLE `act_id_info` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `USER_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `VALUE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PASSWORD_` longblob,
+  `PARENT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_id_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_membership
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_membership`;
+CREATE TABLE `act_id_membership` (
+  `USER_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `GROUP_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`USER_ID_`,`GROUP_ID_`),
+  KEY `ACT_FK_MEMB_GROUP` (`GROUP_ID_`),
+  CONSTRAINT `ACT_FK_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`),
+  CONSTRAINT `ACT_FK_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_id_membership
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_id_user
+-- ----------------------------
+DROP TABLE IF EXISTS `act_id_user`;
+CREATE TABLE `act_id_user` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `FIRST_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `LAST_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `EMAIL_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PWD_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PICTURE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_id_user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_procdef_info
+-- ----------------------------
+DROP TABLE IF EXISTS `act_procdef_info`;
+CREATE TABLE `act_procdef_info` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `INFO_JSON_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_INFO_PROCDEF` (`PROC_DEF_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_procdef_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_deployment
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_deployment`;
+CREATE TABLE `act_re_deployment` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `DEPLOY_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `ENGINE_VERSION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_re_deployment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_model
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_model`;
+CREATE TABLE `act_re_model` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `CREATE_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `LAST_UPDATE_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `VERSION_` int(11) DEFAULT NULL,
+  `META_INFO_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EDITOR_SOURCE_VALUE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EDITOR_SOURCE_EXTRA_VALUE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_re_model
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_re_procdef
+-- ----------------------------
+DROP TABLE IF EXISTS `act_re_procdef`;
+CREATE TABLE `act_re_procdef` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `KEY_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `VERSION_` int(11) NOT NULL,
+  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `RESOURCE_NAME_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `DGRM_RESOURCE_NAME_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `HAS_START_FORM_KEY_` tinyint(4) DEFAULT NULL,
+  `HAS_GRAPHICAL_NOTATION_` tinyint(4) DEFAULT NULL,
+  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `ENGINE_VERSION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  UNIQUE KEY `ACT_UNIQ_PROCDEF` (`KEY_`,`VERSION_`,`TENANT_ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_re_procdef
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_event_subscr
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_event_subscr`;
+CREATE TABLE `act_ru_event_subscr` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `EVENT_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `EVENT_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ACTIVITY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `CONFIGURATION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `CREATED_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_EVENT_SUBSCR_CONFIG_` (`CONFIGURATION_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_event_subscr
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_execution
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_execution`;
+CREATE TABLE `act_ru_execution` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PARENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `SUPER_EXEC_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ROOT_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `IS_ACTIVE_` tinyint(4) DEFAULT NULL,
+  `IS_CONCURRENT_` tinyint(4) DEFAULT NULL,
+  `IS_SCOPE_` tinyint(4) DEFAULT NULL,
+  `IS_EVENT_SCOPE_` tinyint(4) DEFAULT NULL,
+  `IS_MI_ROOT_` tinyint(4) DEFAULT NULL,
+  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
+  `CACHED_ENT_STATE_` int(11) DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `LOCK_TIME_` timestamp(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_EXEC_BUSKEY` (`BUSINESS_KEY_`),
+  KEY `ACT_IDC_EXEC_ROOT` (`ROOT_PROC_INST_ID_`),
+  KEY `ACT_FK_EXE_PROCINST` (`PROC_INST_ID_`),
+  KEY `ACT_FK_EXE_PARENT` (`PARENT_ID_`),
+  KEY `ACT_FK_EXE_SUPER` (`SUPER_EXEC_`),
+  KEY `ACT_FK_EXE_PROCDEF` (`PROC_DEF_ID_`),
+  CONSTRAINT `ACT_FK_EXE_PARENT` FOREIGN KEY (`PARENT_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE,
+  CONSTRAINT `ACT_FK_EXE_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
+  CONSTRAINT `ACT_FK_EXE_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ACT_FK_EXE_SUPER` FOREIGN KEY (`SUPER_EXEC_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_execution
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_identitylink
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_identitylink`;
+CREATE TABLE `act_ru_identitylink` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `GROUP_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_IDENT_LNK_USER` (`USER_ID_`),
+  KEY `ACT_IDX_IDENT_LNK_GROUP` (`GROUP_ID_`),
+  KEY `ACT_IDX_ATHRZ_PROCEDEF` (`PROC_DEF_ID_`),
+  KEY `ACT_FK_TSKASS_TASK` (`TASK_ID_`),
+  KEY `ACT_FK_IDL_PROCINST` (`PROC_INST_ID_`),
+  CONSTRAINT `ACT_FK_ATHRZ_PROCEDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
+  CONSTRAINT `ACT_FK_IDL_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`),
+  CONSTRAINT `ACT_FK_TSKASS_TASK` FOREIGN KEY (`TASK_ID_`) REFERENCES `act_ru_task` (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_identitylink
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_job
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_job`;
+CREATE TABLE `act_ru_job` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `LOCK_EXP_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `LOCK_OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `EXCLUSIVE_` tinyint(1) DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROCESS_INSTANCE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `RETRIES_` int(11) DEFAULT NULL,
+  `EXCEPTION_STACK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `EXCEPTION_MSG_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `DUEDATE_` timestamp(3) NULL DEFAULT NULL,
+  `REPEAT_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `HANDLER_TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `HANDLER_CFG_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  PRIMARY KEY (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_job
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_task
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_task`;
+CREATE TABLE `act_ru_task` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `PARENT_TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `DELEGATION_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PRIORITY_` int(11) DEFAULT NULL,
+  `CREATE_TIME_` timestamp(3) NULL DEFAULT NULL,
+  `DUE_DATE_` datetime(3) DEFAULT NULL,
+  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
+  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `FORM_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_TASK_CREATE` (`CREATE_TIME_`),
+  KEY `ACT_FK_TASK_EXE` (`EXECUTION_ID_`),
+  KEY `ACT_FK_TASK_PROCINST` (`PROC_INST_ID_`),
+  KEY `ACT_FK_TASK_PROCDEF` (`PROC_DEF_ID_`),
+  CONSTRAINT `ACT_FK_TASK_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`),
+  CONSTRAINT `ACT_FK_TASK_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
+  CONSTRAINT `ACT_FK_TASK_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_task
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for act_ru_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `act_ru_variable`;
+CREATE TABLE `act_ru_variable` (
+  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
+  `REV_` int(11) DEFAULT NULL,
+  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
+  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `DOUBLE_` double DEFAULT NULL,
+  `LONG_` bigint(20) DEFAULT NULL,
+  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID_`),
+  KEY `ACT_IDX_VARIABLE_TASK_ID` (`TASK_ID_`),
+  KEY `ACT_FK_VAR_EXE` (`EXECUTION_ID_`),
+  KEY `ACT_FK_VAR_PROCINST` (`PROC_INST_ID_`),
+  KEY `ACT_FK_VAR_BYTEARRAY` (`BYTEARRAY_ID_`),
+  CONSTRAINT `ACT_FK_VAR_BYTEARRAY` FOREIGN KEY (`BYTEARRAY_ID_`) REFERENCES `act_ge_bytearray` (`ID_`),
+  CONSTRAINT `ACT_FK_VAR_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`),
+  CONSTRAINT `ACT_FK_VAR_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of act_ru_variable
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tpl_app_group_t
@@ -195,7 +826,7 @@ CREATE TABLE `tpl_menu_t` (
   `sn` int(11) DEFAULT NULL,
   `publish` char(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tpl_menu_t
@@ -258,6 +889,44 @@ INSERT INTO `tpl_menu_t` VALUES ('61', null, 'Grid', null, null, null, '60', '0'
 INSERT INTO `tpl_menu_t` VALUES ('62', '', 'contextmenu', '#!web/demo/easyui/datagrid/contextmenu.html', '', '', '61', '0', '1');
 INSERT INTO `tpl_menu_t` VALUES ('63', '', 'Plugins', '', '', '', '44', '5', '1');
 INSERT INTO `tpl_menu_t` VALUES ('64', '', 'Form', '#!web/demo/plugins/Form/index.jsx', '', '', '63', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('65', '', 'Antd', '#!web/demo/plugins/antd/index.jsx', '', '', '44', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('66', '', 'Form 表单', '#!web/demo/plugins/antd/from.jsx', '', '', '89', '1', '1');
+INSERT INTO `tpl_menu_t` VALUES ('67', '', 'Radio 单选框', '#!web/demo/plugins/antd/Radio.jsx', '', '', '89', '2', '1');
+INSERT INTO `tpl_menu_t` VALUES ('68', '', 'Checkbox 多选框', '#!web/demo/plugins/antd/Checkbox.jsx', '', '', '89', '3', '1');
+INSERT INTO `tpl_menu_t` VALUES ('69', '', 'Button  按钮', '#!web/demo/plugins/antd/Button.jsx', '', '', '88', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('70', '', 'Switch 开关', '#!web/demo/plugins/antd/Switch.jsx', '', '', '89', '4', '1');
+INSERT INTO `tpl_menu_t` VALUES ('71', '', 'Select 选择器', '#!web/demo/plugins/antd/Select.jsx', '', '', '89', '5', '1');
+INSERT INTO `tpl_menu_t` VALUES ('72', '', 'Menu 导航菜单', '#!web/demo/plugins/antd/Menu.jsx', '', '', '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('73', '', 'InputNumber 数字输入框', '#!web/demo/plugins/antd/InputNumber.jsx', '', '', '89', '6', '1');
+INSERT INTO `tpl_menu_t` VALUES ('74', '', 'Message 全局提示', '#!web/demo/plugins/antd/Message.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('75', '', 'Model 对话框', '#!web/demo/plugins/antd/Model.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('76', '', 'Tooltip 文字提示', '#!web/demo/plugins/antd/Tooltip.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('77', '', 'Tabs 标签页', '#!web/demo/plugins/antd/Tabs.jsx', '', '', '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('78', '', 'Table 表格', '#!web/demo/plugins/antd/Table.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('79', '', 'Popconfirm 气泡确认框', '#!web/demo/plugins/antd/Popconfirm.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('80', '', 'Upload 文件上传', '#!web/demo/plugins/antd/Upload.jsx', '', '', '89', '7', '1');
+INSERT INTO `tpl_menu_t` VALUES ('81', '', 'Tag 标签', '#!web/demo/plugins/antd/Tag.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('82', '', 'Progress 进度条', '#!web/demo/plugins/antd/Progress.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('83', '', 'Spin 加载中', '#!web/demo/plugins/antd/Spin.jsx', '', '', '92', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('84', '', 'Popover 气泡卡片', '#!web/demo/plugins/antd/Popover.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('85', '', 'Notification 通知提醒框', '#!web/demo/plugins/antd/Notification.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('86', '', 'Steps 步骤条', '#!web/demo/plugins/antd/Steps.jsx', '', '', '91', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('87', null, 'Components', null, null, null, '43', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('88', null, '基本', null, null, null, '87', '1', '1');
+INSERT INTO `tpl_menu_t` VALUES ('89', null, '表单', null, null, null, '87', '3', '1');
+INSERT INTO `tpl_menu_t` VALUES ('90', null, '展示', null, null, null, '87', '5', '1');
+INSERT INTO `tpl_menu_t` VALUES ('91', null, '导航', null, null, null, '87', '7', '1');
+INSERT INTO `tpl_menu_t` VALUES ('92', null, '其他', null, null, null, '87', '11', '1');
+INSERT INTO `tpl_menu_t` VALUES ('93', '', 'Timeline 时间轴', '#!web/demo/plugins/antd/Timeline.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('94', '', 'Cascader 级联选择', '#!web/demo/plugins/antd/Cascader.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('95', '', 'DatePicker 日期选择框', '#!web/demo/plugins/antd/DatePicker.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('96', '', 'Calendar 日历', '#!web/demo/plugins/antd/Calendar.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('97', '', 'Slider 滑动输入条', '#!web/demo/plugins/antd/Slider.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('98', '', 'Tree 树形控件', '#!web/demo/plugins/antd/Tree.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('99', '', 'TimePicker 时间选择框', '#!web/demo/plugins/antd/TimePicker.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('100', '', 'Carousel 走马灯', '#!web/demo/plugins/antd/Carousel.jsx', '', '', '90', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('101', '', 'TreeSelect 树选择', '#!web/demo/plugins/antd/TreeSelect.jsx', '', '', '89', '0', '1');
+INSERT INTO `tpl_menu_t` VALUES ('102', null, 'Transfer 穿梭框', '#!web/demo/plugins/antd/Transfer.jsx', null, null, '89', '0', '1');
 
 -- ----------------------------
 -- Table structure for tpl_user_t

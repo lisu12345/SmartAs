@@ -1,5 +1,5 @@
-+function(Namespace) {
-	var ns = Namespace.register("Smart.Env"),env={
++function() {
+	var ns = {},env={
 		profile:"${profile}"
 	};
 	env.user = {
@@ -8,4 +8,5 @@
 	ns.getInfo=function(){
 		return env;
 	}
-}(Smart.Namespace)
+	window.Env = ns;
+}()

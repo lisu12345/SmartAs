@@ -23,6 +23,7 @@
 <link href="web/common/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link rel="stylesheet" href="web/common/zTree_v3/css/zTreeStyle/zTreeStyle.css">
+<link href="web/ui/css/smart.css" rel="stylesheet">
 <link href="web/ui/css/main.css" rel="stylesheet">
 <link href="web/ui/theme/index.css" rel="stylesheet">
 <link href="web/ui/theme/smart-icons.css" rel="stylesheet">
@@ -74,7 +75,7 @@
 						</ul></li>
 					<li>
 					<li><a href="#">Help</a></li>
-					<li><a id="navbar-fullscreen"><i class="fa fa-object-group"></i></a></li>
+					<!-- <li><a id="navbar-fullscreen"><i class="fa fa-object-group"></i></a></li> -->
 				</ul>
 				<form class="navbar-form navbar-right">
 					<input type="text" class="form-control" placeholder="Search...">
@@ -92,11 +93,15 @@
 			</div>
 			<div id="main" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main full-height">
 				<div class="h4 page-header">
-				<div style="position: absolute; top: 3px">
-					<ol class="breadcrumb" id="breadcrumb" style="margin-bottom: 5px; padding: 4px">
-						<li></li>
-					</ol>
-				</div></div>
+					<div style="position: absolute; top: 8px">
+						<div id="breadcrumb" style="margin-bottom: 5px; padding: 4px 0">
+						
+						</div>
+						<!-- <ol class="breadcrumb" id="breadcrumb" >
+							<li></li>
+						</ol> -->
+					</div>
+				</div>
 				<div id="content" class="full-height"></div>
 
 			</div>
@@ -109,6 +114,7 @@
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script src="web/common/bootstrap/ie10-viewport-bug-workaround.js"></script>
 	<script src="web/common/jquery/jquery.js"></script>
+	<script src="web/common/velocity.min.js"></script>
 	<script src="web/common/lodash.js"></script>
 	<script src="web/common/immutable.min.js"></script>
 	<script src="web/common/qs.js"></script>
@@ -116,7 +122,8 @@
 	<script src="web/common/log4js.js"></script>
 	<script src="web/config/log4js.config.js"></script>
 	<script src="web/common/jquery.ba-hashchange.min.js"></script>
-
+	<script src="web/common/My97DatePicker/WdatePicker.js"></script>
+	
 	<script src="web/common/zTree_v3/js/jquery.ztree.all-3.5.js"></script>
 	<script src="web/common/bootstrap/js/bootstrap.js"></script>
 	<script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script>
@@ -131,16 +138,105 @@
 	<script src="web/common/easyui/jquery.easyui.min.js"></script>
 	<script src="web/common/easyui/locale/easyui-lang-zh_CN.js"></script>
 	
-	<script src="web/ui/wegits/msgBox.js"></script>
-	<script src="web/core/Namespace.js"></script>
 	<script src="services/env/workspace"></script>
+	<script src="web/ui/wegits/msgBox.js"></script>
+	<!-- <script src="web/ui/components/locale/en_US.js"></script> -->
+	
+
+	<!-- -->
+	<script src="web/core/Namespace.js"></script>
 	<script src="web/core/EventBus.js"></script>
-	<!-- <script src="web/core/Dispatcher.js"></script> -->
 	<script src="web/core/ActionTypes.js"></script>
 	<script src="web/core/Store.js"></script>
 	<script src="web/core/Resource.js"></script>
 	<script src="web/core/DataSource.js"></script>
 	<script src="web/core/Service.js"></script>
+	
+	<script src="web/ui/components/locale/zh_CN.js"></script>
+	<script src="web/ui/components/index.js"></script>
+	<script src="web/ui/components/react-slick.js"></script>
+	<script src="web/ui/components/util/index.js"></script>
+	<script src="web/ui/components/dom-align/index.js"></script>
+	<script src="web/ui/components/css-animation/index.js"></script>
+	<script src="web/ui/components/align/index.js"></script>
+	<script src="web/ui/components/animate/index.js"></script>
+	<script src="web/ui/components/trigger/index.js"></script>
+	<script src="web/ui/components/notification/index.js"></script>
+	<script src="web/ui/components/checkbox/index.js"></script>
+	<script src="web/ui/components/input-number/index.js"></script>
+	<script src="web/ui/components/dropdown/index.js"></script>
+	<script src="web/ui/components/radio/index.js"></script>
+	<script src="web/ui/components/menu/index.js"></script>
+	<script src="web/ui/components/select/index.js"></script>
+	<script src="web/ui/components/switch/index.js"></script>
+	<script src="web/ui/components/progress/index.js"></script>
+	<script src="web/ui/components/tooltip/index.js"></script>
+	<script src="web/ui/components/dialog/index.js"></script>
+	<script src="web/ui/components/tabs/index.js"></script>
+	<script src="web/ui/components/upload/index.js"></script>
+	<script src="web/ui/components/async-validator/index.js"></script>
+	<script src="web/ui/components/form/index.js"></script>
+	<script src="web/ui/components/pagination/index.js"></script>
+	<script src="web/ui/components/table/index.js"></script>
+	<script src="web/ui/components/steps/index.js"></script>
+	<script src="web/ui/components/cascader/index.js"></script>
+	<script src="web/ui/components/gregorian-calendar/index.js"></script>
+	<script src="web/ui/components/time-picker/index.js"></script>
+	<script src="web/ui/components/calendar/index.js"></script>
+	<script src="web/ui/components/slider/index.js"></script>
+	<script src="web/ui/components/tree/index.js"></script>
+	<script src="web/ui/components/tree-select/index.js"></script>
+	
+	<script src="web/ui/wegits/locale/zh_CN.js"></script>
+	<script src="web/ui/wegits/index.js"></script>
+	<script src="web/ui/wegits/layout/index.js"></script>
+	<script src="web/ui/wegits/icon/index.js"></script>
+	<script src="web/ui/wegits/breadcrumb/index.js"></script>
+	<script src="web/ui/wegits/input/index.js"></script>
+	<script src="web/ui/wegits/progress/index.js"></script>
+	<script src="web/ui/wegits/checkbox/index.js"></script>
+	<script src="web/ui/wegits/switch/index.js"></script>
+	<script src="web/ui/wegits/radio/index.js"></script>
+	<script src="web/ui/wegits/form/index.js"></script>
+	<script src="web/ui/wegits/input-number/index.js"></script>
+	<script src="web/ui/wegits/message/index.js"></script>
+	<script src="web/ui/wegits/notification/index.js"></script>
+	<script src="web/ui/wegits/affix/index.js"></script>
+	<script src="web/ui/wegits/alert/index.js"></script>
+	<script src="web/ui/wegits/badge/index.js"></script>
+	<script src="web/ui/wegits/button/index.js"></script>
+	<script src="web/ui/wegits/menu/index.js"></script>
+	<script src="web/ui/wegits/select/index.js"></script>
+	<script src="web/ui/wegits/dropdown/index.js"></script>
+	<script src="web/ui/wegits/modal/index.js"></script>
+	<script src="web/ui/wegits/tooltip/index.js"></script>
+	<script src="web/ui/wegits/tabs/index.js"></script>
+	<script src="web/ui/wegits/popconfirm/index.js"></script>
+	<script src="web/ui/wegits/upload/index.js"></script>
+	<script src="web/ui/wegits/tag/index.js"></script>
+	<script src="web/ui/wegits/spin/index.js"></script>
+	<script src="web/ui/wegits/popover/index.js"></script>
+	<script src="web/ui/wegits/pagination/index.js"></script>
+	<script src="web/ui/wegits/table/index.js"></script>
+	<script src="web/ui/wegits/steps/index.js"></script>
+	<script src="web/ui/wegits/timeline/index.js"></script>
+	<script src="web/ui/wegits/cascader/index.js"></script>
+	<script src="web/ui/wegits/time-picker/index.js"></script>
+	<script src="web/ui/wegits/calendar/index.js"></script>
+	<script src="web/ui/wegits/date-picker/index.js"></script>
+	<script src="web/ui/wegits/slider/index.js"></script>
+	<script src="web/ui/wegits/tree/index.js"></script>
+	<script src="web/ui/wegits/carousel/index.js"></script>
+	<script src="web/ui/wegits/tree-select/index.js"></script>
+	<script src="web/ui/wegits/transfer/index.js"></script>
+	
+	<!-- 
+	<script src="web/core/main.min.js"></script>
+	<script src="web/ui/components/locale/zh_CN.js"></script>
+	<script src="web/ui/wegits/locale/zh_CN.js"></script>
+	<script src="web/ui/components/main.min.js"></script>
+	<script src="web/ui/wegits/main.min.js"></script> 
+	-->
 	
 	<script src="web/ui/plugins/Storage.js"></script>
 	<script src="web/ui/plugins/Datagrid.js"></script>
@@ -151,10 +247,9 @@
 	
 	
 
-	<script src="web/ui/Core.js"></script>
+	<script src="web/ui/index.js"></script>
 	<script src="web/ui/react-debug.js"></script>
 	<script src="web/security/Login.js"></script>
 	<script src="web/ui/theme/index.js"></script>
-
 </body>
 </html>
