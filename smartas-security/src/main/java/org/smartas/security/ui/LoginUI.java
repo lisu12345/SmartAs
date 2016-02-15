@@ -14,8 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
+import org.smartas.core.util.Constants;
+import org.smartas.security.AjaxLoginResult;
 import org.smartas.security.Credentials;
 import org.smartas.security.LoginResult;
 import org.smartas.security.User;
@@ -42,20 +43,36 @@ public class LoginUI {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	@Operation(code = Operation.READ, desc = Operation.READ_DESC)
 	public LoginResult login(@RequestBody Credentials credentials, HttpServletRequest request) {
 		User user = userService.findByUserAcount(StringUtils.trim(credentials.getUsername()));
 		LoginResult result = new LoginResult();
 		result.setContext(request.getContextPath());
-		System.out.println(DigestUtils.sha256Hex(credentials.getPassword()));
+		//System.out.println(DigestUtils.sha256Hex(credentials.getPassword()));
 		if (user == null || !StringUtils.equals(DigestUtils.sha256Hex(credentials.getPassword()), user.getPassword())) {
 			result.setStatus(400);
 			return result;
 		}
-		// userService.getAll(1,5);
+
+		String home = request.getHeader(Constants.X_REQUESTED_URL);
 		request.getSession().setAttribute("user", user);
 		result.setStatus(200);
-		result.setHome("web/demo/Dashboard.html");
+		result.setHome(home);
+		return result;
+	}
+
+	@RequestMapping(value = "/ajaxLogin", method = RequestMethod.POST)
+	public AjaxLoginResult ajaxLogin(@RequestBody Credentials credentials, HttpServletRequest request) {
+		User user = userService.findByUserAcount(StringUtils.trim(credentials.getUsername()));
+		AjaxLoginResult result = new AjaxLoginResult();
+		result.setContext(request.getContextPath());
+		//System.out.println(DigestUtils.sha256Hex(credentials.getPassword()));
+		if (user == null || !StringUtils.equals(DigestUtils.sha256Hex(credentials.getPassword()), user.getPassword())) {
+			result.setStatus(400);
+			return result;
+		}
+		request.getSession().setAttribute("user", user);
+		result.setStatus(200);
+		result.setUser(user);
 		return result;
 	}
 

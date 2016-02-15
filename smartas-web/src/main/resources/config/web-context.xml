@@ -79,7 +79,7 @@
 			<property name="prefix" value="/services" />
 			<property name="interceptors">
 				<list>
-					<ref bean="securityInteceptor" />
+					<ref bean="securityInterceptor" />
 				</list>
 			</property>
 		</bean>
@@ -107,7 +107,11 @@
 			<mvc:interceptor>
 				<mvc:mapping path="/" />
 				<mvc:mapping path="/index.html" />
-				<ref bean="loginInteceptor" />
+				<ref bean="loginInterceptor" />
+			</mvc:interceptor>
+			<mvc:interceptor>
+				<mvc:mapping path="/web/**" />
+				<ref bean="ajaxLoginInterceptor" />
 			</mvc:interceptor>
 		</mvc:interceptors>
 

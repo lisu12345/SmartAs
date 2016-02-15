@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.smartas.core.model.LongIdVO;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class User extends LongIdVO {
 
 	/**
@@ -17,6 +19,7 @@ public class User extends LongIdVO {
 	private String email;
 	private String firstname;
 	private String lastname;
+	@JSONField(serialize = false)
 	private short status;
 	private String addr1;
 	private String addr2;
@@ -26,15 +29,18 @@ public class User extends LongIdVO {
 	private String country;
 	private String phone;
 
+	@JSONField(serialize = false)
 	protected String password;
 	protected String mobile;
 	protected String fax;
 	protected String address;
 	protected String photo;
+	@JSONField(serialize = false)
 	protected Date accessionTime;
 	protected String education;
 	protected Short title;
 
+	@JSONField(serialize = false)
 	private Short delFlag;
 
 	private Set<String> rights = new HashSet<String>();

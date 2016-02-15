@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class SecurityInteceptor extends HandlerInterceptorAdapter {
+public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	// private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
 	@Override

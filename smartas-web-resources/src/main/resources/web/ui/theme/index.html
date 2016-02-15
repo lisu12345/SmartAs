@@ -16,7 +16,7 @@
 
 <!-- Bootstrap core CSS -->
 <link href="web/common/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="web/common/scrollbar/jquery.mCustomScrollbar.min.css"></link>
+<!-- <link href="web/common/scrollbar/jquery.mCustomScrollbar.min.css"></link> -->
 <link href="web/common/fontawesome/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -27,8 +27,8 @@
 <link href="web/ui/css/main.css" rel="stylesheet">
 <link href="web/ui/theme/index.css" rel="stylesheet">
 <link href="web/ui/theme/smart-icons.css" rel="stylesheet">
-<link href="web/ui/theme/Aqua/css/all.css" rel="stylesheet">
-<link href="web/ui/theme/Gray/css/all.css" rel="stylesheet">
+<!-- <link href="web/ui/theme/Aqua/css/all.css" rel="stylesheet">
+<link href="web/ui/theme/Gray/css/all.css" rel="stylesheet"> -->
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]>
@@ -59,7 +59,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#">Profile</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-						aria-haspopup="true" aria-expanded="false">chenjpu<span class="caret"></span></a>
+						aria-haspopup="true" aria-expanded="false" id="userInfo">&nbsp;&nbsp;&nbsp;<span class="caret"/></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#"> <i class="fa fa-user"></i> <span class="text">资料</span>
 							</a></li>
@@ -107,7 +107,50 @@
 			</div>
 		</div>
 	</div>
-</div>
+	</div>
+	
+	<div class="modal fade" id="loginModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="loginModalLabel">登录</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-signin form-horizontal" id="login_form">
+				<div class="form-group">
+					<label for="username" class="col-sm-2 control-label">账号:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="username" placeholder="账号"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-2 control-label">密码:</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="password" placeholder="密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							<label> <input type="checkbox">Remember me</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group" style="display: none;" id="info">
+					<div class="col-sm-offset-2 col-sm-10 ">
+						<div class="alert alert-warning" role="alert"></div>
+					</div>
+				</div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+	        <button type="button" onclick="return false" data-loading-text="Sign in..."  id="login_bnt" class="btn btn-primary">Sign in</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -122,11 +165,11 @@
 	<script src="web/common/log4js.js"></script>
 	<script src="web/config/log4js.config.js"></script>
 	<script src="web/common/jquery.ba-hashchange.min.js"></script>
-	<script src="web/common/My97DatePicker/WdatePicker.js"></script>
+	<!-- <script src="web/common/My97DatePicker/WdatePicker.js"></script> -->
 	
 	<script src="web/common/zTree_v3/js/jquery.ztree.all-3.5.js"></script>
 	<script src="web/common/bootstrap/js/bootstrap.js"></script>
-	<script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script>
+	<!-- <script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script> -->
 	<script src="web/common/react/react.js"></script>
 	<script src="web/common/react/react-with-addons.js"></script>
 	<script src="web/common/react/react-dom.js"></script>
@@ -249,7 +292,7 @@
 
 	<script src="web/ui/index.js"></script>
 	<script src="web/ui/react-debug.js"></script>
-	<script src="web/security/Login.js"></script>
+	<script src="web/common/jquery.form2json.js"></script>
 	<script src="web/ui/theme/index.js"></script>
 </body>
 </html>
