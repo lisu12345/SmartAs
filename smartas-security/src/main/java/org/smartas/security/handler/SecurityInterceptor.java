@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
+import org.smartas.core.util.Constants;
+import org.smartas.core.util.SessionUtil;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
@@ -34,6 +36,14 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 		// .方法对应的资源定义
 		Resource res = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), Resource.class);
 		Assert.notNull(res, handlerMethod.getBeanType() + " need @Resource");
+		
+		//受控服务必须登录状态
+		if (!SessionUtil.isLogin(req)) {
+			resp.setHeader(Constants.X_SESSION_STATUS, "timeout");//在响应头设置session状态  
+			resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			return false;
+		}
+		
 		return true;
 	}
 
