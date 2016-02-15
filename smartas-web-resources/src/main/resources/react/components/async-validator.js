@@ -1,215 +1,231 @@
-/**
- *  Encapsulates a validation schema.
- *
- *  @param descriptor An object declaring validation rules
- *  for this schema.
- */
-
-//import {format, complementError, asyncMap} from './util';
-//import validators from './validator/';
-//import {error} from './rule/';
-
+//V1.5.0 - 2016.2.15
 + function(RC) {
   //message
-  const defaultMessages = {
-    'default': 'Validation error on field %s',
-    required: '%s is required',
-    'enum': '%s must be one of %s',
-    whitespace: '%s cannot be empty',
-    date: {
-      format: '%s date %s is invalid for format %s',
-      parse: '%s date could not be parsed, %s is invalid ',
-      invalid: '%s date %s is invalid',
-    },
-    types: {
-      string: '%s is not a %s',
-      method: '%s is not a %s (function)',
-      array: '%s is not an %s',
-      object: '%s is not an %s',
-      number: '%s is not a %s',
-      date: '%s is not a %s',
-      boolean: '%s is not a %s',
-      integer: '%s is not an %s',
-      float: '%s is not a %s',
-      regexp: '%s is not a valid %s',
-      email: '%s is not a valid %s',
-      url: '%s is not a valid %s',
-      hex: '%s is not a valid %s',
-    },
-    string: {
-      len: '%s must be exactly %s characters',
-      min: '%s must be at least %s characters',
-      max: '%s cannot be longer than %s characters',
-      range: '%s must be between %s and %s characters',
-    },
-    number: {
-      len: '%s must equal %s',
-      min: '%s cannot be less than %s',
-      max: '%s cannot be greater than %s',
-      range: '%s must be between %s and %s',
-    },
-    array: {
-      len: '%s must be exactly %s in length',
-      min: '%s cannot be less than %s in length',
-      max: '%s cannot be greater than %s in length',
-      range: '%s must be between %s and %s in length',
-    },
-    pattern: {
-      mismatch: '%s value %s does not match pattern %s',
-    },
-    clone() {
-      const cloned = JSON.parse(JSON.stringify(this));
-      cloned.clone = this.clone;
-      return cloned;
-    },
-  };
+  
+  function newMessages() {
+    return {
+      'default': 'Validation error on field %s',
+      required: '%s is required',
+      'enum': '%s must be one of %s',
+      whitespace: '%s cannot be empty',
+      date: {
+        format: '%s date %s is invalid for format %s',
+        parse: '%s date could not be parsed, %s is invalid ',
+        invalid: '%s date %s is invalid',
+      },
+      types: {
+        string: '%s is not a %s',
+        method: '%s is not a %s (function)',
+        array: '%s is not an %s',
+        object: '%s is not an %s',
+        number: '%s is not a %s',
+        date: '%s is not a %s',
+        boolean: '%s is not a %s',
+        integer: '%s is not an %s',
+        float: '%s is not a %s',
+        regexp: '%s is not a valid %s',
+        email: '%s is not a valid %s',
+        url: '%s is not a valid %s',
+        hex: '%s is not a valid %s',
+      },
+      string: {
+        len: '%s must be exactly %s characters',
+        min: '%s must be at least %s characters',
+        max: '%s cannot be longer than %s characters',
+        range: '%s must be between %s and %s characters',
+      },
+      number: {
+        len: '%s must equal %s',
+        min: '%s cannot be less than %s',
+        max: '%s cannot be greater than %s',
+        range: '%s must be between %s and %s',
+      },
+      array: {
+        len: '%s must be exactly %s in length',
+        min: '%s cannot be less than %s in length',
+        max: '%s cannot be greater than %s in length',
+        range: '%s must be between %s and %s in length',
+      },
+      pattern: {
+        mismatch: '%s value %s does not match pattern %s',
+      },
+      clone() {
+        const cloned = JSON.parse(JSON.stringify(this));
+        cloned.clone = this.clone;
+        return cloned;
+      },
+    };
+  }
+
+  const defaultMessages = newMessages();
 
 
   ////util
   const formatRegExp = /%[sdj%]/g;
 
-  function format(...args) {
-    let i = 1;
-    const f = args[0];
-    const len = args.length;
-    let str = String(f).replace(formatRegExp, (x) => {
-      if (x === '%%') {
-        return '%';
+  const util = function(){
+
+    function format(...args) {
+      let i = 1;
+      const f = args[0];
+      const len = args.length;
+      if (typeof f === 'function') {
+        return f.apply(null, args.slice(1));
       }
-      if (i >= len) {
-        return x;
-      }
-      switch (x) {
-        case '%s':
-          return String(args[i++]);
-        case '%d':
-          return Number(args[i++]);
-        case '%j':
-          try {
-            return JSON.stringify(args[i++]);
-          } catch (_) {
-            return '[Circular]';
+      if (typeof f === 'string') {
+        let str = String(f).replace(formatRegExp, (x) => {
+          if (x === '%%') {
+            return '%';
           }
-          break;
-        default:
-          return x;
+          if (i >= len) {
+            return x;
+          }
+          switch (x) {
+            case '%s':
+              return String(args[i++]);
+            case '%d':
+              return Number(args[i++]);
+            case '%j':
+              try {
+                return JSON.stringify(args[i++]);
+              } catch (_) {
+                return '[Circular]';
+              }
+              break;
+            default:
+              return x;
+          }
+        });
+        for (let arg = args[i]; i < len; arg = args[++i]) {
+          str += ' ' + arg;
+        }
+        return str;
       }
-    });
-    for (let arg = args[i]; i < len; arg = args[++i]) {
-      str += ' ' + arg;
+      return f;
     }
-    return str;
-  }
 
-  function isNativeStringType(type) {
-    return type === 'string' || type === 'url' || type === 'hex' || type === 'email';
-  }
-
-  function isEmptyValue(value, type) {
-    if (value === undefined || value === null) {
-      return true;
+    function isNativeStringType(type) {
+      return type === 'string' || type === 'url' || type === 'hex' || type === 'email';
     }
-    if (type === 'array' && Array.isArray(value) && !value.length) {
-      return true;
-    }
-    if (isNativeStringType(type) && typeof value === 'string' && !value) {
-      return true;
-    }
-    return false;
-  }
 
-  function isEmptyObject(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  function asyncParallelArray(arr, func, callback) {
-    const results = [];
-    let total = 0;
-    const arrLength = arr.length;
-
-    function count(errors) {
-      results.push.apply(results, errors);
-      total++;
-      if (total === arrLength) {
-        callback(results);
+    function isEmptyValue(value, type) {
+      if (value === undefined || value === null) {
+        return true;
       }
+      if (type === 'array' && Array.isArray(value) && !value.length) {
+        return true;
+      }
+      if (isNativeStringType(type) && typeof value === 'string' && !value) {
+        return true;
+      }
+      return false;
     }
 
-    arr.forEach((a) => {
-      func(a, count);
-    });
-  }
-
-  function asyncSerialArray(arr, func, callback) {
-    let index = 0;
-    const arrLength = arr.length;
-
-    function next(errors) {
-      if (errors.length) {
-        callback(errors);
-        return;
-      }
-      const original = index;
-      index = index + 1;
-      if (original < arrLength) {
-        func(arr[original], next);
-      } else {
-        callback([]);
-      }
+    function isEmptyObject(obj) {
+      return Object.keys(obj).length === 0;
     }
 
-    next([]);
-  }
+    function asyncParallelArray(arr, func, callback) {
+      const results = [];
+      let total = 0;
+      const arrLength = arr.length;
 
-  function flattenObjArr(objArr) {
-    const ret = [];
-    Object.keys(objArr).forEach((k) => {
-      ret.push.apply(ret, objArr[k]);
-    });
-    return ret;
-  }
+      function count(errors) {
+        results.push.apply(results, errors);
+        total++;
+        if (total === arrLength) {
+          callback(results);
+        }
+      }
 
-  function asyncMap(objArr, option, func, callback) {
-    if (option.first) {
-      const flattenArr = flattenObjArr(objArr);
-      return asyncSerialArray(flattenArr, func, callback);
+      arr.forEach((a) => {
+        func(a, count);
+      });
     }
-    let firstFields = option.firstFields || [];
-    if (firstFields === true) {
-      firstFields = Object.keys(objArr);
+
+    function asyncSerialArray(arr, func, callback) {
+      let index = 0;
+      const arrLength = arr.length;
+
+      function next(errors) {
+        if (errors.length) {
+          callback(errors);
+          return;
+        }
+        const original = index;
+        index = index + 1;
+        if (original < arrLength) {
+          func(arr[original], next);
+        } else {
+          callback([]);
+        }
+      }
+
+      next([]);
     }
-    const objArrKeys = Object.keys(objArr);
-    const objArrLength = objArrKeys.length;
-    let total = 0;
-    const results = [];
-    const next = (errors) => {
-      results.push.apply(results, errors);
-      total++;
-      if (total === objArrLength) {
-        callback(results);
-      }
-    };
-    objArrKeys.forEach((key) => {
-      const arr = objArr[key];
-      if (firstFields.indexOf(key) !== -1) {
-        asyncSerialArray(arr, func, next);
-      } else {
-        asyncParallelArray(arr, func, next);
-      }
-    });
-  }
 
-  function complementError(rule) {
-    return (oe) => {
-      let e = oe;
-      if (!e.message) {
-        e = new Error(e);
-      }
-      e.field = e.field || rule.fullField;
-      return e;
-    };
-  }
+    function flattenObjArr(objArr) {
+      const ret = [];
+      Object.keys(objArr).forEach((k)=> {
+        ret.push.apply(ret, objArr[k]);
+      });
+      return ret;
+    }
 
+    function asyncMap(objArr, option, func, callback) {
+      if (option.first) {
+        const flattenArr = flattenObjArr(objArr);
+        return asyncSerialArray(flattenArr, func, callback);
+      }
+      let firstFields = option.firstFields || [];
+      if (firstFields === true) {
+        firstFields = Object.keys(objArr);
+      }
+      const objArrKeys = Object.keys(objArr);
+      const objArrLength = objArrKeys.length;
+      let total = 0;
+      const results = [];
+      const next = (errors) => {
+        results.push.apply(results, errors);
+        total++;
+        if (total === objArrLength) {
+          callback(results);
+        }
+      };
+      objArrKeys.forEach((key) => {
+        const arr = objArr[key];
+        if (firstFields.indexOf(key) !== -1) {
+          asyncSerialArray(arr, func, next);
+        } else {
+          asyncParallelArray(arr, func, next);
+        }
+      });
+    }
+
+    function complementError(rule) {
+      return (oe) => {
+        if (oe && oe.message) {
+          oe.field = oe.field || rule.fullField;
+          return oe;
+        }
+        return {
+          message: oe,
+          field: oe.field || rule.fullField,
+        };
+      };
+    }
+
+    return {
+      format,
+      isEmptyValue,
+      isEmptyObject,
+      asyncMap,
+      complementError,
+    }
+
+  }();
+
+  const {format, isEmptyValue,isEmptyObject,complementError, asyncMap} = util;
 
   //rule
 
@@ -440,7 +456,7 @@
 
   /////////////////////////
 
-  const validates = function() {
+  const validators = function() {
     /**
      *  Validates an array.
      *
@@ -772,7 +788,7 @@
     }
 
 
-    const validators = {
+    return {
       string: string,
       method: method,
       number: number,
@@ -793,8 +809,21 @@
 
   //////////////////
 
+  const error = rules,
+    {mergeWith} = _;
 
+  function mergeCustomizer(objValue, srcValue) {
+    if (typeof objValue !== 'object') {
+      return srcValue;
+    }
+  }
 
+  /**
+   *  Encapsulates a validation schema.
+   *
+   *  @param descriptor An object declaring validation rules
+   *  for this schema.
+   */
   function Schema(descriptor) {
     this.rules = null;
     this._messages = defaultMessages;
@@ -803,189 +832,195 @@
 
   Schema.prototype = {
     messages(messages) {
-        if (messages) {
-          this._messages = messages;
+      if (messages) {
+        this._messages = mergeWith(newMessages(), messages, mergeCustomizer);
+      }
+      return this._messages;
+    },
+    define(rules) {
+      if (!rules) {
+        throw new Error(
+          'Cannot configure a schema with no rules');
+      }
+      if (typeof rules !== 'object' || Array.isArray(rules)) {
+        throw new Error('Rules must be an object');
+      }
+      this.rules = {};
+      let z;
+      let item;
+      for (z in rules) {
+        if (rules.hasOwnProperty(z)) {
+          item = rules[z];
+          this.rules[z] = Array.isArray(item) ? item : [item];
         }
-        return this._messages;
-      },
-      define(rules) {
-        if (!rules) {
-          throw new Error(
-            'Cannot configure a schema with no rules');
-        }
-        if (typeof rules !== 'object' || Array.isArray(rules)) {
-          throw new Error('Rules must be an object');
-        }
-        this.rules = {};
-        let z;
-        let item;
-        for (z in rules) {
-          if (rules.hasOwnProperty(z)) {
-            item = rules[z];
-            this.rules[z] = Array.isArray(item) ? item : [item];
-          }
-        }
-      },
-      validate(source_, o = {}, oc) {
-        let source = source_;
-        let options = o;
-        if (!this.rules) {
-          throw new Error('Cannot validate with no rules.');
-        }
-        let callback = oc;
-        if (typeof options === 'function') {
-          callback = options;
-          options = {};
-        }
+      }
+    },
+    validate(source_, o = {}, oc) {
+      let source = source_;
+      let options = o;
+      if (!this.rules) {
+        throw new Error('Cannot validate with no rules.');
+      }
+      let callback = oc;
+      if (typeof options === 'function') {
+        callback = options;
+        options = {};
+      }
+      function complete(results) {
+        let i;
+        let field;
+        let errors = [];
+        let fields = {};
 
-        function complete(results) {
-          let i;
-          let field;
-          let errors = [];
-          let fields = {};
-
-          function add(e) {
-            if ((e instanceof Error)) {
-              errors.push(e);
-            } else if (Array.isArray(e)) {
-              errors = errors.concat.apply(errors, e);
-            }
-          }
-
-          for (i = 0; i < results.length; i++) {
-            add(results[i]);
-          }
-          if (!errors.length) {
-            errors = null;
-            fields = null;
+        function add(e) {
+          if (Array.isArray(e)) {
+            errors = errors.concat.apply(errors, e);
           } else {
-            for (i = 0; i < errors.length; i++) {
-              field = errors[i].field;
-              fields[field] = fields[field] || [];
-              fields[field].push(errors[i]);
-            }
+            errors.push(e);
           }
-          callback(errors, fields);
         }
 
-        options.messages = options.messages || this.messages();
-        options.error = error;
-        let arr;
-        let value;
-        const series = {};
-        const keys = options.keys || Object.keys(this.rules);
-        keys.forEach((z) => {
-          arr = this.rules[z];
-          value = source[z];
-          arr.forEach((r) => {
-            let rule = r;
-            if (typeof(rule.transform) === 'function') {
-              if (source === source_) {
-                source = {...source
-                };
-              }
-              value = source[z] = rule.transform(value);
+        for (i = 0; i < results.length; i++) {
+          add(results[i]);
+        }
+        if (!errors.length) {
+          errors = null;
+          fields = null;
+        } else {
+          for (i = 0; i < errors.length; i++) {
+            field = errors[i].field;
+            fields[field] = fields[field] || [];
+            fields[field].push(errors[i]);
+          }
+        }
+        callback(errors, fields);
+      }
+
+      if (options.messages) {
+        let messages = this.messages();
+        if (messages === defaultMessages) {
+          messages = newMessages();
+        }
+        mergeWith(messages, options.messages, mergeCustomizer);
+        options.messages = messages;
+      } else {
+        options.messages = this.messages();
+      }
+
+      options.error = error;
+      let arr;
+      let value;
+      const series = {};
+      const keys = options.keys || Object.keys(this.rules);
+      keys.forEach((z) => {
+        arr = this.rules[z];
+        value = source[z];
+        arr.forEach((r) => {
+          let rule = r;
+          if (typeof (rule.transform) === 'function') {
+            if (source === source_) {
+              source = {...source};
             }
-            if (typeof(rule) === 'function') {
-              rule = {
-                validator: rule,
-              };
-            } else {
-              rule = {...rule
-              };
-            }
-            rule.field = z;
-            rule.fullField = rule.fullField || z;
-            rule.type = this.getType(rule);
-            rule.validator = this.getValidationMethod(rule);
-            if (!rule.validator) {
-              return;
-            }
-            series[z] = series[z] || [];
-            series[z].push({
-              rule: rule,
-              value: value,
-              source: source,
-              field: z,
-            });
+            value = source[z] = rule.transform(value);
+          }
+          if (typeof (rule) === 'function') {
+            rule = {
+              validator: rule,
+            };
+          } else {
+            rule = {...rule};
+          }
+          rule.field = z;
+          rule.fullField = rule.fullField || z;
+          rule.type = this.getType(rule);
+          rule.validator = this.getValidationMethod(rule);
+          if (!rule.validator) {
+            return;
+          }
+          series[z] = series[z] || [];
+          series[z].push({
+            rule: rule,
+            value: value,
+            source: source,
+            field: z,
           });
         });
-        const errorFields = {};
-        asyncMap(series, options, (data, doIt) => {
-          const rule = data.rule;
-          let deep = (rule.type === 'object' || rule.type === 'array') && typeof(rule.fields) === 'object';
-          deep = deep && (rule.required || (!rule.required && data.value));
-          rule.field = data.field;
-
-          function cb(e = []) {
-            let errors = e;
-            if (!Array.isArray(errors)) {
-              errors = [errors];
-            }
-            if (errors.length && rule.message) {
-              errors = [].concat(rule.message);
-            }
-
-            errors = errors.map(complementError(rule));
-
-            if ((options.first || options.fieldFirst) && errors.length) {
-              errorFields[rule.field] = 1;
-              return doIt(errors);
-            }
-            if (!deep) {
-              doIt(errors);
-            } else {
-              // if rule is required but the target object
-              // does not exist fail at the rule level and don't
-              // go deeper
-              if (rule.required && !data.value) {
-                if (rule.message) {
-                  errors = [].concat(rule.message).map(complementError(rule));
-                } else {
-                  errors = [options.error(rule, format(options.messages.required, rule.field))];
-                }
-                return doIt(errors);
-              }
-              const fieldsSchema = data.rule.fields;
-              for (const f in fieldsSchema) {
-                if (fieldsSchema.hasOwnProperty(f)) {
-                  const fieldSchema = fieldsSchema[f];
-                  fieldSchema.fullField = rule.fullField + '.' + f;
-                }
-              }
-              const schema = new Schema(fieldsSchema);
-              schema.messages(options.messages);
-              if (data.rule.options) {
-                data.rule.options.messages = options.messages;
-                data.rule.options.error = options.error;
-              }
-              schema.validate(data.value, data.rule.options || options, (errs) => {
-                doIt(errs && errs.length ? errors.concat(errs) : errs);
-              });
-            }
+      });
+      const errorFields = {};
+      asyncMap(series, options, (data, doIt) => {
+        const rule = data.rule;
+        let deep = (rule.type === 'object' || rule.type === 'array') && typeof (rule.fields) === 'object';
+        deep = deep && (rule.required || (!rule.required && data.value));
+        rule.field = data.field;
+        function cb(e = []) {
+          let errors = e;
+          if (!Array.isArray(errors)) {
+            errors = [errors];
+          }
+          if (errors.length && rule.message) {
+            errors = [].concat(rule.message);
           }
 
-          rule.validator(
-            rule, data.value, cb, data.source, options);
-        }, (results) => {
-          complete(results);
-        });
-      },
-      getType(rule) {
-        if (rule.type === undefined && (rule.pattern instanceof RegExp)) {
-          rule.type = 'pattern';
+          errors = errors.map(complementError(rule));
+
+          if ((options.first || options.fieldFirst) && errors.length) {
+            errorFields[rule.field] = 1;
+            return doIt(errors);
+          }
+          if (!deep) {
+            doIt(errors);
+          } else {
+            // if rule is required but the target object
+            // does not exist fail at the rule level and don't
+            // go deeper
+            if (rule.required && !data.value) {
+              if (rule.message) {
+                errors = [].concat(rule.message).map(complementError(rule));
+              } else {
+                errors = [options.error(rule, format(options.messages.required, rule.field))];
+              }
+              return doIt(errors);
+            }
+            const fieldsSchema = data.rule.fields;
+            for (const f in fieldsSchema) {
+              if (fieldsSchema.hasOwnProperty(f)) {
+                const fieldSchema = fieldsSchema[f];
+                fieldSchema.fullField = rule.fullField + '.' + f;
+              }
+            }
+            const schema = new Schema(fieldsSchema);
+            schema.messages(options.messages);
+            if (data.rule.options) {
+              data.rule.options.messages = options.messages;
+              data.rule.options.error = options.error;
+            }
+            schema.validate(data.value, data.rule.options || options, (errs) => {
+              doIt(errs && errs.length ? errors.concat(errs) : errs);
+            });
+          }
         }
-        if (typeof(rule.validator) !== 'function' && (rule.type && !validators.hasOwnProperty(rule.type))) {
-          throw new Error(format('Unknown rule type %s', rule.type));
-        }
-        return rule.type || 'string';
-      },
-      getValidationMethod(rule) {
-        if (typeof rule.validator === 'function') {
-          return rule.validator;
-        }
-        return validators[rule.type] || false;
-      },
+
+        rule.validator(
+          rule, data.value, cb, data.source, options);
+      }, (results) => {
+        complete(results);
+      });
+    },
+    getType(rule) {
+      if (rule.type === undefined && (rule.pattern instanceof RegExp)) {
+        rule.type = 'pattern';
+      }
+      if (typeof (rule.validator) !== 'function' && (rule.type && !validators.hasOwnProperty(rule.type))) {
+        throw new Error(format('Unknown rule type %s', rule.type));
+      }
+      return rule.type || 'string';
+    },
+    getValidationMethod(rule) {
+      if (typeof rule.validator === 'function') {
+        return rule.validator;
+      }
+      return validators[rule.type] || false;
+    },
   };
 
   Schema.register = function register(type, validator) {

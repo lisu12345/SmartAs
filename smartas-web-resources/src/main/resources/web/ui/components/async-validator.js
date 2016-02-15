@@ -4,220 +4,240 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-/**
- *  Encapsulates a validation schema.
- *
- *  @param descriptor An object declaring validation rules
- *  for this schema.
- */
-
-//import {format, complementError, asyncMap} from './util';
-//import validators from './validator/';
-//import {error} from './rule/';
-
+//V1.5.0 - 2016.2.15
 +(function (RC) {
   //message
-  var defaultMessages = {
-    'default': 'Validation error on field %s',
-    required: '%s is required',
-    'enum': '%s must be one of %s',
-    whitespace: '%s cannot be empty',
-    date: {
-      format: '%s date %s is invalid for format %s',
-      parse: '%s date could not be parsed, %s is invalid ',
-      invalid: '%s date %s is invalid'
-    },
-    types: {
-      string: '%s is not a %s',
-      method: '%s is not a %s (function)',
-      array: '%s is not an %s',
-      object: '%s is not an %s',
-      number: '%s is not a %s',
-      date: '%s is not a %s',
-      boolean: '%s is not a %s',
-      integer: '%s is not an %s',
-      float: '%s is not a %s',
-      regexp: '%s is not a valid %s',
-      email: '%s is not a valid %s',
-      url: '%s is not a valid %s',
-      hex: '%s is not a valid %s'
-    },
-    string: {
-      len: '%s must be exactly %s characters',
-      min: '%s must be at least %s characters',
-      max: '%s cannot be longer than %s characters',
-      range: '%s must be between %s and %s characters'
-    },
-    number: {
-      len: '%s must equal %s',
-      min: '%s cannot be less than %s',
-      max: '%s cannot be greater than %s',
-      range: '%s must be between %s and %s'
-    },
-    array: {
-      len: '%s must be exactly %s in length',
-      min: '%s cannot be less than %s in length',
-      max: '%s cannot be greater than %s in length',
-      range: '%s must be between %s and %s in length'
-    },
-    pattern: {
-      mismatch: '%s value %s does not match pattern %s'
-    },
-    clone: function clone() {
-      var cloned = JSON.parse(JSON.stringify(this));
-      cloned.clone = this.clone;
-      return cloned;
-    }
-  };
+
+  function newMessages() {
+    return {
+      'default': 'Validation error on field %s',
+      required: '%s is required',
+      'enum': '%s must be one of %s',
+      whitespace: '%s cannot be empty',
+      date: {
+        format: '%s date %s is invalid for format %s',
+        parse: '%s date could not be parsed, %s is invalid ',
+        invalid: '%s date %s is invalid'
+      },
+      types: {
+        string: '%s is not a %s',
+        method: '%s is not a %s (function)',
+        array: '%s is not an %s',
+        object: '%s is not an %s',
+        number: '%s is not a %s',
+        date: '%s is not a %s',
+        boolean: '%s is not a %s',
+        integer: '%s is not an %s',
+        float: '%s is not a %s',
+        regexp: '%s is not a valid %s',
+        email: '%s is not a valid %s',
+        url: '%s is not a valid %s',
+        hex: '%s is not a valid %s'
+      },
+      string: {
+        len: '%s must be exactly %s characters',
+        min: '%s must be at least %s characters',
+        max: '%s cannot be longer than %s characters',
+        range: '%s must be between %s and %s characters'
+      },
+      number: {
+        len: '%s must equal %s',
+        min: '%s cannot be less than %s',
+        max: '%s cannot be greater than %s',
+        range: '%s must be between %s and %s'
+      },
+      array: {
+        len: '%s must be exactly %s in length',
+        min: '%s cannot be less than %s in length',
+        max: '%s cannot be greater than %s in length',
+        range: '%s must be between %s and %s in length'
+      },
+      pattern: {
+        mismatch: '%s value %s does not match pattern %s'
+      },
+      clone: function clone() {
+        var cloned = JSON.parse(JSON.stringify(this));
+        cloned.clone = this.clone;
+        return cloned;
+      }
+    };
+  }
+
+  var defaultMessages = newMessages();
 
   ////util
   var formatRegExp = /%[sdj%]/g;
 
-  function format() {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+  var util = (function () {
 
-    var i = 1;
-    var f = args[0];
-    var len = args.length;
-    var str = String(f).replace(formatRegExp, function (x) {
-      if (x === '%%') {
-        return '%';
+    function format() {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
-      if (i >= len) {
-        return x;
+
+      var i = 1;
+      var f = args[0];
+      var len = args.length;
+      if (typeof f === 'function') {
+        return f.apply(null, args.slice(1));
       }
-      switch (x) {
-        case '%s':
-          return String(args[i++]);
-        case '%d':
-          return Number(args[i++]);
-        case '%j':
-          try {
-            return JSON.stringify(args[i++]);
-          } catch (_) {
-            return '[Circular]';
+      if (typeof f === 'string') {
+        var str = String(f).replace(formatRegExp, function (x) {
+          if (x === '%%') {
+            return '%';
           }
-          break;
-        default:
-          return x;
+          if (i >= len) {
+            return x;
+          }
+          switch (x) {
+            case '%s':
+              return String(args[i++]);
+            case '%d':
+              return Number(args[i++]);
+            case '%j':
+              try {
+                return JSON.stringify(args[i++]);
+              } catch (_) {
+                return '[Circular]';
+              }
+              break;
+            default:
+              return x;
+          }
+        });
+        for (var arg = args[i]; i < len; arg = args[++i]) {
+          str += ' ' + arg;
+        }
+        return str;
       }
-    });
-    for (var arg = args[i]; i < len; arg = args[++i]) {
-      str += ' ' + arg;
+      return f;
     }
-    return str;
-  }
 
-  function isNativeStringType(type) {
-    return type === 'string' || type === 'url' || type === 'hex' || type === 'email';
-  }
-
-  function isEmptyValue(value, type) {
-    if (value === undefined || value === null) {
-      return true;
+    function isNativeStringType(type) {
+      return type === 'string' || type === 'url' || type === 'hex' || type === 'email';
     }
-    if (type === 'array' && Array.isArray(value) && !value.length) {
-      return true;
-    }
-    if (isNativeStringType(type) && typeof value === 'string' && !value) {
-      return true;
-    }
-    return false;
-  }
 
-  function isEmptyObject(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  function asyncParallelArray(arr, func, callback) {
-    var results = [];
-    var total = 0;
-    var arrLength = arr.length;
-
-    function count(errors) {
-      results.push.apply(results, errors);
-      total++;
-      if (total === arrLength) {
-        callback(results);
+    function isEmptyValue(value, type) {
+      if (value === undefined || value === null) {
+        return true;
       }
-    }
-
-    arr.forEach(function (a) {
-      func(a, count);
-    });
-  }
-
-  function asyncSerialArray(arr, func, callback) {
-    var index = 0;
-    var arrLength = arr.length;
-
-    function next(errors) {
-      if (errors.length) {
-        callback(errors);
-        return;
+      if (type === 'array' && Array.isArray(value) && !value.length) {
+        return true;
       }
-      var original = index;
-      index = index + 1;
-      if (original < arrLength) {
-        func(arr[original], next);
-      } else {
-        callback([]);
+      if (isNativeStringType(type) && typeof value === 'string' && !value) {
+        return true;
       }
+      return false;
     }
 
-    next([]);
-  }
-
-  function flattenObjArr(objArr) {
-    var ret = [];
-    Object.keys(objArr).forEach(function (k) {
-      ret.push.apply(ret, objArr[k]);
-    });
-    return ret;
-  }
-
-  function asyncMap(objArr, option, func, callback) {
-    if (option.first) {
-      var flattenArr = flattenObjArr(objArr);
-      return asyncSerialArray(flattenArr, func, callback);
+    function isEmptyObject(obj) {
+      return Object.keys(obj).length === 0;
     }
-    var firstFields = option.firstFields || [];
-    if (firstFields === true) {
-      firstFields = Object.keys(objArr);
-    }
-    var objArrKeys = Object.keys(objArr);
-    var objArrLength = objArrKeys.length;
-    var total = 0;
-    var results = [];
-    var next = function next(errors) {
-      results.push.apply(results, errors);
-      total++;
-      if (total === objArrLength) {
-        callback(results);
+
+    function asyncParallelArray(arr, func, callback) {
+      var results = [];
+      var total = 0;
+      var arrLength = arr.length;
+
+      function count(errors) {
+        results.push.apply(results, errors);
+        total++;
+        if (total === arrLength) {
+          callback(results);
+        }
       }
+
+      arr.forEach(function (a) {
+        func(a, count);
+      });
+    }
+
+    function asyncSerialArray(arr, func, callback) {
+      var index = 0;
+      var arrLength = arr.length;
+
+      function next(errors) {
+        if (errors.length) {
+          callback(errors);
+          return;
+        }
+        var original = index;
+        index = index + 1;
+        if (original < arrLength) {
+          func(arr[original], next);
+        } else {
+          callback([]);
+        }
+      }
+
+      next([]);
+    }
+
+    function flattenObjArr(objArr) {
+      var ret = [];
+      Object.keys(objArr).forEach(function (k) {
+        ret.push.apply(ret, objArr[k]);
+      });
+      return ret;
+    }
+
+    function asyncMap(objArr, option, func, callback) {
+      if (option.first) {
+        var flattenArr = flattenObjArr(objArr);
+        return asyncSerialArray(flattenArr, func, callback);
+      }
+      var firstFields = option.firstFields || [];
+      if (firstFields === true) {
+        firstFields = Object.keys(objArr);
+      }
+      var objArrKeys = Object.keys(objArr);
+      var objArrLength = objArrKeys.length;
+      var total = 0;
+      var results = [];
+      var next = function next(errors) {
+        results.push.apply(results, errors);
+        total++;
+        if (total === objArrLength) {
+          callback(results);
+        }
+      };
+      objArrKeys.forEach(function (key) {
+        var arr = objArr[key];
+        if (firstFields.indexOf(key) !== -1) {
+          asyncSerialArray(arr, func, next);
+        } else {
+          asyncParallelArray(arr, func, next);
+        }
+      });
+    }
+
+    function complementError(rule) {
+      return function (oe) {
+        if (oe && oe.message) {
+          oe.field = oe.field || rule.fullField;
+          return oe;
+        }
+        return {
+          message: oe,
+          field: oe.field || rule.fullField
+        };
+      };
+    }
+
+    return {
+      format: format,
+      isEmptyValue: isEmptyValue,
+      isEmptyObject: isEmptyObject,
+      asyncMap: asyncMap,
+      complementError: complementError
     };
-    objArrKeys.forEach(function (key) {
-      var arr = objArr[key];
-      if (firstFields.indexOf(key) !== -1) {
-        asyncSerialArray(arr, func, next);
-      } else {
-        asyncParallelArray(arr, func, next);
-      }
-    });
-  }
+  })();
 
-  function complementError(rule) {
-    return function (oe) {
-      var e = oe;
-      if (!e.message) {
-        e = new Error(e);
-      }
-      e.field = e.field || rule.fullField;
-      return e;
-    };
-  }
+  var format = util.format;
+  var isEmptyValue = util.isEmptyValue;
+  var isEmptyObject = util.isEmptyObject;
+  var complementError = util.complementError;
+  var asyncMap = util.asyncMap;
 
   //rule
 
@@ -436,7 +456,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   /////////////////////////
 
-  var validates = (function () {
+  var validators = (function () {
     /**
      *  Validates an array.
      *
@@ -760,7 +780,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       callback(errors);
     }
 
-    var validators = {
+    return {
       string: string,
       method: method,
       number: number,
@@ -781,6 +801,22 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   //////////////////
 
+  var error = rules;
+  var _ref = _;
+  var mergeWith = _ref.mergeWith;
+
+  function mergeCustomizer(objValue, srcValue) {
+    if ((typeof objValue === 'undefined' ? 'undefined' : _typeof(objValue)) !== 'object') {
+      return srcValue;
+    }
+  }
+
+  /**
+   *  Encapsulates a validation schema.
+   *
+   *  @param descriptor An object declaring validation rules
+   *  for this schema.
+   */
   function Schema(descriptor) {
     this.rules = null;
     this._messages = defaultMessages;
@@ -790,7 +826,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   Schema.prototype = {
     messages: function messages(_messages) {
       if (_messages) {
-        this._messages = _messages;
+        this._messages = mergeWith(newMessages(), _messages, mergeCustomizer);
       }
       return this._messages;
     },
@@ -827,7 +863,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         callback = options;
         options = {};
       }
-
       function complete(results) {
         var i = undefined;
         var field = undefined;
@@ -835,10 +870,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var fields = {};
 
         function add(e) {
-          if (e instanceof Error) {
-            errors.push(e);
-          } else if (Array.isArray(e)) {
+          if (Array.isArray(e)) {
             errors = errors.concat.apply(errors, e);
+          } else {
+            errors.push(e);
           }
         }
 
@@ -858,7 +893,17 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         callback(errors, fields);
       }
 
-      options.messages = options.messages || this.messages();
+      if (options.messages) {
+        var messages = this.messages();
+        if (messages === defaultMessages) {
+          messages = newMessages();
+        }
+        mergeWith(messages, options.messages, mergeCustomizer);
+        options.messages = messages;
+      } else {
+        options.messages = this.messages();
+      }
+
       options.error = error;
       var arr = undefined;
       var value = undefined;
@@ -904,7 +949,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var deep = (rule.type === 'object' || rule.type === 'array') && _typeof(rule.fields) === 'object';
         deep = deep && (rule.required || !rule.required && data.value);
         rule.field = data.field;
-
         function cb() {
           var e = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
