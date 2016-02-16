@@ -14,7 +14,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //export default Form;
 +(function (UI, RC) {
-	var createForm = RC.createForm;
+	var createDOMForm = RC.createDOMForm;
 
 	function merge() {
 		var ret = {};
@@ -323,7 +323,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			fieldMetaProp: '__meta'
 		});
 
-		return createForm(options);
+		return createDOMForm(options);
 	};
 	Form.Item = FormItem;
 

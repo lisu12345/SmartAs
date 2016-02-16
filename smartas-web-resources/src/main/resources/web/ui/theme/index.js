@@ -144,20 +144,25 @@ $(function() {
 		});
 	});
 	$("#userInfo").html(Env.getUser().acount +'</span><span class="caret">');
+	$("#username").val(Env.getUser().acount);
 	// 第一次手动触发
 	$(window).hashchange();
 	
 	loginModal.on('hidden.bs.modal', function (e) {
-		Resource.fire('login');
+		Resource.fire('login',loginModal.__);
 	})
-	Resource.on('timeout',function(){
+	Resource.on('timeout',function(options){
+		loginModal.__ = options;
 		loginModal.modal('show');
 	});
 	
-	Resource.on('login',function(){
-		$("#userInfo").html(Env.getUser().acount +'</span><span class="caret">');
-		zTree_Menu.reAsyncChildNodes(null, "refresh");
-		$(window).hashchange();
+	Resource.on('login',function(options){
+		//if(options.type === 'GET'){
+		//	$(window).hashchange();
+		//}
+		//$("#userInfo").html(Env.getUser().acount +'</span><span class="caret">');
+		//zTree_Menu.reAsyncChildNodes(null, "refresh");
+		//$(window).hashchange();
 	});
 	
 	$("#logout").click(function() {

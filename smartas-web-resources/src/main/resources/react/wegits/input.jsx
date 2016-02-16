@@ -1,5 +1,6 @@
-+ function(UI) {
-  let assign = _.assign;
++ function(UI,RC) {
+  const { assign } = _,
+  	{classNames} = RC;
 
   function prefixClsFn(prefixCls, ...args) {
     return args.map((s) => {
@@ -45,23 +46,27 @@
       const addonClassName = prefixClsFn(wrapperClassName, 'addon');
       const addonBefore = props.addonBefore ? (
         <span className={addonClassName}>
-        {props.addonBefore}
-      </span>
+        	{props.addonBefore}
+        </span>
       ) : null;
 
       const addonAfter = props.addonAfter ? (
         <span className={addonClassName}>
-        {props.addonAfter}
-      </span>
+        	{props.addonAfter}
+        </span>
       ) : null;
 
-      return (
-        <span className={(addonBefore || addonAfter) ? wrapperClassName : ''}>
-        {addonBefore}
-        {children}
-        {addonAfter}
-      </span>
-      );
+      const className = classNames({
+          [`${props.prefixCls}-input-wrapper`]: true,
+          [wrapperClassName]: (addonBefore || addonAfter),
+        });
+	  return (
+	      <span className={className}>
+	        {addonBefore}
+	        {children}
+	        {addonAfter}
+	      </span>
+	    );
     }
 
     renderInput() {
@@ -143,4 +148,4 @@
 
   UI.Input = Input;
   UI.Input.Group = Group;
-}(Smart.UI);
+}(Smart.UI,Smart.RC);

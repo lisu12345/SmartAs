@@ -10,16 +10,6 @@
 	
 	$.ajaxSetup({
 		cache : true,
-		error : function (xhr, textStatus, errorThrown) {
-		    // 通常 textStatus 和 errorThrown 之中只有一个会包含信息
-		    //this;调用本次AJAX请求时传递的options参数
-			//登录超时
-			var status = xhr.getResponseHeader("X-Session-Status");
-	        if(status == "timeout"){ 
-	        	//alert("登录超时,请重新登录！");
-	        	lifecycle.fire('timeout');
-	        } 
-		}
 	});
 	
 	//context.ajaxError(function(event,request, settings){
@@ -132,6 +122,11 @@
 			var complete = options.complete;
 			options.complete = function(request, code) {
 				try {
+					var status = request.getResponseHeader("X-Session-Status");
+			        if(status == "timeout"){ 
+			        	options.complete = complete;
+			        	lifecycle.fire('timeout',options);
+			        } 
 					complete && complete(request, code);
 				} finally {
 					lifecycle.fire('after');
@@ -166,8 +161,8 @@
 			on : function(event,fn){
 				lifecycle.on(event, fn);
 			},
-			fire : function(event){
-				lifecycle.fire(event);
+			fire : function(event,payload){
+				lifecycle.fire(event,payload);
 			},
 			getQs : function(reqs) {
 				if (reqs) {

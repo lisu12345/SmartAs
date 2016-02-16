@@ -1,7 +1,7 @@
 //export default Form;
 + function(UI,RC) {
 
-	const {createForm} = RC;
+	const {createDOMForm} = RC;
 
 	function merge() {
 		const ret = {};
@@ -276,7 +276,7 @@
 	    fieldMetaProp: '__meta',
 	  };
 
-	  return createForm(options);
+	  return createDOMForm(options);
 	};
 	Form.Item = FormItem;
 

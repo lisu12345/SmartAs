@@ -4,6 +4,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -12,8 +14,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-+(function (UI) {
-  var assign = _.assign;
++(function (UI, RC) {
+  var _ref = _;
+  var assign = _ref.assign;
+  var classNames = RC.classNames;
 
   function prefixClsFn(prefixCls) {
     for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -81,6 +85,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     _createClass(Input, [{
       key: 'renderLabledInput',
       value: function renderLabledInput(children) {
+        var _classNames;
+
         var props = this.props;
         var wrapperClassName = prefixClsFn(props.prefixCls, 'input-group');
         var addonClassName = prefixClsFn(wrapperClassName, 'addon');
@@ -96,9 +102,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           props.addonAfter
         ) : null;
 
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames, wrapperClassName, addonBefore || addonAfter), _classNames));
         return React.createElement(
           'span',
-          { className: addonBefore || addonAfter ? wrapperClassName : '' },
+          { className: className },
           addonBefore,
           children,
           addonAfter
@@ -176,4 +183,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   UI.Input = Input;
   UI.Input.Group = Group;
-})(Smart.UI);
+})(Smart.UI, Smart.RC);
