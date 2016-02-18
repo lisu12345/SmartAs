@@ -90,7 +90,10 @@
 				ReactDOM.render(React.createElement(ReactRedux.Provider, {
 					store : store
 				}, React.createElement(node, {
-					qs : Resource.getQs()
+					qs : Resource.getQs(),
+					link : function(){
+						
+					}
 				})), context[0]);
 			}
 			resources[namespace] = pkg;
