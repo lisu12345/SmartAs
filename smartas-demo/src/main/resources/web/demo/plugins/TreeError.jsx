@@ -5,22 +5,33 @@ install("web.security.menu2",function($S){
 	var logger = Log.getLogger('web.security.menu2');
 	const {UI,Service} = Smart,
 		{Tree,TreeNode,Form,Input, Button,ButtonGroup, Checkbox, Row, Col,FormItem,InputNumber} = UI;
-
+	var p_id = 200;
 	const service = Service.New("security/menu");
+	
+	const DeNode = React.createClass({
+		render:function() {
+			const {item} = this.props
+			if(item.children){
+				return childNodes.map(function(item){
+					return <DeNode key={'key-' + item.id} item={item}></DeNode>
+				});
+			}
+			return <TreeNode title={item.name} key={'key-' + item.id}/>; 
+		}
+	})
 	
 	const Nav = React.createClass({
 		getInitialState() {
 			return {
-			  treeData: [],
+			  treeData: [{id:0,name:'Root',sn:0},{id:1,name:'0-0',sn:1,parentId:0}],
 			};
 		},
 		onSelect(selectedKeys,e) {
 			var key = selectedKeys[0] && selectedKeys[0].substr(4);
 			if(key && key > 0){
-				service.get(key,function(data) {
-					//如果查询不到结果，需要同步树结构？？
-					this.props.onSelect(data || {id:0});
-				}.bind(this));
+				const data  = this.state.treeData;
+				let index = _.findIndex(data,{'id':+key});
+				this.props.onSelect(data[index]);
 			}else{
 				this.props.onSelect({id:0});
 			}
@@ -40,43 +51,51 @@ install("web.security.menu2",function($S){
 					let index = _.findIndex(treeData,{'id':data.id});
 					treeData[index] = data;
 				}else if(type === 'remove'){
-					treeData = this.state.treeData
-					_.remove(treeData,function(o){
-						return (data == o.id)
+					let aa = this.state.treeData
+					_.remove(aa,function(o){
+						return data == o.id
 					});
+					//let index = _.findIndex(treeData,{'id':data});
+					//aa[1] = {id:1,name:'0-0',sn:1,parentId:0};
+					this.setState({
+				      	treeData: _.orderBy(aa,['id', 'sn'], ['asc', 'asc'])
+				    });
+					
+					debugger;
 				}
 				treeData!=null && this.setState({
 			      	treeData: _.orderBy(treeData,['id', 'sn'], ['asc', 'asc'])
 			    });
 			}.bind(this));
-
-			//list(q, sucess, error)
-			//获取导航树
-			service.list(function(data){
-				//提取需要的属性
-				data = _.map(data,function(a){
-					return _.pick(a,['id','parentId','name','sn']);
-				})
-				//添加虚拟根节点
-				data = _.concat(data,[{id:0,name:'Root',sn:0}]);
-
-				this.setState({
-			      treeData: _.orderBy(data,['sn'], ['asc'])
-			    });
-			}.bind(this));
 		},
-		render() {
+		render : function(){
 		    const loop = data => data.map((item) => {
-			      if (item.children) {
-			        return <TreeNode title={item.name} key={'key-' + item.id}>{loop(item.children)}</TreeNode>;
+			    if(item){
+			    	if(item.children && item.children.length) {
+			        return <TreeNode title={item.name} key={'key-' + item.id}>
+			         {loop(item.children)}
+			        </TreeNode>;
 			      }
-			      return <TreeNode title={item.name} key={'key-' + item.id} isLeaf={true} />;
+			      return <TreeNode  style={{display:'none'}}  title={item.name} key={'key-' + item.id} isLeaf={true} />; 
+			    }
 		    });
-		    const treeNodes = loop(l2t(this.state.treeData));
-		    return (
+		    
+		    const loop1 = function(data,level){
+		    	return data.map((item) => {
+				      if (item.children) {
+				        return <ul style={{'paddingLeft':level*2}} title={item.name} key={'key-' + item.id}>{item.name}{loop1(item.children,level+1)}</ul>;
+				      }
+				      return <li style={{'paddingLeft':level*2,display:'none'}} key={'key-' + item.id}>{item.name}</li>;
+		    	})
+		    };
+		    const data = l2t(this.state.treeData);
+		    const treeNodes = loop(data);
+		    
+		    return (<div>
 		      <Tree onSelect={this.onSelect} defaultExpandedKeys={['key-0','key-1','key-2']}>
-		        {treeNodes}
-		      </Tree>
+		      	{treeNodes}
+		      </Tree>{loop1(data,1)}
+		      </div>
 		    );
 		},
 	});
@@ -90,10 +109,10 @@ install("web.security.menu2",function($S){
 		    e.preventDefault();
 		    var data = this.props.form.getFieldsValue(),isCreate = !data.id;
 		    var method = isCreate?'create':'update';
-		    service[method](data,function(id){
-		    	data.id = id;
-		    	service.dispatch(method,data);
-		    });
+		    if(isCreate){
+		    	data.id = p_id++
+		    }
+		    service.dispatch(method,data);
 		},
 		render() {
 			const {linkState,form,data} = this.props,
@@ -103,23 +122,9 @@ install("web.security.menu2",function($S){
 	        <FormItem label="名称：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="名称" {...getFieldProps('name')} />
 	        </FormItem>
-	        <FormItem label="URL：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
-	          <Input type="input" placeholder="URL" {...getFieldProps('url')} />
-	        </FormItem>
-	        <FormItem label="Class：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
-	          <Input type="input" placeholder="样式" {...getFieldProps('className')} />
-	        </FormItem>
-	        <FormItem label="Icon：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
-	          <Input type="input" placeholder="图标" {...getFieldProps('iconName')} />
-	        </FormItem>
 	        <FormItem label="排序号：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <InputNumber min={0} defaultValue={0} {...getFieldProps('sn')}/>
 	        </FormItem> 
-	        <FormItem wrapperCol={{ span: 14, offset: 3 }}>
-	          <label>
-	            <Checkbox {...getFieldProps('publish',{valuePropName:'checked'})} />是否发布
-	          </label>
-	        </FormItem>
 	        <Row>
 	          <Col span="16" offset="3">
 	          	<Input type="hidden" {...getFieldProps('id')} />
@@ -146,21 +151,12 @@ install("web.security.menu2",function($S){
 				name : '',
 				id : '',
 				sn : '1',
-				publish:false,
-				iconName:'',
-				className:'',
-				url:'',
 				parentId : this.state.id
 			});
 		},
 		onDelete:function(){
 			const id = this.state.id
-			service.remove(id,function(data){
-				service.dispatch('remove',id);
-				this.setState({
-					id:0
-				})
-			}.bind(this));
+			service.dispatch('remove',id);
 		},
  		render: function() {
 			var data = this.state;
@@ -179,7 +175,7 @@ install("web.security.menu2",function($S){
 					<div className="col-md-8 full-height">
 						<div className="panel panel-default full-height">
 							<div className="panel-body full-height">
-							{(data.id !='0')?<MenuForm linkState={this.props.linkState} data={this.state}/>:''}								
+							{(data.id !='0')?<MenuForm data={this.state}/>:''}								
 							</div>
 						</div>
 					</div>

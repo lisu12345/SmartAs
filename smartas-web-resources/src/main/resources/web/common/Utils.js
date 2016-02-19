@@ -78,7 +78,10 @@
 	        this.list = list;
 	        this.options = options != null ? options : {};
 	        this.ParseOptions();
-	        this.list = _.map(_.orderBy(this.list, [this.key_parent, this.key_id], ['asc', 'asc']));
+	        var key_child = this.options.key_child;
+	        this.list = _.map(this.list,function(item){
+	        	return _.omit(item,[key_child]);
+	        });
 	        this.groupParent = _.uniq(_.map(this.list, this.key_parent));
 	        return this;
 	    }
