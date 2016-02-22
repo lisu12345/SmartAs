@@ -32,7 +32,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var v = e;
 			var target = e && e.target;
 			if (target) {
-				if ((target.nodeName + '').toLowerCase() === 'input' && target.type === 'checkbox') {
+				if (('' + target.nodeName).toLowerCase() === 'input' && target.type === 'checkbox') {
 					v = target.checked;
 				} else {
 					v = e.target.value;

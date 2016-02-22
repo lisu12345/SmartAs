@@ -17,10 +17,6 @@
     getFormatter() {
       const formats = this.formats = this.formats || {};
       let format = this.props.format;
-      // Remove time format text when has time-picker in calendar
-      if (this.props.showTime) {
-        format = format.replace('HH:mm:ss', '');
-      }
       if (formats[format]) {
         return formats[format];
       }
@@ -44,6 +40,7 @@
     // remove input readonly warning
     handleInputChange() {
     },
+    
     toggleOpen(e) {
       this.setState({
         open: e.open
@@ -62,8 +59,12 @@
         endPlaceholder: '结束日期',
         transitionName: 'slide-up',
         popupStyle: {},
-        onChange() {},
-        onOk() {},
+        onChange() {
+        	
+        },
+        onOk() {
+        	
+        },
         locale: {},
         align: {
           offset: [0, -9],
@@ -109,82 +110,108 @@
       let defaultCalendarValue = new GregorianCalendar(locale);
       defaultCalendarValue.setTime(Date.now());
 
-      const { disabledDate, showTime, size, startPlaceholder, endPlaceholder,getCalendarContainer,
-              transitionName, disabled, popupStyle, align, style ,onOk} = this.props;
-      const state = this.state;
+      const { disabledDate, showTime, size, startPlaceholder, endPlaceholder, getCalendarContainer,
+          transitionName, disabled, popupStyle, align, style, onOk } = this.props;
+    const state = this.state;
 
-      const timePicker = showTime
-        ? <TimePicker prefixCls="ant-time-picker"
-          placeholder={locale.lang.timePlaceholder}
-          transitionName="slide-up" />
-        : null;
+    let timePicker = null;
 
-      const calendarClassName = classNames({
-        ['ant-calendar-time']: this.props.showTime,
-      });
+    if (showTime) {
+      timePicker = (<TimePicker
+        prefixCls="ant-time-picker"
+        placeholder={locale.lang.timePlaceholder}
+        transitionName="slide-up"/>);
+    }
 
-      const calendar = (
-        <RangeCalendar prefixCls="ant-calendar"
-          formatter={this.getFormatter()}
-          className={calendarClassName}
-          timePicker={timePicker}
-          disabledDate={disabledDate}
-          dateInputPlaceholder={[startPlaceholder, endPlaceholder]}
-          locale={locale.lang}
-          onOk={onOk}
-          defaultValue={[defaultCalendarValue, defaultCalendarValue]}
-          showClear />
-      );
+    const calendarClassName = classNames({
+      ['ant-calendar-time']: this.props.showTime,
+    });
 
-      const pickerClass = classNames({
-        'ant-calendar-picker': true,
-        'ant-calendar-picker-open': state.open
-      });
+    let pickerChangeHandler = {
+      onChange: this.handleChange,
+    };
 
-      const pickerInputClass = classNames({
-        'ant-calendar-range-picker': true,
-        'ant-input': true,
-        'ant-input-lg': size === 'large',
-        'ant-input-sm': size === 'small',
-      });
+    let calendarHandler = {
+      onOk: this.handleChange,
+    };
 
-      return (<span className={pickerClass} style={style}>
-        <DatePicker
-          transitionName={transitionName}
-          disabled={disabled}
-          calendar={calendar}
-          value={state.value}
-          prefixCls="ant-calendar-picker-container"
-          style={popupStyle}
-          align={align}
-          getCalendarContainer={getCalendarContainer}
-          onOpen={this.toggleOpen}
-          onClose={this.toggleOpen}
-          onChange={this.handleChange}>
-          {
-            ({ value }) => {
-              const start = value[0];
-              const end = value[1];
-              return (
-                <span className={pickerInputClass} disabled={disabled}>
-                  <input disabled={disabled}
-                    onChange={this.handleInputChange}
-                    value={start && this.getFormatter().format(start)}
-                    placeholder={startPlaceholder}
-                    className="ant-calendar-range-picker-input" />
-                  <span className="ant-calendar-range-picker-separator"> ~ </span>
-                  <input disabled={disabled}
-                    onChange={this.handleInputChange}
-                    value={end && this.getFormatter().format(end)}
-                    placeholder={endPlaceholder}
-                    className="ant-calendar-range-picker-input" />
-                  <span className="ant-calendar-picker-icon" />
-                </span>
-              );
-            }
+    if (timePicker) {
+      pickerChangeHandler.onChange = (value) => {
+        // Click clear button
+        if (value === null || value.length === 0) {
+          this.handleChange(value);
+        }
+      };
+    } else {
+      calendarHandler = {};
+    }
+
+    const calendar = (
+      <RangeCalendar
+        prefixCls="ant-calendar"
+        className={calendarClassName}
+        timePicker={timePicker}
+        disabledDate={disabledDate}
+        dateInputPlaceholder={[startPlaceholder, endPlaceholder]}
+        locale={locale.lang}
+        onOk={onOk}
+        defaultValue={[defaultCalendarValue, defaultCalendarValue]}
+        {...calendarHandler}
+      />
+    );
+
+    const pickerClass = classNames({
+      'ant-calendar-picker': true,
+      'ant-calendar-picker-open': state.open
+    });
+
+    const pickerInputClass = classNames({
+      'ant-calendar-range-picker': true,
+      'ant-input': true,
+      'ant-input-lg': size === 'large',
+      'ant-input-sm': size === 'small',
+    });
+
+    return (<span className={pickerClass} style={style}>
+      <DatePicker
+        transitionName={transitionName}
+        disabled={disabled}
+        calendar={calendar}
+        value={state.value}
+        prefixCls="ant-calendar-picker-container"
+        style={popupStyle}
+        align={align}
+        getCalendarContainer={getCalendarContainer}
+        onOpen={this.toggleOpen}
+        onClose={this.toggleOpen}
+        {...pickerChangeHandler}
+      >
+        {
+          ({ value }) => {
+            const start = value[0];
+            const end = value[1];
+            return (
+              <span className={pickerInputClass} disabled={disabled}>
+                <input
+                  disabled={disabled}
+                  onChange={this.handleInputChange}
+                  value={start && this.getFormatter().format(start)}
+                  placeholder={startPlaceholder}
+                  className="ant-calendar-range-picker-input"/>
+                <span className="ant-calendar-range-picker-separator"> ~ </span>
+                <input
+                  disabled={disabled}
+                  onChange={this.handleInputChange}
+                  value={end && this.getFormatter().format(end)}
+                  placeholder={endPlaceholder}
+                  className="ant-calendar-range-picker-input"/>
+                <span className="ant-calendar-picker-icon"/>
+              </span>
+            );
           }
-        </DatePicker>
-      </span>);
+        }
+      </DatePicker>
+    </span>);
     }
   });
 
@@ -195,13 +222,17 @@
           format: defaultFormat || 'yyyy-MM-dd',
           transitionName: 'slide-up',
           popupStyle: {},
-          onChange() {},
-          onOk() {},
+          onChange() {
+        	  
+          },
+          onOk() {
+        	  
+          },
           locale: {},
           align: {
             offset: [0, -9],
           },
-          open: false
+          open: false,
         };
       },
       getInitialState() {

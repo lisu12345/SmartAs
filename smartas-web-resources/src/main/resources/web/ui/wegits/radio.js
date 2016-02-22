@@ -35,13 +35,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	function getCheckedValue(children) {
-		var checkedValue = null;
+		var value = null;
+		var matched = false;
 		React.Children.forEach(children, function (radio) {
 			if (radio.props && radio.props.checked) {
-				checkedValue = radio.props.value;
+				value = radio.props.value;
+				matched = true;
 			}
 		});
-		return checkedValue;
+		return matched ? { value: value } : undefined;
 	}
 
 	var RadioGroup = React.createClass({
@@ -55,21 +57,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		getInitialState: function getInitialState() {
 			var props = this.props;
+			var value = undefined;
+			if ('value' in props) {
+				value = props.value;
+			} else if ('defaultValue' in props) {
+				value = props.defaultValue;
+			} else {
+				var checkedValue = getCheckedValue(props.children);
+				value = checkedValue && checkedValue.value;
+			}
 			return {
-				value: props.value || props.defaultValue || getCheckedValue(props.children)
+				value: value
 			};
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			if ('value' in nextProps || getCheckedValue(nextProps.children)) {
+			if ('value' in nextProps) {
 				this.setState({
-					value: nextProps.value || getCheckedValue(nextProps.children)
+					value: nextProps.value
 				});
+			} else {
+				var checkedValue = getCheckedValue(nextProps.children);
+				if (checkedValue) {
+					this.setState({
+						value: checkedValue.value
+					});
+				}
 			}
 		},
 		onRadioChange: function onRadioChange(ev) {
-			this.setState({
-				value: ev.target.value
-			});
+			if (!('value' in this.props)) {
+				this.setState({
+					value: ev.target.value
+				});
+			}
 			this.props.onChange(ev);
 		},
 		render: function render() {
@@ -78,9 +98,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var props = this.props;
 			var children = React.Children.map(props.children, function (radio) {
 				if (radio.props) {
-					return React.cloneElement(radio, _extends({
-						key: radio.props.value
-					}, radio.props, {
+					var keyProps = {};
+					if (!('key' in radio) && typeof radio.props.value === 'string') {
+						keyProps.key = radio.props.value;
+					}
+					return React.cloneElement(radio, _extends({}, keyProps, radio.props, {
 						onChange: _this.onRadioChange,
 						checked: _this.state.value === radio.props.value,
 						disabled: radio.props.disabled || _this.props.disabled

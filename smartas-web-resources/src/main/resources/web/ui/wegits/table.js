@@ -559,20 +559,21 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
               column.className += ' ant-table-column-sort';
             }
           }
-
+          var isAscend = isSortColumn && _this8.state.sortOrder === 'ascend';
+          var isDescend = isSortColumn && _this8.state.sortOrder === 'descend';
           sortButton = React.createElement(
             'div',
             { className: 'ant-table-column-sorter' },
             React.createElement(
               'span',
-              { className: 'ant-table-column-sorter-up ' + (isSortColumn && _this8.state.sortOrder === 'ascend' ? 'on' : 'off'),
+              { className: 'ant-table-column-sorter-up ' + (isAscend ? 'on' : 'off'),
                 title: '↑',
                 onClick: _this8.toggleSortOrder.bind(_this8, 'ascend', column) },
               React.createElement(Icon, { type: 'caret-up' })
             ),
             React.createElement(
               'span',
-              { className: 'ant-table-column-sorter-down ' + (isSortColumn && _this8.state.sortOrder === 'descend' ? 'on' : 'off'),
+              { className: 'ant-table-column-sorter-down ' + (isDescend ? 'on' : 'off'),
                 title: '↓',
                 onClick: _this8.toggleSortOrder.bind(_this8, 'descend', column) },
               React.createElement(Icon, { type: 'caret-down' })

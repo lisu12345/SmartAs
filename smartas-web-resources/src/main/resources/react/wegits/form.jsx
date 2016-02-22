@@ -19,7 +19,7 @@
 			let v = e;
 			const target = e && e.target;
 			if (target) {
-				if ((target.nodeName + '').toLowerCase() === 'input' &&
+				if ((`${target.nodeName}`).toLowerCase() === 'input' &&
 					target.type === 'checkbox') {
 					v = target.checked;
 				} else {
@@ -37,7 +37,7 @@
 
 	function prefixClsFn(prefixCls, ...args) {
 		return args.map((s) => {
-			return prefixCls + '-' + s;
+			return `${prefixCls}-${s}`;
 		}).join(' ');
 	}
 
@@ -49,8 +49,8 @@
 			const {
 				span, offset
 			} = colDef;
-			const col = span ? 'col-' + span : '';
-			const offsetCol = offset ? ' col-offset-' + offset : '';
+			const col = span ? `col-${span}` : '';
+		    const offsetCol = offset ? ` col-offset-${offset}` : '';
 			return col + offsetCol;
 		}
 		
@@ -116,7 +116,7 @@
 		      );
 		    }
 		    return (
-		      <div className={this.props.prefixCls + '-item-control ' + classes}>
+		      <div className={`${this.props.prefixCls}-item-control ${classes}`}>
 		        {c1}{c2}{c3}
 		      </div>
 		    );

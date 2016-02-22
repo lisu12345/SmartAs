@@ -63,19 +63,19 @@
     render() {
       const {title, okText, cancelText, placement, overlayStyle, trigger,...restProps} = this.props;
       const overlay = (
-        <div>
-          <div className={prefixCls + '-content'}>
-            <p className={prefixCls + '-message'}>
-              <Icon type="exclamation-circle" />
-              {title}
-            </p>
-            <div className={prefixCls + '-buttons'}>
-              <Button onClick={this.cancel} type="ghost" size="small">{cancelText}</Button>
-              <Button onClick={this.confirm} type="primary" size="small">{okText}</Button>
-            </div>
-          </div>
-        </div>
-      );
+	      <div>
+	        <div className={`${prefixCls}-content`}>
+	          <p className={`${prefixCls}-message`}>
+	            <Icon type="exclamation-circle" />
+	            {title}
+	          </p>
+	          <div className={`${prefixCls}-buttons`}>
+	            <Button onClick={this.cancel} type="ghost" size="small">{cancelText}</Button>
+	            <Button onClick={this.confirm} type="primary" size="small">{okText}</Button>
+	          </div>
+	        </div>
+	      </div>
+	    );
 
       const transitionName = transitionNames[placement];
 

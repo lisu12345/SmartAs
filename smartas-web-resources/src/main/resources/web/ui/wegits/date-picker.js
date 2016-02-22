@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 +(function (UI, RC) {
@@ -28,10 +30,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getFormatter: function getFormatter() {
       var formats = this.formats = this.formats || {};
       var format = this.props.format;
-      // Remove time format text when has time-picker in calendar
-      if (this.props.showTime) {
-        format = format.replace('HH:mm:ss', '');
-      }
       if (formats[format]) {
         return formats[format];
       }
@@ -137,22 +135,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var state = this.state;
 
-      var timePicker = showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
-        placeholder: locale.lang.timePlaceholder,
-        transitionName: 'slide-up' }) : null;
+      var timePicker = null;
+
+      if (showTime) {
+        timePicker = React.createElement(TimePicker, {
+          prefixCls: 'ant-time-picker',
+          placeholder: locale.lang.timePlaceholder,
+          transitionName: 'slide-up' });
+      }
 
       var calendarClassName = classNames(_defineProperty({}, 'ant-calendar-time', this.props.showTime));
 
-      var calendar = React.createElement(RangeCalendar, { prefixCls: 'ant-calendar',
-        formatter: this.getFormatter(),
+      var pickerChangeHandler = {
+        onChange: this.handleChange
+      };
+
+      var calendarHandler = {
+        onOk: this.handleChange
+      };
+
+      if (timePicker) {
+        pickerChangeHandler.onChange = function (value) {
+          // Click clear button
+          if (value === null || value.length === 0) {
+            _this.handleChange(value);
+          }
+        };
+      } else {
+        calendarHandler = {};
+      }
+
+      var calendar = React.createElement(RangeCalendar, _extends({
+        prefixCls: 'ant-calendar',
         className: calendarClassName,
         timePicker: timePicker,
         disabledDate: disabledDate,
         dateInputPlaceholder: [startPlaceholder, endPlaceholder],
         locale: locale.lang,
         onOk: onOk,
-        defaultValue: [defaultCalendarValue, defaultCalendarValue],
-        showClear: true });
+        defaultValue: [defaultCalendarValue, defaultCalendarValue]
+      }, calendarHandler));
 
       var pickerClass = classNames({
         'ant-calendar-picker': true,
@@ -171,7 +193,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         { className: pickerClass, style: style },
         React.createElement(
           DatePicker,
-          {
+          _extends({
             transitionName: transitionName,
             disabled: disabled,
             calendar: calendar,
@@ -181,8 +203,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             align: align,
             getCalendarContainer: getCalendarContainer,
             onOpen: this.toggleOpen,
-            onClose: this.toggleOpen,
-            onChange: this.handleChange },
+            onClose: this.toggleOpen
+          }, pickerChangeHandler),
           function (_ref) {
             var value = _ref.value;
 
@@ -191,7 +213,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return React.createElement(
               'span',
               { className: pickerInputClass, disabled: disabled },
-              React.createElement('input', { disabled: disabled,
+              React.createElement('input', {
+                disabled: disabled,
                 onChange: _this.handleInputChange,
                 value: start && _this.getFormatter().format(start),
                 placeholder: startPlaceholder,
@@ -201,7 +224,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 { className: 'ant-calendar-range-picker-separator' },
                 ' ~ '
               ),
-              React.createElement('input', { disabled: disabled,
+              React.createElement('input', {
+                disabled: disabled,
                 onChange: _this.handleInputChange,
                 value: end && _this.getFormatter().format(end),
                 placeholder: endPlaceholder,

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -34,19 +34,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     }
 
     _createClass(AntTag, [{
-      key: 'close',
+      key: "close",
       value: function close(e) {
         var dom = ReactDOM.findDOMNode(this);
-        dom.style.width = dom.offsetWidth + 'px';
+        dom.style.width = dom.offsetWidth + "px";
         // It's Magic Code, don't know why
-        dom.style.width = dom.offsetWidth + 'px';
+        dom.style.width = dom.offsetWidth + "px";
         this.setState({
           closing: true
         });
         this.props.onClose(e);
       }
     }, {
-      key: 'animationEnd',
+      key: "animationEnd",
       value: function animationEnd(key, existed) {
         if (!existed) {
           this.setState({
@@ -57,7 +57,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }
       }
     }, {
-      key: 'render',
+      key: "render",
       value: function render() {
         var _classNames;
 
@@ -66,21 +66,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var closable = _props.closable;
         var color = _props.color;
 
-        var restProps = _objectWithoutProperties(_props, ['prefixCls', 'closable', 'color']);
+        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color"]);
 
-        var close = closable ? React.createElement(Icon, { type: 'cross', onClick: this.close.bind(this) }) : '';
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-' + color, !!color), _defineProperty(_classNames, prefixCls + '-close', this.state.closing), _classNames));
+        var close = closable ? React.createElement(Icon, { type: "cross", onClick: this.close.bind(this) }) : '';
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _classNames));
         return React.createElement(
           Animate,
-          { component: '',
-            showProp: 'data-show',
-            transitionName: prefixCls + '-zoom',
+          { component: "",
+            showProp: "data-show",
+            transitionName: prefixCls + "-zoom",
             transitionAppear: true,
             onEnd: this.animationEnd.bind(this) },
           this.state.closed ? null : React.createElement(
-            'div',
-            { 'data-show': !this.state.closing, className: className },
-            React.createElement('span', _extends({ className: prefixCls + '-text' }, restProps)),
+            "div",
+            { "data-show": !this.state.closing, className: className },
+            React.createElement("span", _extends({ className: prefixCls + "-text" }, restProps)),
             close
           )
         );

@@ -17,7 +17,7 @@
 		window.matchMedia = window.matchMedia || matchMediaPolyfill;
 	}
 })(Smart.Namespace);
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -28,7 +28,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 +(function (UI) {
 
   var Col = React.createClass({
-    displayName: 'Col',
+    displayName: "Col",
 
     propTypes: {
       span: React.PropTypes.string,
@@ -50,11 +50,11 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       var pull = _props.pull;
       var className = _props.className;
 
-      var others = _objectWithoutProperties(_props, ['span', 'order', 'offset', 'push', 'pull', 'className']);
+      var others = _objectWithoutProperties(_props, ["span", "order", "offset", "push", "pull", "className"]);
 
-      var classes = classNames((_classNames = {}, _defineProperty(_classNames, 'col-' + span, span), _defineProperty(_classNames, 'col-order-' + order, order), _defineProperty(_classNames, 'col-offset-' + offset, offset), _defineProperty(_classNames, 'col-push-' + push, push), _defineProperty(_classNames, 'col-pull-' + pull, pull), _defineProperty(_classNames, className, className), _classNames));
+      var classes = classNames((_classNames = {}, _defineProperty(_classNames, "col-" + span, span), _defineProperty(_classNames, "col-order-" + order, order), _defineProperty(_classNames, "col-offset-" + offset, offset), _defineProperty(_classNames, "col-push-" + push, push), _defineProperty(_classNames, "col-pull-" + pull, pull), _defineProperty(_classNames, className, className), _classNames));
       return React.createElement(
-        'div',
+        "div",
         _extends({}, others, { className: classes }),
         this.props.children
       );
@@ -62,7 +62,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   });
 
   var Row = React.createClass({
-    displayName: 'Row',
+    displayName: "Row",
 
     propTypes: {
       type: React.PropTypes.string,
@@ -80,13 +80,13 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       var align = _props2.align;
       var className = _props2.className;
 
-      var others = _objectWithoutProperties(_props2, ['type', 'justify', 'align', 'className']);
+      var others = _objectWithoutProperties(_props2, ["type", "justify", "align", "className"]);
 
       var classes = classNames((_classNames2 = {
         row: true
-      }, _defineProperty(_classNames2, 'row-' + type, type), _defineProperty(_classNames2, 'row-' + type + '-' + justify, justify), _defineProperty(_classNames2, 'row-' + type + '-' + align, align), _defineProperty(_classNames2, className, className), _classNames2));
+      }, _defineProperty(_classNames2, "row-" + type, type), _defineProperty(_classNames2, "row-" + type + "-" + justify, justify), _defineProperty(_classNames2, "row-" + type + "-" + align, align), _defineProperty(_classNames2, className, className), _classNames2));
       return React.createElement(
-        'div',
+        "div",
         _extends({}, others, { className: classes }),
         this.props.children
       );
@@ -109,102 +109,148 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//扩展了paths属性,提供数组结构的面包屑控件
 +(function (UI) {
-  var BreadcrumbItem = React.createClass({
-    displayName: 'BreadcrumbItem',
-    getDefaultProps: function getDefaultProps() {
-      return {
-        prefixCls: 'ant-breadcrumb',
-        separator: '/'
-      };
-    },
+		var _React = React;
+		var cloneElement = _React.cloneElement;
 
-    propTypes: {
-      prefixCls: React.PropTypes.string,
-      separator: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
-      href: React.PropTypes.string
-    },
-    render: function render() {
-      var _props = this.props;
-      var prefixCls = _props.prefixCls;
-      var separator = _props.separator;
-      var children = _props.children;
+		var BreadcrumbItem = React.createClass({
+				displayName: 'BreadcrumbItem',
+				getDefaultProps: function getDefaultProps() {
+						return {
+								prefixCls: 'ant-breadcrumb',
+								separator: '/'
+						};
+				},
 
-      var link = React.createElement(
-        'a',
-        _extends({ className: prefixCls + '-link' }, this.props),
-        children
-      );
-      if (typeof this.props.href === 'undefined') {
-        link = React.createElement(
-          'span',
-          _extends({ className: prefixCls + '-link' }, this.props),
-          children
-        );
-      }
-      return React.createElement(
-        'span',
-        null,
-        link,
-        React.createElement(
-          'span',
-          { className: prefixCls + '-separator' },
-          separator
-        )
-      );
-    }
-  });
+				propTypes: {
+						prefixCls: React.PropTypes.string,
+						separator: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
+						href: React.PropTypes.string
+				},
+				render: function render() {
+						var _props = this.props;
+						var prefixCls = _props.prefixCls;
+						var separator = _props.separator;
+						var children = _props.children;
 
-  var Breadcrumb = React.createClass({
-    displayName: 'Breadcrumb',
-    getDefaultProps: function getDefaultProps() {
-      return {
-        prefixCls: 'ant-breadcrumb',
-        separator: '/'
-      };
-    },
+						var link = React.createElement(
+								'a',
+								_extends({ className: prefixCls + '-link' }, this.props),
+								children
+						);
+						if (typeof this.props.href === 'undefined') {
+								link = React.createElement(
+										'span',
+										_extends({ className: prefixCls + '-link' }, this.props),
+										children
+								);
+						}
+						return React.createElement(
+								'span',
+								null,
+								link,
+								React.createElement(
+										'span',
+										{ className: prefixCls + '-separator' },
+										separator
+								)
+						);
+				}
+		});
 
-    propTypes: {
-      prefixCls: React.PropTypes.string,
-      separator: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
-      paths: React.PropTypes.array,
-      params: React.PropTypes.object
-    },
-    render: function render() {
-      var crumbs = undefined;
-      var _props2 = this.props;
-      var separator = _props2.separator;
-      var prefixCls = _props2.prefixCls;
-      var paths = _props2.paths;
-      var params = _props2.params;
-      var children = _props2.children;
+		var Breadcrumb = React.createClass({
+				displayName: 'Breadcrumb',
+				getDefaultProps: function getDefaultProps() {
+						return {
+								prefixCls: 'ant-breadcrumb',
+								separator: '/'
+						};
+				},
 
-      if (paths && paths.length > 0) {
-        crumbs = paths.map(function (name, i) {
-          return React.createElement(
-            BreadcrumbItem,
-            { separator: separator, key: name },
-            name
-          );
-        });
-      } else {
-        crumbs = React.Children.map(children, function (element, index) {
-          return React.cloneElement(element, {
-            separator: separator,
-            key: index
-          });
-        });
-      }
-      return React.createElement(
-        'div',
-        { className: prefixCls },
-        crumbs
-      );
-    }
-  });
+				propTypes: {
+						prefixCls: React.PropTypes.string,
+						separator: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
+						routes: React.PropTypes.array,
+						paths: React.PropTypes.array,
+						params: React.PropTypes.object
+				},
+				render: function render() {
+						var crumbs = undefined;
+						var _props2 = this.props;
+						var separator = _props2.separator;
+						var prefixCls = _props2.prefixCls;
+						var routes = _props2.routes;
+						var paths = _props2.paths;
+						var params = _props2.params;
+						var children = _props2.children;
 
-  Breadcrumb.Item = BreadcrumbItem;
-  UI.Breadcrumb = Breadcrumb;
+						if (paths && paths.length > 0) {
+								crumbs = paths.map(function (name, i) {
+										return React.createElement(
+												BreadcrumbItem,
+												{ separator: separator, key: name },
+												name
+										);
+								});
+						} else if (routes && routes.length > 0) {
+								(function () {
+										var paths = [];
+										crumbs = routes.map(function (route, i) {
+												if (!route.breadcrumbName) {
+														return null;
+												}
+												var name = route.breadcrumbName.replace(/\:(.*)/g, function (replacement, key) {
+														return params[key] || replacement;
+												});
+
+												var link = undefined;
+												var path = route.path.replace(/^\//, '');
+												Object.keys(params).forEach(function (key) {
+														path = path.replace(':' + key, params[key]);
+												});
+												if (path) {
+														paths.push(path);
+												}
+
+												if (i === routes.length - 1) {
+														link = React.createElement(
+																'span',
+																null,
+																name
+														);
+												} else {
+														link = React.createElement(
+																'a',
+																{ href: '#/' + paths.join('/') },
+																name
+														);
+												}
+												return React.createElement(
+														BreadcrumbItem,
+														{ separator: separator, key: name },
+														link
+												);
+										});
+								})();
+						} else {
+								crumbs = React.Children.map(children, function (element, index) {
+										return cloneElement(element, {
+												separator: separator,
+												key: index
+										});
+								});
+						}
+						return React.createElement(
+								'div',
+								{ className: prefixCls },
+								crumbs
+						);
+				}
+		});
+
+		Breadcrumb.Item = BreadcrumbItem;
+		UI.Breadcrumb = Breadcrumb;
 })(Smart.UI);
 'use strict';
 
@@ -264,7 +310,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     _createClass(Group, [{
       key: 'render',
       value: function render() {
-        var className = 'ant-input-group ' + (this.props.className || '');
+        var className = classNames(_defineProperty({
+          'ant-input-group': true
+        }, this.props.className, !!this.props.className));
         return React.createElement(
           'span',
           { className: className,
@@ -293,7 +341,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     _createClass(Input, [{
       key: 'renderLabledInput',
       value: function renderLabledInput(children) {
-        var _classNames;
+        var _classNames2;
 
         var props = this.props;
         var wrapperClassName = prefixClsFn(props.prefixCls, 'input-group');
@@ -310,7 +358,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           props.addonAfter
         ) : null;
 
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames, wrapperClassName, addonBefore || addonAfter), _classNames));
+        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
         return React.createElement(
           'span',
           { className: className },
@@ -395,191 +443,191 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 'use strict';
 
 +(function (UI, RC) {
-  var _ref = _;
-  var assign = _ref.assign;
-  var Icon = UI.Icon;
-  var Progress = RC.Progress;
-  var Progresscircle = Progress.Circle;
+		var _ref = _;
+		var assign = _ref.assign;
+		var Icon = UI.Icon;
+		var Progress = RC.Progress;
+		var Progresscircle = Progress.Circle;
 
-  var prefixCls = 'ant-progress';
+		var prefixCls = 'ant-progress';
 
-  var statusColorMap = {
-    normal: '#2db7f5',
-    exception: '#ff6600',
-    success: '#87d068'
-  };
+		var statusColorMap = {
+				normal: '#2db7f5',
+				exception: '#ff6600',
+				success: '#87d068'
+		};
 
-  var Line = React.createClass({
-    displayName: 'Line',
+		var Line = React.createClass({
+				displayName: 'Line',
 
-    propTypes: {
-      status: React.PropTypes.oneOf(['normal', 'exception', 'active', 'success']),
-      showInfo: React.PropTypes.bool,
-      percent: React.PropTypes.number,
-      strokeWidth: React.PropTypes.number,
-      trailColor: React.PropTypes.string,
-      format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
-    },
-    getDefaultProps: function getDefaultProps() {
-      return {
-        percent: 0,
-        strokeWidth: 10,
-        status: 'normal', // exception active
-        showInfo: true,
-        trailColor: '#e9e9e9'
-      };
-    },
-    render: function render() {
-      var props = assign({}, this.props);
+				propTypes: {
+						status: React.PropTypes.oneOf(['normal', 'exception', 'active', 'success']),
+						showInfo: React.PropTypes.bool,
+						percent: React.PropTypes.number,
+						strokeWidth: React.PropTypes.number,
+						trailColor: React.PropTypes.string,
+						format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
+				},
+				getDefaultProps: function getDefaultProps() {
+						return {
+								percent: 0,
+								strokeWidth: 10,
+								status: 'normal', // exception active
+								showInfo: true,
+								trailColor: '#e9e9e9'
+						};
+				},
+				render: function render() {
+						var props = assign({}, this.props);
 
-      if (parseInt(props.percent, 10) === 100) {
-        props.status = 'success';
-      }
+						if (parseInt(props.percent, 10) === 100) {
+								props.status = 'success';
+						}
 
-      var progressInfo = undefined;
-      var fullCls = '';
+						var progressInfo = undefined;
+						var fullCls = '';
 
-      if (props.format) {
-        warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
-      }
+						if (props.format) {
+								warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
+						}
 
-      var text = props.format || props.percent + '%';
-      if (typeof props.format === 'string') {
-        // 向下兼容原来的字符串替换方式
-        text = props.format.replace('${percent}', props.percent);
-      } else if (typeof props.format === 'function') {
-        text = props.format(props.percent);
-      }
+						var text = props.format || props.percent + '%';
+						if (typeof props.format === 'string') {
+								// 向下兼容原来的字符串替换方式
+								text = props.format.replace('${percent}', props.percent);
+						} else if (typeof props.format === 'function') {
+								text = props.format(props.percent);
+						}
 
-      if (props.showInfo === true) {
-        if (props.status === 'exception') {
-          progressInfo = React.createElement(
-            'span',
-            { className: prefixCls + '-line-text' },
-            props.format ? text : React.createElement(Icon, { type: 'exclamation' })
-          );
-        } else if (props.status === 'success') {
-          progressInfo = React.createElement(
-            'span',
-            { className: prefixCls + '-line-text' },
-            props.format ? text : React.createElement(Icon, { type: 'check' })
-          );
-        } else {
-          progressInfo = React.createElement(
-            'span',
-            { className: prefixCls + '-line-text' },
-            text
-          );
-        }
-      } else {
-        fullCls = ' ' + prefixCls + '-line-wrap-full';
-      }
-      var percentStyle = {
-        width: props.percent + '%',
-        height: props.strokeWidth
-      };
+						if (props.showInfo === true) {
+								if (props.status === 'exception') {
+										progressInfo = React.createElement(
+												'span',
+												{ className: prefixCls + '-line-text' },
+												props.format ? text : React.createElement(Icon, { type: 'exclamation' })
+										);
+								} else if (props.status === 'success') {
+										progressInfo = React.createElement(
+												'span',
+												{ className: prefixCls + '-line-text' },
+												props.format ? text : React.createElement(Icon, { type: 'check' })
+										);
+								} else {
+										progressInfo = React.createElement(
+												'span',
+												{ className: prefixCls + '-line-text' },
+												text
+										);
+								}
+						} else {
+								fullCls = ' ' + prefixCls + '-line-wrap-full';
+						}
+						var percentStyle = {
+								width: props.percent + '%',
+								height: props.strokeWidth
+						};
 
-      return React.createElement(
-        'div',
-        { className: prefixCls + '-line-wrap clearfix status-' + props.status + fullCls, style: props.style },
-        progressInfo,
-        React.createElement(
-          'div',
-          { className: prefixCls + '-line-outer' },
-          React.createElement(
-            'div',
-            { className: prefixCls + '-line-inner' },
-            React.createElement('div', { className: prefixCls + '-line-bg', style: percentStyle })
-          )
-        )
-      );
-    }
-  });
+						return React.createElement(
+								'div',
+								{ className: prefixCls + '-line-wrap clearfix status-' + props.status + fullCls, style: props.style },
+								progressInfo,
+								React.createElement(
+										'div',
+										{ className: prefixCls + '-line-outer' },
+										React.createElement(
+												'div',
+												{ className: prefixCls + '-line-inner' },
+												React.createElement('div', { className: prefixCls + '-line-bg', style: percentStyle })
+										)
+								)
+						);
+				}
+		});
 
-  var Circle = React.createClass({
-    displayName: 'Circle',
+		var Circle = React.createClass({
+				displayName: 'Circle',
 
-    propTypes: {
-      status: React.PropTypes.oneOf(['normal', 'exception', 'success']),
-      percent: React.PropTypes.number,
-      strokeWidth: React.PropTypes.number,
-      width: React.PropTypes.number,
-      trailColor: React.PropTypes.string,
-      format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
-    },
-    getDefaultProps: function getDefaultProps() {
-      return {
-        width: 132,
-        percent: 0,
-        strokeWidth: 6,
-        status: 'normal', // exception
-        trailColor: '#f9f9f9'
-      };
-    },
-    render: function render() {
-      var props = assign({}, this.props);
+				propTypes: {
+						status: React.PropTypes.oneOf(['normal', 'exception', 'success']),
+						percent: React.PropTypes.number,
+						strokeWidth: React.PropTypes.number,
+						width: React.PropTypes.number,
+						trailColor: React.PropTypes.string,
+						format: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.string, React.PropTypes.func])
+				},
+				getDefaultProps: function getDefaultProps() {
+						return {
+								width: 132,
+								percent: 0,
+								strokeWidth: 6,
+								status: 'normal', // exception
+								trailColor: '#f9f9f9'
+						};
+				},
+				render: function render() {
+						var props = assign({}, this.props);
 
-      if (parseInt(props.percent, 10) === 100) {
-        props.status = 'success';
-      }
+						if (parseInt(props.percent, 10) === 100) {
+								props.status = 'success';
+						}
 
-      var style = {
-        width: props.width,
-        height: props.width,
-        fontSize: props.width * 0.16 + 6
-      };
-      var progressInfo = undefined;
-      var text = props.format || props.percent + '%';
+						var style = {
+								width: props.width,
+								height: props.width,
+								fontSize: props.width * 0.16 + 6
+						};
+						var progressInfo = undefined;
+						var text = props.format || props.percent + '%';
 
-      if (props.format) {
-        warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
-      }
+						if (props.format) {
+								warning(typeof props.format === 'function', 'antd.Progress props.format type is function, change format={xxx} to format={() => xxx}');
+						}
 
-      if (typeof props.format === 'string') {
-        // 向下兼容原来的字符串替换方式
-        text = props.format.replace('${percent}', props.percent);
-      } else if (typeof props.format === 'function') {
-        text = props.format(props.percent);
-      }
+						if (typeof props.format === 'string') {
+								// 向下兼容原来的字符串替换方式
+								text = props.format.replace('${percent}', props.percent);
+						} else if (typeof props.format === 'function') {
+								text = props.format(props.percent);
+						}
 
-      if (props.status === 'exception') {
-        progressInfo = React.createElement(
-          'span',
-          { className: prefixCls + '-circle-text' },
-          props.format ? text : React.createElement(Icon, { type: 'exclamation' })
-        );
-      } else if (props.status === 'success') {
-        progressInfo = React.createElement(
-          'span',
-          { className: prefixCls + '-circle-text' },
-          props.format ? text : React.createElement(Icon, { type: 'check' })
-        );
-      } else {
-        progressInfo = React.createElement(
-          'span',
-          { className: prefixCls + '-circle-text' },
-          text
-        );
-      }
+						if (props.status === 'exception') {
+								progressInfo = React.createElement(
+										'span',
+										{ className: prefixCls + '-circle-text' },
+										props.format ? text : React.createElement(Icon, { type: 'exclamation' })
+								);
+						} else if (props.status === 'success') {
+								progressInfo = React.createElement(
+										'span',
+										{ className: prefixCls + '-circle-text' },
+										props.format ? text : React.createElement(Icon, { type: 'check' })
+								);
+						} else {
+								progressInfo = React.createElement(
+										'span',
+										{ className: prefixCls + '-circle-text' },
+										text
+								);
+						}
 
-      return React.createElement(
-        'div',
-        { className: prefixCls + '-circle-wrap status-' + props.status, style: props.style },
-        React.createElement(
-          'div',
-          { className: prefixCls + '-circle-inner', style: style },
-          React.createElement(Progresscircle, { percent: props.percent, strokeWidth: props.strokeWidth,
-            strokeColor: statusColorMap[props.status], trailColor: props.trailColor }),
-          progressInfo
-        )
-      );
-    }
-  });
+						return React.createElement(
+								'div',
+								{ className: prefixCls + '-circle-wrap status-' + props.status, style: props.style },
+								React.createElement(
+										'div',
+										{ className: prefixCls + '-circle-inner', style: style },
+										React.createElement(Progresscircle, { percent: props.percent, strokeWidth: props.strokeWidth,
+												strokeColor: statusColorMap[props.status], trailColor: props.trailColor }),
+										progressInfo
+								)
+						);
+				}
+		});
 
-  UI.Progress = {
-    Line: Line,
-    Circle: Circle
-  };
+		UI.Progress = {
+				Line: Line,
+				Circle: Circle
+		};
 })(Smart.UI, Smart.RC);
 'use strict';
 
@@ -616,13 +664,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 			onChange: React.PropTypes.func
 		},
 		getInitialState: function getInitialState() {
-			var _props = this.props;
-			var value = _props.value;
-			var defaultValue = _props.defaultValue;
-
-			return {
-				value: value || defaultValue
-			};
+			var props = this.props;
+			var value = undefined;
+			if ('value' in props) {
+				value = props.value;
+			} else if ('defaultValue' in props) {
+				value = props.defaultValue;
+			}
+			return { value: value };
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 			if ('value' in nextProps) {
@@ -737,13 +786,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	function getCheckedValue(children) {
-		var checkedValue = null;
+		var value = null;
+		var matched = false;
 		React.Children.forEach(children, function (radio) {
 			if (radio.props && radio.props.checked) {
-				checkedValue = radio.props.value;
+				value = radio.props.value;
+				matched = true;
 			}
 		});
-		return checkedValue;
+		return matched ? { value: value } : undefined;
 	}
 
 	var RadioGroup = React.createClass({
@@ -757,21 +808,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		getInitialState: function getInitialState() {
 			var props = this.props;
+			var value = undefined;
+			if ('value' in props) {
+				value = props.value;
+			} else if ('defaultValue' in props) {
+				value = props.defaultValue;
+			} else {
+				var checkedValue = getCheckedValue(props.children);
+				value = checkedValue && checkedValue.value;
+			}
 			return {
-				value: props.value || props.defaultValue || getCheckedValue(props.children)
+				value: value
 			};
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			if ('value' in nextProps || getCheckedValue(nextProps.children)) {
+			if ('value' in nextProps) {
 				this.setState({
-					value: nextProps.value || getCheckedValue(nextProps.children)
+					value: nextProps.value
 				});
+			} else {
+				var checkedValue = getCheckedValue(nextProps.children);
+				if (checkedValue) {
+					this.setState({
+						value: checkedValue.value
+					});
+				}
 			}
 		},
 		onRadioChange: function onRadioChange(ev) {
-			this.setState({
-				value: ev.target.value
-			});
+			if (!('value' in this.props)) {
+				this.setState({
+					value: ev.target.value
+				});
+			}
 			this.props.onChange(ev);
 		},
 		render: function render() {
@@ -780,9 +849,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var props = this.props;
 			var children = React.Children.map(props.children, function (radio) {
 				if (radio.props) {
-					return React.cloneElement(radio, _extends({
-						key: radio.props.value
-					}, radio.props, {
+					var keyProps = {};
+					if (!('key' in radio) && typeof radio.props.value === 'string') {
+						keyProps.key = radio.props.value;
+					}
+					return React.cloneElement(radio, _extends({}, keyProps, radio.props, {
 						onChange: _this.onRadioChange,
 						checked: _this.state.value === radio.props.value,
 						disabled: radio.props.disabled || _this.props.disabled
@@ -848,7 +919,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var v = e;
 			var target = e && e.target;
 			if (target) {
-				if ((target.nodeName + '').toLowerCase() === 'input' && target.type === 'checkbox') {
+				if (('' + target.nodeName).toLowerCase() === 'input' && target.type === 'checkbox') {
 					v = target.checked;
 				} else {
 					v = e.target.value;
@@ -3285,7 +3356,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   });
   UI.Upload = AntUpload;
 })(Smart.UI, Smart.RC);
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -3321,19 +3392,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     }
 
     _createClass(AntTag, [{
-      key: 'close',
+      key: "close",
       value: function close(e) {
         var dom = ReactDOM.findDOMNode(this);
-        dom.style.width = dom.offsetWidth + 'px';
+        dom.style.width = dom.offsetWidth + "px";
         // It's Magic Code, don't know why
-        dom.style.width = dom.offsetWidth + 'px';
+        dom.style.width = dom.offsetWidth + "px";
         this.setState({
           closing: true
         });
         this.props.onClose(e);
       }
     }, {
-      key: 'animationEnd',
+      key: "animationEnd",
       value: function animationEnd(key, existed) {
         if (!existed) {
           this.setState({
@@ -3344,7 +3415,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }
       }
     }, {
-      key: 'render',
+      key: "render",
       value: function render() {
         var _classNames;
 
@@ -3353,21 +3424,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var closable = _props.closable;
         var color = _props.color;
 
-        var restProps = _objectWithoutProperties(_props, ['prefixCls', 'closable', 'color']);
+        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color"]);
 
-        var close = closable ? React.createElement(Icon, { type: 'cross', onClick: this.close.bind(this) }) : '';
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-' + color, !!color), _defineProperty(_classNames, prefixCls + '-close', this.state.closing), _classNames));
+        var close = closable ? React.createElement(Icon, { type: "cross", onClick: this.close.bind(this) }) : '';
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _classNames));
         return React.createElement(
           Animate,
-          { component: '',
-            showProp: 'data-show',
-            transitionName: prefixCls + '-zoom',
+          { component: "",
+            showProp: "data-show",
+            transitionName: prefixCls + "-zoom",
             transitionAppear: true,
             onEnd: this.animationEnd.bind(this) },
           this.state.closed ? null : React.createElement(
-            'div',
-            { 'data-show': !this.state.closing, className: className },
-            React.createElement('span', _extends({ className: prefixCls + '-text' }, restProps)),
+            "div",
+            { "data-show": !this.state.closing, className: className },
+            React.createElement("span", _extends({ className: prefixCls + "-text" }, restProps)),
             close
           )
         );
@@ -4161,20 +4232,21 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
               column.className += ' ant-table-column-sort';
             }
           }
-
+          var isAscend = isSortColumn && _this8.state.sortOrder === 'ascend';
+          var isDescend = isSortColumn && _this8.state.sortOrder === 'descend';
           sortButton = React.createElement(
             'div',
             { className: 'ant-table-column-sorter' },
             React.createElement(
               'span',
-              { className: 'ant-table-column-sorter-up ' + (isSortColumn && _this8.state.sortOrder === 'ascend' ? 'on' : 'off'),
+              { className: 'ant-table-column-sorter-up ' + (isAscend ? 'on' : 'off'),
                 title: '↑',
                 onClick: _this8.toggleSortOrder.bind(_this8, 'ascend', column) },
               React.createElement(Icon, { type: 'caret-up' })
             ),
             React.createElement(
               'span',
-              { className: 'ant-table-column-sorter-down ' + (isSortColumn && _this8.state.sortOrder === 'descend' ? 'on' : 'off'),
+              { className: 'ant-table-column-sorter-down ' + (isDescend ? 'on' : 'off'),
                 title: '↓',
                 onClick: _this8.toggleSortOrder.bind(_this8, 'descend', column) },
               React.createElement(Icon, { type: 'caret-down' })
@@ -4613,6 +4685,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		prefixCls: 'ant-cascader',
 		placeholder: '请选择',
 		transitionName: 'slide-up',
+		popupPlacement: 'bottomLeft',
 		onChange: function onChange() {},
 
 		options: [],
@@ -4919,7 +4992,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
   function zerofixed(v) {
     if (v < 10) return '0' + v;
-    return v + '';
+    return '' + v;
   }
 
   var Calendar = (function (_Component2) {
@@ -5082,6 +5155,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 })(Smart.UI, Smart.RC);
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 +(function (UI, RC) {
@@ -5110,10 +5185,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getFormatter: function getFormatter() {
       var formats = this.formats = this.formats || {};
       var format = this.props.format;
-      // Remove time format text when has time-picker in calendar
-      if (this.props.showTime) {
-        format = format.replace('HH:mm:ss', '');
-      }
       if (formats[format]) {
         return formats[format];
       }
@@ -5219,22 +5290,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var state = this.state;
 
-      var timePicker = showTime ? React.createElement(TimePicker, { prefixCls: 'ant-time-picker',
-        placeholder: locale.lang.timePlaceholder,
-        transitionName: 'slide-up' }) : null;
+      var timePicker = null;
+
+      if (showTime) {
+        timePicker = React.createElement(TimePicker, {
+          prefixCls: 'ant-time-picker',
+          placeholder: locale.lang.timePlaceholder,
+          transitionName: 'slide-up' });
+      }
 
       var calendarClassName = classNames(_defineProperty({}, 'ant-calendar-time', this.props.showTime));
 
-      var calendar = React.createElement(RangeCalendar, { prefixCls: 'ant-calendar',
-        formatter: this.getFormatter(),
+      var pickerChangeHandler = {
+        onChange: this.handleChange
+      };
+
+      var calendarHandler = {
+        onOk: this.handleChange
+      };
+
+      if (timePicker) {
+        pickerChangeHandler.onChange = function (value) {
+          // Click clear button
+          if (value === null || value.length === 0) {
+            _this.handleChange(value);
+          }
+        };
+      } else {
+        calendarHandler = {};
+      }
+
+      var calendar = React.createElement(RangeCalendar, _extends({
+        prefixCls: 'ant-calendar',
         className: calendarClassName,
         timePicker: timePicker,
         disabledDate: disabledDate,
         dateInputPlaceholder: [startPlaceholder, endPlaceholder],
         locale: locale.lang,
         onOk: onOk,
-        defaultValue: [defaultCalendarValue, defaultCalendarValue],
-        showClear: true });
+        defaultValue: [defaultCalendarValue, defaultCalendarValue]
+      }, calendarHandler));
 
       var pickerClass = classNames({
         'ant-calendar-picker': true,
@@ -5253,7 +5348,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         { className: pickerClass, style: style },
         React.createElement(
           DatePicker,
-          {
+          _extends({
             transitionName: transitionName,
             disabled: disabled,
             calendar: calendar,
@@ -5263,8 +5358,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             align: align,
             getCalendarContainer: getCalendarContainer,
             onOpen: this.toggleOpen,
-            onClose: this.toggleOpen,
-            onChange: this.handleChange },
+            onClose: this.toggleOpen
+          }, pickerChangeHandler),
           function (_ref) {
             var value = _ref.value;
 
@@ -5273,7 +5368,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return React.createElement(
               'span',
               { className: pickerInputClass, disabled: disabled },
-              React.createElement('input', { disabled: disabled,
+              React.createElement('input', {
+                disabled: disabled,
                 onChange: _this.handleInputChange,
                 value: start && _this.getFormatter().format(start),
                 placeholder: startPlaceholder,
@@ -5283,7 +5379,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 { className: 'ant-calendar-range-picker-separator' },
                 ' ~ '
               ),
-              React.createElement('input', { disabled: disabled,
+              React.createElement('input', {
+                disabled: disabled,
                 onChange: _this.handleInputChange,
                 value: end && _this.getFormatter().format(end),
                 placeholder: endPlaceholder,

@@ -77,7 +77,7 @@
 				className: `${this.props.prefixCls}-only`,
 				style: {
 					transition: removeTransition && 'none',
-					transform: 'translate3d(0, ' + (-position * height) + 'px, 0)',
+					transform: `translate3d(0, ${-position * height}px, 0)`,
 					height: height,
 				},
 				key: i,
@@ -162,7 +162,7 @@
 		        {children}
 		        <Animate component=""
 		          showProp="data-show"
-		          transitionName={prefixCls + '-zoom'}
+		          transitionName={`${prefixCls}-zoom`}
 		          transitionAppear>
 		          {
 		            hidden ? null :

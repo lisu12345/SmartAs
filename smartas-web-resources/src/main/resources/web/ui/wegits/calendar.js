@@ -183,7 +183,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
   function zerofixed(v) {
     if (v < 10) return '0' + v;
-    return v + '';
+    return '' + v;
   }
 
   var Calendar = (function (_Component2) {

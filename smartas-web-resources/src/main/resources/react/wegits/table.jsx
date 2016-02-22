@@ -539,23 +539,22 @@
               column.className += ' ant-table-column-sort';
             }
           }
-
+          const isAscend = isSortColumn && this.state.sortOrder === 'ascend';
+          const isDescend = isSortColumn && this.state.sortOrder === 'descend';
           sortButton = (
-            <div className="ant-table-column-sorter">
-              <span className={'ant-table-column-sorter-up ' +
-                               ((isSortColumn && this.state.sortOrder === 'ascend') ? 'on' : 'off')}
-                title="↑"
-                onClick={this.toggleSortOrder.bind(this, 'ascend', column)}>
-                <Icon type="caret-up"/>
-              </span>
-              <span className={'ant-table-column-sorter-down ' +
-                               ((isSortColumn && this.state.sortOrder === 'descend') ? 'on' : 'off')}
-                title="↓"
-                onClick={this.toggleSortOrder.bind(this, 'descend', column)}>
-                <Icon type="caret-down"/>
-              </span>
-            </div>
-          );
+              <div className="ant-table-column-sorter">
+                <span className={`ant-table-column-sorter-up ${isAscend ? 'on' : 'off'}`}
+                  title="↑"
+                  onClick={this.toggleSortOrder.bind(this, 'ascend', column)}>
+                  <Icon type="caret-up"/>
+                </span>
+                <span className={`ant-table-column-sorter-down ${isDescend ? 'on' : 'off'}`}
+                  title="↓"
+                  onClick={this.toggleSortOrder.bind(this, 'descend', column)}>
+                  <Icon type="caret-down"/>
+                </span>
+              </div>
+            );
         }
         column.title = (
           <span>
@@ -721,7 +720,7 @@
         table = <Spin className={spinClassName}>{table}</Spin>;
       }
       return (
-        <div className={'clearfix' + emptyClass}>
+        <div className={`clearfix${emptyClass}`}>
           {table}
           {this.renderPagination()}
         </div>

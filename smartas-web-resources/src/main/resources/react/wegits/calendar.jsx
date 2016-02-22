@@ -114,9 +114,9 @@
     onTypeChange: noop,
   };
 
-  function zerofixed (v) {
-    if (v < 10) return '0' + v;
-    return v + '';
+  function zerofixed(v) {
+	  if (v < 10) return `0${v}`;
+	  return `${v}`;
   }
 
   class Calendar extends Component {
@@ -183,7 +183,7 @@
 
       let cls = className || '';
       if (fullscreen) {
-        cls += (' ' + prefixCls + '-fullscreen');
+    	  cls += (` ${prefixCls}-fullscreen`);
       }
 
       return (

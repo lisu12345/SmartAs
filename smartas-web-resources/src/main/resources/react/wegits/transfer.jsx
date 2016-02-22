@@ -83,13 +83,13 @@
       const { placeholder, value, prefixCls } = this.props;
       return (
         <div>
-          <input placeholder={placeholder} className={ prefixCls + ' ant-input' } value={ value } ref="input"
+          <input placeholder={placeholder} className={`${prefixCls} ant-input`} value={ value } ref="input"
             onChange={this.handleChange}/>
           { value && value.length > 0 ?
-            <a href="#" className={ prefixCls + '-action' } onClick={this.handleClear}>
+            <a href="#" className={`${prefixCls}-action`} onClick={this.handleClear}>
               <Icon type="cross-circle" />
             </a>
-            : <span className={ prefixCls + '-action' }><Icon type="search" /></span>
+            : <span className={`${prefixCls}-action`}><Icon type="search" /></span>
           }
         </div>
       );
@@ -201,7 +201,7 @@
 
       const listCls = classNames({
         [prefixCls]: true,
-        [prefixCls + '-with-footer']: !!footerDom,
+        [`${prefixCls}-with-footer`]: !!footerDom,
       });
 
       const showItems = dataSource.map((item) => {
@@ -387,22 +387,22 @@
         this.filterDataSource(dataSource, filter).map(item => item.key);
 
       this.setState({
-        [direction + 'CheckedKeys']: holder,
+        [`${direction}CheckedKeys`]: holder,
       });
     },
 
     handleFilter: function(direction, e) {
       this.setState({
         // deselect all
-        [direction + 'CheckedKeys']: [],
+        [`${direction}CheckedKeys`]: [],
         // add filter
-        [direction + 'Filter']: e.target.value,
+        [`${direction}Filter`]: e.target.value,
       });
     },
 
     handleClear: function(direction) {
       this.setState({
-        [direction + 'Filter']: '',
+        [`${direction}Filter`]: '',
       });
     },
 
@@ -422,7 +422,7 @@
         holder.push(selectedItem.key);
       }
       this.setState({
-        [direction + 'CheckedKeys']: holder,
+        [`${direction}CheckedKeys`]: holder,
       });
     },
 
@@ -463,14 +463,14 @@
             searchPlaceholder={searchPlaceholder}
             body={body}
             footer={footer}
-            prefixCls={prefixCls + '-list'}/>
+            prefixCls={`${prefixCls}-list`}/>
           <Operation rightActive={rightActive}
             rightArrowText={operations[0]}
             moveToRight={this.moveTo.bind(this, 'right')}
             leftActive={leftActive}
             leftArrowText={operations[1]}
             moveToLeft={this.moveTo.bind(this, 'left')}
-            className={prefixCls + '-operation'}/>
+            className={`${prefixCls}-operation`}/>
           <List titleText={titles[1]}
             dataSource={rightDataSource}
             filter={rightFilter}
@@ -487,7 +487,7 @@
             searchPlaceholder={searchPlaceholder}
             body={body}
             footer={footer}
-            prefixCls={prefixCls + '-list'}/>
+            prefixCls={`${prefixCls}-list`}/>
         </div>
       );
     }

@@ -33,13 +33,14 @@
 			onChange: React.PropTypes.func
 		},
 		getInitialState: function getInitialState() {
-			var _props = this.props;
-			var value = _props.value;
-			var defaultValue = _props.defaultValue;
-
-			return {
-				value: value || defaultValue
-			};
+			var props = this.props;
+			var value = undefined;
+			if ('value' in props) {
+				value = props.value;
+			} else if ('defaultValue' in props) {
+				value = props.defaultValue;
+			}
+			return { value: value };
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 			if ('value' in nextProps) {

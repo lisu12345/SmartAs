@@ -143,6 +143,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		prefixCls: 'ant-cascader',
 		placeholder: '请选择',
 		transitionName: 'slide-up',
+		popupPlacement: 'bottomLeft',
 		onChange: function onChange() {},
 
 		options: [],

@@ -56,7 +56,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     _createClass(Group, [{
       key: 'render',
       value: function render() {
-        var className = 'ant-input-group ' + (this.props.className || '');
+        var className = classNames(_defineProperty({
+          'ant-input-group': true
+        }, this.props.className, !!this.props.className));
         return React.createElement(
           'span',
           { className: className,
@@ -85,7 +87,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     _createClass(Input, [{
       key: 'renderLabledInput',
       value: function renderLabledInput(children) {
-        var _classNames;
+        var _classNames2;
 
         var props = this.props;
         var wrapperClassName = prefixClsFn(props.prefixCls, 'input-group');
@@ -102,7 +104,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           props.addonAfter
         ) : null;
 
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames, wrapperClassName, addonBefore || addonAfter), _classNames));
+        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
         return React.createElement(
           'span',
           { className: className },

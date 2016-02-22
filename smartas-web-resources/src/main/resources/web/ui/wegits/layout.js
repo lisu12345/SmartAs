@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -9,7 +9,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 +(function (UI) {
 
   var Col = React.createClass({
-    displayName: 'Col',
+    displayName: "Col",
 
     propTypes: {
       span: React.PropTypes.string,
@@ -31,11 +31,11 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       var pull = _props.pull;
       var className = _props.className;
 
-      var others = _objectWithoutProperties(_props, ['span', 'order', 'offset', 'push', 'pull', 'className']);
+      var others = _objectWithoutProperties(_props, ["span", "order", "offset", "push", "pull", "className"]);
 
-      var classes = classNames((_classNames = {}, _defineProperty(_classNames, 'col-' + span, span), _defineProperty(_classNames, 'col-order-' + order, order), _defineProperty(_classNames, 'col-offset-' + offset, offset), _defineProperty(_classNames, 'col-push-' + push, push), _defineProperty(_classNames, 'col-pull-' + pull, pull), _defineProperty(_classNames, className, className), _classNames));
+      var classes = classNames((_classNames = {}, _defineProperty(_classNames, "col-" + span, span), _defineProperty(_classNames, "col-order-" + order, order), _defineProperty(_classNames, "col-offset-" + offset, offset), _defineProperty(_classNames, "col-push-" + push, push), _defineProperty(_classNames, "col-pull-" + pull, pull), _defineProperty(_classNames, className, className), _classNames));
       return React.createElement(
-        'div',
+        "div",
         _extends({}, others, { className: classes }),
         this.props.children
       );
@@ -43,7 +43,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   });
 
   var Row = React.createClass({
-    displayName: 'Row',
+    displayName: "Row",
 
     propTypes: {
       type: React.PropTypes.string,
@@ -61,13 +61,13 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       var align = _props2.align;
       var className = _props2.className;
 
-      var others = _objectWithoutProperties(_props2, ['type', 'justify', 'align', 'className']);
+      var others = _objectWithoutProperties(_props2, ["type", "justify", "align", "className"]);
 
       var classes = classNames((_classNames2 = {
         row: true
-      }, _defineProperty(_classNames2, 'row-' + type, type), _defineProperty(_classNames2, 'row-' + type + '-' + justify, justify), _defineProperty(_classNames2, 'row-' + type + '-' + align, align), _defineProperty(_classNames2, className, className), _classNames2));
+      }, _defineProperty(_classNames2, "row-" + type, type), _defineProperty(_classNames2, "row-" + type + "-" + justify, justify), _defineProperty(_classNames2, "row-" + type + "-" + align, align), _defineProperty(_classNames2, className, className), _classNames2));
       return React.createElement(
-        'div',
+        "div",
         _extends({}, others, { className: classes }),
         this.props.children
       );

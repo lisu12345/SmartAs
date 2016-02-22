@@ -44,7 +44,7 @@
 	      [prefix + type]: type,
 	      [prefix + shape]: shape,
 	      [prefix + sizeCls]: sizeCls,
-	      [prefix + 'loading']: ('loading' in props && props.loading !== false),
+	      [`${prefix}loading`]: ('loading' in props && props.loading !== false),
 	      [className]: className
 	    });
 
