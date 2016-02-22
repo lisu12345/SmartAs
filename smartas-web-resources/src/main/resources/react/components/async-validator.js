@@ -1032,5 +1032,5 @@
 
   Schema.messages = defaultMessages;
   RC.Schema = Schema;
-  RC.AsyncValidate = Schema;
+  RC.AsyncValidator = Schema;
 }(Smart.RC);

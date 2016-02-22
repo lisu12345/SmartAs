@@ -1030,5 +1030,5 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   Schema.messages = defaultMessages;
   RC.Schema = Schema;
-  RC.AsyncValidate = Schema;
+  RC.AsyncValidator = Schema;
 })(Smart.RC);

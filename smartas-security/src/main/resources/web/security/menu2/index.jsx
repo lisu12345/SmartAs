@@ -15,7 +15,7 @@ install("web.security.menu2",function($S){
 			};
 		},
 		onSelect(selectedKeys,e) {
-			var key = selectedKeys[0] && selectedKeys[0].substr(4);
+			var key = selectedKeys[0];
 			if(key && key > 0){
 				service.get(key,function(data) {
 					//如果查询不到结果，需要同步树结构？？
@@ -33,7 +33,7 @@ install("web.security.menu2",function($S){
 				if(type === 'create'){
 					treeData = _.concat(this.state.treeData,[data]);		
 					this.setState({
-			      		treeData: _.orderBy(treeData,['id', 'sn'], ['asc', 'asc'])
+			      		treeData: _.orderBy(treeData,['sn'], ['asc'])
 			    	});
 				}else if(type === 'update'){
 					treeData = this.state.treeData
@@ -46,7 +46,7 @@ install("web.security.menu2",function($S){
 					});
 				}
 				treeData!=null && this.setState({
-			      	treeData: _.orderBy(treeData,['id', 'sn'], ['asc', 'asc'])
+			      	treeData: _.orderBy(treeData,['sn'], ['asc'])
 			    });
 			}.bind(this));
 
@@ -68,13 +68,13 @@ install("web.security.menu2",function($S){
 		render() {
 		    const loop = data => data.map((item) => {
 			      if (item.children) {
-			        return <TreeNode title={item.name} key={'key-' + item.id}>{loop(item.children)}</TreeNode>;
+			        return <TreeNode title={item.name} key={item.id}>{loop(item.children)}</TreeNode>;
 			      }
-			      return <TreeNode title={item.name} key={'key-' + item.id} isLeaf={true} />;
+			      return <TreeNode title={item.name} key={item.id} isLeaf={true} />;
 		    });
 		    const treeNodes = loop(l2t(this.state.treeData));
 		    return (
-		      <Tree onSelect={this.onSelect} defaultExpandedKeys={['key-0','key-1','key-2']}>
+		      <Tree onSelect={this.onSelect} defaultExpandedKeys={['0','1','2']}>
 		        {treeNodes}
 		      </Tree>
 		    );
@@ -86,22 +86,47 @@ install("web.security.menu2",function($S){
 			return {value:value}
 		});
 	}})(React.createClass({
+		getValidateStatus(field) {
+		    const { isFieldValidating, getFieldError, getFieldValue } = this.props.form;
+
+		    if (isFieldValidating(field)) {
+		      return 'validating';
+		    } else if (!!getFieldError(field)) {
+		      return 'error';
+		    } else if (getFieldValue(field)) {
+		      return 'success';
+		    }
+		  },
+
 		handleSubmit(e) {
 		    e.preventDefault();
-		    var data = this.props.form.getFieldsValue(),isCreate = !data.id;
-		    var method = isCreate?'create':'update';
-		    service[method](data,function(id){
-		    	data.id = id;
-		    	service.dispatch(method,data);
+		    this.props.form.validateFields((errors, values) => {
+		        if (!!errors) {
+		          console.log('Errors in form!!!');
+		          return;
+		        }
+		        var data = this.props.form.getFieldsValue(),isCreate = !data.id;
+			    var method = isCreate?'create':'update';
+			    service[method](data,function(id){
+			    	data.id = id;
+			    	service.dispatch(method,data);
+			    });
 		    });
 		},
 		render() {
 			const {linkState,form,data} = this.props,
 				{getFieldProps} = form;
 			return (
-	      <Form horizontal onSubmit={this.handleSubmit}>
+	      <Form horizontal  form={this.props.form}>
 	        <FormItem label="名称：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
-	          <Input type="input" placeholder="名称" {...getFieldProps('name')} />
+	          <Input type="input" placeholder="名称" {...getFieldProps('name',{
+	              validate: [{
+		                rules: [
+		                  { required: true,message: '请输入栏目名称'},
+		                ],
+		                trigger: 'onBlur',
+		              }]
+		            })}/>
 	        </FormItem>
 	        <FormItem label="URL：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="URL" {...getFieldProps('url')} />
@@ -124,7 +149,7 @@ install("web.security.menu2",function($S){
 	          <Col span="16" offset="3">
 	          	<Input type="hidden" {...getFieldProps('id')} />
 	          	<Input type="hidden" {...getFieldProps('parentId')} />
-	            <Button type="primary" htmlType="submit">确定</Button>
+	            <Button type="primary" htmlType="submit" onClick={this.handleSubmit.bind(this)}>确定</Button>
 	          </Col>
 	        </Row>
 	      </Form>

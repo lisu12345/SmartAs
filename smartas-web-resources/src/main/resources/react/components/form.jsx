@@ -1,7 +1,7 @@
 //v0.13.4 -2016.2.16
 + function(RC) {
 
-	const {AsyncValidate,Util} = RC,
+	const {AsyncValidate,Util,AsyncValidator} = RC,
 		{hoistStatics,scrollIntoView} = Util,
 		{Component} = React;
 

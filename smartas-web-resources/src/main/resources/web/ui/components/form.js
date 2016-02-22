@@ -8,6 +8,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 +(function (RC) {
 	var AsyncValidate = RC.AsyncValidate;
 	var Util = RC.Util;
+	var AsyncValidator = RC.AsyncValidator;
 	var hoistStatics = Util.hoistStatics;
 	var scrollIntoView = Util.scrollIntoView;
 	var _React = React;
