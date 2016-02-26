@@ -356,7 +356,7 @@
         uploadList = (
           <UploadList listType={this.props.listType}
             items={this.state.fileList}
-            onRemove={this.handleManualRemove}/>
+            onRemove={this.handleManualRemove} />
         );
       }
       if (type === 'drag') {
@@ -413,7 +413,7 @@
 
   AntUpload.Dragger = React.createClass({
     render() {
-      return <AntUpload {...this.props} type="drag" style={{height: this.props.height}}/>;
+      return <AntUpload {...this.props} type="drag" style={{height: this.props.height}} />;
     }
   });
   UI.Upload = AntUpload;

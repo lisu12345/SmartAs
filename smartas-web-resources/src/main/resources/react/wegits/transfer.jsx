@@ -54,9 +54,6 @@
 
 
   const Search  = React.createClass({
-    /*constructor(props) {
-      super(props);
-    }*/
     propTypes: {
       prefixCls: PropTypes.string,
       placeholder: PropTypes.string,
@@ -84,7 +81,7 @@
       return (
         <div>
           <input placeholder={placeholder} className={`${prefixCls} ant-input`} value={ value } ref="input"
-            onChange={this.handleChange}/>
+            onChange={this.handleChange} />
           { value && value.length > 0 ?
             <a href="#" className={`${prefixCls}-action`} onClick={this.handleClear}>
               <Icon type="cross-circle" />
@@ -204,21 +201,19 @@
         [`${prefixCls}-with-footer`]: !!footerDom,
       });
 
-      const showItems = dataSource.map((item) => {
-        // apply filter
+      const showItems = dataSource.filter((item) => {
         const itemText = this.props.render(item);
         const filterResult = this.matchFilter(itemText, filter);
+        return !!filterResult;
+      }).map((item) => {
         const renderedText = this.props.render(item);
-
-        if (filterResult) {
-          return (
-            <li onClick={this.handleSelect.bind(this, item)} key={item.key} title={renderedText}>
-              <Checkbox checked={checkedKeys.some(key => key === item.key)} />
-              {renderedText}
-            </li>
-          );
-        }
-      }).filter(item => !!item);
+        return (
+          <li onClick={this.handleSelect.bind(this, item)} key={item.key} title={renderedText}>
+            <Checkbox checked={checkedKeys.some(key => key === item.key)} />
+            {renderedText}
+          </li>
+        );
+      });
 
       return (
         <div className={listCls} {...this.props}>
@@ -227,7 +222,7 @@
               prefixCls: 'ant-transfer',
               checked: checkStatus === 'all',
               checkPart: checkStatus === 'part',
-              checkable: <span className={`ant-transfer-checkbox-inner`}></span>
+              checkable: <span className={'ant-transfer-checkbox-inner'}></span>
             })}<span className={`${prefixCls}-header-selected`}><span>{(checkedKeys.length > 0 ? checkedKeys.length + '/' : '') + dataSource.length} 条</span>
             <span className={`${prefixCls}-header-title`}>{titleText}</span></span>
           </div>
@@ -305,7 +300,7 @@
     splitDataSource: function() {
       const { targetKeys, dataSource } = this.props;
 
-      let leftDataSource = Object.assign([], dataSource);
+      let leftDataSource = [...dataSource];
       let rightDataSource = [];
 
       if (targetKeys.length > 0) {
@@ -315,6 +310,7 @@
               leftDataSource.splice(index, 1);
               return true;
             }
+            return false;
           })[0]);
         });
       }
@@ -463,14 +459,14 @@
             searchPlaceholder={searchPlaceholder}
             body={body}
             footer={footer}
-            prefixCls={`${prefixCls}-list`}/>
+            prefixCls={`${prefixCls}-list`} />
           <Operation rightActive={rightActive}
             rightArrowText={operations[0]}
             moveToRight={this.moveTo.bind(this, 'right')}
             leftActive={leftActive}
             leftArrowText={operations[1]}
             moveToLeft={this.moveTo.bind(this, 'left')}
-            className={`${prefixCls}-operation`}/>
+            className={`${prefixCls}-operation`} />
           <List titleText={titles[1]}
             dataSource={rightDataSource}
             filter={rightFilter}
@@ -487,7 +483,7 @@
             searchPlaceholder={searchPlaceholder}
             body={body}
             footer={footer}
-            prefixCls={`${prefixCls}-list`}/>
+            prefixCls={`${prefixCls}-list`} />
         </div>
       );
     }

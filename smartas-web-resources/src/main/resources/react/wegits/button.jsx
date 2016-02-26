@@ -23,14 +23,17 @@
 	}
 
 	class Button extends React.Component {
-	  componentDidMount() {
-	    if (window && window.PIE) {
-	      window.PIE.attach(findDOMNode(this));
-	    }
+	  handleClick(...args) {
+	    const buttonNode = findDOMNode(this);
+	    buttonNode.className = buttonNode.className.replace(`${prefix}clicked`, '');
+	    setTimeout(() => {
+	      buttonNode.className += ` ${prefix}clicked`;
+	    }, 10);
+	    this.props.onClick(...args);
 	  }
 	  render() {
 	    const props = this.props;
-	    const {type, shape, size, onClick, className, htmlType, children, ...others} = props;
+	    const {type, shape, size, className, htmlType, children, ...others} = props;
 
 	    // large => lg
 	    // small => sm
@@ -51,7 +54,7 @@
 	    const kids = React.Children.map(children, insertSpace);
 
 	    return (
-		    <button {...others} type={htmlType || 'button'} className={classes} onClick={onClick}>
+		    <button {...others} type={htmlType || 'button'} className={classes} onClick={this.handleClick.bind(this)}>
 		      {kids}
 		    </button>
 	    );

@@ -21,9 +21,9 @@ install("web.security.menu2",function($S){
 					//如果查询不到结果，需要同步树结构？？
 					this.props.onSelect(data || {id:0});
 				}.bind(this));
-			}else{
-				this.props.onSelect({id:0});
+				return;
 			}
+			this.props.onSelect({id:0});
 		},
 		componentDidMount: function() {
 			//信息修改以后，需要同步菜单名称
@@ -74,7 +74,7 @@ install("web.security.menu2",function($S){
 		    });
 		    const treeNodes = loop(l2t(this.state.treeData));
 		    return (
-		      <Tree onSelect={this.onSelect} defaultExpandedKeys={['0','1','2']}>
+		      <Tree onSelect={this.onSelect} defaultExpandedKeys={['0','1','2']} showLine={true}>
 		        {treeNodes}
 		      </Tree>
 		    );
@@ -86,23 +86,10 @@ install("web.security.menu2",function($S){
 			return {value:value}
 		});
 	}})(React.createClass({
-		getValidateStatus(field) {
-		    const { isFieldValidating, getFieldError, getFieldValue } = this.props.form;
-
-		    if (isFieldValidating(field)) {
-		      return 'validating';
-		    } else if (!!getFieldError(field)) {
-		      return 'error';
-		    } else if (getFieldValue(field)) {
-		      return 'success';
-		    }
-		  },
-
 		handleSubmit(e) {
 		    e.preventDefault();
 		    this.props.form.validateFields((errors, values) => {
 		        if (!!errors) {
-		          console.log('Errors in form!!!');
 		          return;
 		        }
 		        var data = this.props.form.getFieldsValue(),isCreate = !data.id;

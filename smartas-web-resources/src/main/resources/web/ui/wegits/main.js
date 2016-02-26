@@ -1,6 +1,6 @@
 "use strict";
 
-//v0.12.1 - 2016.2.16
+//v0.12.5 - 2016.2.26
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
 
@@ -887,9 +887,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 })(Smart.UI, Smart.RC);
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -902,17 +902,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //export default Form;
 +(function (UI, RC) {
 	var createDOMForm = RC.createDOMForm;
-
-	function merge() {
-		var ret = {};
-		var args = [].slice.call(arguments, 0);
-		args.forEach(function (a) {
-			Object.keys(a).forEach(function (k) {
-				ret[k] = a[k];
-			});
-		});
-		return ret;
-	}
 
 	var ValueMixin = {
 		setValue: function setValue(field, e) {
@@ -928,7 +917,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var newFormData = {};
 			newFormData[field] = v;
 			this.setState({
-				formData: merge(this.state.formData, newFormData)
+				formData: _extends({}, this.state.formData, newFormData)
 			});
 		}
 	};
@@ -1015,6 +1004,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				} else if (getFieldValue(field) !== undefined) {
 					return 'success';
 				}
+
+				return '';
 			}
 		}, {
 			key: 'renderValidateWrapper',
@@ -1906,10 +1897,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	var AntBadge = (function (_React$Component2) {
 		_inherits(AntBadge, _React$Component2);
 
-		function AntBadge(props) {
+		function AntBadge() {
 			_classCallCheck(this, AntBadge);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(AntBadge).call(this, props));
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(AntBadge).apply(this, arguments));
 		}
 
 		_createClass(AntBadge, [{
@@ -2022,11 +2013,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}
 
 		_createClass(Button, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				if (window && window.PIE) {
-					window.PIE.attach(findDOMNode(this));
-				}
+			key: 'handleClick',
+			value: function handleClick() {
+				var _props;
+
+				var buttonNode = findDOMNode(this);
+				buttonNode.className = buttonNode.className.replace(prefix + 'clicked', '');
+				setTimeout(function () {
+					buttonNode.className += ' ' + prefix + 'clicked';
+				}, 10);
+				(_props = this.props).onClick.apply(_props, arguments);
 			}
 		}, {
 			key: 'render',
@@ -2037,12 +2033,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var type = props.type;
 				var shape = props.shape;
 				var size = props.size;
-				var onClick = props.onClick;
 				var className = props.className;
 				var htmlType = props.htmlType;
 				var children = props.children;
 
-				var others = _objectWithoutProperties(props, ['type', 'shape', 'size', 'onClick', 'className', 'htmlType', 'children']);
+				var others = _objectWithoutProperties(props, ['type', 'shape', 'size', 'className', 'htmlType', 'children']);
 
 				// large => lg
 				// small => sm
@@ -2060,7 +2055,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'button',
-					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: onClick }),
+					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: this.handleClick.bind(this) }),
 					kids
 				);
 			}
@@ -2099,11 +2094,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function render() {
 				var _classNames2;
 
-				var _props = this.props;
-				var size = _props.size;
-				var className = _props.className;
+				var _props2 = this.props;
+				var size = _props2.size;
+				var className = _props2.className;
 
-				var others = _objectWithoutProperties(_props, ['size', 'className']);
+				var others = _objectWithoutProperties(_props2, ['size', 'className']);
 
 				// large => lg
 				// small => sm
@@ -2323,7 +2318,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			adjustX: 1,
 			adjustY: 1
 		},
-		offset: [0, 3],
+		offset: [0, 4],
 		targetOffset: [0, 0]
 	};
 
@@ -3760,9 +3755,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             var keyPathOfSelectedItem = _this.state.keyPathOfSelectedItem;
             var containSelected = Object.keys(keyPathOfSelectedItem).some(function (key) {
               var keyPath = keyPathOfSelectedItem[key];
-              if (keyPath.indexOf(item.value) >= 0) {
-                return true;
-              }
+              return keyPath.indexOf(item.value) >= 0;
             });
             var subMenuCls = containSelected ? 'ant-dropdown-submenu-contain-selected' : '';
             return {
@@ -3872,7 +3865,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         sortOrder: '',
         sorter: null,
         radioIndex: null,
-        pagination: this.hasPagination() ? objectAssign({}, defaultPagination, this.props.pagination) : {}
+        pagination: this.hasPagination() ? objectAssign({
+          size: this.props.size
+        }, defaultPagination, this.props.pagination) : {}
       };
     },
     getDefaultProps: function getDefaultProps() {
@@ -3968,7 +3963,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       if (typeof column.sorter === 'function') {
         sorter = function sorter() {
-          var result = column.sorter.apply(this, arguments);
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var result = column.sorter.apply(this, args);
           if (sortOrder === 'ascend') {
             return result;
           } else if (sortOrder === 'descend') {
@@ -4327,9 +4326,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       // 否则进行读取分页数据
       if (data.length > pageSize || pageSize === Number.MAX_VALUE) {
         data = data.filter(function (item, i) {
-          if (i >= (current - 1) * pageSize && i < current * pageSize) {
-            return item;
-          }
+          return i >= (current - 1) * pageSize && i < current * pageSize;
         });
       }
       return data;
@@ -4398,6 +4395,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           data: data,
           columns: columns,
           className: classString,
+          expandIconColumnIndex: columns[0].key === 'selection-column' ? 1 : 0,
           expandIconAsCell: expandIconAsCell })),
         emptyText
       );
@@ -4644,12 +4642,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var size = _props2.size;
 				var disabled = _props2.disabled;
 				var className = _props2.className;
+				var allowClear = _props2.allowClear;
 
 				var sizeCls = classNames({
 					'ant-input-lg': size === 'large',
 					'ant-input-sm': size === 'small'
 				});
-				var clearIcon = this.state.value.length > 0 ? React.createElement(Icon, { type: 'cross-circle',
+				var clearIcon = allowClear && !disabled && this.state.value.length > 0 ? React.createElement(Icon, { type: 'cross-circle',
 					className: prefixCls + '-picker-clear',
 					onClick: this.clearSelection }) : null;
 				var arrowCls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-picker-arrow', true), _defineProperty(_classNames, prefixCls + '-picker-arrow-expand', this.state.popupVisible), _classNames));
@@ -4694,6 +4693,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		},
 
 		disabled: false,
+		allowClear: true,
 		onPopupVisibleChange: function onPopupVisibleChange() {}
 	};
 
@@ -5725,6 +5725,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 +(function (UI, RC) {
@@ -5799,9 +5801,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var Search = React.createClass({
     displayName: 'Search',
 
-    /*constructor(props) {
-      super(props);
-    }*/
     propTypes: {
       prefixCls: PropTypes.string,
       placeholder: PropTypes.string,
@@ -5969,24 +5968,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var listCls = classNames((_classNames2 = {}, _defineProperty(_classNames2, prefixCls, true), _defineProperty(_classNames2, prefixCls + '-with-footer', !!footerDom), _classNames2));
 
-      var showItems = dataSource.map(function (item) {
-        // apply filter
+      var showItems = dataSource.filter(function (item) {
         var itemText = _this2.props.render(item);
         var filterResult = _this2.matchFilter(itemText, filter);
+        return !!filterResult;
+      }).map(function (item) {
         var renderedText = _this2.props.render(item);
-
-        if (filterResult) {
-          return React.createElement(
-            'li',
-            { onClick: _this2.handleSelect.bind(_this2, item), key: item.key, title: renderedText },
-            React.createElement(Checkbox, { checked: checkedKeys.some(function (key) {
-                return key === item.key;
-              }) }),
-            renderedText
-          );
-        }
-      }).filter(function (item) {
-        return !!item;
+        return React.createElement(
+          'li',
+          { onClick: _this2.handleSelect.bind(_this2, item), key: item.key, title: renderedText },
+          React.createElement(Checkbox, { checked: checkedKeys.some(function (key) {
+              return key === item.key;
+            }) }),
+          renderedText
+        );
       });
 
       return React.createElement(
@@ -6104,7 +6099,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var targetKeys = _props4.targetKeys;
       var dataSource = _props4.dataSource;
 
-      var leftDataSource = Object.assign([], dataSource);
+      var leftDataSource = [].concat(_toConsumableArray(dataSource));
       var rightDataSource = [];
 
       if (targetKeys.length > 0) {
@@ -6114,6 +6109,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               leftDataSource.splice(index, 1);
               return true;
             }
+            return false;
           })[0]);
         });
       }

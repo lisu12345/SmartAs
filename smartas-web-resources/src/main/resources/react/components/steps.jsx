@@ -13,7 +13,11 @@
 	    status: React.PropTypes.string,
 	    iconPrefix: React.PropTypes.string,
 	    icon: React.PropTypes.string,
-	    maxDescriptionWidth: React.PropTypes.number,
+	    //maxDescriptionWidth: React.PropTypes.number,
+	    maxDescriptionWidth: React.PropTypes.oneOfType([
+	      React.PropTypes.number,
+	      React.PropTypes.string,
+	    ]),
 	    stepLast: React.PropTypes.bool,
 	    stepNumber: React.PropTypes.string,
 	    description: React.PropTypes.any,

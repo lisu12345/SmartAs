@@ -162,10 +162,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	var AntBadge = (function (_React$Component2) {
 		_inherits(AntBadge, _React$Component2);
 
-		function AntBadge(props) {
+		function AntBadge() {
 			_classCallCheck(this, AntBadge);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(AntBadge).call(this, props));
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(AntBadge).apply(this, arguments));
 		}
 
 		_createClass(AntBadge, [{

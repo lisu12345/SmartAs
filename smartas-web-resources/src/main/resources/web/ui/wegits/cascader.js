@@ -102,12 +102,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var size = _props2.size;
 				var disabled = _props2.disabled;
 				var className = _props2.className;
+				var allowClear = _props2.allowClear;
 
 				var sizeCls = classNames({
 					'ant-input-lg': size === 'large',
 					'ant-input-sm': size === 'small'
 				});
-				var clearIcon = this.state.value.length > 0 ? React.createElement(Icon, { type: 'cross-circle',
+				var clearIcon = allowClear && !disabled && this.state.value.length > 0 ? React.createElement(Icon, { type: 'cross-circle',
 					className: prefixCls + '-picker-clear',
 					onClick: this.clearSelection }) : null;
 				var arrowCls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-picker-arrow', true), _defineProperty(_classNames, prefixCls + '-picker-arrow-expand', this.state.popupVisible), _classNames));
@@ -152,6 +153,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		},
 
 		disabled: false,
+		allowClear: true,
 		onPopupVisibleChange: function onPopupVisibleChange() {}
 	};
 

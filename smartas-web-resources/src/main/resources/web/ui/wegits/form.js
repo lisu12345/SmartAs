@@ -1,8 +1,8 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -15,17 +15,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //export default Form;
 +(function (UI, RC) {
 	var createDOMForm = RC.createDOMForm;
-
-	function merge() {
-		var ret = {};
-		var args = [].slice.call(arguments, 0);
-		args.forEach(function (a) {
-			Object.keys(a).forEach(function (k) {
-				ret[k] = a[k];
-			});
-		});
-		return ret;
-	}
 
 	var ValueMixin = {
 		setValue: function setValue(field, e) {
@@ -41,7 +30,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var newFormData = {};
 			newFormData[field] = v;
 			this.setState({
-				formData: merge(this.state.formData, newFormData)
+				formData: _extends({}, this.state.formData, newFormData)
 			});
 		}
 	};
@@ -128,6 +117,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				} else if (getFieldValue(field) !== undefined) {
 					return 'success';
 				}
+
+				return '';
 			}
 		}, {
 			key: 'renderValidateWrapper',

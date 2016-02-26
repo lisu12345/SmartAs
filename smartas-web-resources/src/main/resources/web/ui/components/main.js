@@ -10835,6 +10835,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 +(function (RC) {
 	var AsyncValidate = RC.AsyncValidate;
 	var Util = RC.Util;
+	var AsyncValidator = RC.AsyncValidator;
 	var hoistStatics = Util.hoistStatics;
 	var scrollIntoView = Util.scrollIntoView;
 	var _React = React;
@@ -12605,7 +12606,8 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			status: React.PropTypes.string,
 			iconPrefix: React.PropTypes.string,
 			icon: React.PropTypes.string,
-			maxDescriptionWidth: React.PropTypes.number,
+			//maxDescriptionWidth: React.PropTypes.number,
+			maxDescriptionWidth: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
 			stepLast: React.PropTypes.bool,
 			stepNumber: React.PropTypes.string,
 			description: React.PropTypes.any,

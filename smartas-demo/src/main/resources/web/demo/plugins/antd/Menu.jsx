@@ -73,7 +73,7 @@ install("web.demo.plugins.antd.Switch",function($S){
 	          <Menu.Item key="1100">选项10</Menu.Item>
 	          <Menu.Item key="1110">选项11</Menu.Item>
 	          <Menu.Item key="1120">选项12</Menu.Item>
-	          <Menu.Item key="1120">选项12</Menu.Item>
+	          <Menu.Item key="1121">选项12</Menu.Item>
 	          <Menu.Item key="1190">选项9</Menu.Item>
 	          <Menu.Item key="11100">选项10</Menu.Item>
 	          <Menu.Item key="11110">选项11</Menu.Item>

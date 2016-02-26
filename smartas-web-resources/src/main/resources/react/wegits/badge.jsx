@@ -133,10 +133,7 @@
 
 
 	class AntBadge extends React.Component {
-		constructor(props) {
-			super(props);
-		}
-
+		
 		render() {
 			let {
 				count, prefixCls, overflowCount, className, style, children

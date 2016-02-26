@@ -195,7 +195,7 @@
             locale={locale.lang}
             prefixCls={prefixCls}
             onTypeChange={this.setType.bind(this)}
-            onValueChange={this.setValue.bind(this)}/>
+            onValueChange={this.setValue.bind(this)} />
           <FullCalendar
             {...props}
             Select={noop}

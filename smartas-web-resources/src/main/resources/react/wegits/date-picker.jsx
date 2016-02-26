@@ -120,7 +120,7 @@
       timePicker = (<TimePicker
         prefixCls="ant-time-picker"
         placeholder={locale.lang.timePlaceholder}
-        transitionName="slide-up"/>);
+        transitionName="slide-up" />);
     }
 
     const calendarClassName = classNames({
@@ -197,15 +197,15 @@
                   onChange={this.handleInputChange}
                   value={start && this.getFormatter().format(start)}
                   placeholder={startPlaceholder}
-                  className="ant-calendar-range-picker-input"/>
+                  className="ant-calendar-range-picker-input" />
                 <span className="ant-calendar-range-picker-separator"> ~ </span>
                 <input
                   disabled={disabled}
                   onChange={this.handleInputChange}
                   value={end && this.getFormatter().format(end)}
                   placeholder={endPlaceholder}
-                  className="ant-calendar-range-picker-input"/>
-                <span className="ant-calendar-picker-icon"/>
+                  className="ant-calendar-range-picker-input" />
+                <span className="ant-calendar-picker-icon" />
               </span>
             );
           }
@@ -329,8 +329,8 @@
                         value={value && this.getFormatter().format(value)}
                         placeholder={placeholder}
                         style={this.props.style}
-                        className={'ant-calendar-picker-input ant-input' + sizeClass}/>
-                      <span className="ant-calendar-picker-icon"/>
+                        className={'ant-calendar-picker-input ant-input' + sizeClass} />
+                      <span className="ant-calendar-picker-icon" />
                     </span>
                   );
                 }

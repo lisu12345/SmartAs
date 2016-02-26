@@ -47,11 +47,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}
 
 		_createClass(Button, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				if (window && window.PIE) {
-					window.PIE.attach(findDOMNode(this));
-				}
+			key: 'handleClick',
+			value: function handleClick() {
+				var _props;
+
+				var buttonNode = findDOMNode(this);
+				buttonNode.className = buttonNode.className.replace(prefix + 'clicked', '');
+				setTimeout(function () {
+					buttonNode.className += ' ' + prefix + 'clicked';
+				}, 10);
+				(_props = this.props).onClick.apply(_props, arguments);
 			}
 		}, {
 			key: 'render',
@@ -62,12 +67,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var type = props.type;
 				var shape = props.shape;
 				var size = props.size;
-				var onClick = props.onClick;
 				var className = props.className;
 				var htmlType = props.htmlType;
 				var children = props.children;
 
-				var others = _objectWithoutProperties(props, ['type', 'shape', 'size', 'onClick', 'className', 'htmlType', 'children']);
+				var others = _objectWithoutProperties(props, ['type', 'shape', 'size', 'className', 'htmlType', 'children']);
 
 				// large => lg
 				// small => sm
@@ -85,7 +89,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'button',
-					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: onClick }),
+					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: this.handleClick.bind(this) }),
 					kids
 				);
 			}
@@ -124,11 +128,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function render() {
 				var _classNames2;
 
-				var _props = this.props;
-				var size = _props.size;
-				var className = _props.className;
+				var _props2 = this.props;
+				var size = _props2.size;
+				var className = _props2.className;
 
-				var others = _objectWithoutProperties(_props, ['size', 'className']);
+				var others = _objectWithoutProperties(_props2, ['size', 'className']);
 
 				// large => lg
 				// small => sm

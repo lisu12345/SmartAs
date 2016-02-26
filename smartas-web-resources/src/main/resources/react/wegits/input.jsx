@@ -106,7 +106,7 @@
           className = {
             inputClassName
           }
-          ref = "input" / > ;
+          ref = "input" /> ;
         default:
           inputClassName = props.className ? props.className : inputClassName;
           return <input {...props
@@ -117,7 +117,7 @@
           className = {
             inputClassName
           }
-          ref = "input" / > ;
+          ref = "input" /> ;
       }
     }
 

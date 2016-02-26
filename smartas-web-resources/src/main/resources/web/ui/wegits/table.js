@@ -87,9 +87,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             var keyPathOfSelectedItem = _this.state.keyPathOfSelectedItem;
             var containSelected = Object.keys(keyPathOfSelectedItem).some(function (key) {
               var keyPath = keyPathOfSelectedItem[key];
-              if (keyPath.indexOf(item.value) >= 0) {
-                return true;
-              }
+              return keyPath.indexOf(item.value) >= 0;
             });
             var subMenuCls = containSelected ? 'ant-dropdown-submenu-contain-selected' : '';
             return {
@@ -199,7 +197,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         sortOrder: '',
         sorter: null,
         radioIndex: null,
-        pagination: this.hasPagination() ? objectAssign({}, defaultPagination, this.props.pagination) : {}
+        pagination: this.hasPagination() ? objectAssign({
+          size: this.props.size
+        }, defaultPagination, this.props.pagination) : {}
       };
     },
     getDefaultProps: function getDefaultProps() {
@@ -295,7 +295,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       if (typeof column.sorter === 'function') {
         sorter = function sorter() {
-          var result = column.sorter.apply(this, arguments);
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var result = column.sorter.apply(this, args);
           if (sortOrder === 'ascend') {
             return result;
           } else if (sortOrder === 'descend') {
@@ -654,9 +658,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       // 否则进行读取分页数据
       if (data.length > pageSize || pageSize === Number.MAX_VALUE) {
         data = data.filter(function (item, i) {
-          if (i >= (current - 1) * pageSize && i < current * pageSize) {
-            return item;
-          }
+          return i >= (current - 1) * pageSize && i < current * pageSize;
         });
       }
       return data;
@@ -725,6 +727,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           data: data,
           columns: columns,
           className: classString,
+          expandIconColumnIndex: columns[0].key === 'selection-column' ? 1 : 0,
           expandIconAsCell: expandIconAsCell })),
         emptyText
       );
