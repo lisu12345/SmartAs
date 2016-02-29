@@ -382,7 +382,7 @@
       } else {
         pagination.current = pagination.current || 1;
       }
-      pagination.onChange(pagination.current);
+      pagination.onChange(pagination.current,pagination.pageSize);
 
       const newState = {
         selectionDirty: false,

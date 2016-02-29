@@ -56,7 +56,7 @@ install("web.security.role",function($S){
 	// 根组件
  	this.ready = function(connect){
 
-		var UI = Smart.UI,
+		var UI = Smart.ExtUI,
 			Panel = UI.Panel,
 			IGrid = UI.IGrid,
 			Grid = UI.Grid,

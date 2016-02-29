@@ -1,32 +1,45 @@
 /*[[
- <script src="web/security/user/index.js"></script>
+  
 ]]*/
 install("web.security.user",function($S){
 	var pkg = this,dataSource = pkg.dataSource,eventBus = this.eventBus;
+	
+	const {UI,Service} = Smart,
+		{Grid, Icon } = UI;
+
+	const service = Service.New("security/user");
+	
+	const columns = [{
+		title: '账户',
+		dataIndex: 'acount',
+		render(text) {
+			return <a href="#">{text}</a>;
+		}
+	}, {
+		title: 'Emai',
+		dataIndex: 'email'
+	}, {
+		title: 'First name',
+		dataIndex: 'firstname'
+	},{
+		title: 'Last name',
+		dataIndex: 'lastname'
+	},{
+		title: 'state',
+		dataIndex: '状态',
+		render(value) {
+			return value == 1 ? '有效':'锁定';
+		}
+	}];
+	
+	const App = React.createClass({
+ 		render: function() {
+			return <Grid rowKey='id' columns={columns} service={service} />
+		}
+	});
+	
+	
  	this.ready = function(c){
-		var UI = Smart.UI,
-			Panel = UI.Panel,
-			IGrid = UI.IGrid,
-			Grid = UI.Grid,
-			Column = UI.Column;
-		var Node = React.createClass({
-			render: function() {
-				return <div>
-						<Panel>
-							<Panel.Header title="用户列表"></Panel.Header>
-							<UI.Storage model="security/user">
-						 		<IGrid height="256">
-									<IGrid.Column field="acount" width="100">账户</IGrid.Column>
-									<IGrid.Column field="email" width="100">Emai</IGrid.Column>
-									<IGrid.Column field="firstname" width="200">First name</IGrid.Column>
-									<IGrid.Column field="lastname" width="200">Last name</IGrid.Column>
-									<IGrid.Column field="state" width="50" render={function(value){return value == 1 ? '有效':'锁定'}}>状态</IGrid.Column>
-						 		</IGrid>
-					 		</UI.Storage>
-						</Panel>
-					</div>
-			}
-		});
-		return (Node);
+		return (App);
 	};
 });

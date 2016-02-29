@@ -11654,7 +11654,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}, {
 			key: '_changeSize',
 			value: function _changeSize(value) {
-				this.props.changeSize(Number(value));
+				this.props.changeSize(Number(value), this.state.pageSize);
 			}
 		}, {
 			key: '_handleChange',

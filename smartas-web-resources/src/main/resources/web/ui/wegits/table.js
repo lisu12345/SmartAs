@@ -426,7 +426,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       } else {
         pagination.current = pagination.current || 1;
       }
-      pagination.onChange(pagination.current);
+      pagination.onChange(pagination.current, pagination.pageSize);
 
       var newState = {
         selectionDirty: false,
