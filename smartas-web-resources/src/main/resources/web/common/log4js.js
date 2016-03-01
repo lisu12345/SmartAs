@@ -1,9 +1,38 @@
 +function() {
-	var slice = Array.prototype.slice,format = String.prototype.format;
+	var slice = Array.prototype.slice;
+	
+	Log.DEBUG = 1;
+	Log.INFO = 2;
+	Log.WARN = 3;
+	Log.ERROR = 4;
+	Log.FATAL = 5;
+	Log.NONE = 6;
 
-	var consoleLogger = function(msg, level, obj) {
-		if (window.console) {
-			window.console.log(level + ": " + msg);
+	var levels = {
+		'debug' : Log.DEBUG,
+		'info' : Log.INFO,
+		'warn' : Log.WARN,
+		'error' : Log.ERROR,
+		'fatal' : Log.FATAL,
+		'none' : Log.NONE
+	}
+	
+	var method = ['','debug','info','warn','error','debug','']
+
+	function format() {
+		var args = arguments, length = args.length;
+		return this.replace(new RegExp("{([0-9]+)}", "g"),
+			function(str, index) {
+				var value = args[index];
+				return value !== undefined ? value : "";
+			});
+	}
+	
+	var consoleLogger = function(msg, level, levelStr, obj) {
+		var console = window.console;
+		var fn = method[level];
+		if(fn) {
+			console[fn](levelStr + ": " + msg);
 		}
 	}
 
@@ -36,22 +65,6 @@
 		level && this.setLevel(level);
 		prefix && this.setPrefix(prefix);
 	}
-
-	Log.DEBUG = 1;
-	Log.INFO = 2;
-	Log.WARN = 3;
-	Log.ERROR = 4;
-	Log.FATAL = 5;
-	Log.NONE = 6;
-
-	var levels = {
-		'debug' : Log.DEBUG,
-		'info' : Log.INFO,
-		'warn' : Log.WARN,
-		'error' : Log.ERROR,
-		'fatal' : Log.FATAL,
-		'none' : Log.NONE
-	}
 	
 	var toString = function(obj){
 		if(typeof obj !== 'string'){
@@ -66,39 +79,40 @@
 	Log.prototype.debug = function(s) {
 		if (this.getLevel() <= Log.DEBUG) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), "DEBUG", this);
+			this._log(format.apply(toString(s), args), Log.DEBUG, "DEBUG", this);
 		}
 	}
 	Log.prototype.info = function(s) {
 		if (this.getLevel() <= Log.INFO) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), "INFO ", this);
+			this._log(format.apply(toString(s), args), Log.INFO, "INFO ", this);
 		}
 	}
 	Log.prototype.warn = function(s) {
 		if (this.getLevel() <= Log.WARN) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), "WARN ", this);
+			this._log(format.apply(toString(s), args), Log.WARN,"WARN ", this);
 		}
 	}
 	Log.prototype.error = function(s) {
 		if (this.getLevel() <= Log.ERROR) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), "ERROR", this);
+			this._log(format.apply(toString(s), args), Log.ERROR,"ERROR", this);
 		}
 	}
 	Log.prototype.fatal = function(s) {
 		if (this.getLevel() <= Log.FATAL) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), "FATAL", this);
+			this._log(format.apply(toString(s), args), Log.FATAL,"FATAL", this);
 		}
 	}
 
-	Log.prototype._log = function(msg, level, obj) {
+	Log.prototype._log = function(msg, level, levelStr,obj,e) {
+		var log = this.getLogger()
 		if (this.getPrefix()) {
-			this.getLogger()(this.getPrefix() + " - " + msg, level, obj);
+			log(this.getPrefix() + " - " + msg, level, levelStr,obj,e);
 		} else {
-			this.getLogger()(msg, level, obj);
+			log(msg, level,levelStr, obj,e);
 		}
 	}
 
