@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.smartas.tools;
+package org.smartas.devops.generator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.log4j.lf5.util.StreamUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -50,7 +50,7 @@ public class Boot {
 	public static void main(String[] args) throws Exception {
 		Scanner scanner = new Scanner(System.in);
 		try {
-			cfg.setDirectoryForTemplateLoading(new File(PRO_ROOT, "src/test/resources/ftl"));
+			cfg.setDirectoryForTemplateLoading(new File(PRO_ROOT, "src/main/resources/ftl"));
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

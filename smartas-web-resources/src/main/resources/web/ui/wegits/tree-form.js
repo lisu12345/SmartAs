@@ -5,6 +5,7 @@
 	var TreeNode = UI.TreeNode;
 	var ButtonGroup = UI.ButtonGroup;
 	var Button = UI.Button;
+	var Popconfirm = UI.Popconfirm;
 	var _React = React;
 	var PropTypes = _React.PropTypes;
 
@@ -32,11 +33,18 @@
 			var _props = this.props;
 			var service = _props.service;
 			var idKey = _props.idKey;
+			var parentKey = _props.parentKey;
+			var treeData = this.state.treeData;
 
 			if (key && key > 0) {
 				service.get(key, (function (data) {
 					//如果查询不到结果，需要同步树结构？？
-					this.props.onSelect(data || { id: -9999 });
+					if (data) {
+						var index = _.findIndex(treeData, { id: data[parentKey] });
+						this.props.onSelect(data, treeData[index]);
+						return;
+					}
+					this.props.onSelect({ id: -9999 });
 				}).bind(this));
 				return;
 			}
@@ -78,9 +86,9 @@
 			//获取导航树
 			service.list((function (data) {
 				//提取需要的属性
-				data = _.map(data, function (a) {
-					return _.pick(a, [idKey, parentKey, nameKey, snKey]);
-				});
+				//data = _.map(data,function(a){
+				//	return _.pick(a,[idKey,parentKey,nameKey,snKey]);
+				//})
 				//添加虚拟根节点
 				data = _.concat(data, [root]);
 				this.setState({
@@ -151,21 +159,23 @@
 			};
 		},
 		getInitialState: function getInitialState() {
-			return { id: -9999 };
+			return { data: { id: -9999 } };
 		},
-		onSelect: function onSelect(data) {
-			this.setState(data);
+		onSelect: function onSelect(data, parent) {
+			this.setState({ data: data, parent: parent });
 		},
 		onCreate: function onCreate() {
-			this.setState(this.props.onCreate(this.state.id));
+			var data = this.state.data;
+
+			this.setState({ data: this.props.onCreate(), parent: data });
 		},
 		onDelete: function onDelete() {
-			var id = this.state.id;
+			var id = this.state.data.id;
 			var service = this.props.service;
 
 			service.remove(id, (function (data) {
 				service.dispatch('remove', id);
-				this.setState({ id: -9999 });
+				this.setState({ data: { id: -9999 } });
 			}).bind(this));
 		},
 		handleSubmit: function handleSubmit(e) {
@@ -198,8 +208,10 @@
 			var root = _props4.root;
 			var orderBy = _props4.orderBy;
 			var expandedKeys = _props4.expandedKeys;
+			var _state = this.state;
+			var data = _state.data;
+			var parent = _state.parent;
 
-			var data = this.state;
 			return React.createElement(
 				'div',
 				{ className: 'full-height' },
@@ -221,9 +233,13 @@
 									'新增'
 								),
 								React.createElement(
-									Button,
-									{ onClick: this.onDelete, disabled: data[idKey] < 0 },
-									'删除'
+									Popconfirm,
+									{ title: '确定要删除这个任务吗？', onConfirm: this.onDelete },
+									React.createElement(
+										Button,
+										{ disabled: data[idKey] < 0 },
+										'删除'
+									)
 								)
 							),
 							React.createElement(Nav, { idKey: idKey,
@@ -246,7 +262,7 @@
 							React.createElement(
 								'div',
 								{ className: 'panel-body full-height' },
-								data.id >= 0 ? React.createElement(Form, { ref: 'Form', data: this.state, handleSubmit: this.handleSubmit }) : ''
+								data.id >= 0 ? React.createElement(Form, { ref: 'Form', data: data, parent: parent, handleSubmit: this.handleSubmit }) : ''
 							)
 						)
 					)

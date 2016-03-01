@@ -45,11 +45,11 @@
 		(#{code,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
 		#{url,jdbcType=VARCHAR},
-		#{parentId,jdbcType=VARCHAR},
+		#{parentId,jdbcType=NUMERIC},
 		#{sn,jdbcType=VARCHAR},
 		#{className,jdbcType=VARCHAR},
 		#{iconName,jdbcType=VARCHAR},
-		#{publish,jdbcType=VARCHAR})
+		#{publish,jdbcType=CHAR})
 		<selectKey resultType="long" keyProperty="id" order="AFTER">
 			SELECT LAST_INSERT_ID() AS ID
 		</selectKey>
@@ -60,11 +60,11 @@
 		code = #{code,jdbcType=VARCHAR},
 		name = #{name,jdbcType=VARCHAR},
 		url = #{url,jdbcType=VARCHAR},
-		parentId = #{parentId,jdbcType=VARCHAR},
-		sn = #{sn,jdbcType=VARCHAR},
+		parentId = #{parentId,jdbcType=NUMERIC},
+		sn = #{sn,jdbcType=NUMERIC},
 		className = #{className,jdbcType=VARCHAR},
 		iconName = #{iconName,jdbcType=VARCHAR},
-		publish = #{publish,jdbcType=VARCHAR}
+		publish = #{publish,jdbcType=CHAR}
 		WHERE ID = #{id,jdbcType=NUMERIC}
 	</update>
 

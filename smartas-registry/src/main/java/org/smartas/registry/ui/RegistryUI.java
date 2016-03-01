@@ -1,13 +1,13 @@
 /**
  * 
  */
-package org.smartas.demo.workflow.ui;
+package org.smartas.registry.ui;
 
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
-import org.smartas.core.ui.BaseFlowUI;
-import org.smartas.demo.workflow.DemoWorkflow;
-import org.smartas.demo.workflow.service.DemoWorkflowService;
+import org.smartas.core.ui.BaseUI;
+import org.smartas.registry.Registry;
+import org.smartas.registry.service.RegistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController()
-@RequestMapping("/demo/workflow")
-@Resource(code = 4001, model = "Smart", desc = "DemoWorkflow UI")
-public class DemoWorkflowUI extends BaseFlowUI<DemoWorkflow> {
+@RequestMapping("/registry")
+@Resource(code = 1201, model = "Smart", desc = "Registry UI")
+public class RegistryUI extends BaseUI<Registry> {
 	@Autowired
-	private DemoWorkflowService service;
+	private RegistryService service;
 
-	protected DemoWorkflowService getService() {
+	protected RegistryService getService() {
 		return service;
 	}
-
+	
 	////
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@Operation(code = Operation.READ, desc = Operation.READ_DESC)

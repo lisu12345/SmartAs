@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.smartas.tools;
+package org.smartas.devops.generator;
 
 /**
  * @author chenb

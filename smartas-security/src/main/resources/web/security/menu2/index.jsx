@@ -9,13 +9,14 @@ install("web.security.menu2",function($S){
 	const service = Service.New("security/menu");
 
 	const MenuForm  = Form.create({mapPropsToFields:function(props){
-		return _.mapValues(props.data,function(value){
+		const {data,parent} = props;
+		return _.mapValues(_.extend({},data,{parentId:parent.id}),function(value){
 			return {value:value}
 		});
 	}})(React.createClass({
 		
 		render() {
-			const {linkState,form,data} = this.props,
+			const {linkState,form} = this.props,
 				{getFieldProps} = form;
 			return (
 	      <Form horizontal  form={this.props.form}>
@@ -61,7 +62,7 @@ install("web.security.menu2",function($S){
 
 
 	const App = React.createClass({
-		onCreate:function(parentId){
+		onCreate:function(){
 			return {
 				name : '',
 				id : '',
@@ -70,7 +71,6 @@ install("web.security.menu2",function($S){
 				iconName:'',
 				className:'',
 				url:'',
-				parentId : parentId
 			};
 		},
  		render: function() {

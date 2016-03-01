@@ -86,6 +86,7 @@ const scripts = {
 			'src/main/resources/web/ui/wegits/carousel.js',
 			'src/main/resources/web/ui/wegits/transfer.js',
 			'src/main/resources/web/ui/wegits/datagrid.jsx',
+			'src/main/resources/web/ui/wegits/tree-form.jsx',
 		]
 	},
 	core: [

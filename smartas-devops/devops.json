@@ -1,0 +1,62 @@
+{
+	"smartas-security" : {
+		"Resource" : {
+			"code" : 10,
+			"ui" : {
+				"UserUI" : 1000,
+				"MenuUI" : 1001,
+				"RoleUI" : 1002,
+				"PermissionUI" : 1003,
+				"LoginUI" : 1099
+			}
+		}
+	},
+	"smartas-env" : {
+		"Resource" : {
+			"code" : 11,
+			"ui" : {
+
+			}
+		}
+	},
+	"smartas-registry" : {
+		"Resource" : {
+			"code" : 12,
+			"ui" : {
+				"RegistryUI" : 1201
+			}
+		}
+	},
+	"smartas-web-support" : {
+		"Resource" : {
+			"code" : 13,
+			"ui" : {
+
+			}
+		}
+	},
+	"smartas-workflow" : {
+		"Resource" : {
+			"code" : 18,
+			"ui" : {
+
+			}
+		}
+	},
+	"smartas-devops" : {
+		"Resource" : {
+			"code" : 19,
+			"ui" : {
+				"GeneratorUI" : 1901
+			}
+		}
+	},
+	"smartas.demo" : {
+		"Resource" : {
+			"code" : 40,
+			"ui" : {
+				"DemoWorkflowUI" : 4001
+			}
+		}
+	}
+}

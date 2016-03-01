@@ -27,6 +27,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.smart.as</groupId>
+			<artifactId>smartas-registry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.smart.as</groupId>
+			<artifactId>smartas-devops</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.smart.as</groupId>
 			<artifactId>smartas-web-resources</artifactId>
 		</dependency>
 		<dependency>

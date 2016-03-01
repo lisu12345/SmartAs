@@ -28,12 +28,18 @@
 			});
 	}
 	
-	var consoleLogger = function(msg, level, levelStr, obj) {
+	var consoleLogger = function(msg, level, levelStr, obj, e) {
 		var console = window.console;
-		var fn = method[level];
-		if(fn) {
-			console[fn](levelStr + ": " + msg);
+		if(console){
+			var fn = method[level];
+			if(fn) {
+				console[fn](levelStr + ": " + msg);
+			}
+			if(e instanceof Error){
+				console.info('ERROR' + ": " + e.stack) 
+			}
 		}
+		
 	}
 
 	function Log(level, prefix) {
@@ -79,31 +85,31 @@
 	Log.prototype.debug = function(s) {
 		if (this.getLevel() <= Log.DEBUG) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), Log.DEBUG, "DEBUG", this);
+			this._log(format.apply(toString(s), args), Log.DEBUG, "DEBUG", this,args[args.length - 1]);
 		}
 	}
 	Log.prototype.info = function(s) {
 		if (this.getLevel() <= Log.INFO) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), Log.INFO, "INFO ", this);
+			this._log(format.apply(toString(s), args), Log.INFO, "INFO ", this,args[args.length - 1]);
 		}
 	}
 	Log.prototype.warn = function(s) {
 		if (this.getLevel() <= Log.WARN) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), Log.WARN,"WARN ", this);
+			this._log(format.apply(toString(s), args), Log.WARN,"WARN ", this,args[args.length - 1]);
 		}
 	}
 	Log.prototype.error = function(s) {
 		if (this.getLevel() <= Log.ERROR) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), Log.ERROR,"ERROR", this);
+			this._log(format.apply(toString(s), args), Log.ERROR,"ERROR", this,args[args.length - 1]);
 		}
 	}
 	Log.prototype.fatal = function(s) {
 		if (this.getLevel() <= Log.FATAL) {
 			var args = slice.call(arguments, 1);
-			this._log(format.apply(toString(s), args), Log.FATAL,"FATAL", this);
+			this._log(format.apply(toString(s), args), Log.FATAL,"FATAL", this,args[args.length - 1]);
 		}
 	}
 

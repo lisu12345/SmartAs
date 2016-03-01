@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
 @RequestMapping("/security")
-@Resource(code = 9000, model = "Smart", desc = "Login UI")
+@Resource(code = 1099, model = "Smart", desc = "Login UI")
 public class LoginUI {
 
 	@Autowired

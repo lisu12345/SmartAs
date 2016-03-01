@@ -1,7 +1,6 @@
 + function(UI, RC) {
-	const {Tree,TreeNode,ButtonGroup,Button} = UI,
+	const {Tree,TreeNode,ButtonGroup,Button,Popconfirm} = UI,
 		{PropTypes} = React;
-		
 		
 	const Nav = React.createClass({
 		propTypes: {
@@ -22,11 +21,17 @@
 		},
 		onSelect(selectedKeys,e) {
 			var key = selectedKeys[0];
-			const {service,idKey} = this.props;
+			const {service,idKey,parentKey} = this.props,
+				{treeData} = this.state;
 			if(key && key > 0){
 				service.get(key,function(data) {
 					//如果查询不到结果，需要同步树结构？？
-					this.props.onSelect(data || {id:-9999});
+					if(data){
+						let index = _.findIndex(treeData,{id : data[parentKey]});
+						this.props.onSelect(data,treeData[index]);
+						return
+					}
+					this.props.onSelect({id:-9999});
 				}.bind(this));
 				return;
 			}
@@ -58,9 +63,9 @@
 			//获取导航树
 			service.list(function(data){
 				//提取需要的属性
-				data = _.map(data,function(a){
-					return _.pick(a,[idKey,parentKey,nameKey,snKey]);
-				})
+				//data = _.map(data,function(a){
+				//	return _.pick(a,[idKey,parentKey,nameKey,snKey]);
+				//})
 				//添加虚拟根节点
 				data = _.concat(data,[root]);
 				this.setState({
@@ -117,20 +122,21 @@
 			}
 		},
 		getInitialState: function() {
-   			 return {id : -9999};
+   			 return {data:{id : -9999}};
   		},
-		onSelect:function(data){
-			this.setState(data);
+		onSelect:function(data,parent){
+			this.setState({data,parent});
 		},
 		onCreate:function(){
-			this.setState(this.props.onCreate(this.state.id));
+			const {data} = this.state;
+			this.setState({data:this.props.onCreate(),parent:data});
 		},
 		onDelete:function(){
-			const {id} = this.state,
+			const {id} = this.state.data,
 				{service} = this.props;
 			service.remove(id,function(data){
 				service.dispatch('remove',id);
-				this.setState({id:-9999})
+				this.setState({data:{id : -9999}})
 			}.bind(this));
 		},
 		handleSubmit(e) {
@@ -151,7 +157,7 @@
 		},
  		render: function() {
 			const {Form,service,idKey,parentKey,nameKey,snKey,root,orderBy,expandedKeys} = this.props;
- 			var data = this.state;
+ 			var {data,parent} = this.state;
 			return(
 			<div className="full-height">
 				<div className="row full-height">
@@ -159,7 +165,9 @@
 						<div className="panel panel-default full-height" style={{overflow:'auto'}}>
 							<ButtonGroup size='small' style={{padding:5}} >
 							  <Button onClick={this.onCreate} disabled={data[idKey] < 0}>新增</Button>
-							  <Button onClick={this.onDelete} disabled={data[idKey] < 0}>删除</Button>
+							  <Popconfirm title="确定要删除这个任务吗？" onConfirm={this.onDelete}>
+							  	<Button disabled={data[idKey] < 0}>删除</Button>
+							  </Popconfirm>
 							</ButtonGroup>
 							<Nav idKey={idKey} 
 								root={root} 
@@ -175,7 +183,7 @@
 					<div className="col-md-8 full-height">
 						<div className="panel panel-default full-height">
 							<div className="panel-body full-height">
-							{(data.id >= 0)?<Form ref='Form' data={this.state} handleSubmit={this.handleSubmit} />:''}								
+							{(data.id >= 0)?<Form ref='Form' data={data} parent={parent} handleSubmit={this.handleSubmit} />:''}								
 							</div>
 						</div>
 					</div>

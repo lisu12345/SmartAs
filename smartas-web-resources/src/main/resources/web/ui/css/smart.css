@@ -11219,6 +11219,9 @@ ul li.ant-transfer-list-highlight-enter {
   border-color: #ccc;
   border-width: 0 1px 1px 0;
   border-style: dotted;
+  height: 25px;
+  line-height: 25px;
+  font-size: 12px;
   margin: 0;
   padding: 0;
 }
@@ -11228,15 +11231,12 @@ ul li.ant-transfer-list-highlight-enter {
 .ant-table-grid td:last-child {
   border-right: 0;
 }
-.ant-table-grid span {
+.ant-table-grid td > span {
   margin: 0;
   padding: 0 4px;
   white-space: nowrap;
   word-wrap: normal;
   overflow: hidden;
-  height: 25px;
-  line-height: 25px;
-  font-size: 12px;
 }
 .ant-table-grid .ant-table-row:last-child td {
   border-bottom: 0;
