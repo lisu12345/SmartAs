@@ -47,6 +47,9 @@
 		border-color: #ccc;
 		border-width: 0 1px 1px 0;
 		border-style: dotted;
+		height: 25px;
+	    line-height: 25px;
+	    font-size: 12px;
 		margin: 0;
 		padding: 0;
 		
@@ -59,19 +62,17 @@
     	&:last-child {
        		border-right: 0;
     	}
+    	
+    	>span {
+	        margin: 0;
+	    	padding: 0 4px;
+		    white-space: nowrap;
+		    word-wrap: normal;
+		    overflow: hidden;
+		   
+	    }
     }
     
-    
-    span {
-        margin: 0;
-    	padding: 0 4px;
-	    white-space: nowrap;
-	    word-wrap: normal;
-	    overflow: hidden;
-	    height: 25px;
-	    line-height: 25px;
-	    font-size: 12px;
-    }
     
     .@{css-prefix}table-row:last-child td {
       border-bottom: 0;
