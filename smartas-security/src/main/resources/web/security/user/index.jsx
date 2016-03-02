@@ -1,6 +1,7 @@
 /*[[
   
 ]]*/
+//# sourceURL=web/security/user/index.js
 install("web.security.user",function($S){
 	var pkg = this,dataSource = pkg.dataSource,eventBus = this.eventBus;
 	
@@ -34,7 +35,7 @@ install("web.security.user",function($S){
 	
 	const App = React.createClass({
  		render: function() {
-			return <Grid rowKey='id' columns={columns} service={service} />
+			return <Grid rowKey='id' columns={columns} service={service} title='用户列表' />
 		}
 	});
 	

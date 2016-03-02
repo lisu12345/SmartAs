@@ -20,6 +20,30 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	};
 
+	var Header = React.createClass({
+		displayName: 'Header',
+
+		propTypes: {
+			title: React.PropTypes.string
+		},
+		render: function render() {
+			var title = this.props.title;
+
+			if (title) {
+				return React.createElement(
+					'div',
+					{ className: 'grid-head' },
+					React.createElement(
+						'div',
+						{ className: 'grid-title' },
+						title
+					)
+				);
+			}
+			return null;
+		}
+	});
+
 	var Grid = React.createClass({
 		displayName: 'Grid',
 
@@ -83,16 +107,22 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var _rowKey = _props.rowKey;
 			var rownumbers = _props.rownumbers;
 			var columns = _props.columns;
+			var title = _props.title;
 
-			var props = _objectWithoutProperties(_props, ['service', 'rowKey', 'rownumbers', 'columns']);
+			var props = _objectWithoutProperties(_props, ['service', 'rowKey', 'rownumbers', 'columns', 'title']);
 
-			return React.createElement(Table, _extends({ size: 'grid' }, props, {
-				rowKey: function rowKey(record) {
-					return record[_rowKey];
-				},
-				columns: rownumbers ? _.concat(ROWNUMBERS, columns) : columns,
-				dataSource: data,
-				pagination: pagination }));
+			return React.createElement(
+				'div',
+				{ className: 'ant-grid' },
+				React.createElement(Header, { title: title }),
+				React.createElement(Table, _extends({ size: 'grid' }, props, {
+					rowKey: function rowKey(record) {
+						return record[_rowKey];
+					},
+					columns: rownumbers ? _.concat(ROWNUMBERS, columns) : columns,
+					dataSource: data,
+					pagination: pagination }))
+			);
 		}
 	});
 

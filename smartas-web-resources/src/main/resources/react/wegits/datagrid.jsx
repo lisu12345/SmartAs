@@ -9,6 +9,24 @@
 			return <span>{index + 1}</span>;
 		}	
 	};
+
+	const Header = React.createClass({
+		propTypes: {
+			title : React.PropTypes.string,
+		},
+		render: function() {
+			const {title} = this.props;
+			if(title){
+				return (<div className="grid-head">
+					<div className="grid-title">
+						{title}
+					</div>
+				</div>);
+			}
+			return null
+		}
+	});
+
 	
 	const Grid = React.createClass({
 		propTypes: {
@@ -56,14 +74,18 @@
 			service.listPage(1,10);
 		},
  		render: function() {
-			const {data,pagination} = this.state,{service,rowKey,rownumbers,columns,...props} = this.props;
+			const {data,pagination} = this.state,{service,rowKey,rownumbers,columns,title,...props} = this.props;
 			
-			
-			return (<Table size='grid' {...props} 
-				rowKey={function(record){return record[rowKey]}}
-				columns={rownumbers ? _.concat(ROWNUMBERS,columns):columns}
-				dataSource={data} 
-				pagination={pagination} />);
+			return (
+				<div className="ant-grid">
+					<Header title={title} />
+					<Table size='grid' {...props} 
+					rowKey={function(record){return record[rowKey]}}
+					columns={rownumbers ? _.concat(ROWNUMBERS,columns):columns}
+					dataSource={data} 
+					pagination={pagination} />
+				</div>
+			);
 		}
 	});
 	

@@ -1,6 +1,7 @@
 /*[[
  
 ]]*/
+//# sourceURL=web/security/menu2/index.jsx
 install("web.security.menu2",function($S){
 	var logger = Log.getLogger('web.security.menu2');
 	const {UI,Service} = Smart,
