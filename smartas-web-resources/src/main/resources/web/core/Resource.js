@@ -6,7 +6,16 @@
 	function $S(selector) {
 		return $(selector, context);
 	}
-
+	
+	
+	$.ajaxSetup({
+		cache : false,
+	});
+	
+	//context.ajaxError(function(event,request, settings){
+	     //$(this).append("<li>出错页面:" + settings.url + "</li>");
+		 //alert("出错页面:" + settings.url);
+	//});
 	$.fn.include = function(url, params, callback) {
 		// .处理url中?参数
 		var index = url.indexOf('?'), self = this;
@@ -25,7 +34,11 @@
 		}
 
 		logger.debug("request url '{0}'", url);
-		Resource.ajax({
+		return Resource.ajax({
+			beforeSend: function(xhr) {
+			    xhr.setRequestHeader("X-Requested-URL", url);
+			},
+			//cache : false,
 			type : 'get',
 			url : url,
 			dataType : 'html',
@@ -43,16 +56,18 @@
 					html.push('</script>');
 					data = html.join("");
 				}
-				// 2.加载资源
-				var page = $(data);
-				logger.info("apply html segment to dom ");
-				self.html(page);
-				// .3初始化
-				self.trigger('changed.dom');
+				try{
+					// 2.加载资源
+					var page = $(data);
+					logger.info("apply html segment to dom ");
+					self.html(page);
+					// .3初始化
+					self.trigger('changed.dom');
+				}catch(e){
+					logger.error("apply html {0}",e);
+				}
+				
 			},
-			error : function() {
-
-			}
 		});
 	};
 
@@ -75,7 +90,10 @@
 				ReactDOM.render(React.createElement(ReactRedux.Provider, {
 					store : store
 				}, React.createElement(node, {
-					qs : Resource.getQs()
+					qs : Resource.getQs(),
+					link : function(){
+						
+					}
 				})), context[0]);
 			}
 			resources[namespace] = pkg;
@@ -107,6 +125,11 @@
 			var complete = options.complete;
 			options.complete = function(request, code) {
 				try {
+					var status = request.getResponseHeader("X-Session-Status");
+			        if(status == "timeout"){ 
+			        	options.complete = complete;
+			        	lifecycle.fire('timeout',options);
+			        } 
 					complete && complete(request, code);
 				} finally {
 					lifecycle.fire('after');
@@ -137,6 +160,12 @@
 			},
 			after : function(fn) {
 				lifecycle.on('after', fn);
+			},
+			on : function(event,fn){
+				lifecycle.on(event, fn);
+			},
+			fire : function(event,payload){
+				lifecycle.fire(event,payload);
 			},
 			getQs : function(reqs) {
 				if (reqs) {
@@ -179,11 +208,11 @@
 	});
 
 	$(window).hashchange(function(e) {
-		var hash = location.hash;
+		var hash = location.hash,xhr;
 		Resource.hash = hash;
 		qs = Qs.parse(hash.substr(hash.indexOf('?') + 1));
 		// TODO：处理请求参数
-		context.include(hash.substr(2), function() {
+		xhr = context.include(hash.substr(2), function() {
 			// 卸载已经加载的资源
 			ReactDOM.unmountComponentAtNode(context[0]);
 			Resource.uninstall();

@@ -21,6 +21,9 @@ label {
 }
 
 // Input styles
+.@{css-prefix}input-wrapper {
+  display: block;
+}
 .@{css-prefix}input {
   .input;
 }
@@ -165,14 +168,13 @@ form {
     margin-right: 8px;
   }
 
-  .@{calendar-prefix-cls}-picker,
   .@{select-prefix-cls} {
     width: 100%;
   }
 }
 
 // Input combined with select
-.@{css-prefix}input-group {
+.@{css-prefix}input-group-wrap {
   .@{select-prefix-cls}-selection {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
@@ -264,6 +266,11 @@ form {
 
   .has-feedback {
     display: inline-block;
+  }
+
+  // Fix https://github.com/ant-design/ant-design/issues/1040
+  .@{css-prefix}form-explain {
+    position: absolute;
   }
 }
 

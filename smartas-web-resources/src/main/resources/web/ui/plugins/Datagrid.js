@@ -1,7 +1,7 @@
 'use strict';
 
 +(function (Namespace, AT) {
-	var NS = Namespace.register("Smart.UI"),
+	var NS = Namespace.register("Smart.ExtUI"),
 	    request = Smart.Resource.ajax;
 
 	var PanelTools = React.createClass({

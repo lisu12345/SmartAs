@@ -100,6 +100,14 @@
 	height: 31px;
 }
 
+.btn-separator {
+    float: left;
+    height: 24px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #fff;
+    margin: 2px 1px;
+}
+
 .smart .datagrid-pager {
 	display: block;
 	margin: 0;

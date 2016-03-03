@@ -4,10 +4,10 @@
 		var logger = Log.getLogger('web.security.role');
 		var eventBus = this.eventBus, request = Smart.Resource.ajax,pkg = this,treeObj = null;
 		
-		this.service = Smart.Service.New("security/role");
+		const service = this.service = Smart.Service.New("security/role");
 		
 		this.del = function(id) {
-			this.service.remove(id);
+			service.remove(id);
 		};
 		this.roleSetting = function(id,name) {
 			$S("#myTabs li:last").show().children('a:last').tab('show');

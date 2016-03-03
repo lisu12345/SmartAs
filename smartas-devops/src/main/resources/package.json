@@ -1,0 +1,42 @@
+[
+	{
+		"name": "smartas-demo",
+		"packages": [
+			"org.smartas.demo.workflow"
+		]
+	},
+
+	{
+		"name": "smartas-env",
+		"packages": [
+			"org.smartas.env"
+		]
+	},
+
+	{
+		"name": "smartas-security",
+		"packages": [
+			"org.smartas.security"
+		]
+	},
+	
+	{
+		"name": "smartas-registry",
+		"packages": [
+			"org.smartas.registry"
+		]
+	},
+	{
+		"name": "smartas-devops",
+		"packages": [
+			"org.smartas.devops"
+		]
+	},
+
+	{
+		"name": "smartas-workflow",
+		"packages": [
+			"org.smartas.workflow"
+		]
+	}
+]

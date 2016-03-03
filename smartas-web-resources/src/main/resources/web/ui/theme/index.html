@@ -11,13 +11,8 @@
 
 <title>Smart</title>
 
-<link rel="stylesheet" href="web/common/easyui/themes/bootstrap/easyui.css">
-<link rel="stylesheet" href="web/common/easyui/themes/icon.css">
-
 <!-- Bootstrap core CSS -->
 <link href="web/common/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="web/common/scrollbar/jquery.mCustomScrollbar.min.css"></link>
-<link href="web/common/fontawesome/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <link href="web/common/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -27,8 +22,8 @@
 <link href="web/ui/css/main.css" rel="stylesheet">
 <link href="web/ui/theme/index.css" rel="stylesheet">
 <link href="web/ui/theme/smart-icons.css" rel="stylesheet">
-<link href="web/ui/theme/Aqua/css/all.css" rel="stylesheet">
-<link href="web/ui/theme/Gray/css/all.css" rel="stylesheet">
+<!-- <link href="web/ui/theme/Aqua/css/all.css" rel="stylesheet">
+<link href="web/ui/theme/Gray/css/all.css" rel="stylesheet"> -->
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]>
@@ -59,7 +54,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#">Profile</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-						aria-haspopup="true" aria-expanded="false">chenjpu<span class="caret"></span></a>
+						aria-haspopup="true" aria-expanded="false" id="userInfo">&nbsp;&nbsp;&nbsp;<span class="caret"/></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#"> <i class="fa fa-user"></i> <span class="text">资料</span>
 							</a></li>
@@ -107,7 +102,50 @@
 			</div>
 		</div>
 	</div>
-</div>
+	</div>
+	
+	<div class="modal fade" id="loginModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title" id="loginModalLabel">登录</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-signin form-horizontal" id="login_form">
+				<div class="form-group">
+					<label for="username" class="col-sm-2 control-label">账号:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="username" placeholder="账号" readonly/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-2 control-label">密码:</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="password" placeholder="密码">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							<label> <input type="checkbox">Remember me</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group" style="display: none;" id="info">
+					<div class="col-sm-offset-2 col-sm-10 ">
+						<div class="alert alert-warning" role="alert"></div>
+					</div>
+				</div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+	        <button type="button" onclick="return false" data-loading-text="Sign in..."  id="login_bnt" class="btn btn-primary">Sign in</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -122,11 +160,11 @@
 	<script src="web/common/log4js.js"></script>
 	<script src="web/config/log4js.config.js"></script>
 	<script src="web/common/jquery.ba-hashchange.min.js"></script>
-	<script src="web/common/My97DatePicker/WdatePicker.js"></script>
+	<!-- <script src="web/common/My97DatePicker/WdatePicker.js"></script> -->
 	
 	<script src="web/common/zTree_v3/js/jquery.ztree.all-3.5.js"></script>
 	<script src="web/common/bootstrap/js/bootstrap.js"></script>
-	<script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script>
+	<!-- <script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script> -->
 	<script src="web/common/react/react.js"></script>
 	<script src="web/common/react/react-with-addons.js"></script>
 	<script src="web/common/react/react-dom.js"></script>
@@ -135,8 +173,6 @@
 	<script src="web/common/react/react-redux.js"></script>
 
 	<script src="web/common/react/browser.min.js"></script>
-	<script src="web/common/easyui/jquery.easyui.min.js"></script>
-	<script src="web/common/easyui/locale/easyui-lang-zh_CN.js"></script>
 	
 	<script src="services/env/workspace"></script>
 	<script src="web/ui/wegits/msgBox.js"></script>
@@ -155,80 +191,82 @@
 	<script src="web/ui/components/locale/zh_CN.js"></script>
 	<script src="web/ui/components/index.js"></script>
 	<script src="web/ui/components/react-slick.js"></script>
-	<script src="web/ui/components/util/index.js"></script>
-	<script src="web/ui/components/dom-align/index.js"></script>
-	<script src="web/ui/components/css-animation/index.js"></script>
-	<script src="web/ui/components/align/index.js"></script>
-	<script src="web/ui/components/animate/index.js"></script>
-	<script src="web/ui/components/trigger/index.js"></script>
-	<script src="web/ui/components/notification/index.js"></script>
-	<script src="web/ui/components/checkbox/index.js"></script>
-	<script src="web/ui/components/input-number/index.js"></script>
-	<script src="web/ui/components/dropdown/index.js"></script>
-	<script src="web/ui/components/radio/index.js"></script>
-	<script src="web/ui/components/menu/index.js"></script>
-	<script src="web/ui/components/select/index.js"></script>
-	<script src="web/ui/components/switch/index.js"></script>
-	<script src="web/ui/components/progress/index.js"></script>
-	<script src="web/ui/components/tooltip/index.js"></script>
-	<script src="web/ui/components/dialog/index.js"></script>
-	<script src="web/ui/components/tabs/index.js"></script>
-	<script src="web/ui/components/upload/index.js"></script>
-	<script src="web/ui/components/async-validator/index.js"></script>
-	<script src="web/ui/components/form/index.js"></script>
-	<script src="web/ui/components/pagination/index.js"></script>
-	<script src="web/ui/components/table/index.js"></script>
-	<script src="web/ui/components/steps/index.js"></script>
-	<script src="web/ui/components/cascader/index.js"></script>
-	<script src="web/ui/components/gregorian-calendar/index.js"></script>
-	<script src="web/ui/components/time-picker/index.js"></script>
-	<script src="web/ui/components/calendar/index.js"></script>
-	<script src="web/ui/components/slider/index.js"></script>
-	<script src="web/ui/components/tree/index.js"></script>
-	<script src="web/ui/components/tree-select/index.js"></script>
+	<script src="web/ui/components/util.js"></script>
+	<script src="web/ui/components/dom-align.js"></script>
+	<script src="web/ui/components/css-animation.js"></script>
+	<script src="web/ui/components/align.js"></script>
+	<script src="web/ui/components/animate.js"></script>
+	<script src="web/ui/components/trigger.js"></script>
+	<script src="web/ui/components/notification.js"></script>
+	<script src="web/ui/components/checkbox.js"></script>
+	<script src="web/ui/components/input-number.js"></script>
+	<script src="web/ui/components/dropdown.js"></script>
+	<script src="web/ui/components/radio.js"></script>
+	<script src="web/ui/components/menu.js"></script>
+	<script src="web/ui/components/select.js"></script>
+	<script src="web/ui/components/switch.js"></script>
+	<script src="web/ui/components/progress.js"></script>
+	<script src="web/ui/components/tooltip.js"></script>
+	<script src="web/ui/components/dialog.js"></script>
+	<script src="web/ui/components/tabs.js"></script>
+	<script src="web/ui/components/upload.js"></script>
+	<script src="web/ui/components/async-validator.js"></script>
+	<script src="web/ui/components/form.js"></script>
+	<script src="web/ui/components/pagination.js"></script>
+	<script src="web/ui/components/table.js"></script>
+	<script src="web/ui/components/steps.js"></script>
+	<script src="web/ui/components/cascader.js"></script>
+	<script src="web/ui/components/gregorian-calendar.js"></script>
+	<script src="web/ui/components/time-picker.js"></script>
+	<script src="web/ui/components/calendar.js"></script>
+	<script src="web/ui/components/slider.js"></script>
+	<script src="web/ui/components/tree.js"></script>
+	<script src="web/ui/components/tree-select.js"></script>
 	
 	<script src="web/ui/wegits/locale/zh_CN.js"></script>
 	<script src="web/ui/wegits/index.js"></script>
-	<script src="web/ui/wegits/layout/index.js"></script>
-	<script src="web/ui/wegits/icon/index.js"></script>
-	<script src="web/ui/wegits/breadcrumb/index.js"></script>
-	<script src="web/ui/wegits/input/index.js"></script>
-	<script src="web/ui/wegits/progress/index.js"></script>
-	<script src="web/ui/wegits/checkbox/index.js"></script>
-	<script src="web/ui/wegits/switch/index.js"></script>
-	<script src="web/ui/wegits/radio/index.js"></script>
-	<script src="web/ui/wegits/form/index.js"></script>
-	<script src="web/ui/wegits/input-number/index.js"></script>
-	<script src="web/ui/wegits/message/index.js"></script>
-	<script src="web/ui/wegits/notification/index.js"></script>
-	<script src="web/ui/wegits/affix/index.js"></script>
-	<script src="web/ui/wegits/alert/index.js"></script>
-	<script src="web/ui/wegits/badge/index.js"></script>
-	<script src="web/ui/wegits/button/index.js"></script>
-	<script src="web/ui/wegits/menu/index.js"></script>
-	<script src="web/ui/wegits/select/index.js"></script>
-	<script src="web/ui/wegits/dropdown/index.js"></script>
-	<script src="web/ui/wegits/modal/index.js"></script>
-	<script src="web/ui/wegits/tooltip/index.js"></script>
-	<script src="web/ui/wegits/tabs/index.js"></script>
-	<script src="web/ui/wegits/popconfirm/index.js"></script>
-	<script src="web/ui/wegits/upload/index.js"></script>
-	<script src="web/ui/wegits/tag/index.js"></script>
-	<script src="web/ui/wegits/spin/index.js"></script>
-	<script src="web/ui/wegits/popover/index.js"></script>
-	<script src="web/ui/wegits/pagination/index.js"></script>
-	<script src="web/ui/wegits/table/index.js"></script>
-	<script src="web/ui/wegits/steps/index.js"></script>
-	<script src="web/ui/wegits/timeline/index.js"></script>
-	<script src="web/ui/wegits/cascader/index.js"></script>
-	<script src="web/ui/wegits/time-picker/index.js"></script>
-	<script src="web/ui/wegits/calendar/index.js"></script>
-	<script src="web/ui/wegits/date-picker/index.js"></script>
-	<script src="web/ui/wegits/slider/index.js"></script>
-	<script src="web/ui/wegits/tree/index.js"></script>
-	<script src="web/ui/wegits/carousel/index.js"></script>
-	<script src="web/ui/wegits/tree-select/index.js"></script>
-	<script src="web/ui/wegits/transfer/index.js"></script>
+	<script src="web/ui/wegits/layout.js"></script>
+	<script src="web/ui/wegits/icon.js"></script>
+	<script src="web/ui/wegits/breadcrumb.js"></script>
+	<script src="web/ui/wegits/input.js"></script>
+	<script src="web/ui/wegits/progress.js"></script>
+	<script src="web/ui/wegits/checkbox.js"></script>
+	<script src="web/ui/wegits/switch.js"></script>
+	<script src="web/ui/wegits/radio.js"></script>
+	<script src="web/ui/wegits/form.js"></script>
+	<script src="web/ui/wegits/input-number.js"></script>
+	<script src="web/ui/wegits/message.js"></script>
+	<script src="web/ui/wegits/notification.js"></script>
+	<script src="web/ui/wegits/affix.js"></script>
+	<script src="web/ui/wegits/alert.js"></script>
+	<script src="web/ui/wegits/badge.js"></script>
+	<script src="web/ui/wegits/button.js"></script>
+	<script src="web/ui/wegits/menu.js"></script>
+	<script src="web/ui/wegits/select.js"></script>
+	<script src="web/ui/wegits/dropdown.js"></script>
+	<script src="web/ui/wegits/modal.js"></script>
+	<script src="web/ui/wegits/tooltip.js"></script>
+	<script src="web/ui/wegits/tabs.js"></script>
+	<script src="web/ui/wegits/popconfirm.js"></script>
+	<script src="web/ui/wegits/upload.js"></script>
+	<script src="web/ui/wegits/tag.js"></script>
+	<script src="web/ui/wegits/spin.js"></script>
+	<script src="web/ui/wegits/popover.js"></script>
+	<script src="web/ui/wegits/pagination.js"></script>
+	<script src="web/ui/wegits/table.js"></script>
+	<script src="web/ui/wegits/steps.js"></script>
+	<script src="web/ui/wegits/timeline.js"></script>
+	<script src="web/ui/wegits/cascader.js"></script>
+	<script src="web/ui/wegits/time-picker.js"></script>
+	<script src="web/ui/wegits/calendar.js"></script>
+	<script src="web/ui/wegits/date-picker.js"></script>
+	<script src="web/ui/wegits/slider.js"></script>
+	<script src="web/ui/wegits/tree.js"></script>
+	<script src="web/ui/wegits/carousel.js"></script>
+	<script src="web/ui/wegits/tree-select.js"></script>
+	<script src="web/ui/wegits/transfer.js"></script>
+	<script src="web/ui/wegits/datagrid.js"></script>
+	<script src="web/ui/wegits/tree-form.js"></script>
 	
 	<!-- 
 	<script src="web/core/main.min.js"></script>
@@ -249,7 +287,7 @@
 
 	<script src="web/ui/index.js"></script>
 	<script src="web/ui/react-debug.js"></script>
-	<script src="web/security/Login.js"></script>
+	<script src="web/common/jquery.form2json.js"></script>
 	<script src="web/ui/theme/index.js"></script>
 </body>
 </html>

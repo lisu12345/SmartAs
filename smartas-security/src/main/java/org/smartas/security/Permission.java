@@ -76,6 +76,10 @@ public class Permission extends StringIdVO {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
+	
+	public int hashCode(){
+		return this.id != null?this.id.hashCode():0;
+	}
 
 	public boolean equals(Object o) {
 		if (o == null) {

@@ -272,10 +272,9 @@
 		return store;
 	}
 	
-	function linkState(key) {
-		var props = this.props;
+	function link(key,local){
 		return {
-			value: props.local.getIn(key),
+			value: local.getIn(key),
 			requestChange: function(value, checked, input) {
 				store.dispatch({
 					type: AT.LINK.INPUT_CHANGE,
@@ -286,6 +285,10 @@
 				});
 			}
 		};
+	}
+	
+	function linkState(key) {
+		 return link(key,this.props.local)
 	}
 	
 	var ImmutableMethod = {
@@ -302,13 +305,17 @@
 			return ReactRedux.connect(function(state) {
 				var ns = state.get(namespace) || Immutable.Map({}), global = state.get('global');
 				//return _.extend({},ns?ns.toJS():{},{global:global.toJS()});
+				var getIn = _.bind(ImmutableMethod.getIn,ns);
+				var get = _.bind(ImmutableMethod.get,ns);
+				var local = {
+						get : get,
+						getIn : getIn
+				};
 				return {
-					get : _.bind(ImmutableMethod.get,ns),
-					getIn : _.bind(ImmutableMethod.getIn,ns),
-					local : {
-						get : _.bind(ImmutableMethod.get,ns),
-						getIn : _.bind(ImmutableMethod.getIn,ns)
-					},
+					get : get,
+					getIn : getIn,
+					linkState : function(key){return link(key,local)},
+					local : local,
 					global : {
 						get : _.bind(ImmutableMethod.get,global),
 						getIn : _.bind(ImmutableMethod.getIn,global)
@@ -337,7 +344,16 @@
 	function $S(selector) {
 		return $(selector, context);
 	}
-
+	
+	
+	$.ajaxSetup({
+		cache : false,
+	});
+	
+	//context.ajaxError(function(event,request, settings){
+	     //$(this).append("<li>出错页面:" + settings.url + "</li>");
+		 //alert("出错页面:" + settings.url);
+	//});
 	$.fn.include = function(url, params, callback) {
 		// .处理url中?参数
 		var index = url.indexOf('?'), self = this;
@@ -356,7 +372,11 @@
 		}
 
 		logger.debug("request url '{0}'", url);
-		Resource.ajax({
+		return Resource.ajax({
+			beforeSend: function(xhr) {
+			    xhr.setRequestHeader("X-Requested-URL", url);
+			},
+			//cache : false,
 			type : 'get',
 			url : url,
 			dataType : 'html',
@@ -374,16 +394,18 @@
 					html.push('</script>');
 					data = html.join("");
 				}
-				// 2.加载资源
-				var page = $(data);
-				logger.info("apply html segment to dom ");
-				self.html(page);
-				// .3初始化
-				self.trigger('changed.dom');
+				try{
+					// 2.加载资源
+					var page = $(data);
+					logger.info("apply html segment to dom ");
+					self.html(page);
+					// .3初始化
+					self.trigger('changed.dom');
+				}catch(e){
+					logger.error("apply html {0}",e);
+				}
+				
 			},
-			error : function() {
-
-			}
 		});
 	};
 
@@ -406,7 +428,10 @@
 				ReactDOM.render(React.createElement(ReactRedux.Provider, {
 					store : store
 				}, React.createElement(node, {
-					qs : Resource.getQs()
+					qs : Resource.getQs(),
+					link : function(){
+						
+					}
 				})), context[0]);
 			}
 			resources[namespace] = pkg;
@@ -438,6 +463,11 @@
 			var complete = options.complete;
 			options.complete = function(request, code) {
 				try {
+					var status = request.getResponseHeader("X-Session-Status");
+			        if(status == "timeout"){ 
+			        	options.complete = complete;
+			        	lifecycle.fire('timeout',options);
+			        } 
 					complete && complete(request, code);
 				} finally {
 					lifecycle.fire('after');
@@ -468,6 +498,12 @@
 			},
 			after : function(fn) {
 				lifecycle.on('after', fn);
+			},
+			on : function(event,fn){
+				lifecycle.on(event, fn);
+			},
+			fire : function(event,payload){
+				lifecycle.fire(event,payload);
 			},
 			getQs : function(reqs) {
 				if (reqs) {
@@ -510,11 +546,11 @@
 	});
 
 	$(window).hashchange(function(e) {
-		var hash = location.hash;
+		var hash = location.hash,xhr;
 		Resource.hash = hash;
 		qs = Qs.parse(hash.substr(hash.indexOf('?') + 1));
 		// TODO：处理请求参数
-		context.include(hash.substr(2), function() {
+		xhr = context.include(hash.substr(2), function() {
 			// 卸载已经加载的资源
 			ReactDOM.unmountComponentAtNode(context[0]);
 			Resource.uninstall();
@@ -772,13 +808,13 @@
 		}
 	}
 
-	NS.New = function(model) {
+	NS.New = function(model,notify) {
 		var listeners = [], services = {
 			create : 'services/' + model + '/single',
 			update : 'services/' + model + '/single',
-			get : 'services/' + model + '/single/{0}',
+			get : 'services/' + model + '/{0}/{1}',
 			find : 'services/' + model + '/single/{0}',
-			remove : 'services/' + model + '/single/{0}',
+			remove : 'services/' + model + '/{0}/{1}',
 			list : 'services/' + model + '/list',
 			listPage : 'services/' + model + '/list/{0}/{1}',
 		};
@@ -803,11 +839,12 @@
 			});
 		}
 
-		var method = function(method, type, url, data, success, error) {
+		var method = function(method, type, notify, url, data, success, error) {
 			return Resource.method(type, url, data, compose(type, function(data) {
 				_dispatch({
 					type : AT.SERVICE.SUCCESS,
 					method : method,
+					notify : notify,
 					model : model,
 					data : data
 				});
@@ -815,31 +852,37 @@
 		}
 
 		function create(data, sucess, error) {
-			return method('create', 'post', services.create, data, sucess, error);
+			return method('create', 'post',true, services.create, data, sucess, error);
 		}
 		function update(data, sucess, error) {
-			return method('update', 'put', services.update, data, sucess, error);
+			return method('update', 'put', true, services.update, data, sucess, error);
 		}
 		function get(id, sucess, error) {
-			return method('get', 'get', services.get.format(id), sucess, error);
+			if(_.isArray(id)){
+				return method('get', 'get',false, services.get.format('batach',_.join(id)) , sucess, error);
+			}
+			return method('get', 'get', false,services.get.format('single',id), sucess, error);
 		}
 		function find(id, sucess, error) {
-			return method('find', 'get', services.find.format(id), sucess, error);
+			return method('find', 'get',false, services.find.format(id), sucess, error);
 		}
 		function remove(id, sucess, error) {
-			return method('remove', 'delete', services.remove.format(id), sucess, error);
+			if(_.isArray(id)){
+				return method('remove', 'delete',true, services.remove.format('batach',_.join(id)), sucess, error);
+			}
+			return method('remove', 'delete',true, services.get.format('single',id), sucess, error);
 		}
 		function list(q, sucess, error) {
-			return method('list', 'get', services.list, q, sucess, error);
+			return method('list', 'get', false,services.list, q, sucess, error);
 		}
 		function listPage(page, pageSize, q, sucess, error) {
-			return method('listPage', 'get', services.listPage.format(page, pageSize), q, sucess, error);
+			return method('listPage', 'get',false, services.listPage.format(page, pageSize), q, sucess, error);
 		}
 		function ready() {
-			dispatch(AT.SERVICE.READY);
+			dispatch(AT.SERVICE.READY,undefined,'ready');
 		}
 		function init() {
-			dispatch(AT.SERVICE.INIT);
+			dispatch(AT.SERVICE.INIT,undefined,'init');
 		}
 		function refresh(/*page, pageSize, q*/) {
 			if(arguments.length){
@@ -847,17 +890,25 @@
 					page : arguments[0],
 					pageSize : arguments[1],
 					q : arguments[2]
-				});
+				},'refresh');
 			}else {
-				dispatch(AT.SERVICE.REFRESH);
+				dispatch(AT.SERVICE.REFRESH,undefined,'refresh');
 			}
 		}
-		function dispatch(type, data) {
+		function dispatch(type, data, method) {
 			_dispatch({
 				type : type,
+				method : method,
 				data : data
 			});
 		}
+		
+		if(notify || notify === undefined){
+			listeners.push(function(action){
+				action.notify && refresh();
+			});
+		}
+		
 		return {
 			create : create,
 			update : update,

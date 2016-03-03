@@ -1,724 +1,202 @@
-'use strict';
+"use strict";
 
-+(function (Namespace) {
-	var NS = Namespace.register("Smart.UI"),
-	    request = Smart.Resource.ajax;
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	NS.Hello = React.createClass({
-		displayName: 'Hello',
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
++(function (UI, RC) {
+	var Table = UI.Table;
+	var Button = UI.Button;
+	var Icon = UI.Icon;
+
+	var Header = React.createClass({
+		displayName: "Header",
+
+		propTypes: {
+			title: React.PropTypes.string
+		},
 		render: function render() {
-			return React.createElement(
-				'div',
-				null,
-				'Hello ',
-				this.props.name
-			);
-		}
-	});
+			var title = this.props.title;
 
-	var PanelTools = React.createClass({
-		displayName: 'PanelTools',
-
-		//shouldComponentUpdate: function() {
-		//	return false;
-		//collapsible:true,minimizable:true,maximizable:true,closable:true
-		//},var
-		render: function render() {
-			var tools = [],
-			    props = this.props;
-			props.collapsible && tools.push('collapse');
-			props.minimizable && tools.push('min');
-			props.maximizable && tools.push('max');
-			props.closable && tools.push('close');
-			return React.createElement(
-				'div',
-				{ className: 'panel-tool' },
-				_.map(tools, function (value) {
-					return React.createElement('a', { href: 'javascript:void(0)', className: 'panel-tool-' + value });
-				})
-			);
-		}
-	});
-
-	var Panel = NS.Panel = React.createClass({
-		displayName: 'Panel',
-
-		//shouldComponentUpdate: function() {
-		//	return false;
-		//},
-		render: function render() {
-			return React.createElement(
-				'div',
-				{ className: 'smart panel' },
-				this.props.children
-			);
-		}
-	});
-
-	Panel.Header = React.createClass({
-		displayName: 'Header',
-
-		//shouldComponentUpdate: function() {
-		//	return false;
-		//},
-		render: function render() {
-			return React.createElement(
-				'div',
-				{ className: 'panel-header' },
-				React.createElement(
-					'div',
-					{ className: 'panel-title' },
-					this.props.title
-				),
-				React.createElement(PanelTools, this.props)
-			);
-		}
-	});
-
-	var View1 = React.createClass({
-		displayName: 'View1',
-
-		render: function render() {
-			var props = this.props;
-			if (!props.rownumbers) {
-				return null;
+			if (title) {
+				return React.createElement(
+					"div",
+					{ className: "grid-head" },
+					React.createElement(
+						"div",
+						{ className: "grid-title" },
+						title
+					)
+				);
 			}
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-view1', style: { width: '31px' } },
-				React.createElement(
-					'div',
-					{ className: 'datagrid-header', style: { width: '31px', height: '25px' } },
-					React.createElement(
-						'div',
-						{ className: 'datagrid-header-inner' },
-						React.createElement(
-							'table',
-							{ className: 'datagrid-htable', border: '0', cellSpacing: '0', cellPadding: '0', style: { height: '25px' } },
-							React.createElement(
-								'tbody',
-								null,
-								React.createElement(
-									'tr',
-									{ className: 'datagrid-header-row' },
-									React.createElement(
-										'td',
-										{ rowSpan: '0' },
-										React.createElement('div', { className: 'datagrid-header-rownumber' })
-									)
-								)
-							)
-						)
-					)
-				),
-				React.createElement(View1Body, { rows: this.props.rows, height: this.props.height }),
-				React.createElement(
-					'div',
-					{ className: 'datagrid-footer', style: { width: '31px' } },
-					React.createElement('div', { className: 'datagrid-footer-inner', style: { display: 'none' } })
-				)
-			);
-		}
-	});
-
-	var View1Row = React.createClass({
-		displayName: 'View1Row',
-
-		render: function render() {
-			return React.createElement(
-				'tr',
-				{ className: 'datagrid-row', style: { height: '25px' } },
-				React.createElement(
-					'td',
-					{ className: 'datagrid-td-rownumber' },
-					React.createElement(
-						'div',
-						{ className: 'datagrid-cell-rownumber' },
-						this.props.rownumber + 1
-					)
-				)
-			);
-		}
-	});
-
-	var View1Body = React.createClass({
-		displayName: 'View1Body',
-
-		render: function render() {
-			var rows = this.props.rows;
-			if (rows == 0) {
-				return null;
-			}
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-body', style: { width: '31px', marginTop: '0px', height: this.props.height - 26 } },
-				React.createElement(
-					'div',
-					{ className: 'datagrid-body-inner' },
-					React.createElement(
-						'table',
-						{ className: 'datagrid-btable', cellSpacing: '0', cellPadding: '0', border: '0' },
-						React.createElement(
-							'tbody',
-							null,
-							_.times(rows, function (i) {
-								return React.createElement(View1Row, { key: 'view1-row-' + i, rownumber: i });
-							})
-						)
-					)
-				)
-			);
-		}
-	});
-
-	var ViewCell = React.createClass({
-		displayName: 'ViewCell',
-
-		render: function render() {
-			var props = this.props,
-			    column = props.column;
-			return React.createElement(
-				'td',
-				{ field: column.field },
-				React.createElement(
-					'div',
-					{ style: { width: column.width }, className: 'datagrid-cell' },
-					props.value
-				)
-			);
-		}
-	});
-
-	var row = function row(datas, columns) {
-		return _.map(datas, function (data, i) {
-			return React.createElement(
-				'tr',
-				{ key: 'view-row-' + i, className: 'datagrid-row', style: { height: '25px' } },
-				_.map(columns, function (c, j) {
-					var value = c.render.call(data, data[c.field]);
-					return React.createElement(ViewCell, { key: 'view-cell-' + i + '-' + j, column: c, value: value });
-				})
-			);
-		});
-	};
-
-	var ViewBody = React.createClass({
-		displayName: 'ViewBody',
-
-		render: function render() {
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-body', onScroll: this.props.bodyScroll, style: { marginTop: '0px', overflowX: 'auto', height: this.props.height - 26 } },
-				React.createElement(
-					'table',
-					{ className: 'datagrid-btable table-hover', cellSpacing: '0', cellPadding: '0', border: '0' },
-					React.createElement(
-						'tbody',
-						null,
-						row(this.props.data, this.props.columns)
-					)
-				)
-			);
-		}
-	});
-
-	var View = React.createClass({
-		displayName: 'View',
-
-		getColumnsInfo: function getColumnsInfo(list) {
-			var cl = IGrid.Column;
-			return React.Children.map(list, function (node) {
-				return _.chain(node.props).pick(cl.props).defaults(cl.defaults).value();
-			});
-		},
-
-		getInitialState: function getInitialState() {
-			return {
-				columns: this.getColumnsInfo(this.props.children)
-			};
-		},
-
-		render: function render() {
-			var columns = [];
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-view2', style: { left: '32px', right: 0 } },
-				React.createElement(
-					'div',
-					{ className: 'datagrid-header', style: { height: '25px' } },
-					React.createElement(
-						'div',
-						{ className: 'datagrid-header-inner' },
-						React.createElement(
-							'table',
-							{ className: 'datagrid-htable', border: '0', cellSpacing: '0', cellPadding: '0', style: { height: '25px' } },
-							React.createElement(
-								'tbody',
-								null,
-								React.createElement(
-									'tr',
-									{ className: 'datagrid-header-row' },
-									this.props.children
-								)
-							)
-						)
-					)
-				),
-				React.createElement(ViewBody, { bodyScroll: this.props.bodyScroll, columns: this.state.columns, data: this.props.data, height: this.props.height }),
-				React.createElement(
-					'div',
-					{ className: 'datagrid-footer', style: {/*width: '860px'*/} },
-					React.createElement('div', { className: 'datagrid-footer-inner', style: { display: 'none' } })
-				)
-			);
-		}
-	});
-
-	var Pagination = React.createClass({
-		displayName: 'Pagination',
-
-		refresh: function refresh() {
-			this.props.dataSource.refresh();
-		},
-
-		render: function render() {
-			var props = this.props,
-			    length = props.length,
-			    page = props.page,
-			    pageSize = props.pageSize;
-			size = Math.ceil(length / pageSize) || 1;
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-pager pagination' },
-				React.createElement(
-					'table',
-					{ cellSpacing: '0', cellPadding: '0', border: '0' },
-					React.createElement(
-						'tbody',
-						null,
-						React.createElement(
-							'tr',
-							null,
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'select',
-									{ className: 'pagination-page-list', onChange: this.refresh },
-									React.createElement(
-										'option',
-										null,
-										'10'
-									),
-									React.createElement(
-										'option',
-										null,
-										'20'
-									),
-									React.createElement(
-										'option',
-										null,
-										'30'
-									),
-									React.createElement(
-										'option',
-										null,
-										'40'
-									),
-									React.createElement(
-										'option',
-										null,
-										'50'
-									)
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement('div', { className: 'pagination-btn-separator' })
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'a',
-									{ href: 'javascript:void(0)', className: 'l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled' },
-									React.createElement(
-										'span',
-										{
-											className: 'l-btn-left l-btn-icon-left' },
-										React.createElement(
-											'span',
-											{ className: 'l-btn-text l-btn-empty' },
-											' '
-										),
-										' ',
-										React.createElement(
-											'span',
-											{
-												className: 'l-btn-icon pagination-first' },
-											' '
-										)
-									)
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'a',
-									{ href: 'javascript:void(0)', className: 'l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled' },
-									React.createElement(
-										'span',
-										{
-											className: 'l-btn-left l-btn-icon-left' },
-										React.createElement(
-											'span',
-											{ className: 'l-btn-text l-btn-empty' },
-											' '
-										),
-										React.createElement(
-											'span',
-											{
-												className: 'l-btn-icon pagination-prev' },
-											' '
-										)
-									)
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement('div', { className: 'pagination-btn-separator' })
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'span',
-									{ style: { paddingLeft: '6px' } },
-									'第'
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement('input', { className: 'pagination-num', type: 'text', value: page, onChange: this.refresh, size: '2' })
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'span',
-									{ style: { paddingRight: '6px' } },
-									'共',
-									size,
-									'页'
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement('div', { className: 'pagination-btn-separator' })
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'a',
-									{ href: 'javascript:void(0)', className: 'l-btn l-btn-small l-btn-plain' },
-									React.createElement(
-										'span',
-										{
-											className: 'l-btn-left l-btn-icon-left' },
-										React.createElement(
-											'span',
-											{ className: 'l-btn-text l-btn-empty' },
-											' '
-										),
-										React.createElement(
-											'span',
-											{
-												className: 'l-btn-icon pagination-next' },
-											' '
-										)
-									)
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'a',
-									{ href: 'javascript:void(0)', className: 'l-btn l-btn-small l-btn-plain' },
-									React.createElement(
-										'span',
-										{
-											className: 'l-btn-left l-btn-icon-left' },
-										React.createElement(
-											'span',
-											{ className: 'l-btn-text l-btn-empty' },
-											' '
-										),
-										React.createElement(
-											'span',
-											{
-												className: 'l-btn-icon pagination-last' },
-											' '
-										)
-									)
-								)
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement('div', { className: 'pagination-btn-separator' })
-							),
-							React.createElement(
-								'td',
-								null,
-								React.createElement(
-									'a',
-									{ href: 'javascript:void(0)', onClick: this.refresh, className: 'l-btn l-btn-small l-btn-plain' },
-									React.createElement(
-										'span',
-										{
-											className: 'l-btn-left l-btn-icon-left' },
-										React.createElement(
-											'span',
-											{ className: 'l-btn-text l-btn-empty' },
-											' '
-										),
-										React.createElement(
-											'span',
-											{
-												className: 'l-btn-icon pagination-load' },
-											' '
-										)
-									)
-								)
-							)
-						)
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'pagination-info' },
-					'显示',
-					(page - 1) * pageSize + 1,
-					'到',
-					page * pageSize,
-					',共',
-					length,
-					'记录'
-				)
-			);
-		}
-	});
-
-	var IGrid = NS.IGrid = React.createClass({
-		displayName: 'IGrid',
-
-		getDefaultProps: function getDefaultProps() {
-			return {
-				rownumbers: true,
-				singleSelect: true,
-				pagination: true,
-				method: 'get',
-				height: 298
-			};
-		},
-		getInitialState: function getInitialState() {
-			return {
-				page: 1,
-				pageSize: 10,
-				length: 0,
-				data: this.props.data || []
-			};
-		},
-
-		load: function load() {
-			var props = this.props,
-			    dataSource = this.props.dataSource,
-			    context = this,
-			    url = props.url;
-
-			var list = !props.pagination ? dataSource.listAll() : dataSource.listPage(this.state.page, this.state.pageSize);
-
-			list();
-		},
-
-		componentDidMount: function componentDidMount() {
-			var props = this.props,
-			    dataSource = this.props.dataSource,
-			    context = this;
-			dataSource.onRefresh(function (data) {
-				context.load();
-			}).onList(function (data) {
-				var pageable = data;
-				if (!props.pagination) {
-					pageable = {
-						data: data
-					};
-				}
-				context.setState(pageable);
-			});
-			context.load();
-		},
-		bodyScroll: function bodyScroll() {
-
-			var iGrid = $(ReactDOM.findDOMNode(this)),
-			    view1 = iGrid.find("div.datagrid-view1"),
-			    view2 = iGrid.find("div.datagrid-view2"),
-			    body1 = view1.find("div.datagrid-body"),
-			    body2 = view2.find("div.datagrid-body");
-
-			body1.scrollTop(body2.scrollTop());
-			var c1 = body1.children(":first");
-			var c2 = body2.children(":first");
-			if (c1.length && c2.length) {
-				var _85 = c1.offset().top;
-				var _86 = c2.offset().top;
-				if (_85 != _86) {
-					body1.scrollTop(body1.scrollTop() + _85 - _86);
-				}
-			}
-			view2.children("div.datagrid-header,div.datagrid-footer")._scrollLeft(body2._scrollLeft());
-			body2.children("table.datagrid-btable-frozen").css("left", -body2._scrollLeft());
-		},
-		render: function render() {
-			var data = this.state.data,
-			    height = this.props.height,
-			    viewHeight = height - (this.props.pagination ? 31 : 0);
-			return React.createElement(
-				'div',
-				{ className: 'datagrid-wrap panel-body', style: { height: height } },
-				React.createElement(
-					'div',
-					{ className: 'datagrid-view', style: { height: viewHeight } },
-					React.createElement(View1, { rownumbers: this.props.rownumbers, rows: data.length, height: viewHeight }),
-					React.createElement(
-						View,
-						{ data: data, height: viewHeight, bodyScroll: this.bodyScroll },
-						this.props.children
-					)
-				),
-				React.createElement(Pagination, { dataSource: this.props.dataSource, page: this.state.page, pageSize: this.state.pageSize, length: this.state.length })
-			);
-		}
-	});
-
-	IGrid.Column = React.createClass({
-		displayName: 'Column',
-
-		statics: {
-			props: ['field', 'render', 'width', 'operation'],
-			defaults: {
-				render: _.identity
-			}
-		},
-		//shouldComponentUpdate: function() {
-		//	return false;
-		//},
-		render: function render() {
-			return React.createElement(
-				'td',
-				{ field: this.props.field },
-				React.createElement(
-					'div',
-					{ className: 'datagrid-cell', style: { width: this.props.width } },
-					React.createElement(
-						'span',
-						null,
-						this.props.children
-					),
-					React.createElement(
-						'span',
-						{ className: 'datagrid-sort-icon' },
-						' '
-					)
-				)
-			);
-		}
-	});
-
-	//带查询功能列表
-	var QGrid = NS.QGrid = React.createClass({
-		displayName: 'QGrid',
-
-		render: function render() {}
-	});
-
-	NS.Grid = React.createClass({
-		displayName: 'Grid',
-
-		getDefaultProps: function getDefaultProps() {
-			return {
-				rownumbers: true,
-				singleSelect: true,
-				pagination: true
-			};
-		},
-		componentDidMount: function componentDidMount() {
-			$(ReactDOM.findDOMNode(this)).datagrid(_.extend({
-				columns: [this.columns]
-			}, _.omit(this.props, 'children')));
-		},
-		render: function render() {
-
-			this.columns = React.Children.map(this.props.children, function (node) {
-				return _.omit(node.props, 'children');
-			});
-			return React.createElement('table', { className: 'smart easyui-datagrid' });
-		}
-	});
-
-	NS.Column = React.createClass({
-		displayName: 'Column',
-
-		shouldComponentUpdate: function shouldComponentUpdate() {
-			return false;
-		},
-		render: function render() {
 			return null;
 		}
 	});
 
-	NS.Dialog = React.createClass({
-		displayName: 'Dialog',
+	var Toolbar = React.createClass({
+		displayName: "Toolbar",
 
+		propTypes: {
+			toolbar: React.PropTypes.array,
+			service: React.PropTypes.object.isRequired
+		},
 		render: function render() {
-			return React.createElement(
-				'div',
-				{ className: 'modal fade', id: this.props.id, role: 'dialog' },
-				React.createElement(
-					'div',
-					{ className: 'modal-dialog', role: 'document' },
+			var toolbar = this.props.toolbar;
+
+			if (_.size(toolbar)) {
+				return React.createElement(
+					"div",
+					{ className: "grid-toolbar" },
 					React.createElement(
-						'div',
-						{ className: 'modal-content' },
+						"table",
+						{ style: { cellspacing: 0, cellpadding: 0 } },
 						React.createElement(
-							'div',
-							{ className: 'modal-header' },
+							"tbody",
+							null,
 							React.createElement(
-								'button',
-								{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
-								React.createElement(
-									'span',
-									{ 'aria-hidden': 'true' },
-									'×'
-								)
-							),
-							React.createElement(
-								'h4',
-								{ className: 'modal-title' },
-								'New message'
+								"tr",
+								null,
+								_.map(toolbar, function (value, key) {
+									var bar = undefined;
+									if (value === '-') {
+										bar = React.createElement("span", { className: "btn-separator" });
+									} else {
+										bar = React.createElement(
+											Button,
+											{ type: "grid", onClick: value.handler.bind(this) },
+											value.icon ? React.createElement(Icon, { type: value.icon }) : '',
+											React.createElement(
+												"span",
+												null,
+												value.text
+											)
+										);
+									}
+									return React.createElement(
+										"td",
+										{ key: key },
+										bar
+									);
+								})
 							)
 						)
 					)
-				)
+				);
+			}
+			return null;
+		}
+	});
+
+	var rowSelection = {
+		onChange: function onChange(selectedRowKeys) {
+			console.log("selectedRowKeys changed: " + selectedRowKeys);
+		},
+		onSelect: function onSelect(record, selected, selectedRows) {
+			console.log(record, selected, selectedRows);
+		},
+		onSelectAll: function onSelectAll(selected, selectedRows) {
+			console.log(selected, selectedRows);
+		}
+	};
+
+	var Grid = React.createClass({
+		displayName: "Grid",
+
+		propTypes: {
+			service: React.PropTypes.object.isRequired,
+			rownumbers: React.PropTypes.bool,
+			pageSize: React.PropTypes.number,
+			toolbar: React.PropTypes.array
+		},
+		getDefaultProps: function getDefaultProps() {
+			return {
+				rownumbers: true,
+				pageSize: 10,
+				current: 1,
+				toolbar: []
+			};
+		},
+		getInitialState: function getInitialState() {
+			var _props = this.props;
+			var service = _props.service;
+			var current = _props.current;
+			var pageSize = _props.pageSize;
+
+			var pagination = {
+				total: 0,
+				current: current,
+				showSizeChanger: true,
+				showTotal: function showTotal(total) {
+					return "共 " + total + " 条";
+				},
+				onShowSizeChange: function onShowSizeChange(current, pageSize) {
+					service.listPage(current, pageSize);
+				},
+				onChange: function onChange(current, pageSize) {
+					service.listPage(current, pageSize);
+				}
+			};
+			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
+		},
+		componentDidMount: function componentDidMount() {
+			var service = this.props.service;
+
+			service.subscribe((function (action) {
+				var type = action.type;
+				var data = action.data;
+				var method = action.method;
+
+				if (method === 'refresh') {
+					if (data) {
+						service.listPage(data.qs, data.page, data.pageSize);
+						return;
+					}
+					service.listPage( /*this.state.qs,*/this.state.current, this.state.pageSize);
+					return;
+				}
+				if (method === 'listPage') {
+					this.setState({
+						data: data.data,
+						current: data.page,
+						pageSize: data.pageSize,
+						pagination: {
+							total: data.length
+						}
+					});
+					return;
+				}
+			}).bind(this));
+			service.listPage(1, 10);
+		},
+		render: function render() {
+			var _state = this.state;
+			var data = _state.data;
+			var pagination = _state.pagination;var _props2 = this.props;
+			var service = _props2.service;
+			var _rowKey = _props2.rowKey;
+			var rownumbers = _props2.rownumbers;
+			var columns = _props2.columns;
+			var title = _props2.title;
+			var toolbar = _props2.toolbar;
+
+			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar"]);
+
+			return React.createElement(
+				"div",
+				{ className: "ant-grid" },
+				React.createElement(Header, { title: title }),
+				React.createElement(Toolbar, { toolbar: toolbar, service: service }),
+				React.createElement(Table, _extends({ size: "grid" }, props, { rowSelection: rowSelection,
+					rowKey: function rowKey(record) {
+						return record[_rowKey];
+					},
+					columns: columns,
+					rownumbers: rownumbers,
+					dataSource: data,
+					pagination: pagination }))
 			);
 		}
 	});
-})(Smart.Namespace);
+
+	UI.Grid = Grid;
+})(Smart.UI, Smart.RC);

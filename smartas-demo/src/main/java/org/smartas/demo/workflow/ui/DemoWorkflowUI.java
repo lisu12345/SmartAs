@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController()
 @RequestMapping("/demo/workflow")
-@Resource(code = 9000, model = "Smart", desc = "DemoWorkflow UI")
+@Resource(code = 4001, model = "Smart", desc = "DemoWorkflow UI")
 public class DemoWorkflowUI extends BaseFlowUI<DemoWorkflow> {
 	@Autowired
 	private DemoWorkflowService service;

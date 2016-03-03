@@ -1,0 +1,144 @@
+
+@grid-prefix-cls: ~"@{css-prefix}grid";
+@table-prefix-cls: ~"@{css-prefix}table";
+@table-border-color: @border-color-split;
+@table-head-background-color: #f4f4f4;
+
+.@{grid-prefix-cls} {
+	 .border(@color){
+	 	  border: 1px solid @border-color-split;
+	      padding: 0;
+	      border-color: @color;
+	      border-radius:0;
+	 }
+	 
+	 .background(@color){
+	 	  background-color: #F2F2F2;
+		  background: -webkit-linear-gradient(top,#ffffff 0,@color 100%);
+		  background: -moz-linear-gradient(top,#ffffff 0,@color 100%);
+		  background: -o-linear-gradient(top,#ffffff 0,@color 100%);
+		  background: linear-gradient(to bottom,#ffffff 0,@color 100%);
+		  background-repeat: repeat-x;
+	  	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffffff,endColorstr=#F2F2F2,GradientType=0);
+	 }
+	 
+	.grid-head{
+		.border(#D4D4D4);
+		.background(#F2F2F2);
+		padding:5px;
+		height : 28px;
+	 	border-bottom-width: 0;
+	 	
+	 	.grid-title{
+			font-size: 12px;
+	    	font-weight: bold;
+	    	color: #777;
+	   	 	height: 16px;
+	    	line-height: 16px;
+		}
+	}
+	
+	.grid-toolbar{
+		.border(#e6e6e6;);
+		background: #F5F5F5;
+		height: auto;
+    	padding: 1px 2px;
+	 	border-bottom-width: 0;
+	 	
+	 	td{
+	 		padding: 1px;
+	 	}
+	 	
+	 	.ant-btn-grid{
+	 		padding: 4px 5px;
+	 	}
+	}
+	
+	.@{table-prefix-cls} {
+	
+	  &-grid {
+	    padding: 0;
+	    border-color: #ccc;
+	    table {
+	      .border(#D4D4D4);
+	    }
+	
+	    th {
+	      height: 25px;
+	      padding: 0;
+	      border-color: #ccc;
+	      border-width: 0 1px 1px 0;
+		  border-style: dotted;
+		  
+		  .background(#F2F2F2);
+	     
+	      border-bottom: 1px solid @border-color-split;
+	      
+	      &:last-child {
+				border-right: 0;
+		  }
+		  
+		  >span {
+		        margin: 0;
+		    	padding: 0 4px;
+			    white-space: nowrap;
+			    word-wrap: normal;
+			    overflow: hidden;
+			   
+		   }
+	    }
+	    
+	    .cell-rownumber {
+	        width: 30px;
+	        text-align: center;
+		    margin: 0;
+		    padding: 0;
+	    }
+	    
+	    th.@{table-prefix-cls}-selection-column,
+		td.@{table-prefix-cls}-selection-column {
+		   text-align: center;
+		   width: 30px;
+		}
+	
+	    td {
+			padding: 6px 8px;
+			border-color: #ccc;
+			border-width: 0 1px 1px 0;
+			border-style: dotted;
+			height: 25px;
+		    line-height: 25px;
+		    font-size: 12px;
+			margin: 0;
+			padding: 0;
+			
+		  	&:first-child {
+		       span:first-child {
+		    		padding: 0;
+		       }
+	    	}
+	    	
+	    	&:last-child {
+	       		border-right: 0;
+	    	}
+	    	
+	    	>span {
+		        margin: 0;
+		    	padding: 0 4px;
+			    white-space: nowrap;
+			    word-wrap: normal;
+			    overflow: hidden;
+			   
+		    }
+	    }
+	    
+	    
+	    .@{css-prefix}table-row:last-child td {
+	      border-bottom: 0;
+	    }
+	  }
+	 
+	}
+
+
+}

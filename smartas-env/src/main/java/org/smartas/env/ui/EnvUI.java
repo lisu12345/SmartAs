@@ -3,6 +3,8 @@
  */
 package org.smartas.env.ui;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartas.core.spring.EventPublisher;
 import org.smartas.core.spring.event.MyBaitsRefreshEvent;
@@ -34,9 +36,10 @@ public class EnvUI extends WebApplicationObjectSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "workspace", method = RequestMethod.GET)
-	public String workspace(Model model) {
+	public String workspace(Model model, HttpSession session) {
 		String[] profiles = getApplicationContext().getEnvironment().getDefaultProfiles();
 		model.addAttribute("profile", StringUtils.join(profiles, ","));
+		model.addAttribute("user",session.getAttribute("user"));
 		return "info";
 	}
 
