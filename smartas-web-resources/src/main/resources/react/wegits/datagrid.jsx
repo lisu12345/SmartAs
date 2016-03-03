@@ -1,14 +1,6 @@
 + function(UI,RC) {
 	const {Table,Button,Icon} = UI;
 	
-	const ROWNUMBERS = {
-		title: '',
-		dataIndex: 'id',
-		className : 'cell-rownumber',
-		render(id,row,index) {
-			return <span>{index + 1}</span>;
-		}	
-	};
 
 	const Header = React.createClass({
 		propTypes: {
@@ -35,7 +27,7 @@
 		},
 		render: function() {
 			const {toolbar} = this.props;
-			if(toolbar){
+			if(_.size(toolbar)){
 				return (<div className="grid-toolbar">
 					 	<table style={{cellspacing:0,cellpadding:0}}><tbody><tr>
 					 		{
@@ -141,7 +133,8 @@
 					<Toolbar toolbar={toolbar} service={service} />
 					<Table size='grid' {...props} rowSelection={rowSelection}
 					rowKey={function(record){return record[rowKey]}}
-					columns={rownumbers ? _.concat(ROWNUMBERS,columns):columns}
+					columns={columns}
+					rownumbers={rownumbers}
 					dataSource={data} 
 					pagination={pagination} />
 				</div>

@@ -5,6 +5,14 @@
     {Radio,Pagination,Icon,Spin,Dropdown,Checkbox} = UI;
 
 
+  const rownumberColumn = {
+    title: '',
+    dataIndex: 'id',
+    className : 'cell-rownumber',
+    render(id,row,index) {
+      return <span>{index + 1}</span>;
+    } 
+  };
 
   const defaultLocale =  Locale.Table;
 
@@ -175,7 +183,8 @@
         bordered: false,
         indentSize: 20,
         onChange: noop,
-        locale: {}
+        locale: {},
+        rownumbers:false,
       };
     },
 
@@ -190,6 +199,7 @@
       bordered: React.PropTypes.bool,
       onChange: React.PropTypes.func,
       locale: React.PropTypes.object,
+      rownumbers : React.PropTypes.bool,
     },
 
     getDefaultSelection() {
@@ -671,6 +681,11 @@
     render() {
       let data = this.getCurrentPageData();
       let columns = this.renderRowSelection();
+
+      if (this.props.rownumbers) {
+          columns.unshift(rownumberColumn);
+      }
+
       let expandIconAsCell = this.props.expandedRowRender && this.props.expandIconAsCell !== false;
       let locale = objectAssign({}, defaultLocale, this.props.locale);
 

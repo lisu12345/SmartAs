@@ -28,8 +28,8 @@ install("web.security.role",function($S){
 		title: '描述',
 		dataIndex: 'desc'
 	},{
-		title: 'state',
-		dataIndex: '状态',
+		title: '状态',
+		dataIndex: 'state',
 		render(value) {
 			return value == 1 ? '有效':'锁定';
 		}

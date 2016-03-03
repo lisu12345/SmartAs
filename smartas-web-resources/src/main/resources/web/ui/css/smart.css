@@ -11258,11 +11258,23 @@ ul li.ant-transfer-list-highlight-enter {
 .ant-grid .ant-table-grid th:last-child {
   border-right: 0;
 }
+.ant-grid .ant-table-grid th > span {
+  margin: 0;
+  padding: 0 4px;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+}
 .ant-grid .ant-table-grid .cell-rownumber {
   width: 30px;
   text-align: center;
   margin: 0;
   padding: 0;
+}
+.ant-grid .ant-table-grid th.ant-table-selection-column,
+.ant-grid .ant-table-grid td.ant-table-selection-column {
+  text-align: center;
+  width: 30px;
 }
 .ant-grid .ant-table-grid td {
   padding: 6px 8px;
