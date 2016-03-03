@@ -66,6 +66,16 @@
 		<filter-class>com.intercom.btravel.common.web.PlatformServletRequestFilter</filter-class>
 	</filter> -->
 	<!-- Processes application requests -->
+	
+	<servlet>
+      <servlet-name>DruidStatView</servlet-name>
+      <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+      <servlet-name>DruidStatView</servlet-name>
+      <url-pattern>/druid/*</url-pattern>
+  	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

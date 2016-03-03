@@ -234,7 +234,7 @@
 								),
 								React.createElement(
 									Popconfirm,
-									{ title: '确定要删除这个任务吗？', onConfirm: this.onDelete },
+									{ title: '确定要删除当前节点吗？', onConfirm: this.onDelete },
 									React.createElement(
 										Button,
 										{ disabled: data[idKey] < 0 },

@@ -36,6 +36,16 @@ public interface Service<T extends POJO,PK extends Serializable> {
 	 */
 	@Transactional(readOnly=true)
 	T get(PK id) throws BusinessAccessException;
+	
+	
+	/**
+	 * 更具id号获得对象，可以返回。如果返回null，不作相应的异常处理
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	T[] get(PK[] id) throws BusinessAccessException;
 
 	/**
 	 * 更具id号获得对象，一般不应该返回null。如果返回null，应该做相应的异常处理
@@ -92,6 +102,16 @@ public interface Service<T extends POJO,PK extends Serializable> {
 	 */
 	@Transactional()
 	void remove(PK id) throws BusinessAccessException;
+	
+	
+	/**
+	 * 批量删除记录
+	 * 
+	 * @param id
+	 * @throws BusinessAccessException
+	 */
+	@Transactional()
+	void remove(PK[] id) throws BusinessAccessException;
 
 	@Transactional()
 	void remove(T o) throws BusinessAccessException;

@@ -9,7 +9,7 @@
 	
 	
 	$.ajaxSetup({
-		cache : true,
+		cache : false,
 	});
 	
 	//context.ajaxError(function(event,request, settings){

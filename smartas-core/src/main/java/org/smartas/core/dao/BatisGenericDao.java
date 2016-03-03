@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
  * 
  * @author chenjpu
  */
+@Deprecated
 @SuppressWarnings("all")
 public class BatisGenericDao<T extends POJO, PK extends Serializable> extends SqlSessionDaoSupport implements GenericDao<T, PK> {
 
@@ -88,6 +89,10 @@ public class BatisGenericDao<T extends POJO, PK extends Serializable> extends Sq
 	protected String selectByIdStatement(Class<?> clazz) {
 		return getNamespace(clazz) + ".getById";
 	}
+	
+	protected String selectByIdsStatement(Class<?> clazz) {
+		return getNamespace(clazz) + ".getByIds";
+	}
 
 	protected String selectStatement(Class<?> clazz) {
 		return getNamespace(clazz) + ".select";
@@ -114,5 +119,15 @@ public class BatisGenericDao<T extends POJO, PK extends Serializable> extends Sq
 	
 	protected String statement(Class<?> clazz,String statement) {
 		return getNamespace(clazz) + "." + statement;
+	}
+
+	public T[] getByIds(PK[] id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void deleteByIds(Serializable[] id) {
+		// TODO Auto-generated method stub
+		
 	}
 }

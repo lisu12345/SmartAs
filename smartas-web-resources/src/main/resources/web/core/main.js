@@ -347,7 +347,7 @@
 	
 	
 	$.ajaxSetup({
-		cache : true,
+		cache : false,
 	});
 	
 	//context.ajaxError(function(event,request, settings){
@@ -808,13 +808,13 @@
 		}
 	}
 
-	NS.New = function(model) {
+	NS.New = function(model,notify) {
 		var listeners = [], services = {
 			create : 'services/' + model + '/single',
 			update : 'services/' + model + '/single',
-			get : 'services/' + model + '/single/{0}',
+			get : 'services/' + model + '/{0}/{1}',
 			find : 'services/' + model + '/single/{0}',
-			remove : 'services/' + model + '/single/{0}',
+			remove : 'services/' + model + '/{0}/{1}',
 			list : 'services/' + model + '/list',
 			listPage : 'services/' + model + '/list/{0}/{1}',
 		};
@@ -839,11 +839,12 @@
 			});
 		}
 
-		var method = function(method, type, url, data, success, error) {
+		var method = function(method, type, notify, url, data, success, error) {
 			return Resource.method(type, url, data, compose(type, function(data) {
 				_dispatch({
 					type : AT.SERVICE.SUCCESS,
 					method : method,
+					notify : notify,
 					model : model,
 					data : data
 				});
@@ -851,31 +852,37 @@
 		}
 
 		function create(data, sucess, error) {
-			return method('create', 'post', services.create, data, sucess, error);
+			return method('create', 'post',true, services.create, data, sucess, error);
 		}
 		function update(data, sucess, error) {
-			return method('update', 'put', services.update, data, sucess, error);
+			return method('update', 'put', true, services.update, data, sucess, error);
 		}
 		function get(id, sucess, error) {
-			return method('get', 'get', services.get.format(id), sucess, error);
+			if(_.isArray(id)){
+				return method('get', 'get',false, services.get.format('batach',_.join(id)) , sucess, error);
+			}
+			return method('get', 'get', false,services.get.format('single',id), sucess, error);
 		}
 		function find(id, sucess, error) {
-			return method('find', 'get', services.find.format(id), sucess, error);
+			return method('find', 'get',false, services.find.format(id), sucess, error);
 		}
 		function remove(id, sucess, error) {
-			return method('remove', 'delete', services.remove.format(id), sucess, error);
+			if(_.isArray(id)){
+				return method('remove', 'delete',true, services.remove.format('batach',_.join(id)), sucess, error);
+			}
+			return method('remove', 'delete',true, services.get.format('single',id), sucess, error);
 		}
 		function list(q, sucess, error) {
-			return method('list', 'get', services.list, q, sucess, error);
+			return method('list', 'get', false,services.list, q, sucess, error);
 		}
 		function listPage(page, pageSize, q, sucess, error) {
-			return method('listPage', 'get', services.listPage.format(page, pageSize), q, sucess, error);
+			return method('listPage', 'get',false, services.listPage.format(page, pageSize), q, sucess, error);
 		}
 		function ready() {
-			dispatch(AT.SERVICE.READY);
+			dispatch(AT.SERVICE.READY,undefined,'ready');
 		}
 		function init() {
-			dispatch(AT.SERVICE.INIT);
+			dispatch(AT.SERVICE.INIT,undefined,'init');
 		}
 		function refresh(/*page, pageSize, q*/) {
 			if(arguments.length){
@@ -883,17 +890,25 @@
 					page : arguments[0],
 					pageSize : arguments[1],
 					q : arguments[2]
-				});
+				},'refresh');
 			}else {
-				dispatch(AT.SERVICE.REFRESH);
+				dispatch(AT.SERVICE.REFRESH,undefined,'refresh');
 			}
 		}
-		function dispatch(type, data) {
+		function dispatch(type, data, method) {
 			_dispatch({
 				type : type,
+				method : method,
 				data : data
 			});
 		}
+		
+		if(notify || notify === undefined){
+			listeners.push(function(action){
+				action.notify && refresh();
+			});
+		}
+		
 		return {
 			create : create,
 			update : update,

@@ -20,7 +20,10 @@ public abstract class GenericServiceImpl<T extends POJO, PK extends Serializable
 	}
 
 	public T get(PK id) {
-		return (T) getDao().getById(id);
+		return getDao().getById(id);
+	}
+	public T[] get(PK[] ids) {
+		return getDao().getByIds(ids);
 	}
 
 	public Serializable save(T entity) {
@@ -44,6 +47,10 @@ public abstract class GenericServiceImpl<T extends POJO, PK extends Serializable
 
 	public void remove(PK id) {
 		getDao().deleteById(id);
+	}
+	
+	public void remove(PK[] ids) {
+		getDao().deleteByIds(ids);
 	}
 
 	public T find(PK id) throws BusinessAccessException {

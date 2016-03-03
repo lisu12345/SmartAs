@@ -6,6 +6,8 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 +(function (UI, RC) {
 	var Table = UI.Table;
+	var Button = UI.Button;
+	var Icon = UI.Icon;
 
 	var ROWNUMBERS = {
 		title: '',
@@ -44,24 +46,98 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 
+	var Toolbar = React.createClass({
+		displayName: 'Toolbar',
+
+		propTypes: {
+			toolbar: React.PropTypes.array,
+			service: React.PropTypes.object.isRequired
+		},
+		render: function render() {
+			var toolbar = this.props.toolbar;
+
+			if (toolbar) {
+				return React.createElement(
+					'div',
+					{ className: 'grid-toolbar' },
+					React.createElement(
+						'table',
+						{ style: { cellspacing: 0, cellpadding: 0 } },
+						React.createElement(
+							'tbody',
+							null,
+							React.createElement(
+								'tr',
+								null,
+								_.map(toolbar, function (value, key) {
+									var bar = undefined;
+									if (value === '-') {
+										bar = React.createElement('span', { className: 'btn-separator' });
+									} else {
+										bar = React.createElement(
+											Button,
+											{ type: 'grid', onClick: value.handler.bind(this) },
+											value.icon ? React.createElement(Icon, { type: value.icon }) : '',
+											React.createElement(
+												'span',
+												null,
+												value.text
+											)
+										);
+									}
+									return React.createElement(
+										'td',
+										{ key: key },
+										bar
+									);
+								})
+							)
+						)
+					)
+				);
+			}
+			return null;
+		}
+	});
+
+	var rowSelection = {
+		onChange: function onChange(selectedRowKeys) {
+			console.log('selectedRowKeys changed: ' + selectedRowKeys);
+		},
+		onSelect: function onSelect(record, selected, selectedRows) {
+			console.log(record, selected, selectedRows);
+		},
+		onSelectAll: function onSelectAll(selected, selectedRows) {
+			console.log(selected, selectedRows);
+		}
+	};
+
 	var Grid = React.createClass({
 		displayName: 'Grid',
 
 		propTypes: {
 			service: React.PropTypes.object.isRequired,
-			rownumbers: React.PropTypes.bool
+			rownumbers: React.PropTypes.bool,
+			pageSize: React.PropTypes.number,
+			toolbar: React.PropTypes.array
 		},
 		getDefaultProps: function getDefaultProps() {
 			return {
-				rownumbers: true
+				rownumbers: true,
+				pageSize: 10,
+				current: 1,
+				toolbar: []
 			};
 		},
 		getInitialState: function getInitialState() {
-			var service = this.props.service;
+			var _props = this.props;
+			var service = _props.service;
+			var current = _props.current;
+			var pageSize = _props.pageSize;
 
 			var pagination = {
 				total: 0,
-				current: 1,
+				current: current,
 				showSizeChanger: true,
 				showTotal: function showTotal(total) {
 					return '共 ' + total + ' 条';
@@ -73,7 +149,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					service.listPage(current, pageSize);
 				}
 			};
-			return { pagination: pagination, data: [] };
+			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
 		},
 		componentDidMount: function componentDidMount() {
 			var service = this.props.service;
@@ -83,15 +159,21 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 				var data = action.data;
 				var method = action.method;
 
+				if (method === 'refresh') {
+					if (data) {
+						service.listPage(data.qs, data.page, data.pageSize);
+						return;
+					}
+					service.listPage( /*this.state.qs,*/this.state.current, this.state.pageSize);
+					return;
+				}
 				if (method === 'listPage') {
-					var pageSize = data.pageSize;
-					var page = data.page;
-					var length = data.length;
-
 					this.setState({
 						data: data.data,
+						current: data.page,
+						pageSize: data.pageSize,
 						pagination: {
-							total: length
+							total: data.length
 						}
 					});
 					return;
@@ -102,20 +184,22 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		render: function render() {
 			var _state = this.state;
 			var data = _state.data;
-			var pagination = _state.pagination;var _props = this.props;
-			var service = _props.service;
-			var _rowKey = _props.rowKey;
-			var rownumbers = _props.rownumbers;
-			var columns = _props.columns;
-			var title = _props.title;
+			var pagination = _state.pagination;var _props2 = this.props;
+			var service = _props2.service;
+			var _rowKey = _props2.rowKey;
+			var rownumbers = _props2.rownumbers;
+			var columns = _props2.columns;
+			var title = _props2.title;
+			var toolbar = _props2.toolbar;
 
-			var props = _objectWithoutProperties(_props, ['service', 'rowKey', 'rownumbers', 'columns', 'title']);
+			var props = _objectWithoutProperties(_props2, ['service', 'rowKey', 'rownumbers', 'columns', 'title', 'toolbar']);
 
 			return React.createElement(
 				'div',
 				{ className: 'ant-grid' },
 				React.createElement(Header, { title: title }),
-				React.createElement(Table, _extends({ size: 'grid' }, props, {
+				React.createElement(Toolbar, { toolbar: toolbar, service: service }),
+				React.createElement(Table, _extends({ size: 'grid' }, props, { rowSelection: rowSelection,
 					rowKey: function rowKey(record) {
 						return record[_rowKey];
 					},

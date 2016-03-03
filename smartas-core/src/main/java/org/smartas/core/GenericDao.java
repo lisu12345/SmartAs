@@ -23,6 +23,14 @@ public interface GenericDao<T extends POJO, PK extends Serializable> {
 	 */
 
 	T getById(PK id);
+	/**
+	 * 从数据库查询满足条件的对象,这里我们不处理找不到结果的情况,应为存在业务要求 数据库中是否已有这条记录
+	 * 
+	 * @param ids
+	 * @return
+	 * @throws DataAccessException
+	 */
+	T[] getByIds(PK[] ids);
 
 	/**
 	 * 返回某类对象在数据库中的记录数,分页用的比较多
@@ -76,6 +84,15 @@ public interface GenericDao<T extends POJO, PK extends Serializable> {
 	 * @throws DataAccessException
 	 */
 	void deleteById(Serializable id);
+	
+	
+	/**
+	 * 批量删除记录
+	 * 
+	 * @param ids
+	 * @throws DataAccessException
+	 */
+	void deleteByIds(Serializable[] ids);
 
 	// ~~~
 	// void evict(T entity);

@@ -165,7 +165,7 @@
 						<div className="panel panel-default full-height" style={{overflow:'auto'}}>
 							<ButtonGroup size='small' style={{padding:5}} >
 							  <Button onClick={this.onCreate} disabled={data[idKey] < 0}>新增</Button>
-							  <Popconfirm title="确定要删除这个任务吗？" onConfirm={this.onDelete}>
+							  <Popconfirm title="确定要删除当前节点吗？" onConfirm={this.onDelete}>
 							  	<Button disabled={data[idKey] < 0}>删除</Button>
 							  </Popconfirm>
 							</ButtonGroup>

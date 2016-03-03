@@ -33,9 +33,28 @@ install("web.security.user",function($S){
 		}
 	}];
 	
+	
+	var toolbar = [{
+        text:'Add',
+        icon:'add',
+        handler:function(){alert('add')}
+    },{
+        text:'Cut',
+        icon:'cut',
+        handler:function(){alert('cut')}
+    },'-',{
+        text:'Save',
+        icon:'save',
+        handler:function(){alert('save')}
+    },{
+	    text:'删除',
+	    icon:'delete',
+	    handler:function(){alert('删除')}
+	}];
+	
 	const App = React.createClass({
  		render: function() {
-			return <Grid rowKey='id' columns={columns} service={service} title='用户列表' />
+			return <Grid rowKey='id' columns={columns} toolbar={toolbar} service={service} title='用户列表' />
 		}
 	});
 	

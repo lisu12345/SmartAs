@@ -7,12 +7,24 @@
 	<!-- <cache /> -->
 
 	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+	
 
 	<select id="getById" resultType="${pkg}.${name}">
 		SELECT
 		T.*
 		FROM tpl_${name?uncap_first}_t T
 		WHERE T.ID = ${r"#{id}"}
+	</select>
+	
+	
+	<select id="getByIds" resultType="${pkg}.${name}">
+		SELECT
+		T.*
+		FROM tpl_${name?uncap_first}_t T
+		WHERE ID in
+		  <foreach item="id" collection="ids" open="(" separator="," close=")">
+		     ${r"#{id}"}
+		  </foreach>
 	</select>
 
 	<select id="getCountAll" resultType="int">
@@ -51,10 +63,18 @@
 	</update>
 
 
-	<select id="deleteById">
+	<delete id="deleteById">
 		DELETE FROM tpl_${name?uncap_first}_t
 		WHERE ID = ${r"#{id}"}
-	</select>
+	</delete>
+	
+	<delete id="deleteByIds">
+		DELETE FROM tpl_${name?uncap_first}_t
+		WHERE ID in
+		  <foreach item="id" collection="ids" open="(" separator="," close=")">
+		     ${r"#{id}"}
+		  </foreach>
+	</delete>
 
 	<!-- //////////////////////////////////////////////////////////// -->
  

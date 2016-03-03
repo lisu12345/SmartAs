@@ -19,8 +19,7 @@
 		lifecycle.fire(name);
 	});
 
-	//
-	NS.ready(function(el) {
-		$.parser.parse($(el));
-	});
+	//NS.ready(function(el) {
+	//	$.parser.parse($(el));
+	//});
 }(Smart.Namespace, Smart.EventBus, Smart.Resource);

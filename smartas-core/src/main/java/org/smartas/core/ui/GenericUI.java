@@ -28,6 +28,12 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
 	public T get(@PathVariable("id") PK id) {
 		return getService().get(id);
 	}
+	
+	@RequestMapping(value = "/batch/{ids}", method = RequestMethod.GET)
+	@Operation(code = Operation.READ, desc = Operation.READ_DESC)
+	public T[] get(@PathVariable("id") PK[] ids) {
+		return getService().get(ids);
+	}
 
 	@RequestMapping(value = "/list/{page}/{pageSize}", method = RequestMethod.GET)
 	@Operation(code = Operation.READ, desc = Operation.READ_DESC)
@@ -58,6 +64,13 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
 	@Operation(code = Operation.DELETE, desc = Operation.DELETE_DESC)
 	public void remove(@PathVariable("id") PK id) throws BusinessAccessException {
 		getService().remove(id);
+	}
+	
+	
+	@RequestMapping(value = "/batch/{ids}", method = RequestMethod.DELETE)
+	@Operation(code = Operation.DELETE, desc = Operation.DELETE_DESC)
+	public void remove(@PathVariable("ids") PK[] ids) throws BusinessAccessException {
+		//getService().remove(id);
 	}
 
 }
