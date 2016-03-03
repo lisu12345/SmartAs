@@ -77,6 +77,15 @@
 	      &:last-child {
 				border-right: 0;
 		  }
+		  
+		  >span {
+		        margin: 0;
+		    	padding: 0 4px;
+			    white-space: nowrap;
+			    word-wrap: normal;
+			    overflow: hidden;
+			   
+		   }
 	    }
 	    
 	    .cell-rownumber {
@@ -85,6 +94,12 @@
 		    margin: 0;
 		    padding: 0;
 	    }
+	    
+	    th.@{table-prefix-cls}-selection-column,
+		td.@{table-prefix-cls}-selection-column {
+		   text-align: center;
+		   width: 30px;
+		}
 	
 	    td {
 			padding: 6px 8px;

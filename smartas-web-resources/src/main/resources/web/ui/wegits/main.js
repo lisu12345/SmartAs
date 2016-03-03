@@ -3691,6 +3691,19 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
 
+  var rownumberColumn = {
+    title: '',
+    dataIndex: 'id',
+    className: 'cell-rownumber',
+    render: function render(id, row, index) {
+      return React.createElement(
+        'span',
+        null,
+        index + 1
+      );
+    }
+  };
+
   var defaultLocale = Locale.Table;
 
   var FilterMenu = React.createClass({
@@ -3882,7 +3895,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         bordered: false,
         indentSize: 20,
         onChange: noop,
-        locale: {}
+        locale: {},
+        rownumbers: false
       };
     },
 
@@ -3896,7 +3910,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       loading: React.PropTypes.bool,
       bordered: React.PropTypes.bool,
       onChange: React.PropTypes.func,
-      locale: React.PropTypes.object
+      locale: React.PropTypes.object,
+      rownumbers: React.PropTypes.bool
     },
 
     getDefaultSelection: function getDefaultSelection() {
@@ -4365,6 +4380,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var data = this.getCurrentPageData();
       var columns = this.renderRowSelection();
+
+      if (this.props.rownumbers) {
+        columns.unshift(rownumberColumn);
+      }
+
       var expandIconAsCell = this.props.expandedRowRender && this.props.expandIconAsCell !== false;
       var locale = objectAssign({}, defaultLocale, this.props.locale);
 

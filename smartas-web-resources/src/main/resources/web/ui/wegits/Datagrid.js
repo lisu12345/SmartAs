@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -9,21 +9,8 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	var Button = UI.Button;
 	var Icon = UI.Icon;
 
-	var ROWNUMBERS = {
-		title: '',
-		dataIndex: 'id',
-		className: 'cell-rownumber',
-		render: function render(id, row, index) {
-			return React.createElement(
-				'span',
-				null,
-				index + 1
-			);
-		}
-	};
-
 	var Header = React.createClass({
-		displayName: 'Header',
+		displayName: "Header",
 
 		propTypes: {
 			title: React.PropTypes.string
@@ -33,11 +20,11 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 			if (title) {
 				return React.createElement(
-					'div',
-					{ className: 'grid-head' },
+					"div",
+					{ className: "grid-head" },
 					React.createElement(
-						'div',
-						{ className: 'grid-title' },
+						"div",
+						{ className: "grid-title" },
 						title
 					)
 				);
@@ -47,7 +34,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	});
 
 	var Toolbar = React.createClass({
-		displayName: 'Toolbar',
+		displayName: "Toolbar",
 
 		propTypes: {
 			toolbar: React.PropTypes.array,
@@ -56,37 +43,37 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		render: function render() {
 			var toolbar = this.props.toolbar;
 
-			if (toolbar) {
+			if (_.size(toolbar)) {
 				return React.createElement(
-					'div',
-					{ className: 'grid-toolbar' },
+					"div",
+					{ className: "grid-toolbar" },
 					React.createElement(
-						'table',
+						"table",
 						{ style: { cellspacing: 0, cellpadding: 0 } },
 						React.createElement(
-							'tbody',
+							"tbody",
 							null,
 							React.createElement(
-								'tr',
+								"tr",
 								null,
 								_.map(toolbar, function (value, key) {
 									var bar = undefined;
 									if (value === '-') {
-										bar = React.createElement('span', { className: 'btn-separator' });
+										bar = React.createElement("span", { className: "btn-separator" });
 									} else {
 										bar = React.createElement(
 											Button,
-											{ type: 'grid', onClick: value.handler.bind(this) },
+											{ type: "grid", onClick: value.handler.bind(this) },
 											value.icon ? React.createElement(Icon, { type: value.icon }) : '',
 											React.createElement(
-												'span',
+												"span",
 												null,
 												value.text
 											)
 										);
 									}
 									return React.createElement(
-										'td',
+										"td",
 										{ key: key },
 										bar
 									);
@@ -102,7 +89,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 	var rowSelection = {
 		onChange: function onChange(selectedRowKeys) {
-			console.log('selectedRowKeys changed: ' + selectedRowKeys);
+			console.log("selectedRowKeys changed: " + selectedRowKeys);
 		},
 		onSelect: function onSelect(record, selected, selectedRows) {
 			console.log(record, selected, selectedRows);
@@ -113,7 +100,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	};
 
 	var Grid = React.createClass({
-		displayName: 'Grid',
+		displayName: "Grid",
 
 		propTypes: {
 			service: React.PropTypes.object.isRequired,
@@ -140,7 +127,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 				current: current,
 				showSizeChanger: true,
 				showTotal: function showTotal(total) {
-					return '共 ' + total + ' 条';
+					return "共 " + total + " 条";
 				},
 				onShowSizeChange: function onShowSizeChange(current, pageSize) {
 					service.listPage(current, pageSize);
@@ -192,18 +179,19 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var title = _props2.title;
 			var toolbar = _props2.toolbar;
 
-			var props = _objectWithoutProperties(_props2, ['service', 'rowKey', 'rownumbers', 'columns', 'title', 'toolbar']);
+			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar"]);
 
 			return React.createElement(
-				'div',
-				{ className: 'ant-grid' },
+				"div",
+				{ className: "ant-grid" },
 				React.createElement(Header, { title: title }),
 				React.createElement(Toolbar, { toolbar: toolbar, service: service }),
-				React.createElement(Table, _extends({ size: 'grid' }, props, { rowSelection: rowSelection,
+				React.createElement(Table, _extends({ size: "grid" }, props, { rowSelection: rowSelection,
 					rowKey: function rowKey(record) {
 						return record[_rowKey];
 					},
-					columns: rownumbers ? _.concat(ROWNUMBERS, columns) : columns,
+					columns: columns,
+					rownumbers: rownumbers,
 					dataSource: data,
 					pagination: pagination }))
 			);
