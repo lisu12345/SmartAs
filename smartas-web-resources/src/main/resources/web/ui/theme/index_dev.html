@@ -151,9 +151,9 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script src="web/common/bootstrap/ie10-viewport-bug-workaround.js"></script>
-	<script src="web/common/jquery/jquery-2.1.4.min.js"></script>
+	<script src="web/common/jquery/jquery.js"></script>
 	<script src="web/common/velocity.min.js"></script>
-	<script src="web/common/lodash.min.js"></script>
+	<script src="web/common/lodash.js"></script>
 	<script src="web/common/immutable.min.js"></script>
 	<script src="web/common/qs.js"></script>
 	<script src="web/common/Utils.js"></script>
@@ -165,24 +165,128 @@
 	<script src="web/common/zTree_v3/js/jquery.ztree.all-3.5.js"></script>
 	<script src="web/common/bootstrap/js/bootstrap.js"></script>
 	<!-- <script src="web/common/scrollbar/jquery.mCustomScrollbar.min.js"></script> -->
-	<script src="web/common/react/react.min.js"></script>
-	<script src="web/common/react/react-with-addons.min.js"></script>
-	<script src="web/common/react/react-dom.min.js"></script>
-	<script src="web/common/react/react-bootstrap.min.js"></script>
-	<script src="web/common/react/redux.min.js"></script>
-	<script src="web/common/react/react-redux.min.js"></script>
+	<script src="web/common/react/react.js"></script>
+	<script src="web/common/react/react-with-addons.js"></script>
+	<script src="web/common/react/react-dom.js"></script>
+	<script src="web/common/react/react-bootstrap.js"></script>
+	<script src="web/common/react/redux.js"></script>
+	<script src="web/common/react/react-redux.js"></script>
 
+	<script src="web/common/react/browser.min.js"></script>
+	
 	<script src="services/env/workspace"></script>
 	<script src="web/ui/wegits/msgBox.js"></script>
+	<!-- <script src="web/ui/components/locale/en_US.js"></script> -->
 	
+
 	<!-- -->
+	<script src="web/core/Namespace.js"></script>
+	<script src="web/core/EventBus.js"></script>
+	<script src="web/core/ActionTypes.js"></script>
+	<script src="web/core/Store.js"></script>
+	<script src="web/core/Resource.js"></script>
+	<script src="web/core/DataSource.js"></script>
+	<script src="web/core/Service.js"></script>
+	
+	<script src="web/ui/components/locale/zh_CN.js"></script>
+	<script src="web/ui/components/index.js"></script>
+	<script src="web/ui/components/react-slick.js"></script>
+	<script src="web/ui/components/util.js"></script>
+	<script src="web/ui/components/dom-align.js"></script>
+	<script src="web/ui/components/css-animation.js"></script>
+	<script src="web/ui/components/align.js"></script>
+	<script src="web/ui/components/animate.js"></script>
+	<script src="web/ui/components/trigger.js"></script>
+	<script src="web/ui/components/notification.js"></script>
+	<script src="web/ui/components/checkbox.js"></script>
+	<script src="web/ui/components/input-number.js"></script>
+	<script src="web/ui/components/dropdown.js"></script>
+	<script src="web/ui/components/radio.js"></script>
+	<script src="web/ui/components/menu.js"></script>
+	<script src="web/ui/components/select.js"></script>
+	<script src="web/ui/components/switch.js"></script>
+	<script src="web/ui/components/progress.js"></script>
+	<script src="web/ui/components/tooltip.js"></script>
+	<script src="web/ui/components/dialog.js"></script>
+	<script src="web/ui/components/tabs.js"></script>
+	<script src="web/ui/components/upload.js"></script>
+	<script src="web/ui/components/async-validator.js"></script>
+	<script src="web/ui/components/form.js"></script>
+	<script src="web/ui/components/pagination.js"></script>
+	<script src="web/ui/components/table.js"></script>
+	<script src="web/ui/components/steps.js"></script>
+	<script src="web/ui/components/cascader.js"></script>
+	<script src="web/ui/components/gregorian-calendar.js"></script>
+	<script src="web/ui/components/time-picker.js"></script>
+	<script src="web/ui/components/calendar.js"></script>
+	<script src="web/ui/components/slider.js"></script>
+	<script src="web/ui/components/tree.js"></script>
+	<script src="web/ui/components/tree-select.js"></script>
+	
+	<script src="web/ui/wegits/locale/zh_CN.js"></script>
+	<script src="web/ui/wegits/index.js"></script>
+	<script src="web/ui/wegits/layout.js"></script>
+	<script src="web/ui/wegits/icon.js"></script>
+	<script src="web/ui/wegits/breadcrumb.js"></script>
+	<script src="web/ui/wegits/input.js"></script>
+	<script src="web/ui/wegits/progress.js"></script>
+	<script src="web/ui/wegits/checkbox.js"></script>
+	<script src="web/ui/wegits/switch.js"></script>
+	<script src="web/ui/wegits/radio.js"></script>
+	<script src="web/ui/wegits/form.js"></script>
+	<script src="web/ui/wegits/input-number.js"></script>
+	<script src="web/ui/wegits/message.js"></script>
+	<script src="web/ui/wegits/notification.js"></script>
+	<script src="web/ui/wegits/affix.js"></script>
+	<script src="web/ui/wegits/alert.js"></script>
+	<script src="web/ui/wegits/badge.js"></script>
+	<script src="web/ui/wegits/button.js"></script>
+	<script src="web/ui/wegits/menu.js"></script>
+	<script src="web/ui/wegits/select.js"></script>
+	<script src="web/ui/wegits/dropdown.js"></script>
+	<script src="web/ui/wegits/modal.js"></script>
+	<script src="web/ui/wegits/tooltip.js"></script>
+	<script src="web/ui/wegits/tabs.js"></script>
+	<script src="web/ui/wegits/popconfirm.js"></script>
+	<script src="web/ui/wegits/upload.js"></script>
+	<script src="web/ui/wegits/tag.js"></script>
+	<script src="web/ui/wegits/spin.js"></script>
+	<script src="web/ui/wegits/popover.js"></script>
+	<script src="web/ui/wegits/pagination.js"></script>
+	<script src="web/ui/wegits/table.js"></script>
+	<script src="web/ui/wegits/steps.js"></script>
+	<script src="web/ui/wegits/timeline.js"></script>
+	<script src="web/ui/wegits/cascader.js"></script>
+	<script src="web/ui/wegits/time-picker.js"></script>
+	<script src="web/ui/wegits/calendar.js"></script>
+	<script src="web/ui/wegits/date-picker.js"></script>
+	<script src="web/ui/wegits/slider.js"></script>
+	<script src="web/ui/wegits/tree.js"></script>
+	<script src="web/ui/wegits/carousel.js"></script>
+	<script src="web/ui/wegits/tree-select.js"></script>
+	<script src="web/ui/wegits/transfer.js"></script>
+	<script src="web/ui/wegits/datagrid.js"></script>
+	<script src="web/ui/wegits/tree-form.js"></script>
+	
+	<!-- 
 	<script src="web/core/main.min.js"></script>
 	<script src="web/ui/components/locale/zh_CN.js"></script>
 	<script src="web/ui/wegits/locale/zh_CN.js"></script>
 	<script src="web/ui/components/main.min.js"></script>
 	<script src="web/ui/wegits/main.min.js"></script> 
+	-->
+	
+	<script src="web/ui/plugins/Storage.js"></script>
+	<script src="web/ui/plugins/Datagrid.js"></script>
+	<script src="web/ui/plugins/Radio.js"></script>
+	<script src="web/ui/plugins/Checkbox.js"></script>
+	<script src="web/ui/plugins/Button.js"></script>
+	<script src="web/ui/plugins/Form.js"></script>
+	
+	
 
 	<script src="web/ui/index.js"></script>
+	<script src="web/ui/react-debug.js"></script>
 	<script src="web/common/jquery.form2json.js"></script>
 	<script src="web/ui/theme/index.js"></script>
 </body>
