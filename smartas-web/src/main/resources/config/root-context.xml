@@ -11,6 +11,13 @@
 
 	<beans>
 		
+		<bean id="environment" class="org.smartas.core.Environment">
+			<property name="appName" value="smartas" />
+			<property name="dbName" value="smartas" />
+			<property name="scope" value="smartas" />
+			<property name="tablePrefix" value="tpl" />
+		</bean>
+		
 		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 			<!-- 基本属性 url、user、password -->
 	      <property name="url" value="${datasource.url}" />

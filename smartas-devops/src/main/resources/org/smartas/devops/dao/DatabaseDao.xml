@@ -10,13 +10,13 @@
 		SELECT
 		count(1)
 		FROM information_schema.tables t 
-		WHERE t.table_schema='smartas' AND t.table_name LIKE 'tpl%'
+		WHERE t.table_schema=#{db} AND t.table_name LIKE CONCAT(#{prefix},'%')
 	</select>
 
 	<select id="selectTable" resultType="org.smartas.devops.Table" pageable="true">
 		SELECT t.table_schema as 'schema',t.table_name as 'name',t.table_comment as 'comment' 
 		FROM information_schema.tables t 
-		WHERE t.table_schema='smartas' AND t.table_name LIKE 'tpl%'
+		WHERE t.table_schema=#{db} AND t.table_name LIKE CONCAT(#{prefix},'%')
 	</select>
 
 	<!-- //////////////////////////////////////////////////////////// -->

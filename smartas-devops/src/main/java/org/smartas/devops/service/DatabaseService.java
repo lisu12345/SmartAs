@@ -12,5 +12,5 @@ import org.smartas.devops.Table;
  */
 public interface DatabaseService {
 
-	Pageable<Table> getAll(int page, int pageSize);
+	Pageable<Table> getTable(String db,String tablePrefix,int page, int pageSize);
 }

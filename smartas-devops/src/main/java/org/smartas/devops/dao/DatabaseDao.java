@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DatabaseDao {
 
-	int getTableCountAll();
+	int getTableCountAll(@Param("db") String db,@Param("prefix") String prefix);
 
-	List<Table> selectTable(@Param("page") Page page);
+	List<Table> selectTable(@Param("db") String db,@Param("prefix") String prefix,@Param("page") Page page);
 }

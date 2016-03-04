@@ -3,6 +3,7 @@
  */
 package org.smartas.devops.ui;
 
+import org.smartas.core.Environment;
 import org.smartas.core.Pageable;
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneratorUI {
 	@Autowired
 	private DatabaseService service;
-
+	
 	protected DatabaseService getService() {
 		return service;
 	}
@@ -32,7 +33,7 @@ public class GeneratorUI {
 	@RequestMapping(value = "/table/list/{page}/{pageSize}", method = RequestMethod.GET)
 	@Operation(code = Operation.READ, desc = Operation.READ_DESC)
 	public Pageable<Table> getAll(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
-		return service.getAll(page, pageSize);
+		return service.getTable(Environment.getEvn().getDbName(),Environment.getEvn().getTablePrefix() ,page, pageSize);
 	}
 
 }
