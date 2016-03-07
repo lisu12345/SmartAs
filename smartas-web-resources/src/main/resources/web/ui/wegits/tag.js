@@ -65,11 +65,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var prefixCls = _props.prefixCls;
         var closable = _props.closable;
         var color = _props.color;
+        var className = _props.className;
+        var children = _props.children;
 
-        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color"]);
+        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color", "className", "children"]);
 
         var close = closable ? React.createElement(Icon, { type: "cross", onClick: this.close.bind(this) }) : '';
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _classNames));
+        var classString = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _defineProperty(_classNames, className, !!className), _classNames));
         return React.createElement(
           Animate,
           { component: "",
@@ -79,8 +81,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             onEnd: this.animationEnd.bind(this) },
           this.state.closed ? null : React.createElement(
             "div",
-            { "data-show": !this.state.closing, className: className },
-            React.createElement("span", _extends({ className: prefixCls + "-text" }, restProps)),
+            _extends({ "data-show": !this.state.closing }, restProps, { className: classString }),
+            React.createElement(
+              "span",
+              { className: prefixCls + "-text" },
+              children
+            ),
             close
           )
         );

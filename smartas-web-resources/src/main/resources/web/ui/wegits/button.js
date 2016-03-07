@@ -37,6 +37,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		return child;
 	}
 
+	function clearButton(button) {
+		button.className = button.className.replace(prefix + 'clicked', '');
+	}
+
 	var Button = (function (_React$Component) {
 		_inherits(Button, _React$Component);
 
@@ -51,11 +55,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function handleClick() {
 				var _props;
 
+				// Add click effect
 				var buttonNode = findDOMNode(this);
-				buttonNode.className = buttonNode.className.replace(prefix + 'clicked', '');
+				clearButton(buttonNode);
 				setTimeout(function () {
-					buttonNode.className += ' ' + prefix + 'clicked';
+					return buttonNode.className += ' ' + prefix + 'clicked';
 				}, 10);
+				clearTimeout(this.timeout);
+				this.timeout = setTimeout(function () {
+					return clearButton(buttonNode);
+				}, 500);
+
 				(_props = this.props).onClick.apply(_props, arguments);
 			}
 		}, {
@@ -89,7 +99,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'button',
-					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: this.handleClick.bind(this) }),
+					_extends({}, others, {
+						type: htmlType || 'button',
+						className: classes,
+						onClick: this.handleClick.bind(this) }),
 					kids
 				);
 			}

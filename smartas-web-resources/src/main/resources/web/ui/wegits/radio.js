@@ -23,12 +23,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var checked = _props.checked;
 			var disabled = _props.disabled;
 			var className = _props.className;
+			var style = _props.style;
 
 			var classString = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _classNames));
 			return React.createElement(
 				'label',
-				{ className: classString },
-				React.createElement(Radio, _extends({}, this.props, { children: null })),
+				{ className: classString, style: style },
+				'>',
+				React.createElement(Radio, _extends({}, this.props, { style: null, children: null })),
 				children
 			);
 		}
@@ -38,7 +40,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		var value = null;
 		var matched = false;
 		React.Children.forEach(children, function (radio) {
-			if (radio.props && radio.props.checked) {
+			if (radio && radio.props && radio.props.checked) {
 				value = radio.props.value;
 				matched = true;
 			}
@@ -93,11 +95,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			this.props.onChange(ev);
 		},
 		render: function render() {
-			var _this = this;
+			var _this = this,
+			    _classNames2;
 
 			var props = this.props;
 			var children = React.Children.map(props.children, function (radio) {
-				if (radio.props) {
+				if (radio && (radio.type === Radio || radio.type === RadioButton) && radio.props) {
 					var keyProps = {};
 					if (!('key' in radio) && typeof radio.props.value === 'string') {
 						keyProps.key = radio.props.value;
@@ -110,9 +113,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				}
 				return radio;
 			});
+			var classString = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls, true), _defineProperty(_classNames2, props.prefixCls + '-' + props.size, props.size), _classNames2));
 			return React.createElement(
 				'div',
-				{ className: props.prefixCls + ' ' + props.prefixCls + '-' + props.size },
+				{ className: classString, style: props.style },
 				children
 			);
 		}

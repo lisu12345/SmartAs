@@ -66,25 +66,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var children = _props.children;
         var tabBarExtraContent = _props.tabBarExtraContent;
 
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, this.props.className, !!this.props.className), _defineProperty(_classNames, prefixCls + '-mini', size === 'small' || size === 'mini'), _defineProperty(_classNames, prefixCls + '-vertical', tabPosition === 'left' || tabPosition === 'right'), _defineProperty(_classNames, prefixCls + '-card', type.indexOf('card') >= 0), _classNames));
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, this.props.className, !!this.props.className), _defineProperty(_classNames, prefixCls + '-mini', size === 'small' || size === 'mini'), _defineProperty(_classNames, prefixCls + '-vertical', tabPosition === 'left' || tabPosition === 'right'), _defineProperty(_classNames, prefixCls + '-card', type.indexOf('card') >= 0), _defineProperty(_classNames, prefixCls + '-' + type, true), _classNames));
         if (tabPosition === 'left' || tabPosition === 'right' || type.indexOf('card') >= 0) {
           animation = null;
         }
         // only card type tabs can be added and closed
         if (type === 'editable-card') {
-          if (children.length > 1) {
-            children = children.map(function (child, index) {
-              return cloneElement(child, {
-                tab: React.createElement(
-                  'div',
-                  null,
-                  child.props.tab,
-                  React.createElement(Icon, { type: 'cross', onClick: _this2.removeTab.bind(_this2, child.key) })
-                ),
-                key: child.key || index
-              });
+          children = children.map(function (child, index) {
+            return cloneElement(child, {
+              tab: React.createElement(
+                'div',
+                null,
+                child.props.tab,
+                React.createElement(Icon, { type: 'cross', onClick: _this2.removeTab.bind(_this2, child.key) })
+              ),
+              key: child.key || index
             });
-          }
+          });
           // Add new tab handler
           tabBarExtraContent = React.createElement(
             'span',
@@ -93,17 +91,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             tabBarExtraContent
           );
         }
-        // Wrap the extra content
-        tabBarExtraContent = React.createElement(
-          'div',
-          { className: prefixCls + '-extra-content' },
-          tabBarExtraContent
-        );
         return React.createElement(
           Tabs,
           _extends({}, this.props, {
             className: className,
-            tabBarExtraContent: tabBarExtraContent,
+            tabBarExtraContent: React.createElement(
+              'div',
+              { className: prefixCls + '-extra-content' },
+              tabBarExtraContent
+            ),
             onChange: this.handleChange,
             animation: animation }),
           children

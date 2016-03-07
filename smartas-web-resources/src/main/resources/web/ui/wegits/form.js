@@ -194,10 +194,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function renderChildren() {
 				var props = this.props;
 				var children = React.Children.map(props.children, function (child) {
-					if (typeof child.type === 'function' && !child.props.size) {
+					if (child && typeof child.type === 'function' && !child.props.size) {
 						return React.cloneElement(child, { size: 'large' });
 					}
-
 					return child;
 				});
 				return [this.renderLabel(), this.renderWrapper(this.renderValidateWrapper(children, this.renderHelp(), props.extra))];

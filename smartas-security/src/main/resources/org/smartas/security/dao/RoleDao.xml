@@ -65,11 +65,11 @@
 	  
 	  
 	  
-	  <select id="findByRoleAcount" resultType="org.smartas.security.Role">
+	  <select id="findRoleByUserId" resultType="int">
 	    SELECT
-	       T.*
-	    FROM tpl_app_role_t T 
-	    WHERE T.ACOUNT = #{acount}
+	       T.roleId
+	    FROM tpl_user_role_t T 
+	    WHERE T.userId = #{userId}
 	  </select>
 	
 </mapper>

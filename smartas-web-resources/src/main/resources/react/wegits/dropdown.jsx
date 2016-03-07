@@ -20,35 +20,35 @@
 	  }
 	});
 
-
-	const align = {
-	  points: ['tr', 'br'],
-	  overlay: {
-	    adjustX: 1,
-	    adjustY: 1,
-	  },
-	  offset: [0, 4],
-	  targetOffset: [0, 0],
-	};
-
 	const DropdownButton = React.createClass({
 	  getDefaultProps() {
 	    return {
-	      align,
+	      align: {
+	        points: ['tr', 'br'],
+	        overlay: {
+	          adjustX: 1,
+	          adjustY: 1,
+	        },
+	        offset: [0, 4],
+	        targetOffset: [0, 0],
+	      },
 	      type: 'default',
 	    };
 	  },
 	  render() {
+	    const { type, overlay, trigger, align, children, className, ...restProps } = this.props;
+	    const cls = classNames({
+	      'ant-dropdown-button': true,
+	      className: !!className,
+	    });
 	    return (
-	      <ButtonGroup className="ant-dropdown-button">
-	        <Button type={this.props.type}>
-	          {this.props.children}
-	        </Button>
-	        <AntDropdown {...this.props}>
-	          <Button type={this.props.type}>
+	      <ButtonGroup {...restProps} className={cls}>
+	        <Button type={type}>{children}</Button>
+	        <Dropdown align={align} overlay={overlay} trigger={trigger}>
+	          <Button type={type}>
 	            <Icon type="down" />
 	          </Button>
-	        </AntDropdown>
+	        </Dropdown>
 	      </ButtonGroup>
 	    );
 	  }

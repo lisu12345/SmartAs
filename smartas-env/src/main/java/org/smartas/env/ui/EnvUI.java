@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.smartas.core.spring.EventPublisher;
 import org.smartas.core.spring.event.MyBaitsRefreshEvent;
+import org.smartas.core.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +40,7 @@ public class EnvUI extends WebApplicationObjectSupport {
 	public String workspace(Model model, HttpSession session) {
 		String[] profiles = getApplicationContext().getEnvironment().getDefaultProfiles();
 		model.addAttribute("profile", StringUtils.join(profiles, ","));
-		model.addAttribute("user",session.getAttribute("user"));
+		model.addAttribute("user",SecurityUtil.getSubject().getPrincipal());
 		return "info";
 	}
 

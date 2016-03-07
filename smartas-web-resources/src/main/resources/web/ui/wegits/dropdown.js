@@ -31,39 +31,51 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 
-	var align = {
-		points: ['tr', 'br'],
-		overlay: {
-			adjustX: 1,
-			adjustY: 1
-		},
-		offset: [0, 4],
-		targetOffset: [0, 0]
-	};
-
 	var DropdownButton = React.createClass({
 		displayName: 'DropdownButton',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				align: align,
+				align: {
+					points: ['tr', 'br'],
+					overlay: {
+						adjustX: 1,
+						adjustY: 1
+					},
+					offset: [0, 4],
+					targetOffset: [0, 0]
+				},
 				type: 'default'
 			};
 		},
 		render: function render() {
+			var _props2 = this.props;
+			var type = _props2.type;
+			var overlay = _props2.overlay;
+			var trigger = _props2.trigger;
+			var align = _props2.align;
+			var children = _props2.children;
+			var className = _props2.className;
+
+			var restProps = _objectWithoutProperties(_props2, ['type', 'overlay', 'trigger', 'align', 'children', 'className']);
+
+			var cls = classNames({
+				'ant-dropdown-button': true,
+				className: !!className
+			});
 			return React.createElement(
 				ButtonGroup,
-				{ className: 'ant-dropdown-button' },
+				_extends({}, restProps, { className: cls }),
 				React.createElement(
 					Button,
-					{ type: this.props.type },
-					this.props.children
+					{ type: type },
+					children
 				),
 				React.createElement(
-					AntDropdown,
-					this.props,
+					Dropdown,
+					{ align: align, overlay: overlay, trigger: trigger },
 					React.createElement(
 						Button,
-						{ type: this.props.type },
+						{ type: type },
 						React.createElement(Icon, { type: 'down' })
 					)
 				)

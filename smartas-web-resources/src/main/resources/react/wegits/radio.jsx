@@ -9,7 +9,7 @@
 	    };
 	  },
 	  render() {
-	    const { prefixCls, children, checked, disabled, className } = this.props;
+	    const { prefixCls, children, checked, disabled, className, style} = this.props;
 	    const classString = classNames({
 	      [prefixCls]: true,
 	      [`${prefixCls}-checked`]: checked,
@@ -17,8 +17,8 @@
 	      [className]: !!className,
 	    });
 	    return (
-	      <label className={classString}>
-	        <Radio {...this.props} children={null} />
+	      <label className={classString} style={style}>>
+	        <Radio {...this.props} style={null} children={null} />
 	        {children}
 	      </label>
 	    );
@@ -30,7 +30,7 @@
 	  let value = null;
 	  let matched = false;
 	  React.Children.forEach(children, (radio) => {
-	    if (radio.props && radio.props.checked) {
+	    if (radio && radio.props && radio.props.checked) {
 	      value = radio.props.value;
 	      matched = true;
 	    }
@@ -87,7 +87,7 @@
 	  render() {
 	    const props = this.props;
 	    const children = React.Children.map(props.children, (radio) => {
-	      if (radio.props) {
+	      if (radio && (radio.type === Radio || radio.type === RadioButton) && radio.props) {
 	        const keyProps = {};
 	        if (!('key' in radio) && typeof radio.props.value === 'string') {
 	          keyProps.key = radio.props.value;
@@ -102,11 +102,11 @@
 	      }
 	      return radio;
 	    });
-	    return (
-	      <div className={`${props.prefixCls} ${props.prefixCls}-${props.size}`}>
-	        {children}
-	      </div>
-	    );
+	    const classString = classNames({
+	      [props.prefixCls]: true,
+	      [`${props.prefixCls}-${props.size}`]: props.size,
+	    });
+	    return <div className={classString} style={props.style}>{children}</div>;
 	  },
 	});
 

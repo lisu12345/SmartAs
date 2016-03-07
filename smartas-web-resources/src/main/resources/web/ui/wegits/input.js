@@ -19,16 +19,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var assign = _ref.assign;
   var classNames = RC.classNames;
 
-  function prefixClsFn(prefixCls) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
-    return args.map(function (s) {
-      return prefixCls + '-' + s;
-    }).join(' ');
-  }
-
   function ieGT9() {
     if ((typeof document === 'undefined' ? 'undefined' : _typeof(document)) === undefined) {
       return false;
@@ -90,8 +80,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var _classNames2;
 
         var props = this.props;
-        var wrapperClassName = prefixClsFn(props.prefixCls, 'input-group');
-        var addonClassName = prefixClsFn(wrapperClassName, 'addon');
+        var wrapperClassName = props.prefixCls + '-group';
+        var addonClassName = wrapperClassName + '-addon';
         var addonBefore = props.addonBefore ? React.createElement(
           'span',
           { className: addonClassName },
@@ -104,7 +94,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           props.addonAfter
         ) : null;
 
-        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
+        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
+
         return React.createElement(
           'span',
           { className: className },
@@ -116,22 +107,16 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }, {
       key: 'renderInput',
       value: function renderInput() {
+        var _classNames3;
+
         var props = assign({}, this.props);
         var prefixCls = props.prefixCls;
-        var inputClassName = prefixClsFn(prefixCls, 'input');
         if (!props.type) {
           return props.children;
         }
 
-        switch (props.size) {
-          case 'small':
-            inputClassName = prefixClsFn(prefixCls, 'input', 'input-sm');
-            break;
-          case 'large':
-            inputClassName = prefixClsFn(prefixCls, 'input', 'input-lg');
-            break;
-          default:
-        }
+        var inputClassName = classNames((_classNames3 = {}, _defineProperty(_classNames3, prefixCls, true), _defineProperty(_classNames3, prefixCls + '-sm', props.size === 'small'), _defineProperty(_classNames3, prefixCls + '-lg', props.size === 'large'), _defineProperty(_classNames3, props.className, !!props.className), _classNames3));
+
         var placeholder = props.placeholder;
         if (placeholder && ieGT9()) {
           placeholder = null;
@@ -141,16 +126,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }
         switch (props.type) {
           case 'textarea':
-            return React.createElement('textarea', _extends({}, props, {
-              placeholder: placeholder,
-              className: inputClassName,
-              ref: 'input' }));
+            return React.createElement('textarea', _extends({}, props, { placeholder: placeholder, className: inputClassName, ref: 'input' }));
           default:
-            inputClassName = props.className ? props.className : inputClassName;
-            return React.createElement('input', _extends({}, props, {
-              placeholder: placeholder,
-              className: inputClassName,
-              ref: 'input' }));
+            return React.createElement('input', _extends({}, props, { placeholder: placeholder, className: inputClassName, ref: 'input' }));
         }
       }
     }, {
@@ -179,7 +157,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   Input.defaultProps = {
     defaultValue: '',
     disabled: false,
-    prefixCls: 'ant',
+    prefixCls: 'ant-input',
     type: 'text'
   };
 

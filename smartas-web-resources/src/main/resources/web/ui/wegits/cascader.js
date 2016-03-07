@@ -6,6 +6,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -102,7 +104,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var size = _props2.size;
 				var disabled = _props2.disabled;
 				var className = _props2.className;
+				var style = _props2.style;
 				var allowClear = _props2.allowClear;
+
+				var otherProps = _objectWithoutProperties(_props2, ['prefixCls', 'children', 'placeholder', 'size', 'disabled', 'className', 'style', 'allowClear']);
 
 				var sizeCls = classNames({
 					'ant-input-lg': size === 'large',
@@ -113,6 +118,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					onClick: this.clearSelection }) : null;
 				var arrowCls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-picker-arrow', true), _defineProperty(_classNames, prefixCls + '-picker-arrow-expand', this.state.popupVisible), _classNames));
 				var pickerCls = classNames((_classNames2 = {}, _defineProperty(_classNames2, className, !!className), _defineProperty(_classNames2, prefixCls + '-picker', true), _defineProperty(_classNames2, prefixCls + '-picker-disabled', disabled), _classNames2));
+
+				// Fix bug of https://github.com/facebook/react/pull/5004
+				delete otherProps.onChange;
 				return React.createElement(
 					Cascader,
 					_extends({}, this.props, {
@@ -122,14 +130,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						onChange: this.handleChange }),
 					children || React.createElement(
 						'span',
-						_extends({}, this.props, {
-							className: pickerCls }),
-						React.createElement(Input, { placeholder: placeholder,
+						{
+							style: style,
+							className: pickerCls },
+						React.createElement(Input, _extends({}, otherProps, {
+							placeholder: placeholder,
 							className: prefixCls + '-input ant-input ' + sizeCls,
 							style: { width: '100%' },
 							value: this.getLabel(),
 							disabled: disabled,
-							readOnly: true }),
+							readOnly: true })),
 						clearIcon,
 						React.createElement(Icon, { type: 'down', className: arrowCls })
 					)

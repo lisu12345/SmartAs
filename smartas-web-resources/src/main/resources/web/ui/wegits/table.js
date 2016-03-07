@@ -281,7 +281,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         this.setState({ selectedRowKeys: selectedRowKeys });
       }
       if (this.props.rowSelection && this.props.rowSelection.onChange) {
-        this.props.rowSelection.onChange(selectedRowKeys);
+        var data = this.getCurrentPageData();
+        var selectedRows = data.filter(function (row) {
+          return selectedRowKeys.indexOf(row.key) >= 0;
+        });
+        this.props.rowSelection.onChange(selectedRowKeys, selectedRows);
       }
     },
     hasPagination: function hasPagination() {
@@ -309,17 +313,12 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }
       }
       if (typeof column.sorter === 'function') {
-        sorter = function sorter() {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
+        sorter = function sorter(a, b) {
+          var result = column.sorter(a, b);
+          if (result !== 0) {
+            return sortOrder === 'descend' ? -result : result;
           }
-
-          var result = column.sorter.apply(this, args);
-          if (sortOrder === 'ascend') {
-            return result;
-          } else if (sortOrder === 'descend') {
-            return -result;
-          }
+          return a.index - b.index;
         };
       }
       var newState = {
@@ -410,16 +409,21 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }).map(function (item, i) {
         return _this6.getRecordKey(item, i);
       });
+
+      // 记录变化的列
+      var changeRowKeys = [];
       if (checked) {
         changableRowKeys.forEach(function (key) {
           if (selectedRowKeys.indexOf(key) < 0) {
             selectedRowKeys.push(key);
+            changeRowKeys.push(key);
           }
         });
       } else {
         changableRowKeys.forEach(function (key) {
           if (selectedRowKeys.indexOf(key) >= 0) {
             selectedRowKeys.splice(selectedRowKeys.indexOf(key), 1);
+            changeRowKeys.push(key);
           }
         });
       }
@@ -431,7 +435,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var selectedRows = data.filter(function (row, i) {
           return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
         });
-        this.props.rowSelection.onSelectAll(checked, selectedRows);
+        var changeRows = data.filter(function (row, i) {
+          return changeRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+        });
+        this.props.rowSelection.onSelectAll(checked, selectedRows, changeRows);
       }
     },
     handlePageChange: function handlePageChange(current) {
@@ -669,7 +676,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       // 分页
       // ---
-      // 当数据量少于每页数量时，直接设置数据
+      // 当数据量少于等于每页数量时，直接设置数据
       // 否则进行读取分页数据
       if (data.length > pageSize || pageSize === Number.MAX_VALUE) {
         data = data.filter(function (item, i) {
@@ -685,6 +692,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       var data = dataSource || this.props.dataSource;
       // 排序
       if (state.sortOrder && state.sorter) {
+        data = data.slice(0);
+        for (var i = 0; i < data.length; i++) {
+          data[i].index = i;
+        }
         data = data.sort(state.sorter);
       }
       // 筛选
@@ -712,11 +723,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var data = this.getCurrentPageData();
       var columns = this.renderRowSelection();
-
+      //行编号
       if (this.props.rownumbers) {
         columns.unshift(rownumberColumn);
       }
-
+      ///
       var expandIconAsCell = this.props.expandedRowRender && this.props.expandIconAsCell !== false;
       var locale = objectAssign({}, defaultLocale, this.props.locale);
 
@@ -747,7 +758,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           data: data,
           columns: columns,
           className: classString,
-          expandIconColumnIndex: columns[0].key === 'selection-column' ? 1 : 0,
+          expandIconColumnIndex: columns[0] && columns[0].key === 'selection-column' ? 1 : 0,
           expandIconAsCell: expandIconAsCell })),
         emptyText
       );

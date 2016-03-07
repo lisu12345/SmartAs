@@ -1,6 +1,6 @@
 "use strict";
 
-//v0.12.5 - 2016.2.26
+//v0.12.8 - 2016.3.7
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
 

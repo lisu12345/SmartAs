@@ -13,7 +13,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		displayName: 'AntTreeSelect',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				prefixCls: 'ant-tree-select',
+				prefixCls: 'ant-select',
 				transitionName: 'slide-up',
 				choiceTransitionName: 'zoom',
 				showSearch: false
@@ -21,17 +21,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		// openAnimation: animation,
 		render: function render() {
+			var _classNames;
+
 			var props = this.props;
 			var _props = this.props;
 			var size = _props.size;
 			var className = _props.className;
 			var combobox = _props.combobox;
 			var notFoundContent = _props.notFoundContent;
+			var prefixCls = _props.prefixCls;
 
-			var cls = classNames(_defineProperty({
-				'ant-tree-select-lg': size === 'large',
-				'ant-tree-select-sm': size === 'small'
-			}, className, !!className));
+			var cls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-lg', size === 'large'), _defineProperty(_classNames, prefixCls + '-sm', size === 'small'), _defineProperty(_classNames, className, !!className), _classNames));
 
 			if (combobox) {
 				notFoundContent = null;
@@ -39,7 +39,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 			var checkable = props.treeCheckable;
 			if (checkable) {
-				checkable = React.createElement('span', { className: props.prefixCls + '-tree-checkbox-inner' });
+				checkable = React.createElement('span', { className: prefixCls + '-tree-checkbox-inner' });
 			}
 
 			return React.createElement(TreeSelect, _extends({}, this.props, {

@@ -123,6 +123,12 @@
 				options.data = JSON.stringify(options.data)
 			}
 			var complete = options.complete;
+			
+			options.statusCode = {
+				403:function(){
+					 Smart.UI.message.error('无权操作');
+				}
+			}
 			options.complete = function(request, code) {
 				try {
 					var status = request.getResponseHeader("X-Session-Status");

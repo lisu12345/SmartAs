@@ -1,6 +1,6 @@
 "use strict";
 
-//v0.12.5 - 2016.2.26
+//v0.12.8 - 2016.3.7
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
 
@@ -273,16 +273,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var assign = _ref.assign;
   var classNames = RC.classNames;
 
-  function prefixClsFn(prefixCls) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
-    return args.map(function (s) {
-      return prefixCls + '-' + s;
-    }).join(' ');
-  }
-
   function ieGT9() {
     if ((typeof document === 'undefined' ? 'undefined' : _typeof(document)) === undefined) {
       return false;
@@ -344,8 +334,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var _classNames2;
 
         var props = this.props;
-        var wrapperClassName = prefixClsFn(props.prefixCls, 'input-group');
-        var addonClassName = prefixClsFn(wrapperClassName, 'addon');
+        var wrapperClassName = props.prefixCls + '-group';
+        var addonClassName = wrapperClassName + '-addon';
         var addonBefore = props.addonBefore ? React.createElement(
           'span',
           { className: addonClassName },
@@ -358,7 +348,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           props.addonAfter
         ) : null;
 
-        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-input-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
+        var className = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls + '-wrapper', true), _defineProperty(_classNames2, wrapperClassName, addonBefore || addonAfter), _classNames2));
+
         return React.createElement(
           'span',
           { className: className },
@@ -370,22 +361,16 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }, {
       key: 'renderInput',
       value: function renderInput() {
+        var _classNames3;
+
         var props = assign({}, this.props);
         var prefixCls = props.prefixCls;
-        var inputClassName = prefixClsFn(prefixCls, 'input');
         if (!props.type) {
           return props.children;
         }
 
-        switch (props.size) {
-          case 'small':
-            inputClassName = prefixClsFn(prefixCls, 'input', 'input-sm');
-            break;
-          case 'large':
-            inputClassName = prefixClsFn(prefixCls, 'input', 'input-lg');
-            break;
-          default:
-        }
+        var inputClassName = classNames((_classNames3 = {}, _defineProperty(_classNames3, prefixCls, true), _defineProperty(_classNames3, prefixCls + '-sm', props.size === 'small'), _defineProperty(_classNames3, prefixCls + '-lg', props.size === 'large'), _defineProperty(_classNames3, props.className, !!props.className), _classNames3));
+
         var placeholder = props.placeholder;
         if (placeholder && ieGT9()) {
           placeholder = null;
@@ -395,16 +380,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }
         switch (props.type) {
           case 'textarea':
-            return React.createElement('textarea', _extends({}, props, {
-              placeholder: placeholder,
-              className: inputClassName,
-              ref: 'input' }));
+            return React.createElement('textarea', _extends({}, props, { placeholder: placeholder, className: inputClassName, ref: 'input' }));
           default:
-            inputClassName = props.className ? props.className : inputClassName;
-            return React.createElement('input', _extends({}, props, {
-              placeholder: placeholder,
-              className: inputClassName,
-              ref: 'input' }));
+            return React.createElement('input', _extends({}, props, { placeholder: placeholder, className: inputClassName, ref: 'input' }));
         }
       }
     }, {
@@ -433,7 +411,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   Input.defaultProps = {
     defaultValue: '',
     disabled: false,
-    prefixCls: 'ant',
+    prefixCls: 'ant-input',
     type: 'text'
   };
 
@@ -453,7 +431,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
 		var statusColorMap = {
 				normal: '#2db7f5',
-				exception: '#ff6600',
+				exception: '#ff5500',
 				success: '#87d068'
 		};
 
@@ -474,7 +452,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 								strokeWidth: 10,
 								status: 'normal', // exception active
 								showInfo: true,
-								trailColor: '#e9e9e9'
+								trailColor: '#f3f3f3'
 						};
 				},
 				render: function render() {
@@ -561,7 +539,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 								percent: 0,
 								strokeWidth: 6,
 								status: 'normal', // exception
-								trailColor: '#f9f9f9'
+								trailColor: '#f3f3f3'
 						};
 				},
 				render: function render() {
@@ -631,6 +609,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 })(Smart.UI, Smart.RC);
 'use strict';
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 +(function (UI, RC) {
 
 	var RcCheckbox = RC.Checkbox;
@@ -682,7 +662,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 		},
 		toggleOption: function toggleOption(option) {
 			var optionIndex = this.state.value.indexOf(option);
-			var value = this.state.value;
+			var value = [].concat(_toConsumableArray(this.state.value));
 			if (optionIndex === -1) {
 				value.push(option);
 			} else {
@@ -774,12 +754,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var checked = _props.checked;
 			var disabled = _props.disabled;
 			var className = _props.className;
+			var style = _props.style;
 
 			var classString = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _classNames));
 			return React.createElement(
 				'label',
-				{ className: classString },
-				React.createElement(Radio, _extends({}, this.props, { children: null })),
+				{ className: classString, style: style },
+				'>',
+				React.createElement(Radio, _extends({}, this.props, { style: null, children: null })),
 				children
 			);
 		}
@@ -789,7 +771,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		var value = null;
 		var matched = false;
 		React.Children.forEach(children, function (radio) {
-			if (radio.props && radio.props.checked) {
+			if (radio && radio.props && radio.props.checked) {
 				value = radio.props.value;
 				matched = true;
 			}
@@ -844,11 +826,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			this.props.onChange(ev);
 		},
 		render: function render() {
-			var _this = this;
+			var _this = this,
+			    _classNames2;
 
 			var props = this.props;
 			var children = React.Children.map(props.children, function (radio) {
-				if (radio.props) {
+				if (radio && (radio.type === Radio || radio.type === RadioButton) && radio.props) {
 					var keyProps = {};
 					if (!('key' in radio) && typeof radio.props.value === 'string') {
 						keyProps.key = radio.props.value;
@@ -861,9 +844,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				}
 				return radio;
 			});
+			var classString = classNames((_classNames2 = {}, _defineProperty(_classNames2, props.prefixCls, true), _defineProperty(_classNames2, props.prefixCls + '-' + props.size, props.size), _classNames2));
 			return React.createElement(
 				'div',
-				{ className: props.prefixCls + ' ' + props.prefixCls + '-' + props.size },
+				{ className: classString, style: props.style },
 				children
 			);
 		}
@@ -1081,10 +1065,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function renderChildren() {
 				var props = this.props;
 				var children = React.Children.map(props.children, function (child) {
-					if (typeof child.type === 'function' && !child.props.size) {
+					if (child && typeof child.type === 'function' && !child.props.size) {
 						return React.cloneElement(child, { size: 'large' });
 					}
-
 					return child;
 				});
 				return [this.renderLabel(), this.renderWrapper(this.renderValidateWrapper(children, this.renderHelp(), props.extra))];
@@ -2003,6 +1986,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		return child;
 	}
 
+	function clearButton(button) {
+		button.className = button.className.replace(prefix + 'clicked', '');
+	}
+
 	var Button = (function (_React$Component) {
 		_inherits(Button, _React$Component);
 
@@ -2017,11 +2004,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			value: function handleClick() {
 				var _props;
 
+				// Add click effect
 				var buttonNode = findDOMNode(this);
-				buttonNode.className = buttonNode.className.replace(prefix + 'clicked', '');
+				clearButton(buttonNode);
 				setTimeout(function () {
-					buttonNode.className += ' ' + prefix + 'clicked';
+					return buttonNode.className += ' ' + prefix + 'clicked';
 				}, 10);
+				clearTimeout(this.timeout);
+				this.timeout = setTimeout(function () {
+					return clearButton(buttonNode);
+				}, 500);
+
 				(_props = this.props).onClick.apply(_props, arguments);
 			}
 		}, {
@@ -2055,7 +2048,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'button',
-					_extends({}, others, { type: htmlType || 'button', className: classes, onClick: this.handleClick.bind(this) }),
+					_extends({}, others, {
+						type: htmlType || 'button',
+						className: classes,
+						onClick: this.handleClick.bind(this) }),
 					kids
 				);
 			}
@@ -2312,39 +2308,51 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 
-	var align = {
-		points: ['tr', 'br'],
-		overlay: {
-			adjustX: 1,
-			adjustY: 1
-		},
-		offset: [0, 4],
-		targetOffset: [0, 0]
-	};
-
 	var DropdownButton = React.createClass({
 		displayName: 'DropdownButton',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				align: align,
+				align: {
+					points: ['tr', 'br'],
+					overlay: {
+						adjustX: 1,
+						adjustY: 1
+					},
+					offset: [0, 4],
+					targetOffset: [0, 0]
+				},
 				type: 'default'
 			};
 		},
 		render: function render() {
+			var _props2 = this.props;
+			var type = _props2.type;
+			var overlay = _props2.overlay;
+			var trigger = _props2.trigger;
+			var align = _props2.align;
+			var children = _props2.children;
+			var className = _props2.className;
+
+			var restProps = _objectWithoutProperties(_props2, ['type', 'overlay', 'trigger', 'align', 'children', 'className']);
+
+			var cls = classNames({
+				'ant-dropdown-button': true,
+				className: !!className
+			});
 			return React.createElement(
 				ButtonGroup,
-				{ className: 'ant-dropdown-button' },
+				_extends({}, restProps, { className: cls }),
 				React.createElement(
 					Button,
-					{ type: this.props.type },
-					this.props.children
+					{ type: type },
+					children
 				),
 				React.createElement(
-					AntDropdown,
-					this.props,
+					Dropdown,
+					{ align: align, overlay: overlay, trigger: trigger },
 					React.createElement(
 						Button,
-						{ type: this.props.type },
+						{ type: type },
 						React.createElement(Icon, { type: 'down' })
 					)
 				)
@@ -2724,25 +2732,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var children = _props.children;
         var tabBarExtraContent = _props.tabBarExtraContent;
 
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, this.props.className, !!this.props.className), _defineProperty(_classNames, prefixCls + '-mini', size === 'small' || size === 'mini'), _defineProperty(_classNames, prefixCls + '-vertical', tabPosition === 'left' || tabPosition === 'right'), _defineProperty(_classNames, prefixCls + '-card', type.indexOf('card') >= 0), _classNames));
+        var className = classNames((_classNames = {}, _defineProperty(_classNames, this.props.className, !!this.props.className), _defineProperty(_classNames, prefixCls + '-mini', size === 'small' || size === 'mini'), _defineProperty(_classNames, prefixCls + '-vertical', tabPosition === 'left' || tabPosition === 'right'), _defineProperty(_classNames, prefixCls + '-card', type.indexOf('card') >= 0), _defineProperty(_classNames, prefixCls + '-' + type, true), _classNames));
         if (tabPosition === 'left' || tabPosition === 'right' || type.indexOf('card') >= 0) {
           animation = null;
         }
         // only card type tabs can be added and closed
         if (type === 'editable-card') {
-          if (children.length > 1) {
-            children = children.map(function (child, index) {
-              return cloneElement(child, {
-                tab: React.createElement(
-                  'div',
-                  null,
-                  child.props.tab,
-                  React.createElement(Icon, { type: 'cross', onClick: _this2.removeTab.bind(_this2, child.key) })
-                ),
-                key: child.key || index
-              });
+          children = children.map(function (child, index) {
+            return cloneElement(child, {
+              tab: React.createElement(
+                'div',
+                null,
+                child.props.tab,
+                React.createElement(Icon, { type: 'cross', onClick: _this2.removeTab.bind(_this2, child.key) })
+              ),
+              key: child.key || index
             });
-          }
+          });
           // Add new tab handler
           tabBarExtraContent = React.createElement(
             'span',
@@ -2751,17 +2757,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             tabBarExtraContent
           );
         }
-        // Wrap the extra content
-        tabBarExtraContent = React.createElement(
-          'div',
-          { className: prefixCls + '-extra-content' },
-          tabBarExtraContent
-        );
         return React.createElement(
           Tabs,
           _extends({}, this.props, {
             className: className,
-            tabBarExtraContent: tabBarExtraContent,
+            tabBarExtraContent: React.createElement(
+              'div',
+              { className: prefixCls + '-extra-content' },
+              tabBarExtraContent
+            ),
             onChange: this.handleChange,
             animation: animation }),
           children
@@ -3418,11 +3422,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         var prefixCls = _props.prefixCls;
         var closable = _props.closable;
         var color = _props.color;
+        var className = _props.className;
+        var children = _props.children;
 
-        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color"]);
+        var restProps = _objectWithoutProperties(_props, ["prefixCls", "closable", "color", "className", "children"]);
 
         var close = closable ? React.createElement(Icon, { type: "cross", onClick: this.close.bind(this) }) : '';
-        var className = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _classNames));
+        var classString = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + "-" + color, !!color), _defineProperty(_classNames, prefixCls + "-close", this.state.closing), _defineProperty(_classNames, className, !!className), _classNames));
         return React.createElement(
           Animate,
           { component: "",
@@ -3432,8 +3438,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             onEnd: this.animationEnd.bind(this) },
           this.state.closed ? null : React.createElement(
             "div",
-            { "data-show": !this.state.closing, className: className },
-            React.createElement("span", _extends({ className: prefixCls + "-text" }, restProps)),
+            _extends({ "data-show": !this.state.closing }, restProps, { className: classString }),
+            React.createElement(
+              "span",
+              { className: prefixCls + "-text" },
+              children
+            ),
             close
           )
         );
@@ -3949,7 +3959,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         this.setState({ selectedRowKeys: selectedRowKeys });
       }
       if (this.props.rowSelection && this.props.rowSelection.onChange) {
-        this.props.rowSelection.onChange(selectedRowKeys);
+        var data = this.getCurrentPageData();
+        var selectedRows = data.filter(function (row) {
+          return selectedRowKeys.indexOf(row.key) >= 0;
+        });
+        this.props.rowSelection.onChange(selectedRowKeys, selectedRows);
       }
     },
     hasPagination: function hasPagination() {
@@ -3977,17 +3991,12 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         }
       }
       if (typeof column.sorter === 'function') {
-        sorter = function sorter() {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
+        sorter = function sorter(a, b) {
+          var result = column.sorter(a, b);
+          if (result !== 0) {
+            return sortOrder === 'descend' ? -result : result;
           }
-
-          var result = column.sorter.apply(this, args);
-          if (sortOrder === 'ascend') {
-            return result;
-          } else if (sortOrder === 'descend') {
-            return -result;
-          }
+          return a.index - b.index;
         };
       }
       var newState = {
@@ -4078,16 +4087,21 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }).map(function (item, i) {
         return _this6.getRecordKey(item, i);
       });
+
+      // 记录变化的列
+      var changeRowKeys = [];
       if (checked) {
         changableRowKeys.forEach(function (key) {
           if (selectedRowKeys.indexOf(key) < 0) {
             selectedRowKeys.push(key);
+            changeRowKeys.push(key);
           }
         });
       } else {
         changableRowKeys.forEach(function (key) {
           if (selectedRowKeys.indexOf(key) >= 0) {
             selectedRowKeys.splice(selectedRowKeys.indexOf(key), 1);
+            changeRowKeys.push(key);
           }
         });
       }
@@ -4099,7 +4113,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         var selectedRows = data.filter(function (row, i) {
           return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
         });
-        this.props.rowSelection.onSelectAll(checked, selectedRows);
+        var changeRows = data.filter(function (row, i) {
+          return changeRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+        });
+        this.props.rowSelection.onSelectAll(checked, selectedRows, changeRows);
       }
     },
     handlePageChange: function handlePageChange(current) {
@@ -4337,7 +4354,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       // 分页
       // ---
-      // 当数据量少于每页数量时，直接设置数据
+      // 当数据量少于等于每页数量时，直接设置数据
       // 否则进行读取分页数据
       if (data.length > pageSize || pageSize === Number.MAX_VALUE) {
         data = data.filter(function (item, i) {
@@ -4353,6 +4370,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       var data = dataSource || this.props.dataSource;
       // 排序
       if (state.sortOrder && state.sorter) {
+        data = data.slice(0);
+        for (var i = 0; i < data.length; i++) {
+          data[i].index = i;
+        }
         data = data.sort(state.sorter);
       }
       // 筛选
@@ -4380,11 +4401,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var data = this.getCurrentPageData();
       var columns = this.renderRowSelection();
-
+      //行编号
       if (this.props.rownumbers) {
         columns.unshift(rownumberColumn);
       }
-
+      ///
       var expandIconAsCell = this.props.expandedRowRender && this.props.expandIconAsCell !== false;
       var locale = objectAssign({}, defaultLocale, this.props.locale);
 
@@ -4415,7 +4436,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           data: data,
           columns: columns,
           className: classString,
-          expandIconColumnIndex: columns[0].key === 'selection-column' ? 1 : 0,
+          expandIconColumnIndex: columns[0] && columns[0].key === 'selection-column' ? 1 : 0,
           expandIconAsCell: expandIconAsCell })),
         emptyText
       );
@@ -4566,6 +4587,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -4662,7 +4685,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var size = _props2.size;
 				var disabled = _props2.disabled;
 				var className = _props2.className;
+				var style = _props2.style;
 				var allowClear = _props2.allowClear;
+
+				var otherProps = _objectWithoutProperties(_props2, ['prefixCls', 'children', 'placeholder', 'size', 'disabled', 'className', 'style', 'allowClear']);
 
 				var sizeCls = classNames({
 					'ant-input-lg': size === 'large',
@@ -4673,6 +4699,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					onClick: this.clearSelection }) : null;
 				var arrowCls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-picker-arrow', true), _defineProperty(_classNames, prefixCls + '-picker-arrow-expand', this.state.popupVisible), _classNames));
 				var pickerCls = classNames((_classNames2 = {}, _defineProperty(_classNames2, className, !!className), _defineProperty(_classNames2, prefixCls + '-picker', true), _defineProperty(_classNames2, prefixCls + '-picker-disabled', disabled), _classNames2));
+
+				// Fix bug of https://github.com/facebook/react/pull/5004
+				delete otherProps.onChange;
 				return React.createElement(
 					Cascader,
 					_extends({}, this.props, {
@@ -4682,14 +4711,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						onChange: this.handleChange }),
 					children || React.createElement(
 						'span',
-						_extends({}, this.props, {
-							className: pickerCls }),
-						React.createElement(Input, { placeholder: placeholder,
+						{
+							style: style,
+							className: pickerCls },
+						React.createElement(Input, _extends({}, otherProps, {
+							placeholder: placeholder,
 							className: prefixCls + '-input ant-input ' + sizeCls,
 							style: { width: '100%' },
 							value: this.getLabel(),
 							disabled: disabled,
-							readOnly: true }),
+							readOnly: true })),
 						clearIcon,
 						React.createElement(Icon, { type: 'down', className: arrowCls })
 					)
@@ -5664,7 +5695,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		displayName: 'AntTreeSelect',
 		getDefaultProps: function getDefaultProps() {
 			return {
-				prefixCls: 'ant-tree-select',
+				prefixCls: 'ant-select',
 				transitionName: 'slide-up',
 				choiceTransitionName: 'zoom',
 				showSearch: false
@@ -5672,17 +5703,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		// openAnimation: animation,
 		render: function render() {
+			var _classNames;
+
 			var props = this.props;
 			var _props = this.props;
 			var size = _props.size;
 			var className = _props.className;
 			var combobox = _props.combobox;
 			var notFoundContent = _props.notFoundContent;
+			var prefixCls = _props.prefixCls;
 
-			var cls = classNames(_defineProperty({
-				'ant-tree-select-lg': size === 'large',
-				'ant-tree-select-sm': size === 'small'
-			}, className, !!className));
+			var cls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-lg', size === 'large'), _defineProperty(_classNames, prefixCls + '-sm', size === 'small'), _defineProperty(_classNames, className, !!className), _classNames));
 
 			if (combobox) {
 				notFoundContent = null;
@@ -5690,7 +5721,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 			var checkable = props.treeCheckable;
 			if (checkable) {
-				checkable = React.createElement('span', { className: props.prefixCls + '-tree-checkbox-inner' });
+				checkable = React.createElement('span', { className: prefixCls + '-tree-checkbox-inner' });
 			}
 
 			return React.createElement(TreeSelect, _extends({}, this.props, {
