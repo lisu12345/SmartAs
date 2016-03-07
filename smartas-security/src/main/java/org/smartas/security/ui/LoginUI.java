@@ -91,7 +91,11 @@ public class LoginUI {
       result.setStatus(400);
       return result;
     }
-    request.getSession().setAttribute("user", user);
+    List<Serializable> roles = roleService.findRoleByUserId(user.getId());
+    Set<Serializable> permissions = permissionService.findPermissionsByUserId(user.getId());
+
+    Subject subject = new DefaultSubject(request.getRemoteHost(), roles, permissions, user);
+    request.getSession().setAttribute(Subject.SUBJECT, subject);
     result.setStatus(200);
     result.setUser(user);
     return result;
