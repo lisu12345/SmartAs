@@ -13,147 +13,157 @@ import org.smartas.core.model.LongIdVO;
  */
 public class Menu extends LongIdVO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5732101265834007723L;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -5732101265834007723L;
 
-	private String code;
+  private String code;
 
-	private String name;
+  private String name;
 
-	private String url;
+  private String url;
 
-	private Long parentId;
+  private Long parentId;
 
-	// 排序号
-	private int sn;
 
-	// 样式控制
-	private String className;
-	private String iconName;
-	
-	/**
-	 * 是否发布
-	 */
-	private boolean publish;
+  private String moduleCode;
 
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
-	}
+  // 排序号
+  private int sn;
 
-	/**
-	 * @param code
-	 *            the code to set
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
+  // 样式控制
+  private String className;
+  private String iconName;
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * 是否发布
+   */
+  private boolean publish;
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * @return the code
+   */
+  public String getCode() {
+    return code;
+  }
 
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
+  /**
+   * @param code the code to set
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-	/**
-	 * @param url
-	 *            the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * @return the parentId
-	 */
-	public Long getParentId() {
-		return parentId;
-	}
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * @param parentId
-	 *            the parentId to set
-	 */
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
+  /**
+   * @return the url
+   */
+  public String getUrl() {
+    return url;
+  }
 
-	/**
-	 * @return the className
-	 */
-	public String getClassName() {
-		return className;
-	}
+  /**
+   * @param url the url to set
+   */
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	/**
-	 * @param className
-	 *            the className to set
-	 */
-	public void setClassName(String className) {
-		this.className = className;
-	}
+  /**
+   * @return the parentId
+   */
+  public Long getParentId() {
+    return parentId;
+  }
 
-	/**
-	 * @return the iconName
-	 */
-	public String getIconName() {
-		return iconName;
-	}
+  /**
+   * @param parentId the parentId to set
+   */
+  public void setParentId(Long parentId) {
+    this.parentId = parentId;
+  }
 
-	/**
-	 * @param iconName
-	 *            the iconName to set
-	 */
-	public void setIconName(String iconName) {
-		this.iconName = iconName;
-	}
+  /**
+   * @return the className
+   */
+  public String getClassName() {
+    return className;
+  }
 
-	/**
-	 * @return the sn
-	 */
-	public int getSn() {
-		return sn;
-	}
+  /**
+   * @param className the className to set
+   */
+  public void setClassName(String className) {
+    this.className = className;
+  }
 
-	/**
-	 * @param sn the sn to set
-	 */
-	public void setSn(int sn) {
-		this.sn = sn;
-	}
+  /**
+   * @return the iconName
+   */
+  public String getIconName() {
+    return iconName;
+  }
 
-	/**
-	 * @return the publish
-	 */
-	public boolean isPublish() {
-		return publish;
-	}
+  /**
+   * @param iconName the iconName to set
+   */
+  public void setIconName(String iconName) {
+    this.iconName = iconName;
+  }
 
-	/**
-	 * @param publish the publish to set
-	 */
-	public void setPublish(boolean publish) {
-		this.publish = publish;
-	}
-	
+  /**
+   * @return the sn
+   */
+  public int getSn() {
+    return sn;
+  }
+
+  /**
+   * @param sn the sn to set
+   */
+  public void setSn(int sn) {
+    this.sn = sn;
+  }
+
+  /**
+   * @return the publish
+   */
+  public boolean isPublish() {
+    return publish;
+  }
+
+  /**
+   * @param publish the publish to set
+   */
+  public void setPublish(boolean publish) {
+    this.publish = publish;
+  }
+
+  /**
+   * @return the moduleCode
+   */
+  public String getModuleCode() {
+    return moduleCode;
+  }
+
+  /**
+   * @param moduleCode the moduleCode to set
+   */
+  public void setModuleCode(String moduleCode) {
+    this.moduleCode = moduleCode;
+  }
 }

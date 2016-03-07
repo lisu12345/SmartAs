@@ -34,6 +34,9 @@ install("web.security.menu2",function($S){
 	        <FormItem label="URL：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="URL" {...getFieldProps('url')} />
 	        </FormItem>
+	        <FormItem label="模块编码：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
+	          <Input type="input" placeholder="模块编码" {...getFieldProps('moduleCode')} />
+	        </FormItem>
 	        <FormItem label="Class：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="样式" {...getFieldProps('className')} />
 	        </FormItem>

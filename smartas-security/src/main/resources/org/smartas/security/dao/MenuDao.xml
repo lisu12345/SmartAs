@@ -40,12 +40,13 @@
 
 	<insert id="insert" parameterType="org.smartas.security.Menu">
 		INSERT INTO tpl_menu_t
-		(code, name, url, parentId, sn, className, iconName, publish)
+		(code, name, url, parentId, moduleCode,sn, className, iconName, publish)
 		VALUES
 		(#{code,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
 		#{url,jdbcType=VARCHAR},
 		#{parentId,jdbcType=NUMERIC},
+		#{moduleCode,jdbcType=VARCHAR},
 		#{sn,jdbcType=VARCHAR},
 		#{className,jdbcType=VARCHAR},
 		#{iconName,jdbcType=VARCHAR},
@@ -61,6 +62,7 @@
 		name = #{name,jdbcType=VARCHAR},
 		url = #{url,jdbcType=VARCHAR},
 		parentId = #{parentId,jdbcType=NUMERIC},
+		moduleCode = #{moduleCode,jdbcType=VARCHAR},
 		sn = #{sn,jdbcType=NUMERIC},
 		className = #{className,jdbcType=VARCHAR},
 		iconName = #{iconName,jdbcType=VARCHAR},
