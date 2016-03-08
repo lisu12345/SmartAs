@@ -1,3 +1,4 @@
+//V5.4.0 - 2016/3/8
 + function(RC) {
   const {
     noop
@@ -48,6 +49,7 @@ const Dialog = React.createClass({
     onAfterClose: PropTypes.func,
     onClose: PropTypes.func,
     closable: PropTypes.bool,
+    maskClosable: PropTypes.bool,
     visible: PropTypes.bool,
     mousePosition: PropTypes.object,
   },
@@ -88,7 +90,7 @@ const Dialog = React.createClass({
   },
 
   onMaskClick(e) {
-    if (this.props.closable) {
+    if (this.props.closable && this.props.maskClosable) {
       this.close(e);
     }
     ReactDOM.findDOMNode(this.refs.dialog).focus();
@@ -147,12 +149,12 @@ const Dialog = React.createClass({
 
     let footer;
     if (props.footer) {
-      footer = (<div className={`${prefixCls}-footer`}>{props.footer}</div>);
+      footer = (<div className={`${prefixCls}-footer`} ref="footer">{props.footer}</div>);
     }
 
     let header;
     if (props.title) {
-      header = (<div className={`${prefixCls}-header`}>
+      header = (<div className={`${prefixCls}-header`} ref="header">
         <div className={`${prefixCls}-title`}>{props.title}</div>
       </div>);
     }
@@ -179,7 +181,7 @@ const Dialog = React.createClass({
       <div className={`${prefixCls}-content`}>
         {closer}
         {header}
-        <div className={`${prefixCls}-body`}>{props.children}</div>
+        <div className={`${prefixCls}-body`} style={props.bodyStyle} ref="body">{props.children}</div>
         {footer}
       </div>
       <div tabIndex="0" ref="sentinel" style={{width: 0, height: 0, overflow: 'hidden'}}>sentinel</div>
@@ -250,6 +252,10 @@ const Dialog = React.createClass({
     }
     return transitionName;
   },
+  
+  getElement(part) {
+    return this.refs[part];
+  },
 
   close(e) {
     this.props.onClose(e);
@@ -262,7 +268,7 @@ const Dialog = React.createClass({
       [`${prefixCls}-wrap`]: 1,
     };
 
-    return (<div className={classNames(className)}>
+    return (<div className={classNames(className)} ref="root">
       {[this.getMaskElement(), this.getDialogElement()]}
     </div>);
   },
@@ -307,7 +313,7 @@ const Dialog = React.createClass({
 
 	  componentDidUpdate() {
 	    if (this.dialogRendered) {
-	      ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getDialogElement(), this.getDialogContainer());
+	    	this.dialogInstance = ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getDialogElement(), this.getDialogContainer());
 	    }
 	  }
 
@@ -341,12 +347,12 @@ const Dialog = React.createClass({
 	  getDialogElement(extra) {
 	    const props = this.props;
 	    let dialogProps = copy(props, [
-	      'className', 'closable', 'align',
+	      'className', 'closable', 'maskClosable', 'align',
 	      'title', 'footer', 'mask',
 	      'animation', 'transitionName',
 	      'maskAnimation', 'maskTransitionName', 'mousePosition',
 	      'prefixCls', 'style', 'width',
-	      'height', 'zIndex',
+	      'height', 'zIndex', 'bodyStyle',
 	    ]);
 	    dialogProps = {
 	      ...dialogProps,
@@ -358,7 +364,9 @@ const Dialog = React.createClass({
 	      {props.children}
 	    </Dialog>);
 	  }
-
+	  getElement(part) {
+	    return this.dialogInstance.getElement(part);
+	  }
 	  cleanDialogContainer() {
 	    ReactDOM.unmountComponentAtNode(this.getDialogContainer());
 	    document.body.removeChild(this.dialogContainer);
@@ -379,6 +387,7 @@ const Dialog = React.createClass({
 	  },
 	  mask: true,
 	  closable: true,
+	  maskClosable: true,
 	  prefixCls: 'rc-dialog',
 	  onClose: noop,
 	};
@@ -391,6 +400,7 @@ const Dialog = React.createClass({
 	  }),
 	  mask: React.PropTypes.bool,
 	  closable: React.PropTypes.bool,
+	  maskClosable: React.PropTypes.bool,
 	  prefixCls: React.PropTypes.string,
 	  visible: React.PropTypes.bool,
 	  onClose: React.PropTypes.func,

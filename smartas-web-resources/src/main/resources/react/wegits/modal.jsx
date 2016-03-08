@@ -207,6 +207,52 @@
     return confirm(props);
   };
 
+
+
+  function dialog(props) {
+    let div = document.createElement('div');
+    document.body.appendChild(div);
+
+    let d;
+    props = props || {};
+    props.iconClassName = props.iconClassName || 'question-circle';
+
+    let iconClassType = props.iconClassName;
+
+    let width = props.width || 600;
+
+    props.okText = props.okText || (props.okCancel ? '确定' : '知道了');
+    props.cancelText = props.cancelText || '取消';
+
+    function close() {
+      d.setState({
+        visible: false
+      });
+      ReactDOM.unmountComponentAtNode(div);
+      div.parentNode.removeChild(div);
+    }
+    
+    ReactDOM.render(<AntModal
+      prefixCls="ant-modal"
+      className="ant-dialog"
+      visible
+      maskClosable={false}
+      onClose={close}
+      title={props.title}
+      transitionName="zoom"
+      footer=""
+      maskTransitionName="fade" width={width}>
+      <div style={{zoom: 1, overflow: 'hidden'}}>{React.cloneElement(props.content, {close:close})}</div>
+    </AntModal>, div, function () {
+      d = this;
+    });
+  }
+
+  AntModal.dialog = function (props) {
+    props.okCancel = true;
+    return dialog(props);
+  };
+
   UI.Modal = AntModal;
 
 }(Smart.UI, Smart.RC);

@@ -3,12 +3,13 @@ package org.smartas.core.ui;
 import java.io.Serializable;
 import java.util.List;
 
+import org.smartas.core.AppEnv;
 import org.smartas.core.BusinessAccessException;
-import org.smartas.core.Environment;
 import org.smartas.core.POJO;
 import org.smartas.core.Pageable;
 import org.smartas.core.Service;
 import org.smartas.core.annotation.Operation;
+import org.smartas.core.util.BeanContext;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +25,8 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
 
   protected abstract Service<T, PK> getService();
 
-  protected Environment getEvn() {
-    return Environment.getEvn();
+  protected AppEnv getEvn() {
+    return BeanContext.getAppEnv();
   }
 
   @RequestMapping(value = "/single/{id}", method = RequestMethod.GET)

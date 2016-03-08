@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController()
-@RequestMapping("/xxx/${name?uncap_first}")
-@Resource(code = xxxx, model = "Smart", desc = "${name} UI")
+@RequestMapping("${url}")
+@Resource(code = ${code}, model = "${scope}", desc = "${name} UI")
 public class ${name}UI extends BaseUI<${name}> {
 	@Autowired
 	private ${name}Service service;

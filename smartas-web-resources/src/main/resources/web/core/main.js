@@ -473,6 +473,8 @@
 			        if(status == "timeout"){ 
 			        	options.complete = complete;
 			        	lifecycle.fire('timeout',options);
+			        }else if(code === 'error'){
+			        	 Smart.UI.message.error(request.statusText);
 			        } 
 					complete && complete(request, code);
 				} finally {

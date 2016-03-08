@@ -4827,6 +4827,17 @@ textarea.ant-time-picker-input {
   margin-left: 8px;
   margin-bottom: 0;
 }
+.ant-dialog .ant-modal-body {
+  padding: 0;
+}
+.ant-dialog .ant-confirm-btns {
+  margin-top: 30px;
+  float: right;
+}
+.ant-dialog .ant-confirm-btns button + button {
+  margin-left: 10px;
+  margin-bottom: 0;
+}
 .ant-confirm .ant-modal-header {
   display: none;
 }

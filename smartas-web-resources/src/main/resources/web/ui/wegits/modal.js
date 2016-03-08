@@ -236,5 +236,55 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     return confirm(props);
   };
 
+  function dialog(props) {
+    var div = document.createElement('div');
+    document.body.appendChild(div);
+
+    var d = undefined;
+    props = props || {};
+    props.iconClassName = props.iconClassName || 'question-circle';
+
+    var iconClassType = props.iconClassName;
+
+    var width = props.width || 600;
+
+    props.okText = props.okText || (props.okCancel ? '确定' : '知道了');
+    props.cancelText = props.cancelText || '取消';
+
+    function close() {
+      d.setState({
+        visible: false
+      });
+      ReactDOM.unmountComponentAtNode(div);
+      div.parentNode.removeChild(div);
+    }
+
+    ReactDOM.render(React.createElement(
+      AntModal,
+      {
+        prefixCls: 'ant-modal',
+        className: 'ant-dialog',
+        visible: true,
+        maskClosable: false,
+        onClose: close,
+        title: props.title,
+        transitionName: 'zoom',
+        footer: '',
+        maskTransitionName: 'fade', width: width },
+      React.createElement(
+        'div',
+        { style: { zoom: 1, overflow: 'hidden' } },
+        React.cloneElement(props.content, { close: close })
+      )
+    ), div, function () {
+      d = this;
+    });
+  }
+
+  AntModal.dialog = function (props) {
+    props.okCancel = true;
+    return dialog(props);
+  };
+
   UI.Modal = AntModal;
 })(Smart.UI, Smart.RC);

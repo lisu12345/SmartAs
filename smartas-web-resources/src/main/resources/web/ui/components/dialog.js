@@ -12,6 +12,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//V5.4.0 - 2016/3/8
 +(function (RC) {
   var _ref = _;
   var noop = _ref.noop;var Align = RC.Align;
@@ -61,6 +62,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       onAfterClose: PropTypes.func,
       onClose: PropTypes.func,
       closable: PropTypes.bool,
+      maskClosable: PropTypes.bool,
       visible: PropTypes.bool,
       mousePosition: PropTypes.object
     },
@@ -97,7 +99,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.props.onAfterClose();
     },
     onMaskClick: function onMaskClick(e) {
-      if (this.props.closable) {
+      if (this.props.closable && this.props.maskClosable) {
         this.close(e);
       }
       ReactDOM.findDOMNode(this.refs.dialog).focus();
@@ -155,7 +157,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (props.footer) {
         footer = React.createElement(
           'div',
-          { className: prefixCls + '-footer' },
+          { className: prefixCls + '-footer', ref: 'footer' },
           props.footer
         );
       }
@@ -164,7 +166,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (props.title) {
         header = React.createElement(
           'div',
-          { className: prefixCls + '-header' },
+          { className: prefixCls + '-header', ref: 'header' },
           React.createElement(
             'div',
             { className: prefixCls + '-title' },
@@ -203,7 +205,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           header,
           React.createElement(
             'div',
-            { className: prefixCls + '-body' },
+            { className: prefixCls + '-body', style: props.bodyStyle, ref: 'body' },
             props.children
           ),
           footer
@@ -285,6 +287,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
       return transitionName;
     },
+    getElement: function getElement(part) {
+      return this.refs[part];
+    },
     close: function close(e) {
       this.props.onClose(e);
     },
@@ -295,7 +300,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return React.createElement(
         'div',
-        { className: classNames(className) },
+        { className: classNames(className), ref: 'root' },
         [this.getMaskElement(), this.getDialogElement()]
       );
     }
@@ -351,7 +356,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       key: 'componentDidUpdate',
       value: function componentDidUpdate() {
         if (this.dialogRendered) {
-          ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getDialogElement(), this.getDialogContainer());
+          this.dialogInstance = ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getDialogElement(), this.getDialogContainer());
         }
       }
     }, {
@@ -388,7 +393,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       key: 'getDialogElement',
       value: function getDialogElement(extra) {
         var props = this.props;
-        var dialogProps = copy(props, ['className', 'closable', 'align', 'title', 'footer', 'mask', 'animation', 'transitionName', 'maskAnimation', 'maskTransitionName', 'mousePosition', 'prefixCls', 'style', 'width', 'height', 'zIndex']);
+        var dialogProps = copy(props, ['className', 'closable', 'maskClosable', 'align', 'title', 'footer', 'mask', 'animation', 'transitionName', 'maskAnimation', 'maskTransitionName', 'mousePosition', 'prefixCls', 'style', 'width', 'height', 'zIndex', 'bodyStyle']);
         dialogProps = _extends({}, dialogProps, {
           onClose: this.onClose,
           visible: this.state.visible
@@ -398,6 +403,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _extends({}, dialogProps, { key: 'dialog' }),
           props.children
         );
+      }
+    }, {
+      key: 'getElement',
+      value: function getElement(part) {
+        return this.dialogInstance.getElement(part);
       }
     }, {
       key: 'cleanDialogContainer',
@@ -425,6 +435,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     mask: true,
     closable: true,
+    maskClosable: true,
     prefixCls: 'rc-dialog',
     onClose: noop
   };
@@ -437,6 +448,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }),
     mask: React.PropTypes.bool,
     closable: React.PropTypes.bool,
+    maskClosable: React.PropTypes.bool,
     prefixCls: React.PropTypes.string,
     visible: React.PropTypes.bool,
     onClose: React.PropTypes.func

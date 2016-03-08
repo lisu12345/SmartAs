@@ -9,8 +9,8 @@
 
 package org.smartas.core.model;
 
-import org.smartas.core.Environment;
 import org.smartas.core.POJO;
+import org.smartas.core.util.BeanContext;
 
 /**
  * @author chenb
@@ -29,7 +29,7 @@ public abstract class BaseVO implements POJO {
 
 
   public String getAppName() {
-    return Environment.getEvn().getAppName();
+    return BeanContext.getAppEnv().getAppName();
   }
 
   /**

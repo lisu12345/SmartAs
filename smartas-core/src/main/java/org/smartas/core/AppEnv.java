@@ -3,15 +3,11 @@
  */
 package org.smartas.core;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-
 /**
  * @author chenb
  *
  */
-public class Environment implements BeanFactoryAware {
+public class AppEnv {
 
   /**
    * 应用名称
@@ -21,7 +17,7 @@ public class Environment implements BeanFactoryAware {
    * 数据名称
    */
   private String dbName;
-  
+
   /**
    * 表前缀名
    */
@@ -86,18 +82,4 @@ public class Environment implements BeanFactoryAware {
   public void setTablePrefix(String tablePrefix) {
     this.tablePrefix = tablePrefix;
   }
-
-
-
-  private static Environment evn;
-
-  public static Environment getEvn() {
-    return evn;
-  }
-
-  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-    evn = beanFactory.getBean(Environment.class);
-  }
-
-
 }
