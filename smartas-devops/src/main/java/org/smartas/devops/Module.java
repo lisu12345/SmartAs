@@ -13,6 +13,8 @@ public class Module {
   private boolean indexPage;
   
   private String code;
+  
+  private String table;
 
   /**
    * @return the project
@@ -97,5 +99,18 @@ public class Module {
   public void setUrl(String url) {
     this.url = url;
   }
-  
+
+  /**
+   * @return the table
+   */
+  public String getTable() {
+    return table;
+  }
+
+  /**
+   * @param table the table to set
+   */
+  public void setTable(String table) {
+    this.table = table;
+  }
 }

@@ -8,12 +8,7 @@ install("web.devops.generator",function($S){
 
 	const service = Service.New("devops/generator/table");
 	
-	const NewModule  = Form.create({mapPropsToFields:function(props){
-		//const {data,parent} = props;
-		//return _.mapValues(_.extend({},data,{parentId:parent.id}),function(value){
-		//	return {value:value}
-		//});
-	}})(React.createClass({
+	const NewModule  = Form.create()(React.createClass({
 		handleSubmit(e) {
 		    e.preventDefault();
 		    const {close,form} = this.props;
@@ -22,6 +17,7 @@ install("web.devops.generator",function($S){
 		          return;
 		        }
 		        var data = form.getFieldsValue();
+		        data.table = this.props.table;
 			    service.create(data,function(id){
 			    	close();
 			    });
@@ -105,7 +101,7 @@ install("web.devops.generator",function($S){
 	  }
 	}));
 
-	function showDialog() {
+	function showDialog(table) {
 		Modal.dialog({
 	    title: 'New',
 	    iconClassName:'aa',
@@ -114,7 +110,7 @@ install("web.devops.generator",function($S){
 	    	points: ['tc', 'tc'],
 	    	offset: [0, 100],
 	    },
-	    content: <NewModule />,
+	    content: <NewModule table={table}/>,
 	  });
 	}
 
@@ -126,7 +122,7 @@ install("web.devops.generator",function($S){
 		render(text, record, index) {
 			return (
 				      <span>
-				        <a onClick={showDialog}>创建</a>
+				        <a onClick={function(){showDialog(record.name)}}>创建</a>
 				        <span className="ant-divider"></span>
 				        <a href="#" className="ant-dropdown-link">
 				          更多 <Icon type="down" />

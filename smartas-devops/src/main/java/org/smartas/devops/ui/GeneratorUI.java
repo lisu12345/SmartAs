@@ -96,7 +96,9 @@ public class GeneratorUI extends WebContentGenerator {
      List<Project> result = new ArrayList<>();
      FileFilter filter = new FileFilter() {
        public boolean accept(File file) {
-         return file.isDirectory() && (file.getName().startsWith(appEnv.getAppName()));
+         String name = file.getName();
+         
+         return file.isDirectory() && (name.startsWith(appEnv.getAppName())) && !name.endsWith("-lib") && !name.endsWith("-web");
        }
      };
      File[] projects = projectRootDir.listFiles(filter);
@@ -120,6 +122,7 @@ public class GeneratorUI extends WebContentGenerator {
     data.put("name", entity.getName());
     data.put("scope", appEnv.getScope());
     data.put("url", entity.getUrl());
+    data.put("table", entity.getTable());
     File projectFile = new File(projectRootDir, entity.getProject() + "/src/main/");
 
     String pkgPath = entity.getPackageName().replace(".", "/");

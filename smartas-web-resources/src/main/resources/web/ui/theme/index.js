@@ -59,6 +59,7 @@ $(function() {
 		},
 		callback : {
 			beforeClick : beforeClick,
+			beforeDblClick : beforeDblClick,
 			onNodeCreated: onMenuCreated
 		}
 	};
@@ -115,6 +116,14 @@ $(function() {
 
 	function beforeClick(treeId, treeNode) {
 		loadBreadcrumb2(treeNode);
+		//二次点击
+		if(Resource.getCurrentUrl() === treeNode.url){
+			$(window).hashchange();
+		}
+		return true;
+	}
+	function beforeDblClick(treeId, treeNode) {
+		//loadBreadcrumb2(treeNode);
 		zTree_Menu.expandNode(treeNode);
 		return true;
 	}

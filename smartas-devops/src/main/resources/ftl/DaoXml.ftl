@@ -12,7 +12,7 @@
 	<select id="getById" resultType="${pkg}.${name}">
 		SELECT
 		T.*
-		FROM tpl_${name?uncap_first}_t T
+		FROM ${table} T
 		WHERE T.ID = ${r"#{id}"}
 	</select>
 	
@@ -20,7 +20,7 @@
 	<select id="getByIds" resultType="${pkg}.${name}">
 		SELECT
 		T.*
-		FROM tpl_${name?uncap_first}_t T
+		FROM ${table} T
 		WHERE ID in
 		  <foreach item="id" collection="ids" open="(" separator="," close=")">
 		     ${r"#{id}"}
@@ -30,22 +30,22 @@
 	<select id="getCountAll" resultType="int">
 		SELECT
 		count(1)
-		FROM tpl_${name?uncap_first}_t T
+		FROM ${table} T
 	</select>
 
 	<select id="selectAll" resultType="${pkg}.${name}">
 		SELECT
 		T.*
-		FROM tpl_${name?uncap_first}_t T
+		FROM ${table} T
 	</select>
 
 	<select id="select" resultType="${pkg}.${name}" pageable="true">
-		SELECT T.* FROM tpl_${name?uncap_first}_t T
+		SELECT T.* FROM ${table} T
 	</select>
 
 
 	<insert id="insert" parameterType="${pkg}.${name}">
-		INSERT INTO tpl_${name?uncap_first}_t
+		INSERT INTO ${table}
 		(code)
 		VALUES(
 		${r"#{code,jdbcType=VARCHAR}"}
@@ -57,19 +57,19 @@
 	</insert>
 
 	<update id="update" parameterType="${pkg}.${name}">
-		UPDATE tpl_${name?uncap_first}_t SET
+		UPDATE ${table} SET
 		code = ${r"#{code,jdbcType=VARCHAR}"}
 		WHERE ID = ${r"#{id,jdbcType=NUMERIC}"}
 	</update>
 
 
 	<delete id="deleteById">
-		DELETE FROM tpl_${name?uncap_first}_t
+		DELETE FROM ${table}
 		WHERE ID = ${r"#{id}"}
 	</delete>
 	
 	<delete id="deleteByIds">
-		DELETE FROM tpl_${name?uncap_first}_t
+		DELETE FROM ${table}
 		WHERE ID in
 		  <foreach item="id" collection="ids" open="(" separator="," close=")">
 		     ${r"#{id}"}
