@@ -1,4 +1,4 @@
-//v0.13.4 -2016.2.16
+//v0.14.1-2016.3.9
 + function(RC) {
 
 	const {AsyncValidate,Util,AsyncValidator} = RC,
@@ -95,8 +95,7 @@
 	function createBaseForm(option = {}, mixins = []) {
 	  const { mapPropsToFields, onFieldsChange,
 	    fieldNameProp, fieldMetaProp,
-	    validateMessages, refComponent,
-	    mapProps = mirror,
+	    validateMessages, mapProps = mirror,
 	    formPropName = 'form', withRef } = option;
 
 	  function decorate(WrappedComponent) {
@@ -116,37 +115,24 @@
 	        };
 	      },
 
-	      componentDidMount() {
-	        this.componentDidUpdate();
-	      },
-
 	      componentWillReceiveProps(nextProps) {
 	        if (mapPropsToFields) {
 	          const fields = mapPropsToFields(nextProps);
 	          if (fields) {
-	            this.fields = {
+	            const instanceFields = this.fields = {
 	              ...this.fields,
-	              ...fields,
 	            };
+	            for (const fieldName in fields) {
+	              if (fields.hasOwnProperty(fieldName)) {
+	                instanceFields[fieldName] = {
+	                  ...fields[fieldName],
+	                  // keep instance
+	                  instance: instanceFields[fieldName] && instanceFields[fieldName].instance,
+	                };
+	              }
+	            }
 	          }
 	        }
-	      },
-
-	      componentDidUpdate() {
-	        const { fields, fieldsMeta } = this;
-	        const fieldsMetaKeys = Object.keys(fieldsMeta);
-	        fieldsMetaKeys.forEach((s) => {
-	          if (fieldsMeta[s].stale) {
-	            delete fieldsMeta[s];
-	          }
-	        });
-	        const fieldsKeys = Object.keys(fields);
-	        fieldsKeys.forEach((s) => {
-	          if (!fieldsMeta[s]) {
-	            delete fields[s];
-	          }
-	        });
-	        // do not notify store
 	      },
 
 	      onChange(name, action, event) {
@@ -274,15 +260,12 @@
 	          inputProps[valuePropName] = field.value;
 	        }
 
-	        if (refComponent) {
-	          inputProps.ref = this.getCacheBind(name, `${name}__ref`, this.saveRef);
-	        }
+	        inputProps.ref = this.getCacheBind(name, `${name}__ref`, this.saveRef);
 
 	        const meta = {
 	          ...fieldMeta,
 	          ...fieldOption,
 	          validate: validateRules,
-	          stale: 0,
 	        };
 
 	        this.fieldsMeta[name] = meta;
@@ -322,6 +305,11 @@
 	      getFieldValue(name) {
 	        const { fields } = this;
 	        return this.getValueFromFields(name, fields);
+	      },
+
+	      getFieldInstance(name) {
+	        const { fields } = this;
+	        return fields[name] && fields[name].instance;
 	      },
 
 	      getValueFromFields(name, fields) {
@@ -407,6 +395,12 @@
 	      },
 
 	      saveRef(name, _, component) {
+	      	if (!component) {
+	          // after destroy, delete data
+	          delete this.fieldsMeta[name];
+	          delete this.fields[name];
+	          return;
+	        }
 	        const fieldMeta = this.getFieldMeta(name);
 	        if (fieldMeta && fieldMeta.ref) {
 	          if (typeof fieldMeta.ref === 'string') {
@@ -589,7 +583,9 @@
 	          const field = fields[name];
 	          if (field && 'value' in field) {
 	            changed = true;
-	            newFields[name] = { instance: field.instance };
+	            newFields[name] = { 
+	            	instance: field.instance,
+	            };
 	          }
 	        });
 	        if (changed) {
@@ -600,13 +596,7 @@
 	      render() {
 	        const formProps = {
 	          [formPropName]: this.getForm(),
-	        };
-	        const fieldsMeta = this.fieldsMeta;
-	        for (const name in fieldsMeta) {
-	          if (fieldsMeta.hasOwnProperty(name)) {
-	            fieldsMeta[name].stale = 1;
-	          }
-	        }
+	        };	         
 	        if (withRef) {
 	          formProps.ref = 'wrappedComponent';
 	        }
@@ -632,6 +622,7 @@
 	    return {
 	      getFieldsValue: this.getFieldsValue,
 	      getFieldValue: this.getFieldValue,
+	      getFieldInstance: this.getFieldInstance,
 	      setFieldsValue: this.setFieldsValue,
 	      setFields: this.setFields,
 	      setFieldsInitialValue: this.setFieldsInitialValue,
@@ -706,17 +697,26 @@
 
 	    function newCb(error, values) {
 	      if (error) {
+	        let firstNode;
+	        let firstTop;
 	        for (const name in error) {
 	          if (error.hasOwnProperty(name) && error[name].instance) {
 	            const node = ReactDOM.findDOMNode(error[name].instance);
-	            const c = options.container || getScrollableContainer(node);
-	            scrollIntoView(node, c, {
-	              onlyScrollIfNeeded: true,
-	            });
-	            break;
+	            const top = node.getBoundingClientRect().top;
+	            if (firstTop === undefined || firstTop > top) {
+	              firstTop = top;
+	              firstNode = node;
+	            }
 	          }
 	        }
+	        if (firstNode) {
+	          const c = options.container || getScrollableContainer(firstNode);
+	          scrollIntoView(firstNode, c, {
+	            onlyScrollIfNeeded: true,
+	          });
+	        }
 	      }
+
 	      if (typeof callback === 'function') {
 	        callback(error, values);
 	      }
@@ -729,7 +729,6 @@
 	function createDOMForm(option) {
 	  return createBaseForm({
 	    ...option,
-	    refComponent: true,
 	  }, [mixin]);
 	}
 	

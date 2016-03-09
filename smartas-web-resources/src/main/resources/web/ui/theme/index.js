@@ -60,6 +60,8 @@ $(function() {
 		callback : {
 			beforeClick : beforeClick,
 			beforeDblClick : beforeDblClick,
+			onClick: onClick,
+			onDblClick: onDblClick,
 			onNodeCreated: onMenuCreated
 		}
 	};
@@ -121,6 +123,14 @@ $(function() {
 			$(window).hashchange();
 		}
 		return true;
+	}
+	function onDblClick(e){
+		//e.preventDefault();
+		//e.stopPropagation();
+	}
+	function onClick(e){
+		//e.preventDefault();
+		//e.stopPropagation();
 	}
 	function beforeDblClick(treeId, treeNode) {
 		//loadBreadcrumb2(treeNode);

@@ -14,11 +14,11 @@ install("web.security.role",function($S){
 		width: 80,
 		render(text,row,index) {
 			return <span>
-				<span title="权限设置" onClick={_.bind(pkg.roleSetting,pkg,row.id,row.name)}><Icon type="setting" /></span>
+				<span title="权限设置" onClick={_.bind(pkg.roleSetting,pkg,row.id,row.name)}><i className="fa fa-cog" /></span>
 				<span className="ant-divider"></span>
-				<span title="用户管理" onClick={_.bind(pkg.roleUserList,this,row.id,row.name)}><Icon type="team" /></span>
+				<span title="用户管理" onClick={_.bind(pkg.roleUserList,this,row.id,row.name)}><i className="fa fa-users" /></span>
 				<span className="ant-divider"></span>
-				{row.defaultIn == false?<Popconfirm title="确定要删除角色吗？" onConfirm={_.bind(pkg.del,pkg,row.id)}><span title="删除"><Icon type="delete" /></span></Popconfirm> : null}
+				{row.defaultIn == false?<Popconfirm title="确定要删除角色吗？" onConfirm={_.bind(pkg.del,pkg,row.id)}><span title="删除"><i className="fa fa-trash-o" /></span></Popconfirm> : null}
 			</span>
 		}
 	}, {
