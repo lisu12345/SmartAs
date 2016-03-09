@@ -33,7 +33,11 @@
 		if(console){
 			var fn = method[level];
 			if(fn) {
-				console[fn](levelStr + ": " + msg);
+				if(console[fn]){
+					console[fn](levelStr + ": " + msg);
+				}else{
+					
+				}
 			}
 			if(e instanceof Error){
 				console.info('ERROR' + ": " + e.stack) 

@@ -65,6 +65,7 @@
 					self.trigger('changed.dom');
 				}catch(e){
 					logger.error("apply html {0}",e);
+					throw e;
 				}
 				
 			},

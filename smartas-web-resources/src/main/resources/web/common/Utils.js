@@ -63,7 +63,7 @@
 	}();
 	
 	
-	const LTT = this.LTT = (function() {
+	var LTT = this.LTT = (function() {
 	    LTT.prototype.groupParent = [];
 
 	    LTT.prototype.key_id = 'id';
