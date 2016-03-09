@@ -10843,7 +10843,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//v0.13.4 -2016.2.16
+//v0.14.1-2016.3.9
 +(function (RC) {
 	var AsyncValidate = RC.AsyncValidate;
 	var Util = RC.Util;
@@ -10949,7 +10949,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		var fieldNameProp = option.fieldNameProp;
 		var fieldMetaProp = option.fieldMetaProp;
 		var validateMessages = option.validateMessages;
-		var refComponent = option.refComponent;
 		var _option$mapProps = option.mapProps;
 		var mapProps = _option$mapProps === undefined ? mirror : _option$mapProps;
 		var _option$formPropName = option.formPropName;
@@ -10974,34 +10973,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 						submitting: false
 					};
 				},
-				componentDidMount: function componentDidMount() {
-					this.componentDidUpdate();
-				},
 				componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 					if (mapPropsToFields) {
 						var fields = mapPropsToFields(nextProps);
 						if (fields) {
-							this.fields = _extends({}, this.fields, fields);
+							var instanceFields = this.fields = _extends({}, this.fields);
+							for (var fieldName in fields) {
+								if (fields.hasOwnProperty(fieldName)) {
+									instanceFields[fieldName] = _extends({}, fields[fieldName], {
+										// keep instance
+										instance: instanceFields[fieldName] && instanceFields[fieldName].instance
+									});
+								}
+							}
 						}
 					}
-				},
-				componentDidUpdate: function componentDidUpdate() {
-					var fields = this.fields;
-					var fieldsMeta = this.fieldsMeta;
-
-					var fieldsMetaKeys = Object.keys(fieldsMeta);
-					fieldsMetaKeys.forEach(function (s) {
-						if (fieldsMeta[s].stale) {
-							delete fieldsMeta[s];
-						}
-					});
-					var fieldsKeys = Object.keys(fields);
-					fieldsKeys.forEach(function (s) {
-						if (!fieldsMeta[s]) {
-							delete fields[s];
-						}
-					});
-					// do not notify store
 				},
 				onChange: function onChange(name, action, event) {
 					var fieldMeta = this.getFieldMeta(name);
@@ -11123,13 +11109,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 						inputProps[valuePropName] = field.value;
 					}
 
-					if (refComponent) {
-						inputProps.ref = this.getCacheBind(name, name + '__ref', this.saveRef);
-					}
+					inputProps.ref = this.getCacheBind(name, name + '__ref', this.saveRef);
 
 					var meta = _extends({}, fieldMeta, fieldOption, {
-						validate: validateRules,
-						stale: 0
+						validate: validateRules
 					});
 
 					this.fieldsMeta[name] = meta;
@@ -11167,6 +11150,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					var fields = this.fields;
 
 					return this.getValueFromFields(name, fields);
+				},
+				getFieldInstance: function getFieldInstance(name) {
+					var fields = this.fields;
+
+					return fields[name] && fields[name].instance;
 				},
 				getValueFromFields: function getValueFromFields(name, fields) {
 					var fieldsMeta = this.fieldsMeta;
@@ -11248,6 +11236,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					}
 				},
 				saveRef: function saveRef(name, _, component) {
+					if (!component) {
+						// after destroy, delete data
+						delete this.fieldsMeta[name];
+						delete this.fields[name];
+						return;
+					}
 					var fieldMeta = this.getFieldMeta(name);
 					if (fieldMeta && fieldMeta.ref) {
 						if (typeof fieldMeta.ref === 'string') {
@@ -11433,7 +11427,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 						var field = fields[name];
 						if (field && 'value' in field) {
 							changed = true;
-							newFields[name] = { instance: field.instance };
+							newFields[name] = {
+								instance: field.instance
+							};
 						}
 					});
 					if (changed) {
@@ -11442,12 +11438,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				},
 				render: function render() {
 					var formProps = _defineProperty({}, formPropName, this.getForm());
-					var fieldsMeta = this.fieldsMeta;
-					for (var name in fieldsMeta) {
-						if (fieldsMeta.hasOwnProperty(name)) {
-							fieldsMeta[name].stale = 1;
-						}
-					}
 					if (withRef) {
 						formProps.ref = 'wrappedComponent';
 					}
@@ -11469,6 +11459,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return {
 				getFieldsValue: this.getFieldsValue,
 				getFieldValue: this.getFieldValue,
+				getFieldInstance: this.getFieldInstance,
 				setFieldsValue: this.setFieldsValue,
 				setFields: this.setFields,
 				setFieldsInitialValue: this.setFieldsInitialValue,
@@ -11543,17 +11534,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 			function newCb(error, values) {
 				if (error) {
+					var firstNode = undefined;
+					var firstTop = undefined;
 					for (var name in error) {
 						if (error.hasOwnProperty(name) && error[name].instance) {
 							var node = ReactDOM.findDOMNode(error[name].instance);
-							var c = options.container || getScrollableContainer(node);
-							scrollIntoView(node, c, {
-								onlyScrollIfNeeded: true
-							});
-							break;
+							var top = node.getBoundingClientRect().top;
+							if (firstTop === undefined || firstTop > top) {
+								firstTop = top;
+								firstNode = node;
+							}
 						}
 					}
+					if (firstNode) {
+						var c = options.container || getScrollableContainer(firstNode);
+						scrollIntoView(firstNode, c, {
+							onlyScrollIfNeeded: true
+						});
+					}
 				}
+
 				if (typeof callback === 'function') {
 					callback(error, values);
 				}
@@ -11564,9 +11564,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	};
 
 	function createDOMForm(option) {
-		return createBaseForm(_extends({}, option, {
-			refComponent: true
-		}), [mixin]);
+		return createBaseForm(_extends({}, option), [mixin]);
 	}
 
 	RC.createForm = createForm;

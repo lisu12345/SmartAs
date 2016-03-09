@@ -859,32 +859,67 @@
 			}, success), error);
 		}
 
-		function create(data, sucess, error) {
-			return method('create', 'post',true, services.create, data, sucess, error);
-		}
-		function update(data, sucess, error) {
-			return method('update', 'put', true, services.update, data, sucess, error);
-		}
-		function get(id, sucess, error) {
-			if(_.isArray(id)){
-				return method('get', 'get',false, services.get.format('batach',_.join(id)) , sucess, error);
+		function create(data, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
 			}
-			return method('get', 'get', false,services.get.format('single',id), sucess, error);
+			return method('create', 'post',true, url || services.create, data, success, error);
 		}
-		function find(id, sucess, error) {
-			return method('find', 'get',false, services.find.format(id), sucess, error);
-		}
-		function remove(id, sucess, error) {
-			if(_.isArray(id)){
-				return method('remove', 'delete',true, services.remove.format('batach',_.join(id)), sucess, error);
+		function update(data, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
 			}
-			return method('remove', 'delete',true, services.get.format('single',id), sucess, error);
+			return method('update', 'put', true, url || services.update, data, success, error);
 		}
-		function list(q, sucess, error) {
-			return method('list', 'get', false,services.list, q, sucess, error);
+		function get(id, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
+			}
+			if(_.isArray(id)){
+				return method('get', 'get',false, url || services.get.format('batach',_.join(id)) , success, error);
+			}
+			return method('get', 'get', false,url || services.get.format('single',id), success, error);
 		}
-		function listPage(page, pageSize, q, sucess, error) {
-			return method('listPage', 'get',false, services.listPage.format(page, pageSize), q, sucess, error);
+		function find(id, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
+			}
+			return method('find', 'get',false, url || services.find.format(id), success, error);
+		}
+		function remove(id, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
+			}
+			if(_.isArray(id)){
+				return method('remove', 'delete',true, url || services.remove.format('batach',_.join(id)), success, error);
+			}
+			return method('remove', 'delete',true, url || services.get.format('single',id), success, error);
+		}
+		function list(q, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
+			}
+			return method('list', 'get', false,url || services.list, q, success, error);
+		}
+		function listPage(page, pageSize, q, url ,success, error) {
+			if (_.isFunction(url)) {
+				error = success;
+				success = url;
+				url = undefined;
+			}
+			return method('listPage', 'get',false, url || services.listPage.format(page, pageSize), q, success, error);
 		}
 		function ready() {
 			dispatch(AT.SERVICE.READY,undefined,'ready');

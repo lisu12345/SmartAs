@@ -9,8 +9,13 @@
 
 package org.smartas.core.model;
 
+import java.util.Date;
+
 import org.smartas.core.POJO;
 import org.smartas.core.util.BeanContext;
+import org.smartas.core.util.SecurityUtil;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * @author chenb
@@ -26,6 +31,11 @@ public abstract class BaseVO implements POJO {
   protected String tenantId;// 多租户
   protected String scope;//
   protected int revision = 1;// 版本
+
+  protected String createUserId;
+  protected Date createDate;
+  protected String lastUpdateUserId;
+  protected Date lastUpdateDate;
 
 
   public String getAppName() {
@@ -68,13 +78,75 @@ public abstract class BaseVO implements POJO {
   }
 
   /**
+   * @return the createUserId
+   */
+  public String getCreateUserId() {
+    return createUserId;
+  }
+
+  /**
+   * @param createUserId the createUserId to set
+   */
+  public void setCreateUserId(String createUserId) {
+    this.createUserId = createUserId;
+  }
+
+  /**
+   * @return the createDate
+   */
+  public Date getCreateDate() {
+    return createDate;
+  }
+
+  /**
+   * @param createDate the createDate to set
+   */
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
+
+  /**
+   * @return the lastUpdateUserId
+   */
+  public String getLastUpdateUserId() {
+    return lastUpdateUserId;
+  }
+
+  /**
+   * @param lastUpdateUserId the lastUpdateUserId to set
+   */
+  public void setLastUpdateUserId(String lastUpdateUserId) {
+    this.lastUpdateUserId = lastUpdateUserId;
+  }
+
+  /**
+   * @return the lastUpdateDate
+   */
+  public Date getLastUpdateDate() {
+    return lastUpdateDate;
+  }
+
+  /**
+   * @param lastUpdateDate the lastUpdateDate to set
+   */
+  public void setLastUpdateDate(Date lastUpdateDate) {
+    this.lastUpdateDate = lastUpdateDate;
+  }
+
+  /**
    * @param revision the revision to set
    */
   public void setRevision(int revision) {
     this.revision = revision;
   }
 
+  @JSONField(serialize = false)
   public int getRevisionNext() {
     return revision + 1;
+  }
+
+  @JSONField(serialize = false)
+  public Object getCurrentUser() {
+    return SecurityUtil.getSubject().getPrincipal();
   }
 }
