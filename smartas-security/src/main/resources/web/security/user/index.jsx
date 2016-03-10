@@ -70,9 +70,28 @@ install("web.security.user",function($S){
 
 	UserQForm = Form.create()(UserQForm);
 	
+	const rowSelection = {
+	  onChange(selectedRowKeys) {
+	    console.log(`selectedRowKeys changed: ${selectedRowKeys}`);
+	  },
+	  onSelect(record, selected, selectedRows) {
+	    console.log(record, selected, selectedRows);
+	  },
+	  onSelectAll(selected, selectedRows) {
+	    console.log(selected, selectedRows);
+	  }
+	};
+	
+	
 	const App = React.createClass({
  		render: function() {
-			return <Grid rowKey='id' columns={columns} QForm={UserQForm} toolbar={toolbar} service={service} title='用户列表' />
+			return <Grid rowKey='id' 
+				columns={columns} 
+				QForm={UserQForm} 
+				rowSelection={rowSelection} 
+				toolbar={toolbar} 
+				service={service} 
+				title='用户列表' />
 		}
 	});
 	

@@ -52,25 +52,13 @@
 	});
 	
 	
-	const rowSelection = {
-			  onChange(selectedRowKeys) {
-			    console.log(`selectedRowKeys changed: ${selectedRowKeys}`);
-			  },
-			  onSelect(record, selected, selectedRows) {
-			    console.log(record, selected, selectedRows);
-			  },
-			  onSelectAll(selected, selectedRows) {
-			    console.log(selected, selectedRows);
-			  }
-			};
-
-	
 	const Grid = React.createClass({
 		propTypes: {
 			service: React.PropTypes.object.isRequired,
 			rownumbers : React.PropTypes.bool,
 			pageSize : React.PropTypes.number,
 			toolbar : React.PropTypes.array,
+			rowSelection:React.PropTypes.object,
 			QForm:React.PropTypes.func,
 		},
 		getDefaultProps: function() {
@@ -139,7 +127,9 @@
 		},
  		render: function() {
 			const {data,pagination} = this.state,
-				{service,rowKey,rownumbers,columns,title,toolbar,QForm,...props} = this.props;
+				{service,rowKey,rownumbers,
+					columns,title,toolbar,rowSelection,
+					QForm,...props} = this.props;
 			let Form = null;
 			if(QForm){
 				Form = (<div>

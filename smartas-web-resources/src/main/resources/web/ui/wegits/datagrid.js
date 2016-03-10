@@ -87,18 +87,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 
-	var rowSelection = {
-		onChange: function onChange(selectedRowKeys) {
-			console.log("selectedRowKeys changed: " + selectedRowKeys);
-		},
-		onSelect: function onSelect(record, selected, selectedRows) {
-			console.log(record, selected, selectedRows);
-		},
-		onSelectAll: function onSelectAll(selected, selectedRows) {
-			console.log(selected, selectedRows);
-		}
-	};
-
 	var Grid = React.createClass({
 		displayName: "Grid",
 
@@ -107,6 +95,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			rownumbers: React.PropTypes.bool,
 			pageSize: React.PropTypes.number,
 			toolbar: React.PropTypes.array,
+			rowSelection: React.PropTypes.object,
 			QForm: React.PropTypes.func
 		},
 		getDefaultProps: function getDefaultProps() {
@@ -192,9 +181,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var columns = _props2.columns;
 			var title = _props2.title;
 			var toolbar = _props2.toolbar;
+			var rowSelection = _props2.rowSelection;
 			var QForm = _props2.QForm;
 
-			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "QForm"]);
+			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "rowSelection", "QForm"]);
 
 			var Form = null;
 			if (QForm) {
