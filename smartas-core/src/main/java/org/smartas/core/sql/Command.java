@@ -10,21 +10,30 @@ package org.smartas.core.sql;
 public class Command {
 
   private final String field;
-  private final Object value;
   private final Operator operator;
-
-  public Command(String field, Object value, String operator) {
-    super();
-    this.field = field;
-    this.value = value;
-    this.operator = Operator.valueOf(operator);
-  }
+  private final Object value;
 
   public Command(String field, String operator) {
-    super();
+    this(field, operator, null);
+  }
+
+  public Command(String field, String operator, Object value) {
     this.field = field;
-    this.value = null;
     this.operator = Operator.valueOf(operator);
+    this.value = escape(value);
+  }
+
+  private Object escape(Object value) {
+    switch (this.operator) {
+      case LK:
+      case RLK:
+        if (value != null) {
+          return value.toString().replaceAll("[%_]", "\\\\$0");
+        }
+      default:
+        break;
+    }
+    return value;
   }
 
   /**
@@ -42,54 +51,78 @@ public class Command {
   }
 
   public String toSql(String filterName) {
-    return operator.toSql(filterName, field);
+    return operator.toSql(filterName, this);
   }
 
   // <,>,=,<=,>=,in,like
   public enum Operator {
     LT {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s < #{item.value}", filterName, field);
-        // return new StringBuilder(filterName).append('.').append(field).append(" <
-        // #{item.value}").toString();
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s < #{item.value}", filterName, cmd.field);
+        }
+        return "";
       }
     },
     GT {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s > #{item.value}", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s > #{item.value}", filterName, cmd.field);
+        }
+        return "";
       }
     },
     EQ {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s = #{item.value}", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s = #{item.value}", filterName, cmd.field);
+        }
+        return "";
       }
     },
     LE {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s <= #{item.value}", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s <= #{item.value}", filterName, cmd.field);
+        }
+        return "";
       }
     },
     GE {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s >= #{item.value}", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s >= #{item.value}", filterName, cmd.field);
+        }
+        return "";
       }
     },
     IN {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s in (#{item.value})", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s IN (#{item.value})", filterName, cmd.field);
+        }
+        return "";
       }
     },
     LK {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s like CONCAT('%%',#{item.value},'%%')", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s LIKE CONCAT('%%',#{item.value},'%%') ESCAPE '\\\\'", filterName,
+              cmd.field);
+        }
+        return "";
       }
     },
     RLK {
-      String toSql(String filterName, String field) {
-        return String.format("%s.%s like CONCAT(#{item.value},'%%')", filterName, field);
+      String toSql(String filterName, Command cmd) {
+        if (cmd.value != null) {
+          return String.format("%s.%s LIKE CONCAT(#{item.value},'%%') ESCAPE '\\\\'", filterName,
+              cmd.field);
+        }
+        return "";
       }
     };
-    abstract String toSql(String filterName, String field);
+    abstract String toSql(String filterName, Command cmd);
   }
 
 }

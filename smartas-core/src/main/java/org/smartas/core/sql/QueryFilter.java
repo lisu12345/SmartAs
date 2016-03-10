@@ -87,7 +87,7 @@ public class QueryFilter {
     if (fieldInfo != null && fieldInfo.length == 4) {
       Object value = convertObject(fieldInfo[2], paramValue);
       if (value != null) {
-        Command fieldCommand = new Command(fieldInfo[1], value, fieldInfo[3]);
+        Command fieldCommand = new Command(fieldInfo[1], fieldInfo[3], value);
         commands.add(fieldCommand);
       }
     } else if (fieldInfo != null && fieldInfo.length == 3) {
