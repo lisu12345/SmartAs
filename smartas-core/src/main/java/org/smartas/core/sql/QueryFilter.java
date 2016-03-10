@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -41,8 +42,8 @@ public class QueryFilter {
    * 从请求对象获取查询参�?并进行构�?
    * <p>
    * 参数名格式必须为: Q_firstName_S_EQ 其中Q_表示该参数为查询的参数，firstName查询的字段名称， S代表该参数的类型为字符串类型,该位置的其他值有�?
-   * D=日期，BD=BigDecimal，FT=float,N=Integer,SN=Short,S=字符�? EQ代表等于�? 该位置的其他值有�?br/> LT，GT，EQ，LE，GE,LK,RLK
-   * <br/>
+   * D=日期，BD=BigDecimal，FT=float,N=Integer,SN=Short,S=字符�? EQ代表等于�? 该位置的其他值有�?br/>
+   * LT，GT，EQ，LE，GE,LK,RLK,IN <br/>
    * 要别代表<,>,=,<=,>=,like的条件查�?
    * <p>
    * 
@@ -105,8 +106,7 @@ public class QueryFilter {
       if ("S".equals(type)) {// 大部的查询都是该类型，所以放至在头部
         value = paramValue;
       } else if ("D".equals(type)) {
-        // value = DateUtils.parseDate(paramValue, new String[] {"yyyy-MM-dd", "yyyy-MM-dd
-        // HH:mm:ss"});
+        value = DateUtils.parseDate(paramValue, "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss");
       } else if ("L".equals(type)) {
         value = new Long(paramValue);
       } else if ("N".equals(type)) {
@@ -142,8 +142,8 @@ public class QueryFilter {
   public Map<String, Object> getParams() {
     return params;
   }
-  
-  public boolean isEmpty(){
+
+  public boolean isEmpty() {
     return commands.isEmpty();
   }
 
