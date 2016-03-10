@@ -9,6 +9,8 @@ import org.smartas.core.POJO;
 import org.smartas.core.Pageable;
 import org.smartas.core.Service;
 import org.smartas.core.annotation.Operation;
+import org.smartas.core.annotation.RequestQuery;
+import org.smartas.core.sql.QueryFilter;
 import org.smartas.core.util.BeanContext;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,8 +45,7 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
 
   @RequestMapping(value = "/list/{page}/{pageSize}", method = RequestMethod.GET)
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
-  public Pageable<T> getAll1(@PathVariable("page") int page,
-      @PathVariable("pageSize") int pageSize) {
+  public Pageable<T> getAll(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
     return getService().getAll(page, pageSize);
   }
 
@@ -52,6 +53,20 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
   public List<T> getAll() {
     return getService().getAll();
+  }
+  
+  
+  @RequestMapping(value = "/query/{page}/{pageSize}", method = RequestMethod.GET)
+  @Operation(code = Operation.READ, desc = Operation.READ_DESC)
+  public Pageable<T> getAll(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize,
+      @RequestQuery QueryFilter query) {
+    return getService().getAll(query,page, pageSize);
+  }
+
+  @RequestMapping(value = "/query", method = RequestMethod.GET)
+  @Operation(code = Operation.READ, desc = Operation.READ_DESC)
+  public List<T> getAll(@RequestQuery QueryFilter query) {
+    return getService().getAll(query);
   }
 
   @RequestMapping(value = "/single", method = RequestMethod.POST)

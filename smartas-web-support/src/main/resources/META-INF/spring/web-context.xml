@@ -86,10 +86,14 @@
 					</bean>
 				</list>
 			</property>
+			<property name="customArgumentResolvers">
+				<list>
+					<bean class="org.smartas.web.support.method.annotation.RequestQueryMethodArgumentResolver" />
+				</list>
+			</property>
 		</bean>
-
+		
 		<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
-
 		<mvc:interceptors>
 			<mvc:interceptor>
 				<mvc:mapping path="/" />

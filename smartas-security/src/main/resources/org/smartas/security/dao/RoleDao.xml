@@ -15,20 +15,23 @@
 	    WHERE T.ID = #{id}
 	  </select>
 	  
-	  <select id="getCountAll" resultType="int">
+	  <select id="getCount" resultType="int">
 	    SELECT
 	       count(1)
 	    FROM tpl_app_role_t T
+	    <query open="where (" close=")" />
 	  </select>
 	  
 	  <select id="selectAll" resultType="org.smartas.security.Role">
 	    SELECT
 	       T.*
 	    FROM tpl_app_role_t T
+	    <query open="where (" close=")" />
 	  </select>
 	  
 	  <select id="select" resultType="org.smartas.security.Role" pageable="true">
 	    SELECT T.* FROM tpl_app_role_t T
+	    <query open="where (" close=")" />
 	  </select>
 	  
 	  <insert id="insert" parameterType="org.smartas.security.Role">

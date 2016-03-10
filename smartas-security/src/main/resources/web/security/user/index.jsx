@@ -6,7 +6,7 @@ install("web.security.user",function($S){
 	var pkg = this,dataSource = pkg.dataSource,eventBus = this.eventBus;
 	
 	const {UI,Service} = Smart,
-		{Grid, Icon } = UI;
+		{Grid,Form,FormItem, Input, Button, Checkbox } = UI;
 
 	const service = Service.New("security/user");
 	
@@ -52,9 +52,27 @@ install("web.security.user",function($S){
 	    handler:function(){alert('删除')}
 	}];
 	
+	let UserQForm = React.createClass({
+	  render() {
+	    const { getFieldProps} = this.props.form;
+	    
+	    const acount = getFieldProps('Q_acount_S_LK');
+	    return (
+	      <Form inline onSubmit={this.props.querySubmit}>
+	        <FormItem label="账户：">
+	          <Input placeholder="请输入账户名" {...acount} />
+	        </FormItem>
+	        {this.props.children}
+	      </Form>
+	    );
+	  }
+	});
+
+	UserQForm = Form.create()(UserQForm);
+	
 	const App = React.createClass({
  		render: function() {
-			return <Grid rowKey='id' columns={columns} toolbar={toolbar} service={service} title='用户列表' />
+			return <Grid rowKey='id' columns={columns} QForm={UserQForm} toolbar={toolbar} service={service} title='用户列表' />
 		}
 	});
 	

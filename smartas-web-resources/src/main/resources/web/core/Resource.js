@@ -119,9 +119,10 @@
 
 		var request = function(options) {
 			lifecycle.fire('before');
-			options.contentType = "application/json";
-			if (options.data && !_.isString(options.data)) {
-				options.data = JSON.stringify(options.data)
+			var data = options.data,type = options.type
+			if ((type == 'put' || type == 'post') && data && !_.isString(data)) {
+				options.contentType = "application/json;charset=UTF-8";
+				options.data = JSON.stringify(data)
 			}
 			var complete = options.complete;
 			

@@ -20,8 +20,8 @@
 			get : 'services/' + model + '/{0}/{1}',
 			find : 'services/' + model + '/single/{0}',
 			remove : 'services/' + model + '/{0}/{1}',
-			list : 'services/' + model + '/list',
-			listPage : 'services/' + model + '/list/{0}/{1}',
+			list : 'services/' + model + '/{0}',
+			listPage : 'services/' + model + '/{0}/{1}/{2}',
 		};
 
 		function subscribe(listener) {
@@ -108,7 +108,7 @@
 				success = url;
 				url = undefined;
 			}
-			return method('list', 'get', false,url || services.list, q, success, error);
+			return method('list', 'get', false,url || services.list.format(q ? 'query':'list'), q, success, error);
 		}
 		function listPage(page, pageSize, q, url ,success, error) {
 			if (_.isFunction(url)) {
@@ -116,7 +116,7 @@
 				success = url;
 				url = undefined;
 			}
-			return method('listPage', 'get',false, url || services.listPage.format(page, pageSize), q, success, error);
+			return method('listPage', 'get',false, url || services.listPage.format(q ? 'query':'list',page, pageSize), q, success, error);
 		}
 		function ready() {
 			dispatch(AT.SERVICE.READY,undefined,'ready');

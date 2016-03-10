@@ -10,6 +10,7 @@ package org.smartas.core;
 import java.io.Serializable;
 import java.util.List;
 
+import org.smartas.core.sql.QueryFilter;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -62,8 +63,8 @@ public interface Service<T extends POJO,PK extends Serializable> {
 	 * 
 	 * @return
 	 */
-	@Transactional(readOnly=true)
-	int getAllSize() throws BusinessAccessException;
+	//@Transactional(readOnly=true)
+	//int getAllSize() throws BusinessAccessException;
 
 	/**
 	 * 获得指定范围内的对象集合
@@ -75,8 +76,15 @@ public interface Service<T extends POJO,PK extends Serializable> {
 	 */
 	@Transactional(readOnly=true)
 	Pageable<T> getAll(int page, int pageSize) throws BusinessAccessException;
+	
+	@Transactional(readOnly=true)
+    Pageable<T> getAll(QueryFilter query,int page, int pageSize) throws BusinessAccessException;
+	
 	@Transactional(readOnly=true)
 	List<T> getAll() throws BusinessAccessException;
+	
+	@Transactional(readOnly=true)
+	List<T> getAll(QueryFilter query) throws BusinessAccessException;
 
 	/**
 	 * 存储对象 注意:这个地方应该会有检查是否存在此记录的业务逻辑

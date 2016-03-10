@@ -3,7 +3,9 @@ package org.smartas.core;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
+import org.smartas.core.sql.QueryFilter;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -14,87 +16,95 @@ import org.springframework.dao.DataAccessException;
  * @version 1.2
  */
 public interface GenericDao<T extends POJO, PK extends Serializable> {
-	/**
-	 * 从数据库查询满足条件的对象,这里我们不处理找不到结果的情况,应为存在业务要求 数据库中是否已有这条记录
-	 * 
-	 * @param id
-	 * @return
-	 * @throws DataAccessException
-	 */
+  /**
+   * 从数据库查询满足条件的对象,这里我们不处理找不到结果的情况,应为存在业务要求 数据库中是否已有这条记录
+   * 
+   * @param id
+   * @return
+   * @throws DataAccessException
+   */
 
-	T getById(PK id);
-	/**
-	 * 从数据库查询满足条件的对象,这里我们不处理找不到结果的情况,应为存在业务要求 数据库中是否已有这条记录
-	 * 
-	 * @param ids
-	 * @return
-	 * @throws DataAccessException
-	 */
-	T[] getByIds(PK[] ids);
+  T getById(PK id);
 
-	/**
-	 * 返回某类对象在数据库中的记录数,分页用的比较多
-	 * 
-	 * @return
-	 * @throws DataAccessException
-	 */
-	int getCountAll();
+  /**
+   * 从数据库查询满足条件的对象,这里我们不处理找不到结果的情况,应为存在业务要求 数据库中是否已有这条记录
+   * 
+   * @param ids
+   * @return
+   * @throws DataAccessException
+   */
+  T[] getByIds(PK[] ids);
 
-	/**
-	 * 返回数据库中此类记录的所有数据,按id排序
-	 * 
-	 * @return
-	 * @throws DataAccessException
-	 */
-	// @MapKey("selectAll")
-	List<T> selectAll();
+  /**
+   * 返回某类对象在数据库中的记录数,分页用的比较多
+   * 
+   * @return
+   * @throws DataAccessException
+   */
+  @MapKey("count")
+  int getCount();
+  @MapKey("count")
+  int getCount(@Param("query") QueryFilter filter);
 
-	/**
-	 * 返回数据库中此类记录的数据,满足查询边界.主要用在iBatis上,现在还没有研究hibernate上这个方法怎么实现
-	 * 
-	 * @param skip
-	 * @param pageSize
-	 * @return
-	 * @throws DataAccessException
-	 */
-	List<T> select(@Param("page") Page page);
+  /**
+   * 返回数据库中此类记录的所有数据,按id排序
+   * 
+   * @return
+   * @throws DataAccessException
+   */
+  // @MapKey("selectAll")
+  List<T> selectAll();
 
-	/**
-	 * 保存数据记录,更具id是否为空来判断是否插入新记录还是更新操作
-	 * 
-	 * @param newObject
-	 * @throws DataAccessException
-	 */
-	void insert(T entity);
+  List<T> selectAll(@Param("query") QueryFilter filter);
 
-	/**
-	 * 更新数据记录
-	 * 
-	 * @param Object
-	 * @throws DataAccessException
-	 */
-	void update(T entity);
+  /**
+   * 返回数据库中此类记录的数据,满足查询边界.主要用在iBatis上,现在还没有研究hibernate上这个方法怎么实现
+   * 
+   * @param skip
+   * @param pageSize
+   * @return
+   * @throws DataAccessException
+   */
+  List<T> select(@Param("page") Page page);
 
-	// void merge(T entity);
+  List<T> select(@Param("query") QueryFilter filter, @Param("page") Page page);
 
-	/**
-	 * 删除记录
-	 * 
-	 * @param id
-	 * @throws DataAccessException
-	 */
-	void deleteById(Serializable id);
-	
-	
-	/**
-	 * 批量删除记录
-	 * 
-	 * @param ids
-	 * @throws DataAccessException
-	 */
-	void deleteByIds(Serializable[] ids);
+  /**
+   * 保存数据记录,更具id是否为空来判断是否插入新记录还是更新操作
+   * 
+   * @param newObject
+   * @throws DataAccessException
+   */
+  void insert(T entity);
 
-	// ~~~
-	// void evict(T entity);
-	// List<T> getAll(QueryFilter filter);
+  /**
+   * 更新数据记录
+   * 
+   * @param Object
+   * @throws DataAccessException
+   */
+  void update(T entity);
+
+  // void merge(T entity);
+
+  /**
+   * 删除记录
+   * 
+   * @param id
+   * @throws DataAccessException
+   */
+  void deleteById(Serializable id);
+
+
+  /**
+   * 批量删除记录
+   * 
+   * @param ids
+   * @throws DataAccessException
+   */
+  void deleteByIds(Serializable[] ids);
+
+  // ~~~
+  // void evict(T entity);
+  // List<T> getAll(QueryFilter filter);
 }

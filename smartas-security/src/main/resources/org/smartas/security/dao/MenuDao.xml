@@ -15,26 +15,25 @@
 		WHERE T.ID = #{id}
 	</select>
 
-	<select id="getCountAll" resultType="int">
+	<select id="getCount" resultType="int">
 		SELECT
 		count(1)
 		FROM tpl_menu_t T
+		<query open="where (" close=")" />
 	</select>
 
 	<select id="selectAll" resultType="org.smartas.security.Menu">
 		SELECT
 		T.*
 		FROM tpl_menu_t T
-		<query open="(" close=")"  value="queryVo"/>
+		<query open="where (" close=")" />
 		ORDER BY T.sn
 	</select>
 
-	<select id="select" resultType="org.smartas.security.Menu">
-		${limitBefore}
+	<select id="select" resultType="org.smartas.security.Menu" pageable='true'>
 		SELECT T.* FROM tpl_menu_t T
-		<query open="(" close=")"  value="queryVo"/>
+		<query open="where (" close=")" />
 		ORDER BY T.sn
-		${limitAfter}
 	</select>
 
 

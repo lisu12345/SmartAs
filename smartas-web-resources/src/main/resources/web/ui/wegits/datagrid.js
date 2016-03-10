@@ -106,7 +106,8 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			service: React.PropTypes.object.isRequired,
 			rownumbers: React.PropTypes.bool,
 			pageSize: React.PropTypes.number,
-			toolbar: React.PropTypes.array
+			toolbar: React.PropTypes.array,
+			QForm: React.PropTypes.func
 		},
 		getDefaultProps: function getDefaultProps() {
 			return {
@@ -121,7 +122,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var service = _props.service;
 			var current = _props.current;
 			var pageSize = _props.pageSize;
-
+			var _self = this;
 			var pagination = {
 				total: 0,
 				current: current,
@@ -130,10 +131,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					return "共 " + total + " 条";
 				},
 				onShowSizeChange: function onShowSizeChange(current, pageSize) {
-					service.listPage(current, pageSize);
+					service.listPage(current, pageSize, _self.state.qs);
 				},
 				onChange: function onChange(current, pageSize) {
-					service.listPage(current, pageSize);
+					service.listPage(current, pageSize, _self.state.qs);
 				}
 			};
 			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
@@ -148,10 +149,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 				if (method === 'refresh') {
 					if (data) {
-						service.listPage(data.qs, data.page, data.pageSize);
+						service.listPage(data.page, data.pageSize, data.qs);
 						return;
 					}
-					service.listPage( /*this.state.qs,*/this.state.current, this.state.pageSize);
+					service.listPage(this.state.current, this.state.pageSize, this.state.qs);
 					return;
 				}
 				if (method === 'listPage') {
@@ -168,22 +169,59 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			}).bind(this));
 			service.listPage(1, 10);
 		},
+		queryReset: function queryReset(e) {
+			this.refs.qform.resetFields();
+		},
+		querySubmit: function querySubmit(e) {
+			e.preventDefault();
+
+			var service = this.props.service;
+
+			this.state.qs = this.refs.qform.getFieldsValue();
+			service.refresh();
+		},
+
 		render: function render() {
 			var _state = this.state;
 			var data = _state.data;
-			var pagination = _state.pagination;var _props2 = this.props;
+			var pagination = _state.pagination;
+			var _props2 = this.props;
 			var service = _props2.service;
 			var _rowKey = _props2.rowKey;
 			var rownumbers = _props2.rownumbers;
 			var columns = _props2.columns;
 			var title = _props2.title;
 			var toolbar = _props2.toolbar;
+			var QForm = _props2.QForm;
 
-			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar"]);
+			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "QForm"]);
 
+			var Form = null;
+			if (QForm) {
+				Form = React.createElement(
+					"div",
+					null,
+					React.createElement(
+						QForm,
+						{ ref: "qform", querySubmit: this.querySubmit },
+						React.createElement(
+							Button,
+							{ type: "primary", htmlType: "submit" },
+							"查询"
+						),
+						" ",
+						React.createElement(
+							Button,
+							{ onClick: this.queryReset },
+							"重置"
+						)
+					)
+				);
+			}
 			return React.createElement(
 				"div",
 				{ className: "ant-grid" },
+				QForm && Form,
 				React.createElement(Header, { title: title }),
 				React.createElement(Toolbar, { toolbar: toolbar, service: service }),
 				React.createElement(Table, _extends({ size: "grid" }, props, { rowSelection: rowSelection,

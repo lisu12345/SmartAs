@@ -291,9 +291,10 @@ test CDATA #REQUIRED
 
 <!ELEMENT query EMPTY>
 <!ATTLIST query
- open CDATA #REQUIRED
- close CDATA #REQUIRED
- value CDATA #REQUIRED
+ open CDATA #IMPLIED
+ close CDATA #IMPLIED
+ filterName CDATA #IMPLIED
+ value CDATA #IMPLIED
 >
 
 

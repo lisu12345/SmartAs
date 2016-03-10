@@ -71,6 +71,7 @@
 			rownumbers : React.PropTypes.bool,
 			pageSize : React.PropTypes.number,
 			toolbar : React.PropTypes.array,
+			QForm:React.PropTypes.func,
 		},
 		getDefaultProps: function() {
 			return {
@@ -81,7 +82,8 @@
 			}
 		},
 		getInitialState: function() {
-			const {service,current,pageSize} = this.props;
+			const {service,current,pageSize} = this.props,
+				_self = this;
 			const pagination = {
 				  total: 0,
 				  current: current,
@@ -90,10 +92,10 @@
 					  return `共 ${total} 条`;
 				  },
 				  onShowSizeChange(current, pageSize) {
-					  service.listPage(current,pageSize);
+					  service.listPage(current,pageSize,_self.state.qs);
 				  },
 				  onChange(current,pageSize) {
-					  service.listPage(current,pageSize);
+					  service.listPage(current,pageSize,_self.state.qs);
 				  }
 			 };
    			 return {pagination : pagination,data : [],current,pageSize};
@@ -104,10 +106,10 @@
 				let {type,data,method} = action;
 				if(method === 'refresh'){
 					if(data){
-						service.listPage(data.qs,data.page,data.pageSize);
+						service.listPage(data.page,data.pageSize,data.qs);
 						return;
 					}
-					service.listPage(/*this.state.qs,*/this.state.current,this.state.pageSize);
+					service.listPage(this.state.current,this.state.pageSize,this.state.qs);
 					return;
 				}
 				if(method === 'listPage'){
@@ -124,11 +126,32 @@
 			}.bind(this));
 			service.listPage(1,10);
 		},
+		queryReset:function(e){
+			this.refs.qform.resetFields();
+		},
+		querySubmit(e) {
+		    e.preventDefault();
+
+		    const {service} = this.props;
+			this.state.qs = this.refs.qform.getFieldsValue();
+		    service.refresh();
+
+		},
  		render: function() {
-			const {data,pagination} = this.state,{service,rowKey,rownumbers,columns,title,toolbar,...props} = this.props;
-			
+			const {data,pagination} = this.state,
+				{service,rowKey,rownumbers,columns,title,toolbar,QForm,...props} = this.props;
+			let Form = null;
+			if(QForm){
+				Form = (<div>
+					<QForm ref="qform" querySubmit={this.querySubmit}>
+						<Button type="primary" htmlType="submit">查询</Button>&nbsp;
+						<Button onClick={this.queryReset}>重置</Button>
+					</QForm>
+				</div>);
+			}
 			return (
 				<div className="ant-grid">
+					{QForm && Form}
 					<Header title={title} />
 					<Toolbar toolbar={toolbar} service={service} />
 					<Table size='grid' {...props} rowSelection={rowSelection}

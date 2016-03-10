@@ -15,22 +15,23 @@
 	    WHERE T.ID = #{id}
 	  </select>
 	  
-	  <select id="getCountAll" resultType="int">
+	  <select id="getCount" resultType="int">
 	    SELECT
 	       count(1)
 	    FROM tpl_user_t T
+	    <query open="where (" close=")" />
 	  </select>
 	  
 	  <select id="selectAll" resultType="org.smartas.security.User">
 	    SELECT
 	       T.*
 	    FROM tpl_user_t T
+	    <query open="where (" close=")" />
 	  </select>
 	  
-	  <select id="select" resultType="org.smartas.security.User">
-	    ${limitBefore}
+	  <select id="select" resultType="org.smartas.security.User" pageable='true'>
 	    SELECT T.* FROM tpl_user_t T
-	    ${limitAfter}
+	    <query open="where (" close=")" filterName="T" value="query"/>
 	  </select>
 	  
 	  
