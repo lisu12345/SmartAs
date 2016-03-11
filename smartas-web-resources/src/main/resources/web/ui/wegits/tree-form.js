@@ -21,6 +21,9 @@
 			parentKey: PropTypes.string,
 			nameKey: PropTypes.string,
 			snKey: PropTypes.string,
+			type: PropTypes.string,
+			showIcon: PropTypes.bool,
+			showLine: PropTypes.bool,
 			expandedKeys: PropTypes.array
 		},
 		getInitialState: function getInitialState() {
@@ -103,6 +106,9 @@
 			var parentKey = _props3.parentKey;
 			var nameKey = _props3.nameKey;
 			var expandedKeys = _props3.expandedKeys;
+			var type = _props3.type;
+			var showIcon = _props3.showIcon;
+			var showLine = _props3.showLine;
 
 			var loop = function loop(data) {
 				return data.map(function (item) {
@@ -119,7 +125,7 @@
 			var treeNodes = loop(l2t(this.state.treeData, { key_id: idKey, key_parent: parentKey }));
 			return React.createElement(
 				Tree,
-				{ onSelect: this.onSelect, defaultExpandedKeys: expandedKeys, showLine: true },
+				{ prefixCls: type, showIcon: showIcon, onSelect: this.onSelect, defaultExpandedKeys: expandedKeys, showLine: showLine },
 				treeNodes
 			);
 		}
@@ -138,16 +144,23 @@
 			parentKey: PropTypes.string,
 			nameKey: PropTypes.string,
 			snKey: PropTypes.string,
+			type: PropTypes.string,
+			showIcon: PropTypes.bool,
+			showLine: PropTypes.bool,
 			expandedKeys: PropTypes.array
 
 		},
 		getDefaultProps: function getDefaultProps() {
 			return {
+				type: 'z-tree',
+				showIcon: false,
+				showLine: true,
 				root: {
 					id: 0,
 					name: 'Root',
 					sn: 0
 				},
+
 				idKey: 'id',
 				parentKey: 'parentId',
 				nameKey: 'name',
@@ -208,6 +221,9 @@
 			var root = _props4.root;
 			var orderBy = _props4.orderBy;
 			var expandedKeys = _props4.expandedKeys;
+			var type = _props4.type;
+			var showIcon = _props4.showIcon;
+			var showLine = _props4.showLine;
 			var _state = this.state;
 			var data = _state.data;
 			var parent = _state.parent;
@@ -248,6 +264,9 @@
 								parentKey: parentKey,
 								nameKey: nameKey,
 								snKey: snKey,
+								type: type,
+								showIcon: showIcon,
+								showLine: showLine,
 								expandedKeys: expandedKeys,
 								service: service,
 								onSelect: this.onSelect })

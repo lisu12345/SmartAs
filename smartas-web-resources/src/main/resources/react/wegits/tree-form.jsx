@@ -12,6 +12,9 @@
 			parentKey: PropTypes.string,
 			nameKey: PropTypes.string,
 			snKey: PropTypes.string,
+			type:PropTypes.string,
+			showIcon:PropTypes.bool,
+			showLine:PropTypes.bool,
 			expandedKeys: PropTypes.array,
 		},
 		getInitialState() {
@@ -74,7 +77,7 @@
 			}.bind(this));
 		},
 		render() {
-			const {service,idKey,parentKey,nameKey,expandedKeys} = this.props;
+			const {service,idKey,parentKey,nameKey,expandedKeys,type,showIcon,showLine} = this.props;
 		    const loop = data => data.map((item) => {
 			      if (item.children) {
 			        return <TreeNode title={item[nameKey]} key={item[idKey]}>{loop(item.children)}</TreeNode>;
@@ -83,7 +86,7 @@
 		    });
 		    const treeNodes = loop(l2t(this.state.treeData,{key_id:idKey,key_parent:parentKey}));
 		    return (
-		      <Tree onSelect={this.onSelect} defaultExpandedKeys={expandedKeys} showLine={true}>
+		      <Tree prefixCls={type} showIcon={showIcon} onSelect={this.onSelect} defaultExpandedKeys={expandedKeys} showLine={showLine}>
 		        {treeNodes}
 		      </Tree>
 		    );
@@ -92,25 +95,32 @@
 		
 	const TreeForm = React.createClass({
 		propTypes: {
-			service: PropTypes.object.isRequired,
-			Form: PropTypes.func.isRequired,
-			onCreate: PropTypes.func.isRequired,
-			root : PropTypes.object,
-			orderBy :  PropTypes.func,
-			idKey :  PropTypes.string,
-			parentKey :  PropTypes.string,
-			nameKey :  PropTypes.string,
-			snKey :  PropTypes.string,
+			service:PropTypes.object.isRequired,
+			Form:PropTypes.func.isRequired,
+			onCreate:PropTypes.func.isRequired,
+			root:PropTypes.object,
+			orderBy:PropTypes.func,
+			idKey:PropTypes.string,
+			parentKey:PropTypes.string,
+			nameKey:PropTypes.string,
+			snKey:PropTypes.string,
+			type:PropTypes.string,
+			showIcon:PropTypes.bool,
+			showLine:PropTypes.bool,
 			expandedKeys:PropTypes.array,
 			
 		},
 		getDefaultProps: function() {
 			return {
+				type:'z-tree',
+				showIcon : false,
+				showLine : true,
 				root: {
 					id: 0,
 					name: 'Root',
 					sn: 0
 				},
+				
 				idKey: 'id',
 				parentKey: 'parentId',
 				nameKey: 'name',
@@ -156,7 +166,7 @@
 		    });
 		},
  		render: function() {
-			const {Form,service,idKey,parentKey,nameKey,snKey,root,orderBy,expandedKeys} = this.props;
+			const {Form,service,idKey,parentKey,nameKey,snKey,root,orderBy,expandedKeys,type,showIcon,showLine} = this.props;
  			var {data,parent} = this.state;
 			return(
 			<div className="full-height">
@@ -175,6 +185,9 @@
 								parentKey={parentKey} 
 								nameKey={nameKey} 
 								snKey={snKey} 
+								type={type}
+								showIcon={showIcon}
+								showLine={showLine}
 								expandedKeys={expandedKeys} 
 								service={service} 
 								onSelect={this.onSelect} />

@@ -80,6 +80,8 @@ install("web.security.menu2",function($S){
  		render: function() {
 			return <TreeForm 
 				Form={MenuForm} 
+				type='z-tree'
+				showIcon={true}
 				expandedKeys={['0','1']} 
 				service={service} 
 				onCreate={this.onCreate} />

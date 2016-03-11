@@ -403,6 +403,7 @@
 					self.trigger('changed.dom');
 				}catch(e){
 					logger.error("apply html {0}",e);
+					throw e;
 				}
 				
 			},
@@ -456,9 +457,10 @@
 
 		var request = function(options) {
 			lifecycle.fire('before');
-			options.contentType = "application/json";
-			if (options.data && !_.isString(options.data)) {
-				options.data = JSON.stringify(options.data)
+			var data = options.data,type = options.type
+			if ((type == 'put' || type == 'post') && data && !_.isString(data)) {
+				options.contentType = "application/json;charset=UTF-8";
+				options.data = JSON.stringify(data)
 			}
 			var complete = options.complete;
 			
@@ -823,8 +825,8 @@
 			get : 'services/' + model + '/{0}/{1}',
 			find : 'services/' + model + '/single/{0}',
 			remove : 'services/' + model + '/{0}/{1}',
-			list : 'services/' + model + '/list',
-			listPage : 'services/' + model + '/list/{0}/{1}',
+			list : 'services/' + model + '/{0}',
+			listPage : 'services/' + model + '/{0}/{1}/{2}',
 		};
 
 		function subscribe(listener) {
@@ -911,7 +913,7 @@
 				success = url;
 				url = undefined;
 			}
-			return method('list', 'get', false,url || services.list, q, success, error);
+			return method('list', 'get', false,url || services.list.format(q ? 'query':'list'), q, success, error);
 		}
 		function listPage(page, pageSize, q, url ,success, error) {
 			if (_.isFunction(url)) {
@@ -919,7 +921,7 @@
 				success = url;
 				url = undefined;
 			}
-			return method('listPage', 'get',false, url || services.listPage.format(page, pageSize), q, success, error);
+			return method('listPage', 'get',false, url || services.listPage.format(q ? 'query':'list',page, pageSize), q, success, error);
 		}
 		function ready() {
 			dispatch(AT.SERVICE.READY,undefined,'ready');
