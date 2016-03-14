@@ -1,16 +1,16 @@
 /**
  * 
  */
-package ${pkg}.service;
+package ${entity.packageName}.service;
 
 import org.smartas.core.BaseService;
-import ${pkg}.${name};
+import ${entity.packageName}.${entity.name};
 
 /**
  * @author ftl
  *
  */
-public interface ${name}Service extends BaseService<${name}> {
+public interface ${entity.name}Service extends BaseService<${entity.name}> {
 
 	
 }

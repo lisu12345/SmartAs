@@ -27,6 +27,8 @@ public abstract class BaseVO implements POJO {
    * 
    */
   private static final long serialVersionUID = 3617220118055104348L;
+  
+  
 
   protected String tenantId;// 多租户
   protected String scope;//
@@ -148,5 +150,9 @@ public abstract class BaseVO implements POJO {
   @JSONField(serialize = false)
   public Object getCurrentUser() {
     return SecurityUtil.getSubject().getPrincipal();
+  }
+  @JSONField(serialize = false)
+  public long getCurrentUserId() {
+    return SecurityUtil.getSubject().getUserId();
   }
 }

@@ -1,0 +1,40 @@
++(function(UI,RC) {
+  const {assign} = _;
+
+  var Card =  props => {
+    let { prefixCls = 'ant-card', className, children, extra, bodyStyle, title, loading, ...other } = props;
+    const classString = classNames({
+      [prefixCls]: true,
+      [className]: !!className,
+      [`${prefixCls}-loading`]: loading,
+    });
+
+    if (loading) {
+      children = (
+        <div>
+          <p>███████████████████████</p>
+          <p>██████　███████████████████</p>
+          <p>██████████　███████████</p>
+          <p>█████　██████　█████████████</p>
+        </div>
+      );
+    }
+
+    const head = title ? (
+      <div className={`${prefixCls}-head`}>
+        <h3 className={`${prefixCls}-head-title`}>{title}</h3>
+      </div>
+    ) : null;
+
+    return (
+      <div {...other} className={classString}>
+        {head}
+        {extra ? <div className={`${prefixCls}-extra`}>{extra}</div> : null}
+        <div className={`${prefixCls}-body`} style={bodyStyle}>{children}</div>
+      </div>
+    );
+  };
+ 
+  UI.Card = Card;
+
+})(Smart.UI,Smart.RC);

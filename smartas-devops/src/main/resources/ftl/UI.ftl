@@ -1,13 +1,13 @@
 /**
  * 
  */
-package ${pkg}.ui;
+package ${entity.packageName}.ui;
 
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
 import org.smartas.core.ui.BaseUI;
-import ${pkg}.${name};
-import ${pkg}.service.${name}Service;
+import ${entity.packageName}.${entity.name};
+import ${entity.packageName}.service.${entity.name}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController()
-@RequestMapping("${url}")
-@Resource(code = ${code}, model = "${scope}", desc = "${name} UI")
-public class ${name}UI extends BaseUI<${name}> {
+@RequestMapping("${entity.url}")
+@Resource(code = ${entity.code}, model = "${scope}", desc = "${entity.name} UI")
+public class ${entity.name}UI extends BaseUI<${entity.name}> {
 	@Autowired
-	private ${name}Service service;
+	private ${entity.name}Service service;
 
-	protected ${name}Service getService() {
+	protected ${entity.name}Service getService() {
 		return service;
 	}
 	

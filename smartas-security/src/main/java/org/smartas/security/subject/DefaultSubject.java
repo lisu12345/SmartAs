@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.smartas.core.Subject;
+import org.smartas.security.User;
 
 /**
  * @author chenb
@@ -23,11 +24,10 @@ public class DefaultSubject implements Subject, Serializable {
   private final String host;
   private final List<Serializable> roles;
   private final Set<Serializable> permissions;
-  private final Object principal;
+  private final User principal;
 
   public DefaultSubject(String host, List<Serializable> roles, Set<Serializable> permissions,
-      Object principal) {
-    super();
+      User principal) {
     this.host = host;
     this.roles = roles;
     this.permissions = permissions;
@@ -40,7 +40,7 @@ public class DefaultSubject implements Subject, Serializable {
    * @see org.smartas.core.Subject#getPrincipal()
    */
   @Override
-  public Object getPrincipal() {
+  public User getPrincipal() {
     return principal;
   }
 
@@ -87,6 +87,11 @@ public class DefaultSubject implements Subject, Serializable {
 
   public String getHost() {
     return this.host;
+  }
+
+  @Override
+  public long getUserId() {
+    return principal.getId();
   }
 
 }

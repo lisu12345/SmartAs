@@ -15,7 +15,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		getDefaultProps: function getDefaultProps() {
 			return {
 				transitionName: 'slide-up',
-				prefixCls: 'ant-dropdown'
+				prefixCls: 'ant-dropdown',
+				mouseEnterDelay: 0.15,
+				mouseLeaveDelay: 0.1
 			};
 		},
 		render: function render() {

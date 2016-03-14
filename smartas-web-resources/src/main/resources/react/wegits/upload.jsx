@@ -263,7 +263,7 @@
       targetItem.percent = e.percent;
       this.onChange({
         event: e,
-        file,
+        file: targetItem,
         fileList: this.state.fileList
       });
     },

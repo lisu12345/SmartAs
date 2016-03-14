@@ -10,7 +10,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   var noop = _ref.noop;
   var Icon = UI.Icon;
   var Button = UI.Button;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
   var transitionNames = {
     top: 'zoom-down',
@@ -62,12 +64,12 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
     },
     onVisibleChange: function onVisibleChange(visible) {
       this.setVisible(visible);
-      this.props.onVisibleChange(visible);
     },
     setVisible: function setVisible(visible) {
       if (!('visible' in this.props)) {
         this.setState({ visible: visible });
       }
+      this.props.onVisibleChange(visible);
     },
     render: function render() {
       var _props = this.props;
@@ -87,10 +89,14 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
           'div',
           { className: prefixCls + '-content' },
           React.createElement(
-            'p',
+            'div',
             { className: prefixCls + '-message' },
             React.createElement(Icon, { type: 'exclamation-circle' }),
-            title
+            React.createElement(
+              'div',
+              { className: prefixCls + '-message-title' },
+              title
+            )
           ),
           React.createElement(
             'div',
@@ -113,7 +119,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
       return React.createElement(
         Tooltip,
-        _extends({}, restProps, { placement: placement,
+        _extends({}, restProps, {
+          placement: placement,
+          builtinPlacements: placements,
           overlayStyle: overlayStyle,
           prefixCls: prefixCls,
           onVisibleChange: this.onVisibleChange,

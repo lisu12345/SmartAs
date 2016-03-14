@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-//v0.12.8 - 2016.3.7
+//v0.12.10 - 2016.3.14
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
 
@@ -16,6 +16,98 @@
 		};
 		window.matchMedia = window.matchMedia || matchMediaPolyfill;
 	}
+
+	var autoAdjustOverflow = {
+		adjustX: 1,
+		adjustY: 1
+	};
+
+	var targetOffset = [0, 0];
+
+	UI.getPlacements = function getPlacements() {
+		var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var _config$arrowWidth = config.arrowWidth;
+		var arrowWidth = _config$arrowWidth === undefined ? 5 : _config$arrowWidth;
+		var _config$horizontalArr = config.horizontalArrowShift;
+		var horizontalArrowShift = _config$horizontalArr === undefined ? 16 : _config$horizontalArr;
+		var _config$verticalArrow = config.verticalArrowShift;
+		var verticalArrowShift = _config$verticalArrow === undefined ? 12 : _config$verticalArrow;
+
+		return {
+			left: {
+				points: ['cr', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, 0],
+				targetOffset: targetOffset
+			},
+			right: {
+				points: ['cl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, 0],
+				targetOffset: targetOffset
+			},
+			top: {
+				points: ['bc', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [0, -4],
+				targetOffset: targetOffset
+			},
+			bottom: {
+				points: ['tc', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [0, 4],
+				targetOffset: targetOffset
+			},
+			topLeft: {
+				points: ['bl', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [-(horizontalArrowShift + arrowWidth), -4],
+				targetOffset: targetOffset
+			},
+			leftTop: {
+				points: ['tr', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, -(verticalArrowShift + arrowWidth)],
+				targetOffset: targetOffset
+			},
+			topRight: {
+				points: ['br', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [horizontalArrowShift + arrowWidth, -4],
+				targetOffset: targetOffset
+			},
+			rightTop: {
+				points: ['tl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, -(verticalArrowShift + arrowWidth)],
+				targetOffset: targetOffset
+			},
+			bottomRight: {
+				points: ['tr', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [horizontalArrowShift + arrowWidth, 4],
+				targetOffset: targetOffset
+			},
+			rightBottom: {
+				points: ['bl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, verticalArrowShift + arrowWidth],
+				targetOffset: targetOffset
+			},
+			bottomLeft: {
+				points: ['tl', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [-(horizontalArrowShift + arrowWidth), 4],
+				targetOffset: targetOffset
+			},
+			leftBottom: {
+				points: ['br', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, verticalArrowShift + arrowWidth],
+				targetOffset: targetOffset
+			}
+		};
+	};
 })(Smart.Namespace);
 "use strict";
 
@@ -1827,6 +1919,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					style: {
 						transition: removeTransition && 'none',
 						transform: 'translate3d(0, ' + -position * height + 'px, 0)',
+						WebkitTransform: 'translate3d(0, ' + -position * height + 'px, 0)',
 						height: height
 					},
 					key: i
@@ -2292,7 +2385,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		getDefaultProps: function getDefaultProps() {
 			return {
 				transitionName: 'slide-up',
-				prefixCls: 'ant-dropdown'
+				prefixCls: 'ant-dropdown',
+				mouseEnterDelay: 0.15,
+				mouseLeaveDelay: 0.1
 			};
 		},
 		render: function render() {
@@ -2661,6 +2756,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
+
+  var placements = getPlacements({
+    verticalArrowShift: 8
+  });
 
   UI.Tooltip = React.createClass({
     displayName: 'Tooltip',
@@ -2705,6 +2805,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           overlay: this.props.title,
           visible: visible,
           onVisibleChange: this.onVisibleChange
@@ -2849,7 +2950,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   var noop = _ref.noop;
   var Icon = UI.Icon;
   var Button = UI.Button;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
   var transitionNames = {
     top: 'zoom-down',
@@ -2901,12 +3004,12 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
     },
     onVisibleChange: function onVisibleChange(visible) {
       this.setVisible(visible);
-      this.props.onVisibleChange(visible);
     },
     setVisible: function setVisible(visible) {
       if (!('visible' in this.props)) {
         this.setState({ visible: visible });
       }
+      this.props.onVisibleChange(visible);
     },
     render: function render() {
       var _props = this.props;
@@ -2926,10 +3029,14 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
           'div',
           { className: prefixCls + '-content' },
           React.createElement(
-            'p',
+            'div',
             { className: prefixCls + '-message' },
             React.createElement(Icon, { type: 'exclamation-circle' }),
-            title
+            React.createElement(
+              'div',
+              { className: prefixCls + '-message-title' },
+              title
+            )
           ),
           React.createElement(
             'div',
@@ -2952,7 +3059,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
       return React.createElement(
         Tooltip,
-        _extends({}, restProps, { placement: placement,
+        _extends({}, restProps, {
+          placement: placement,
+          builtinPlacements: placements,
           overlayStyle: overlayStyle,
           prefixCls: prefixCls,
           onVisibleChange: this.onVisibleChange,
@@ -3249,7 +3358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       targetItem.percent = e.percent;
       this.onChange({
         event: e,
-        file: file,
+        file: targetItem,
         fileList: this.state.fileList
       });
     },
@@ -3587,7 +3696,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
 
   var Popover = React.createClass({
@@ -3621,6 +3732,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           ref: 'tooltip'
         }, this.props, {
           overlay: this.getOverlay() }),
@@ -3989,7 +4101,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
       if ('pagination' in nextProps && nextProps.pagination !== false) {
         this.setState({
-          pagination: objectAssign({}, this.state.pagination, nextProps.pagination)
+          pagination: objectAssign({}, defaultPagination, this.state.pagination, nextProps.pagination)
         });
       }
       // dataSource 的变化会清空选中项
@@ -5581,10 +5693,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return React.createElement(
           'span',
-          { className: pickerClass },
+          { className: pickerClass, style: this.props.style },
           React.createElement(
             DatePicker,
-            { transitionName: this.props.transitionName,
+            {
+              transitionName: this.props.transitionName,
               disabled: this.props.disabled,
               calendar: calendar,
               value: this.state.value,
@@ -5605,7 +5718,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   onChange: _this2.handleInputChange,
                   value: value && _this2.getFormatter().format(value),
                   placeholder: placeholder,
-                  style: _this2.props.style,
                   className: 'ant-calendar-picker-input ant-input' + sizeClass }),
                 React.createElement('span', { className: 'ant-calendar-picker-icon' })
               );
@@ -5910,7 +6022,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getDefaultProps: function getDefaultProps() {
       return {
-        placeholder: '请输入搜索内容',
+        placeholder: '',
         onChange: noop,
         handleClear: noop
       };
@@ -6057,10 +6169,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titleText = _props3.titleText;
       var filter = _props3.filter;
       var checkedKeys = _props3.checkedKeys;
+      var notFoundContent = _props3.notFoundContent;
       var checkStatus = _props3.checkStatus;
       var body = _props3.body;
       var footer = _props3.footer;
       var showSearch = _props3.showSearch;
+      var searchPlaceholder = _props3.searchPlaceholder;
 
       // Custom Layout
 
@@ -6119,7 +6233,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           showSearch ? React.createElement(
             'div',
             { className: prefixCls + '-body-search-wrapper' },
-            React.createElement(Search, { prefixCls: prefixCls + '-search', onChange: this.handleFilter, handleClear: this.handleClear, value: filter })
+            React.createElement(Search, { prefixCls: prefixCls + '-search',
+              onChange: this.handleFilter.bind(this),
+              handleClear: this.handleClear.bind(this),
+              placeholder: searchPlaceholder,
+              value: filter })
           ) : null,
           React.createElement(
             Animate,
@@ -6129,7 +6247,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             showItems.length > 0 ? showItems : React.createElement(
               'div',
               { className: prefixCls + '-body-not-found' },
-              'Not Found'
+              notFoundContent
             )
           )
         ),
@@ -6168,6 +6286,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       operations: PropTypes.array,
       showSearch: PropTypes.bool,
       searchPlaceholder: PropTypes.string,
+      notFoundContent: PropTypes.node,
       body: PropTypes.func,
       footer: PropTypes.func
     },
@@ -6182,6 +6301,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         operations: [],
         showSearch: false,
         searchPlaceholder: '请输入搜索内容',
+        notFoundContent: 'Not Found',
         body: noop,
         footer: noop
       };
@@ -6343,6 +6463,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titles = _props5.titles;
       var operations = _props5.operations;
       var showSearch = _props5.showSearch;
+      var notFoundContent = _props5.notFoundContent;
       var searchPlaceholder = _props5.searchPlaceholder;
       var body = _props5.body;
       var footer = _props5.footer;
@@ -6384,6 +6505,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' }),
@@ -6408,6 +6530,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' })

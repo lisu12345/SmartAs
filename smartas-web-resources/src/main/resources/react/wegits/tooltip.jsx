@@ -1,7 +1,11 @@
 +function(UI,RC){
-  const {
-    Tooltip
-  } = RC;
+  const {Tooltip} = RC,
+    {getPlacements} = UI;
+
+
+  const placements = getPlacements({
+    verticalArrowShift: 8,
+  });
 
   UI.Tooltip = React.createClass({
     getDefaultProps() {
@@ -44,6 +48,7 @@
 
       return (
          <Tooltip transitionName={transitionName}
+            builtinPlacements={placements}
             overlay={this.props.title}
             visible={visible}
             onVisibleChange={this.onVisibleChange}

@@ -256,6 +256,9 @@
 
 	Form.defaultProps = {
 		prefixCls: 'ant-form',
+		onSubmit(e) {
+		  e.preventDefault();
+		},
 	};
 	
 	Form.childContextTypes = {

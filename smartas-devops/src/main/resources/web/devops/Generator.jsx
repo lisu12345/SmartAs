@@ -19,7 +19,7 @@ install("web.devops.generator",function($S){
 		        var data = form.getFieldsValue();
 		        data.table = this.props.table;
 			    service.create(data,function(id){
-			    	close();
+			    	//close();
 			    });
 		    });
 		},

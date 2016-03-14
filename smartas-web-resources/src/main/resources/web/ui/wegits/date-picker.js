@@ -325,10 +325,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return React.createElement(
           'span',
-          { className: pickerClass },
+          { className: pickerClass, style: this.props.style },
           React.createElement(
             DatePicker,
-            { transitionName: this.props.transitionName,
+            {
+              transitionName: this.props.transitionName,
               disabled: this.props.disabled,
               calendar: calendar,
               value: this.state.value,
@@ -349,7 +350,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   onChange: _this2.handleInputChange,
                   value: value && _this2.getFormatter().format(value),
                   placeholder: placeholder,
-                  style: _this2.props.style,
                   className: 'ant-calendar-picker-input ant-input' + sizeClass }),
                 React.createElement('span', { className: 'ant-calendar-picker-icon' })
               );

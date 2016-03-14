@@ -17,6 +17,8 @@ public interface Subject {
   public static final String SUBJECT = Subject.class.getName() + ".SUBJECT";
 
   Object getPrincipal();
+  
+  long getUserId();
 
   List<Serializable> getRoles();
 

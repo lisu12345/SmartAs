@@ -86,7 +86,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getDefaultProps: function getDefaultProps() {
       return {
-        placeholder: '请输入搜索内容',
+        placeholder: '',
         onChange: noop,
         handleClear: noop
       };
@@ -233,10 +233,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titleText = _props3.titleText;
       var filter = _props3.filter;
       var checkedKeys = _props3.checkedKeys;
+      var notFoundContent = _props3.notFoundContent;
       var checkStatus = _props3.checkStatus;
       var body = _props3.body;
       var footer = _props3.footer;
       var showSearch = _props3.showSearch;
+      var searchPlaceholder = _props3.searchPlaceholder;
 
       // Custom Layout
 
@@ -295,7 +297,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           showSearch ? React.createElement(
             'div',
             { className: prefixCls + '-body-search-wrapper' },
-            React.createElement(Search, { prefixCls: prefixCls + '-search', onChange: this.handleFilter, handleClear: this.handleClear, value: filter })
+            React.createElement(Search, { prefixCls: prefixCls + '-search',
+              onChange: this.handleFilter.bind(this),
+              handleClear: this.handleClear.bind(this),
+              placeholder: searchPlaceholder,
+              value: filter })
           ) : null,
           React.createElement(
             Animate,
@@ -305,7 +311,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             showItems.length > 0 ? showItems : React.createElement(
               'div',
               { className: prefixCls + '-body-not-found' },
-              'Not Found'
+              notFoundContent
             )
           )
         ),
@@ -344,6 +350,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       operations: PropTypes.array,
       showSearch: PropTypes.bool,
       searchPlaceholder: PropTypes.string,
+      notFoundContent: PropTypes.node,
       body: PropTypes.func,
       footer: PropTypes.func
     },
@@ -358,6 +365,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         operations: [],
         showSearch: false,
         searchPlaceholder: '请输入搜索内容',
+        notFoundContent: 'Not Found',
         body: noop,
         footer: noop
       };
@@ -519,6 +527,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titles = _props5.titles;
       var operations = _props5.operations;
       var showSearch = _props5.showSearch;
+      var notFoundContent = _props5.notFoundContent;
       var searchPlaceholder = _props5.searchPlaceholder;
       var body = _props5.body;
       var footer = _props5.footer;
@@ -560,6 +569,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' }),
@@ -584,6 +594,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' })

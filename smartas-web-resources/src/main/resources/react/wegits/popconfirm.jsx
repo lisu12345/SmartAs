@@ -1,8 +1,9 @@
 + function(UI, RC) {
   const {Tooltip} = RC,
         {noop} = _,
-        {Icon,Button} = UI;
+        {Icon,Button,getPlacements} = UI;
 
+  const placements = getPlacements();
   const prefixCls = 'ant-popover';
   const transitionNames = {
     top: 'zoom-down',
@@ -53,22 +54,22 @@
     },
     onVisibleChange(visible) {
       this.setVisible(visible);
-      this.props.onVisibleChange(visible);
     },
     setVisible(visible) {
       if (!('visible' in this.props)) {
         this.setState({ visible });
       }
+      this.props.onVisibleChange(visible);
     },
     render() {
       const {title, okText, cancelText, placement, overlayStyle, trigger,...restProps} = this.props;
       const overlay = (
 	      <div>
 	        <div className={`${prefixCls}-content`}>
-	          <p className={`${prefixCls}-message`}>
-	            <Icon type="exclamation-circle" />
-	            {title}
-	          </p>
+	          <div className={`${prefixCls}-message`}>
+              <Icon type="exclamation-circle" />
+              <div className={`${prefixCls}-message-title`}>{title}</div>
+            </div>
 	          <div className={`${prefixCls}-buttons`}>
 	            <Button onClick={this.cancel} type="ghost" size="small">{cancelText}</Button>
 	            <Button onClick={this.confirm} type="primary" size="small">{okText}</Button>
@@ -80,7 +81,9 @@
       const transitionName = transitionNames[placement];
 
       return (
-        <Tooltip {...restProps} placement={placement}
+        <Tooltip {...restProps} 
+             placement={placement}
+             builtinPlacements={placements}
              overlayStyle={overlayStyle}
              prefixCls={prefixCls}
              onVisibleChange={this.onVisibleChange}

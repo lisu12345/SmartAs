@@ -62,7 +62,7 @@
     },
     getDefaultProps: function() {
       return {
-        placeholder: '请输入搜索内容',
+        placeholder: '',
         onChange: noop,
         handleClear: noop,
       }
@@ -189,8 +189,8 @@
     },
 
     render: function() {
-      const { prefixCls, dataSource, titleText, filter, checkedKeys,
-              checkStatus, body, footer, showSearch } = this.props;
+      const { prefixCls, dataSource, titleText, filter, checkedKeys, notFoundContent,
+            checkStatus, body, footer, showSearch, searchPlaceholder } = this.props;
 
       // Custom Layout
       const footerDom = footer({ ...this.props });
@@ -229,12 +229,16 @@
           { bodyDom ||
           <div className={ showSearch ? `${prefixCls}-body ${prefixCls}-body-with-search` : `${prefixCls}-body`}>
             { showSearch ? <div className={`${prefixCls}-body-search-wrapper`}>
-              <Search prefixCls={`${prefixCls}-search`} onChange={this.handleFilter} handleClear={this.handleClear} value={filter} />
+              <Search prefixCls={`${prefixCls}-search`}
+                onChange={this.handleFilter.bind(this)}
+                handleClear={this.handleClear.bind(this)}
+                placeholder={searchPlaceholder}
+                value={filter} />
             </div> : null }
             <Animate component="ul"
               transitionName={this.state.mounted ? `${prefixCls}-highlight` : ''}
               transitionLeave={false}>
-              {showItems.length > 0 ? showItems : <div className={`${prefixCls}-body-not-found`}>Not Found</div>}
+              {showItems.length > 0 ? showItems : <div className={`${prefixCls}-body-not-found`}>{notFoundContent}</div>}
             </Animate>
           </div>}
           { footerDom ? <div className={`${prefixCls}-footer`}>
@@ -270,6 +274,7 @@
       operations: PropTypes.array,
       showSearch: PropTypes.bool,
       searchPlaceholder: PropTypes.string,
+      notFoundContent: PropTypes.node,
       body: PropTypes.func,
       footer: PropTypes.func,
     },
@@ -284,6 +289,7 @@
         operations: [],
         showSearch: false,
         searchPlaceholder: '请输入搜索内容',
+        notFoundContent: 'Not Found',
         body: noop,
         footer: noop,
       }
@@ -424,7 +430,7 @@
 
     render: function() {
       const {
-        prefixCls, titles, operations, showSearch,
+        prefixCls, titles, operations, showSearch, notFoundContent,
         searchPlaceholder, body, footer, listStyle, className,
       } = this.props;
       const { leftFilter, rightFilter, leftCheckedKeys, rightCheckedKeys } = this.state;
@@ -457,6 +463,7 @@
             render={this.props.render}
             showSearch={showSearch}
             searchPlaceholder={searchPlaceholder}
+            notFoundContent={notFoundContent}
             body={body}
             footer={footer}
             prefixCls={`${prefixCls}-list`} />
@@ -481,6 +488,7 @@
             render={this.props.render}
             showSearch={showSearch}
             searchPlaceholder={searchPlaceholder}
+            notFoundContent={notFoundContent}
             body={body}
             footer={footer}
             prefixCls={`${prefixCls}-list`} />

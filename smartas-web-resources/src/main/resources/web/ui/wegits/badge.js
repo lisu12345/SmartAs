@@ -109,6 +109,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					style: {
 						transition: removeTransition && 'none',
 						transform: 'translate3d(0, ' + -position * height + 'px, 0)',
+						WebkitTransform: 'translate3d(0, ' + -position * height + 'px, 0)',
 						height: height
 					},
 					key: i

@@ -1,5 +1,8 @@
 + function(UI, RC) {
-  const {Tooltip} = RC;
+  const {Tooltip} = RC,
+      {getPlacements} = UI;
+
+  const placements = getPlacements();
   const prefixCls = 'ant-popover';
 
   const Popover = React.createClass({
@@ -32,6 +35,7 @@
 
       return (
         <Tooltip transitionName={transitionName}
+                 builtinPlacements={placements}
                  ref="tooltip"
                  {...this.props}
                  overlay={this.getOverlay()}>

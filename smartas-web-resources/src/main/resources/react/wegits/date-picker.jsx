@@ -308,8 +308,9 @@
         }
 
         return (
-          <span className={pickerClass}>
-            <DatePicker transitionName={this.props.transitionName}
+          <span className={pickerClass} style={this.props.style}>
+            <DatePicker 
+              transitionName={this.props.transitionName}
               disabled={this.props.disabled}
               calendar={calendar}
               value={this.state.value}
@@ -328,7 +329,6 @@
                         onChange={this.handleInputChange}
                         value={value && this.getFormatter().format(value)}
                         placeholder={placeholder}
-                        style={this.props.style}
                         className={'ant-calendar-picker-input ant-input' + sizeClass} />
                       <span className="ant-calendar-picker-icon" />
                     </span>

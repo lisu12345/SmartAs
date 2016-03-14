@@ -214,7 +214,7 @@
     componentWillReceiveProps(nextProps) {
       if (('pagination' in nextProps) && nextProps.pagination !== false) {
         this.setState({
-          pagination: objectAssign({}, this.state.pagination, nextProps.pagination)
+          pagination: objectAssign({}, defaultPagination,this.state.pagination, nextProps.pagination)
         });
       }
       // dataSource 的变化会清空选中项

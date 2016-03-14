@@ -1,10 +1,10 @@
 /**
  * 
  */
-package ${pkg}.dao;
+package ${entity.packageName}.dao;
 
 import org.smartas.core.BaseDao;
-import ${pkg}.${name};
+import ${entity.packageName}.${entity.name};
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public interface ${name}Dao extends BaseDao<${name}> {
+public interface ${entity.name}Dao extends BaseDao<${entity.name}> {
 
 
 }

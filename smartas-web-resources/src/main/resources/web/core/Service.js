@@ -14,6 +14,10 @@
 	}
 
 	NS.New = function(model,notify) {
+		if(model.charAt(0) == '/'){
+			model = model.substring(1);
+		}
+		
 		var listeners = [], services = {
 			create : 'services/' + model + '/single',
 			update : 'services/' + model + '/single',

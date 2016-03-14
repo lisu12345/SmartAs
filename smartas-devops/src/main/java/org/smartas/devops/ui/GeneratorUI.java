@@ -21,6 +21,11 @@ import org.smartas.devops.Module;
 import org.smartas.devops.Table;
 import org.smartas.devops.generator.Project;
 import org.smartas.devops.generator.Tpl;
+import org.smartas.devops.generator.code.JavaBeanGenerator;
+import org.smartas.devops.generator.config.IgnoredColumn;
+import org.smartas.devops.generator.config.TableConfig;
+import org.smartas.devops.generator.java.TopLevelClass;
+import org.smartas.devops.generator.meta.IntrospectedTable;
 import org.smartas.devops.service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -43,6 +48,9 @@ import freemarker.template.Template;
 @RequestMapping("/devops/generator")
 @Resource(code = 1901, model = "Smart", desc = "Generator UI")
 public class GeneratorUI extends WebContentGenerator {
+  private static final String[] IGNORED_COLUMNS = {"tenant_id", "app_name", "revision",
+      "create_user_id", "last_update_user_id", "create_date", "last_update_date"};
+
   private static String PROJECT_FILE = ".project";
 
   @Autowired
@@ -92,56 +100,86 @@ public class GeneratorUI extends WebContentGenerator {
   @RequestMapping(value = "/project/list", method = RequestMethod.GET)
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
   public List<Project> listAll() {
-     File projectRootDir = getProjectRootDir();
-     List<Project> result = new ArrayList<>();
-     FileFilter filter = new FileFilter() {
-       public boolean accept(File file) {
-         String name = file.getName();
-         
-         return file.isDirectory() && (name.startsWith(appEnv.getAppName())) && !name.endsWith("-lib") && !name.endsWith("-web");
-       }
-     };
-     File[] projects = projectRootDir.listFiles(filter);
-     if(projects != null){
-       for(File file: projects){
-         result.add(new Project(file.getName()));
-       }
-     }
-     return result;
+    File projectRootDir = getProjectRootDir();
+    List<Project> result = new ArrayList<>();
+    FileFilter filter = new FileFilter() {
+      public boolean accept(File file) {
+        String name = file.getName();
+
+        return file.isDirectory() && (name.startsWith(appEnv.getAppName()))
+            && !name.endsWith("-lib") && !name.endsWith("-web");
+      }
+    };
+    File[] projects = projectRootDir.listFiles(filter);
+    if (projects != null) {
+      for (File file : projects) {
+        result.add(new Project(file.getName()));
+      }
+    }
+    return result;
   }
 
 
   @RequestMapping(value = "/table/single", method = RequestMethod.POST)
   @Operation(code = Operation.CREATE, desc = Operation.CREATE_DESC)
   public Serializable cteate(@RequestBody Module entity) throws Exception {
+
+
+    TableConfig config = new TableConfig();
+
+    config.setCatalog(appEnv.getDbName());
+    config.setSchema(appEnv.getDbName());
+    config.setTableName(entity.getTable());
+    
+    for (String columnName : IGNORED_COLUMNS) {
+      config.addIgnoredColumn(new IgnoredColumn(columnName));
+    }
+    
+    List<IntrospectedTable> introspectTables = service.introspectTables(config);
+
+    if (introspectTables.isEmpty()) {
+      throw new RuntimeException();
+    }
+
+    JavaBeanGenerator beanGenerator = new JavaBeanGenerator();
+
+    IntrospectedTable introspectTable = introspectTables.get(0);
+
+    introspectTable.setBaseRecordType(entity.getPackageName() + "." + entity.getName());
+    beanGenerator.setIntrospectedTable(introspectTable);
+    TopLevelClass topLevelClass = beanGenerator.getCompilationUnits();
+
     File projectRootDir = getProjectRootDir();
 
-    Map<String, String> data = new HashMap<>();
-    data.put("pkg", entity.getPackageName());
-    data.put("code", entity.getCode());
-    data.put("name", entity.getName());
+    Map<String, Object> data = new HashMap<>();
+    String moduleName = entity.getProject().substring(entity.getProject().lastIndexOf('-') + 1);
+    data.put("entity", entity);
+    data.put("moduleName", moduleName);
     data.put("scope", appEnv.getScope());
-    data.put("url", entity.getUrl());
-    data.put("table", entity.getTable());
+    data.put("beanInfo", topLevelClass);
+    data.put("introspectTable", introspectTable);
     File projectFile = new File(projectRootDir, entity.getProject() + "/src/main/");
 
     String pkgPath = entity.getPackageName().replace(".", "/");
-
     for (Tpl t : Tpl.tpls) {
       Template tpl = devopsConfiguration.getTemplate(t.getTpl());
       File file = new File(projectFile, String.format(t.getPath(), pkgPath, entity.getName()));
-      file.getParentFile().mkdirs();
-      FileWriter out = new FileWriter(file);
-      try {
-        tpl.process(data, out);
-      } finally {
-        StreamUtils.close(out);
-      }
+      buildFile(tpl, file, data);
     }
-
-
-    System.out.println(projectRootDir);
+    Template tpl = devopsConfiguration.getTemplate("Index.ftl");
+    File file = new File(projectFile, String.format("resources/web/%s./%s.jsx", moduleName, entity.getName()));
+    buildFile(tpl, file, data);
     return true;
+  }
+  
+  private void buildFile(Template tpl,File file,Map<String, Object> data) throws Exception{
+    file.getParentFile().mkdirs();
+    FileWriter out = new FileWriter(file);
+    try {
+      tpl.process(data, out);
+    } finally {
+      StreamUtils.close(out);
+    }
   }
 
 }

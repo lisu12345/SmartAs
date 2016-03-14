@@ -4,7 +4,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
 
   var Popover = React.createClass({
@@ -38,6 +40,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           ref: 'tooltip'
         }, this.props, {
           overlay: this.getOverlay() }),
