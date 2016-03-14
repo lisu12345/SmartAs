@@ -130,11 +130,11 @@ public class GeneratorUI extends WebContentGenerator {
     config.setCatalog(appEnv.getDbName());
     config.setSchema(appEnv.getDbName());
     config.setTableName(entity.getTable());
-    
+
     for (String columnName : IGNORED_COLUMNS) {
       config.addIgnoredColumn(new IgnoredColumn(columnName));
     }
-    
+
     List<IntrospectedTable> introspectTables = service.introspectTables(config);
 
     if (introspectTables.isEmpty()) {
@@ -166,13 +166,16 @@ public class GeneratorUI extends WebContentGenerator {
       File file = new File(projectFile, String.format(t.getPath(), pkgPath, entity.getName()));
       buildFile(tpl, file, data);
     }
-    Template tpl = devopsConfiguration.getTemplate("Index.ftl");
-    File file = new File(projectFile, String.format("resources/web/%s./%s.jsx", moduleName, entity.getName()));
-    buildFile(tpl, file, data);
+    if (entity.isIndexPage()) {
+      Template tpl = devopsConfiguration.getTemplate("Index.ftl");
+      File file = new File(projectFile,
+          String.format("resources/web/%s./%s.jsx", moduleName, entity.getName()));
+      buildFile(tpl, file, data);
+    }
     return true;
   }
-  
-  private void buildFile(Template tpl,File file,Map<String, Object> data) throws Exception{
+
+  private void buildFile(Template tpl, File file, Map<String, Object> data) throws Exception {
     file.getParentFile().mkdirs();
     FileWriter out = new FileWriter(file);
     try {

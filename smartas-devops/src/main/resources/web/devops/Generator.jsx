@@ -88,7 +88,7 @@ install("web.devops.generator",function($S){
 	        </FormItem>
 	        <FormItem wrapperCol={{ span: 14, offset: 4 }}>
 	          <label>
-	            <Checkbox {...getFieldProps('indexPage',{valuePropName:'checked'})} />生成首页地址
+	            <Checkbox {...getFieldProps('indexPage',{valuePropName:'checked'})} />生成首页
 	          </label>
 	        </FormItem>
 	        <Row type="flex" justify="end">
