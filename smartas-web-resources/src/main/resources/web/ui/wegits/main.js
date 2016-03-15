@@ -1261,7 +1261,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	Form.defaultProps = {
-		prefixCls: 'ant-form'
+		prefixCls: 'ant-form',
+		onSubmit: function onSubmit(e) {
+			e.preventDefault();
+		}
 	};
 
 	Form.childContextTypes = {
@@ -2443,7 +2446,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					children
 				),
 				React.createElement(
-					Dropdown,
+					AntDropdown,
 					{ align: align, overlay: overlay, trigger: trigger },
 					React.createElement(
 						Button,

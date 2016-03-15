@@ -298,7 +298,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	Form.defaultProps = {
-		prefixCls: 'ant-form'
+		prefixCls: 'ant-form',
+		onSubmit: function onSubmit(e) {
+			e.preventDefault();
+		}
 	};
 
 	Form.childContextTypes = {

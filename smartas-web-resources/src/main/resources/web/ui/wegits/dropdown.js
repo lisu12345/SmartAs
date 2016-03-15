@@ -73,7 +73,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					children
 				),
 				React.createElement(
-					Dropdown,
+					AntDropdown,
 					{ align: align, overlay: overlay, trigger: trigger },
 					React.createElement(
 						Button,
