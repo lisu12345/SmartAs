@@ -67,6 +67,17 @@
 		<tx:annotation-driven transaction-manager="transactionManager" order="1" />
 
 		<context:component-scan base-package="org.smartas.**.service.impl" />
+		
+		
+		<bean id="messageSource" class="org.smartas.core.spring.MultipleMessageSource">
+			<property name="basenames">
+				<list>
+					<value>classpath:/META-INF/i18n/Messages</value>
+				</list>
+			</property>
+			<property name="fileEncodings" value="UTF-8"/>
+			<property name="defaultEncoding" value="UTF-8"/>
+		</bean>
 	</beans>
 
 </beans>
