@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController()
 @RequestMapping("/demo/test")
-@Resource(code = 7000, model = "Smart", desc = "Test UI")
+@Resource(code = 9000, model = "Smart", desc = "Test UI")
 public class TestUI extends BaseUI<Test> {
 	@Autowired
 	private TestService service;

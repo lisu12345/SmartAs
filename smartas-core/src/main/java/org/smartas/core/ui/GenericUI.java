@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @param <T>
  * @param <PK>
  */
-public abstract class GenericUI<T extends POJO, PK extends Serializable> {
+public abstract class GenericUI<T extends POJO, PK extends Serializable>
+    extends ExceptionHandlerUI {
 
   protected abstract Service<T, PK> getService();
 
@@ -45,7 +46,8 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
 
   @RequestMapping(value = "/list/{page}/{pageSize}", method = RequestMethod.GET)
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
-  public Pageable<T> getAll(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+  public Pageable<T> getAll(@PathVariable("page") int page,
+      @PathVariable("pageSize") int pageSize) {
     return getService().getAll(page, pageSize);
   }
 
@@ -54,13 +56,13 @@ public abstract class GenericUI<T extends POJO, PK extends Serializable> {
   public List<T> getAll() {
     return getService().getAll();
   }
-  
-  
+
+
   @RequestMapping(value = "/query/{page}/{pageSize}", method = RequestMethod.GET)
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
   public Pageable<T> getAll(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize,
       @RequestQuery QueryFilter query) {
-    return getService().getAll(query,page, pageSize);
+    return getService().getAll(query, page, pageSize);
   }
 
   @RequestMapping(value = "/query", method = RequestMethod.GET)

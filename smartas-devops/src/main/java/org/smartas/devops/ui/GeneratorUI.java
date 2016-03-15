@@ -16,6 +16,7 @@ import org.smartas.core.AppEnv;
 import org.smartas.core.Pageable;
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
+import org.smartas.core.ui.ExceptionHandlerUI;
 import org.smartas.core.util.StreamUtils;
 import org.smartas.devops.Module;
 import org.smartas.devops.Table;
@@ -34,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.WebContentGenerator;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -47,7 +47,7 @@ import freemarker.template.Template;
 @RestController()
 @RequestMapping("/devops/generator")
 @Resource(code = 1901, model = "Smart", desc = "Generator UI")
-public class GeneratorUI extends WebContentGenerator {
+public class GeneratorUI extends ExceptionHandlerUI {
   private static final String[] IGNORED_COLUMNS = {"tenant_id", "app_name", "revision",
       "create_user_id", "last_update_user_id", "create_date", "last_update_date"};
 
@@ -171,6 +171,10 @@ public class GeneratorUI extends WebContentGenerator {
       File file = new File(projectFile,
           String.format("resources/web/%s./%s.jsx", moduleName, entity.getName()));
       buildFile(tpl, file, data);
+    }
+
+    if (entity != null) {
+      throw new RuntimeException();
     }
     return true;
   }

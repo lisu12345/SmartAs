@@ -10,6 +10,8 @@
 
 package org.smartas.core;
 
+import org.springframework.core.NestedRuntimeException;
+
 /**
  * 所有业务操作异常结构体系的更对象。它是一个抽象对象，用户可以更具需要实现具体的业务操作异常
  * 
@@ -21,17 +23,32 @@ package org.smartas.core;
  * @author chenjpu
  *
  */
-public class BusinessAccessException extends RuntimeException {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7750201126168763208L;
+public class BusinessAccessException extends NestedRuntimeException {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 7750201126168763208L;
 
-	public BusinessAccessException(String msg) {
-		super(msg);
-	}
+  private final String errorCode;
+  private final Object[] args;
 
-	public BusinessAccessException(String msg, Throwable ex) {
-		super(msg, ex);
-	}
+  public BusinessAccessException(String errorCode, Object... args) {
+    super(errorCode);
+    this.errorCode = errorCode;
+    this.args = args;
+  }
+
+  public BusinessAccessException(String errorCode, Throwable ex, Object... args) {
+    super(errorCode, ex);
+    this.errorCode = errorCode;
+    this.args = args;
+  }
+
+  public String getErrorCode() {
+    return errorCode;
+  }
+
+  public Object[] getArguments() {
+    return args;
+  }
 }
