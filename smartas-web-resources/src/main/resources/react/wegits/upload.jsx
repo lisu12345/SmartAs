@@ -4,7 +4,6 @@
     {Icon,Progress} = UI,
     {Line} = Progress;
 
-
   const prefixCls = 'ant-upload';
 
   function getFileItem(file, fileList) {
@@ -175,10 +174,14 @@
   }
 
   const AntUpload = React.createClass({
+	  propTypes: {
+		  handleType : React.PropTypes.string.isRequired,
+	  },
+	  
     getInitialState() {
       return {
         fileList: this.props.fileList || this.props.defaultFileList || [],
-        dragState: 'drop'
+        dragState: 'drop',
       };
     },
 
@@ -315,6 +318,7 @@
         multiple: false,
         action: '',
         data: {},
+        handleType : 'attachment',
         accept: '',
         onChange: noop,
         beforeUpload: T,

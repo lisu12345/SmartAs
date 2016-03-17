@@ -4,10 +4,13 @@
 install("web.demo.plugins.antd.Model",function($S){
 	var pkg = this,UI = Smart.UI;
 	const { Upload, message, Button, Icon }  = UI;
-
 	const props = {
 	  name: 'file',
-	  action: '/upload.do',
+	  //type : 'drag',
+	  handleType:'attachment',
+	  multiple: true,
+	  action: 'services/file/upLoad',
+	  forceAjax : false,
 	  onChange(info) {
 	    if (info.file.status !== 'uploading') {
 	      console.log(info.file, info.fileList);
@@ -49,25 +52,25 @@ install("web.demo.plugins.antd.Model",function($S){
 	
 	// 组件内部状态改变触发器
 	//API
-	this.actions = {
+	/*this.actions = {
 	   	add : function(name){
 			return {type:'DATE_CLICK',name:name}
 		},
 		asyn : function(url){
 			return function(dispatch){ };
 		}
-	};
+	};*/
 	// API
 	this.ready = function(connect){
 		//return connect(this.actions)(Node);
 		return Node;
 	};
    	// API
-   	this.reducers = function(){
+   	/*this.reducers = function(){
    		return {
    			DATE_CLICK : function(data,action){
    				return data.set('test',Date.now());
    			}
    		}
-   	};
+   	};*/
 });

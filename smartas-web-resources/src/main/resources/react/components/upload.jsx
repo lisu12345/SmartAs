@@ -281,7 +281,7 @@
 	    beforeUpload: PropTypes.func,
 	    withCredentials: PropTypes.bool,
 	  },
-
+	  
 	  onChange(e) {
 	    const files = e.target.files;
 	    this.uploadFiles(files);
@@ -314,11 +314,13 @@
 	  },
 
 	  uploadFiles(files) {
+		const batchNo = uid();
 	    const len = files.length;
 	    if (len > 0) {
 	      for (let i = 0; i < len; i++) {
 	        const file = files.item(i);
 	        file.uid = uid();
+	        file.batchNo = batchNo;
 	        this.upload(file);
 	      }
 	      if (this.props.multiple) {
@@ -351,9 +353,10 @@
 	    if (typeof data === 'function') {
 	      data = data();
 	    }
+	    data.batchNo = file.batchNo;
 
 	    request({
-	      action: props.action,
+	      action: props.action+"/"+props.handleType,
 	      filename: props.name,
 	      file: file,
 	      data: data,
@@ -413,6 +416,7 @@
 	    multiple: PropTypes.bool,
 	    beforeUpload: PropTypes.func,
 	    withCredentials: PropTypes.bool,
+		handleType : PropTypes.string.isRequired,
 	  },
 
 	  getDefaultProps() {
