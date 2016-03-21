@@ -25,7 +25,7 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias alias="extXml" type="org.smartas.core.sql.scripting.ExtDefaultLanguageDriver" />
+		<typeAlias alias="extXml" type="com.fiberhome.smartas.core.sql.scripting.ExtDefaultLanguageDriver" />
 	</typeAliases>
 	
 </configuration>

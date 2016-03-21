@@ -4,7 +4,7 @@
 
 	<name>SmartAs</name>
 	<description>SmartAs</description>
-	<groupId>com.smart.as</groupId>
+	<groupId>com.fiberhome.smartas</groupId>
 	<artifactId>smartas-root</artifactId>
 
 	<packaging>pom</packaging>
@@ -193,53 +193,53 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-security</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-env</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-registry</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-devops</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-web-resources</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-demo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-web-support</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.smart.as</groupId>
+				<groupId>com.fiberhome.smartas</groupId>
 				<artifactId>smartas-workflow</artifactId>
 				<version>${project.version}</version>
 			</dependency>

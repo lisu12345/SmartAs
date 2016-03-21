@@ -10,8 +10,8 @@
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
 	
-	<bean id="securityInterceptor" class="org.smartas.security.handler.SecurityInterceptor" />
-	<bean id="loginInterceptor" class="org.smartas.security.handler.LoginInterceptor" />
-	<bean id="ajaxLoginInterceptor" class="org.smartas.security.handler.AjaxLoginInterceptor" />
+	<bean id="securityInterceptor" class="com.fiberhome.smartas.security.handler.SecurityInterceptor" />
+	<bean id="loginInterceptor" class="com.fiberhome.smartas.security.handler.LoginInterceptor" />
+	<bean id="ajaxLoginInterceptor" class="com.fiberhome.smartas.security.handler.AjaxLoginInterceptor" />
 	
 </beans>

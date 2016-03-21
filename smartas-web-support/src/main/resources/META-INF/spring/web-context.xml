@@ -10,7 +10,7 @@
 
 	<beans profile="dev">
 		<bean name="reactResourcesHandler"
-			class="org.smartas.web.support.handler.ReactResourcesHandler">
+			class="com.fiberhome.smartas.web.support.handler.ReactResourcesHandler">
 			<property name="dev" value="true" />
 			<property name="locations">
 				<list>
@@ -22,7 +22,7 @@
 
 	<beans profile="sit,uat,pat,prod">
 		<bean name="reactResourcesHandler"
-			class="org.smartas.web.support.handler.ReactResourcesHandler">
+			class="com.fiberhome.smartas.web.support.handler.ReactResourcesHandler">
 			<property name="dev" value="false" />
 			<property name="locations">
 				<list>
@@ -35,13 +35,13 @@
 	
 	<beans>
 
-		<context:component-scan base-package="org.smartas.**.ui"
-			name-generator="org.smartas.core.FullClassNameBeanNameGenerator">
+		<context:component-scan base-package="com.fiberhome.smartas.**.ui"
+			name-generator="com.fiberhome.smartas.core.FullClassNameBeanNameGenerator">
 			<context:include-filter type="annotation"
 				expression="org.springframework.stereotype.Controller" />
 		</context:component-scan>
 		
-		<bean id="staticResourcesHandler" class="org.smartas.web.support.handler.StaticResourcesHandler">
+		<bean id="staticResourcesHandler" class="com.fiberhome.smartas.web.support.handler.StaticResourcesHandler">
 			<property name="locations">
 				<list>
 					<value>classpath:web/</value>
@@ -62,7 +62,7 @@
 			</property>
 		</bean>
 
-		<bean class="org.smartas.web.support.handler.ServiceHandlerMapping">
+		<bean class="com.fiberhome.smartas.web.support.handler.ServiceHandlerMapping">
 			<property name="prefix" value="/services" />
 			<property name="interceptors">
 				<list>
@@ -91,7 +91,7 @@
 			</property>
 			<property name="customArgumentResolvers">
 				<list>
-					<bean class="org.smartas.web.support.method.annotation.RequestQueryMethodArgumentResolver" />
+					<bean class="com.fiberhome.smartas.web.support.method.annotation.RequestQueryMethodArgumentResolver" />
 				</list>
 			</property>
 		</bean>

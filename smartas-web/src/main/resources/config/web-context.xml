@@ -8,14 +8,14 @@
 	<import resource="classpath*:/META-INF/spring/web-context.xml" />
 	
 	<beans profile="dev">
-		<bean id="indexHandler" class="org.smartas.web.support.handler.ResourceHandler">
+		<bean id="indexHandler" class="com.fiberhome.smartas.web.support.handler.ResourceHandler">
 			<property name="resource" value="classpath:web/ui/theme/index_dev.html" />
 		</bean>
 		
 	</beans>
 
 	<beans profile="sit,uat,pat,prod">
-		<bean id="indexHandler" class="org.smartas.web.support.handler.ResourceHandler">
+		<bean id="indexHandler" class="com.fiberhome.smartas.web.support.handler.ResourceHandler">
 			<property name="resource" value="classpath:web/ui/theme/index.html" />
 		</bean>
 	</beans>
@@ -24,13 +24,13 @@
 	<beans>
 	   <!--
 		<context:component-scan base-package="xxx.**.ui"
-			name-generator="org.smartas.core.FullClassNameBeanNameGenerator">
+			name-generator="com.fiberhome.smartas.core.FullClassNameBeanNameGenerator">
 			<context:include-filter type="annotation"
 				expression="org.springframework.stereotype.Controller" />
 		</context:component-scan>
 	   -->
-	   <bean id="loginHandler" class="org.smartas.web.support.handler.ResourceHandler">
-			<property name="resource" value="classpath:web/security/signin/index.html" />
+	   <bean id="loginHandler" class="com.fiberhome.smartas.web.support.handler.ResourceHandler">
+			<property name="resource" value="classpath:web/smartas/security/signin/index.html" />
 		</bean>
 		
 	</beans>

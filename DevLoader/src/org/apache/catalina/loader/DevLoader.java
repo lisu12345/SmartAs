@@ -25,7 +25,7 @@ public class DevLoader extends WebappLoader {
   private static final List<String> IG = new ArrayList<String>();
 
   static {
-    // IG.add("servlet-api");
+    IG.add("servlet-api");
     // IG.add("smartas");
   }
 

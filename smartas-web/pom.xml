@@ -3,7 +3,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.smart.as</groupId>
+		<groupId>com.fiberhome.smartas</groupId>
 		<artifactId>smartas-root</artifactId>
 		<version>1.0.0</version>
 	</parent>
@@ -13,36 +13,36 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-core</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-env</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-registry</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-devops</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-web-resources</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-web-support</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-workflow</artifactId>
 		</dependency>
 

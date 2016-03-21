@@ -3,7 +3,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.smart.as</groupId>
+		<groupId>com.fiberhome.smartas</groupId>
 		<artifactId>smartas-root</artifactId>
 		<version>1.0.0</version>
 	</parent>
@@ -15,7 +15,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.smart.as</groupId>
+			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-core</artifactId>
 		</dependency>
 		<dependency>

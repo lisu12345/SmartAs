@@ -11,7 +11,7 @@
 
 	<beans profile="dev">
 		<bean id="devopsConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
-			<property name="templateLoaderPath" value="classpath:/ftl/"/>
+			<property name="templateLoaderPath" value="classpath:/ftl/smartas/"/>
 			<property name="preferFileSystemAccess" value="false" />
 		</bean>
 	</beans>

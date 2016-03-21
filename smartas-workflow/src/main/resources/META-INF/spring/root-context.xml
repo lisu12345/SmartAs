@@ -12,10 +12,10 @@
 	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
 
-	<bean class="org.smartas.workflow.activiti.parse.ExtUserTaskParseHandler"/>
-	<bean class="org.smartas.workflow.activiti.parse.SequenceFlowParseHandler"/>
+	<bean class="com.fiberhome.smartas.workflow.activiti.parse.ExtUserTaskParseHandler"/>
+	<bean class="com.fiberhome.smartas.workflow.activiti.parse.SequenceFlowParseHandler"/>
 
-	<bean id="StartProcessMethodInterceptor" class="org.smartas.workflow.aop.StartProcessMethodInterceptor">
+	<bean id="StartProcessMethodInterceptor" class="com.fiberhome.smartas.workflow.aop.StartProcessMethodInterceptor">
 		<property name="excludeVariableNames">
 			<set>
 				<value>processDefinitionId</value>
@@ -24,7 +24,7 @@
 	</bean>
 
 
-	<bean id="CompleteTaskMethodInterceptor" class="org.smartas.workflow.aop.CompleteTaskMethodInterceptor">
+	<bean id="CompleteTaskMethodInterceptor" class="com.fiberhome.smartas.workflow.aop.CompleteTaskMethodInterceptor">
 		<property name="excludeVariableNames">
 			<set>
 				<value>taskId</value>
@@ -35,14 +35,14 @@
 
 	<aop:config>
 		<aop:advisor advice-ref="StartProcessMethodInterceptor"
-			pointcut="execution(* **.service.*.*(..)) and @annotation(org.smartas.core.annotation.StartProcess)" order="10" />
+			pointcut="execution(* **.service.*.*(..)) and @annotation(com.fiberhome.smartas.core.annotation.StartProcess)" order="10" />
 
 		<aop:advisor advice-ref="CompleteTaskMethodInterceptor"
-			pointcut="execution(* **.service.*.*(..)) and @annotation(org.smartas.core.annotation.ApproveTask)" order="10" />
+			pointcut="execution(* **.service.*.*(..)) and @annotation(com.fiberhome.smartas.core.annotation.ApproveTask)" order="10" />
 	</aop:config>
 
 	<!-- Activiti begin -->
-	<bean id="processEngineConfiguration" class="org.smartas.workflow.activiti.cfg.ExtProcessEngineConfiguration">
+	<bean id="processEngineConfiguration" class="com.fiberhome.smartas.workflow.activiti.cfg.ExtProcessEngineConfiguration">
 		<property name="dataSource" ref="dataSource" />
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="NON" />

@@ -227,21 +227,12 @@
 		}
 		
 		render() {
-			const {
-				prefixCls, className
-			} = this.props;
+			const {prefixCls, className} = this.props;
 			const formClassName = classNames({
 				[className]: !!className, [`${prefixCls}-horizontal`]: this.props.horizontal, [`${prefixCls}-inline`]: this.props.inline,
 			});
 
-			return (<form {...this.props
-				}
-				className = {
-					formClassName
-				}>{
-					this.props.children
-				}</form>
-			);
+			return (<form {...this.props} className={formClassName}>{this.props.children}</form>);
 		}
 	}
 

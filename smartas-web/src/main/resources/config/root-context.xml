@@ -29,7 +29,7 @@
 
 	<beans>
 		
-		<bean id="appEnv" class="org.smartas.core.AppEnv">
+		<bean id="appEnv" class="com.fiberhome.smartas.core.AppEnv">
 			<property name="appName" value="smartas" />
 			<property name="dbName" value="smartas" />
 			<property name="scope" value="Smart" />

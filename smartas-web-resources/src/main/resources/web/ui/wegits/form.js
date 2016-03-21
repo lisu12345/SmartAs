@@ -278,8 +278,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'form',
-					_extends({}, this.props, {
-						className: formClassName }),
+					_extends({}, this.props, { className: formClassName }),
 					this.props.children
 				);
 			}

@@ -115,7 +115,16 @@
 		if(inner){
 			location.href = url
 		}else{
-			location.hash = url.charAt(0) != '!' ? ('!' + url): url
+			location.hash = '!' + url;
 		}
+	}
+	UI.url = function(url,qs){
+		if(qs){
+			if($.isPlainObject(qs)){
+				qs = $.param(qs)
+			}
+			url += '?' + qs;
+		}
+		return '#!' + url;
 	}
 }(Smart.Namespace)
