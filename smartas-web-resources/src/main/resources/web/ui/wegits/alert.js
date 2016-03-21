@@ -11,7 +11,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return {
 				prefixCls: 'ant-alert',
 				showIcon: false,
-				onClose: function onClose() {}
+				onClose: function onClose() {},
+
+				type: 'info'
 			};
 		},
 		getInitialState: function getInitialState() {

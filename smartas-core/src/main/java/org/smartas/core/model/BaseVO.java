@@ -13,7 +13,7 @@ import java.util.Date;
 
 import org.smartas.core.POJO;
 import org.smartas.core.util.BeanContext;
-import org.smartas.core.util.SecurityUtil;
+import org.smartas.core.util.SecurityUtils;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -149,10 +149,10 @@ public abstract class BaseVO implements POJO {
 
   @JSONField(serialize = false)
   public Object getCurrentUser() {
-    return SecurityUtil.getSubject().getPrincipal();
+    return SecurityUtils.getSubject().getPrincipal();
   }
   @JSONField(serialize = false)
   public long getCurrentUserId() {
-    return SecurityUtil.getSubject().getUserId();
+    return SecurityUtils.getSubject().getUserId();
   }
 }

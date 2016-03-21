@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartas.core.util.Constants;
-import org.smartas.core.util.SessionUtil;
+import org.smartas.core.util.SessionUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
@@ -17,7 +17,7 @@ public class AjaxLoginInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 		//String lookupPath = urlPathHelper.getLookupPathForRequest(req);
-		if (!SessionUtil.isLogin(req)) {
+		if (!SessionUtils.isLogin(req)) {
 			//1.是ajax请求响应头会有，x-requested-with  
 			if (StringUtils.equals("XMLHttpRequest", req.getHeader(Constants.X_REQUESTED_WITH))) {
 				resp.setHeader(Constants.X_SESSION_STATUS, "timeout");//在响应头设置session状态  

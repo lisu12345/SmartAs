@@ -12,7 +12,7 @@ import org.smartas.core.Subject;
  * @author chenb
  *
  */
-public class SessionUtil {
+public class SessionUtils {
 
   public static boolean isLogin(HttpServletRequest req) {
     return getSubject(req) != null;

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.smartas.core.Subject;
-import org.smartas.core.util.SessionUtil;
+import org.smartas.core.util.SessionUtils;
 import org.smartas.core.util.ThreadContext;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,7 +25,7 @@ public class SsoFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    Subject subject = SessionUtil.getSubject(request);
+    Subject subject = SessionUtils.getSubject(request);
     ThreadContext.bind(subject);
     try {
       filterChain.doFilter(request, response);

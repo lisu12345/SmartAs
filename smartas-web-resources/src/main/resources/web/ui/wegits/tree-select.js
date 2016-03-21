@@ -8,6 +8,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var TreeSelect = RC.TreeSelect;
 	var classNames = RC.classNames;
 	var TreeNode = TreeSelect.TreeNode;
+	var SHOW_ALL = TreeSelect.SHOW_ALL;
+	var SHOW_PARENT = TreeSelect.SHOW_PARENT;
+	var SHOW_CHILD = TreeSelect.SHOW_CHILD;
 
 	var AntTreeSelect = React.createClass({
 		displayName: 'AntTreeSelect',
@@ -50,5 +53,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	AntTreeSelect.TreeNode = TreeNode;
+	AntTreeSelect.SHOW_ALL = SHOW_ALL;
+	AntTreeSelect.SHOW_PARENT = SHOW_PARENT;
+	AntTreeSelect.SHOW_CHILD = SHOW_CHILD;
 	UI.TreeSelect = AntTreeSelect;
 })(Smart.UI, Smart.RC);

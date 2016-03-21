@@ -87,7 +87,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         null,
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           React.createElement(
             'div',
             { className: prefixCls + '-message' },

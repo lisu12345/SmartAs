@@ -1,6 +1,6 @@
 + function(UI, RC) {
 	const {TreeSelect,classNames} = RC,
-		{TreeNode} = TreeSelect;
+		{TreeNode,SHOW_ALL, SHOW_PARENT, SHOW_CHILD} = TreeSelect;
 		
 	const AntTreeSelect = React.createClass({
 	  getDefaultProps() {
@@ -43,5 +43,8 @@
 	});
 
 	AntTreeSelect.TreeNode = TreeNode;
+	AntTreeSelect.SHOW_ALL = SHOW_ALL;
+	AntTreeSelect.SHOW_PARENT = SHOW_PARENT;
+	AntTreeSelect.SHOW_CHILD = SHOW_CHILD;
 	UI.TreeSelect = AntTreeSelect;
 }(Smart.UI, Smart.RC);

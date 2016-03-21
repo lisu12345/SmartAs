@@ -1,6 +1,6 @@
 'use strict';
 
-//v0.12.10 - 2016.3.14
+//v0.12.12 - 2016.3.21
 +(function (Namespace) {
 	var UI = Namespace.register("Smart.UI");
 
@@ -1711,7 +1711,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return {
 				prefixCls: 'ant-alert',
 				showIcon: false,
-				onClose: function onClose() {}
+				onClose: function onClose() {},
+
+				type: 'info'
 			};
 		},
 		getInitialState: function getInitialState() {
@@ -2061,7 +2063,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI) {
 	var findDOMNode = ReactDOM.findDOMNode;
-	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2,2}$/;
+	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 	var isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 	function isString(str) {
 		return typeof str === 'string';
@@ -2157,10 +2159,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	Button.propTypes = {
-		type: React.PropTypes.string,
-		shape: React.PropTypes.string,
-		size: React.PropTypes.string,
-		htmlType: React.PropTypes.string,
+		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+		shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
+		size: React.PropTypes.oneOf(['large', 'small']),
+		htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),
 		onClick: React.PropTypes.func,
 		loading: React.PropTypes.bool,
 		className: React.PropTypes.string
@@ -2212,7 +2214,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	ButtonGroup.propTypes = {
-		size: React.PropTypes.string
+		size: React.PropTypes.oneOf(['large', 'small'])
 	};
 	Button.Group = ButtonGroup;
 	UI.Button = Button;
@@ -2495,6 +2497,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      onOk: PropTypes.func,
+      onCancel: PropTypes.func,
+      okText: PropTypes.node,
+      cancelText: PropTypes.node,
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      confirmLoading: PropTypes.bool,
+      visible: PropTypes.bool,
+      align: PropTypes.object,
+      footer: PropTypes.node,
+      title: PropTypes.node,
+      closable: PropTypes.bool
+    },
+
     handleCancel: function handleCancel(e) {
       this.props.onCancel(e);
     },
@@ -3030,7 +3048,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         null,
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           React.createElement(
             'div',
             { className: prefixCls + '-message' },
@@ -3756,7 +3774,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         ),
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           this.props.overlay
         )
       );
@@ -3847,6 +3865,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 +(function (UI, RC) {
@@ -3865,6 +3885,25 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Spin = UI.Spin;
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
+
+  function flatArray() {
+    var data = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var childrenName = arguments.length <= 1 || arguments[1] === undefined ? 'children' : arguments[1];
+
+    var result = [];
+    var loop = function loop(array) {
+      array.forEach(function (item) {
+        var newItem = _extends({}, item);
+        delete newItem[childrenName];
+        result.push(newItem);
+        if (item[childrenName] && item[childrenName].length > 0) {
+          loop(item[childrenName]);
+        }
+      });
+    };
+    loop(data);
+    return result;
+  }
 
   var rownumberColumn = {
     title: '',
@@ -3993,6 +4032,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         React.createElement(
           Menu,
           { multiple: multiple,
+            onClick: this.handleMenuItemClick,
             prefixCls: 'ant-dropdown-menu',
             onSelect: this.setSelectedKeys,
             onDeselect: this.setSelectedKeys,
@@ -4095,7 +4135,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       if (!this.props.rowSelection || !this.props.rowSelection.getCheckboxProps) {
         return [];
       }
-      return this.getCurrentPageData().filter(function (item) {
+      return this.getFlatCurrentPageData().filter(function (item) {
         return _this2.props.rowSelection.getCheckboxProps(item).defaultChecked;
       }).map(function (record, rowIndex) {
         return _this2.getRecordKey(record, rowIndex);
@@ -4120,13 +4160,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
     },
     setSelectedRowKeys: function setSelectedRowKeys(selectedRowKeys) {
+      var _this3 = this;
+
       if (this.props.rowSelection && !('selectedRowKeys' in this.props.rowSelection)) {
         this.setState({ selectedRowKeys: selectedRowKeys });
       }
       if (this.props.rowSelection && this.props.rowSelection.onChange) {
-        var data = this.getCurrentPageData();
-        var selectedRows = data.filter(function (row) {
-          return selectedRowKeys.indexOf(row.key) >= 0;
+        var data = this.getFlatCurrentPageData();
+        var selectedRows = data.filter(function (row, i) {
+          return selectedRowKeys.indexOf(_this3.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onChange(selectedRowKeys, selectedRows);
       }
@@ -4135,6 +4177,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return this.props.pagination !== false;
     },
     toggleSortOrder: function toggleSortOrder(order, column) {
+      var _props2;
+
       var sortColumn = this.state.sortColumn;
       var sortOrder = this.state.sortOrder;
       var sorter = undefined;
@@ -4170,15 +4214,16 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         sorter: sorter
       };
       this.setState(newState);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props2 = this.props).onChange.apply(_props2, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     handleFilter: function handleFilter(column, nextFilters) {
-      var _this3 = this;
+      var _this4 = this,
+          _props3;
 
       var filters = objectAssign({}, this.state.filters, _defineProperty({}, this.getColumnKey(column), nextFilters));
       // Remove filters not in current columns
       var currentColumnKeys = this.props.columns.map(function (c) {
-        return _this3.getColumnKey(c);
+        return _this4.getColumnKey(c);
       });
       Object.keys(filters).forEach(function (columnKey) {
         if (currentColumnKeys.indexOf(columnKey) < 0) {
@@ -4191,10 +4236,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       };
       this.setState(newState);
       this.setSelectedRowKeys([]);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props3 = this.props).onChange.apply(_props3, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     handleSelect: function handleSelect(record, rowIndex, e) {
-      var _this4 = this;
+      var _this5 = this;
 
       var checked = e.target.checked;
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
@@ -4212,15 +4257,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelect) {
-        var data = this.getCurrentPageData();
+        var data = this.getFlatCurrentPageData();
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this4.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this5.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelect(record, checked, selectedRows);
       }
     },
     handleRadioSelect: function handleRadioSelect(record, rowIndex, e) {
-      var _this5 = this;
+      var _this6 = this;
 
       var checked = e.target.checked;
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
@@ -4233,24 +4278,24 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelect) {
-        var data = this.getCurrentPageData();
+        var data = this.getFlatCurrentPageData();
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this5.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelect(record, checked, selectedRows);
       }
     },
     handleSelectAllRow: function handleSelectAllRow(e) {
-      var _this6 = this;
+      var _this7 = this;
 
       var checked = e.target.checked;
-      var data = this.getCurrentPageData();
+      var data = this.getFlatCurrentPageData();
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
       var selectedRowKeys = this.state.selectedRowKeys.concat(defaultSelection);
       var changableRowKeys = data.filter(function (item) {
-        return !_this6.props.rowSelection.getCheckboxProps || !_this6.props.rowSelection.getCheckboxProps(item).disabled;
+        return !_this7.props.rowSelection.getCheckboxProps || !_this7.props.rowSelection.getCheckboxProps(item).disabled;
       }).map(function (item, i) {
-        return _this6.getRecordKey(item, i);
+        return _this7.getRecordKey(item, i);
       });
 
       // 记录变化的列
@@ -4276,15 +4321,17 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelectAll) {
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this7.getRecordKey(row, i)) >= 0;
         });
         var changeRows = data.filter(function (row, i) {
-          return changeRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+          return changeRowKeys.indexOf(_this7.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelectAll(checked, selectedRows, changeRows);
       }
     },
     handlePageChange: function handlePageChange(current) {
+      var _props4;
+
       var pagination = objectAssign({}, this.state.pagination);
       if (current) {
         pagination.current = current;
@@ -4298,7 +4345,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         pagination: pagination
       };
       this.setState(newState);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props4 = this.props).onChange.apply(_props4, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     onRadioChange: function onRadioChange(ev) {
       this.setState({
@@ -4343,13 +4390,13 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return record.key || index;
     },
     renderRowSelection: function renderRowSelection() {
-      var _this7 = this;
+      var _this8 = this;
 
       var columns = this.props.columns.concat();
       if (this.props.rowSelection) {
-        var data = this.getCurrentPageData().filter(function (item) {
-          if (_this7.props.rowSelection.getCheckboxProps) {
-            return !_this7.props.rowSelection.getCheckboxProps(item).disabled;
+        var data = this.getFlatCurrentPageData().filter(function (item) {
+          if (_this8.props.rowSelection.getCheckboxProps) {
+            return !_this8.props.rowSelection.getCheckboxProps(item).disabled;
           }
           return true;
         });
@@ -4358,11 +4405,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           checked = false;
         } else {
           checked = this.state.selectionDirty ? data.every(function (item, i) {
-            return _this7.state.selectedRowKeys.indexOf(_this7.getRecordKey(item, i)) >= 0;
+            return _this8.state.selectedRowKeys.indexOf(_this8.getRecordKey(item, i)) >= 0;
           }) : data.every(function (item, i) {
-            return _this7.state.selectedRowKeys.indexOf(_this7.getRecordKey(item, i)) >= 0;
+            return _this8.state.selectedRowKeys.indexOf(_this8.getRecordKey(item, i)) >= 0;
           }) || data.every(function (item) {
-            return _this7.props.rowSelection.getCheckboxProps && _this7.props.rowSelection.getCheckboxProps(item).defaultChecked;
+            return _this8.props.rowSelection.getCheckboxProps && _this8.props.rowSelection.getCheckboxProps(item).defaultChecked;
           });
         }
         var selectionColumn = undefined;
@@ -4374,7 +4421,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           };
         } else {
           var checkboxAllDisabled = data.every(function (item) {
-            return _this7.props.rowSelection.getCheckboxProps && _this7.props.rowSelection.getCheckboxProps(item).disabled;
+            return _this8.props.rowSelection.getCheckboxProps && _this8.props.rowSelection.getCheckboxProps(item).disabled;
           });
           var checkboxAll = React.createElement(Checkbox, { checked: checked,
             disabled: checkboxAllDisabled,
@@ -4406,30 +4453,30 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return isSortColumn;
     },
     renderColumnsDropdown: function renderColumnsDropdown(columns) {
-      var _this8 = this;
+      var _this9 = this;
 
       var locale = objectAssign({}, defaultLocale, this.props.locale);
       return columns.map(function (originColumn, i) {
         var column = objectAssign({}, originColumn);
-        var key = _this8.getColumnKey(column, i);
+        var key = _this9.getColumnKey(column, i);
         var filterDropdown = undefined;
         var sortButton = undefined;
         if (column.filters && column.filters.length > 0) {
-          var colFilters = _this8.state.filters[key] || [];
+          var colFilters = _this9.state.filters[key] || [];
           filterDropdown = React.createElement(FilterDropdown, { locale: locale, column: column,
             selectedKeys: colFilters,
-            confirmFilter: _this8.handleFilter });
+            confirmFilter: _this9.handleFilter });
         }
         if (column.sorter) {
-          var isSortColumn = _this8.isSortColumn(column);
+          var isSortColumn = _this9.isSortColumn(column);
           if (isSortColumn) {
             column.className = column.className || '';
-            if (_this8.state.sortOrder) {
+            if (_this9.state.sortOrder) {
               column.className += ' ant-table-column-sort';
             }
           }
-          var isAscend = isSortColumn && _this8.state.sortOrder === 'ascend';
-          var isDescend = isSortColumn && _this8.state.sortOrder === 'descend';
+          var isAscend = isSortColumn && _this9.state.sortOrder === 'ascend';
+          var isDescend = isSortColumn && _this9.state.sortOrder === 'descend';
           sortButton = React.createElement(
             'div',
             { className: 'ant-table-column-sorter' },
@@ -4437,14 +4484,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
               'span',
               { className: 'ant-table-column-sorter-up ' + (isAscend ? 'on' : 'off'),
                 title: '↑',
-                onClick: _this8.toggleSortOrder.bind(_this8, 'ascend', column) },
+                onClick: _this9.toggleSortOrder.bind(_this9, 'ascend', column) },
               React.createElement(Icon, { type: 'caret-up' })
             ),
             React.createElement(
               'span',
               { className: 'ant-table-column-sorter-down ' + (isDescend ? 'on' : 'off'),
                 title: '↓',
-                onClick: _this8.toggleSortOrder.bind(_this8, 'descend', column) },
+                onClick: _this9.toggleSortOrder.bind(_this9, 'descend', column) },
               React.createElement(Icon, { type: 'caret-down' })
             )
           );
@@ -4460,13 +4507,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
     },
     handleShowSizeChange: function handleShowSizeChange(current, pageSize) {
+      var _props5;
+
       var pagination = this.state.pagination;
       pagination.onShowSizeChange(current, pageSize);
-
-      var nextPagination = objectAssign(pagination, {
-        pageSize: pageSize
-      });
+      var nextPagination = _extends({}, pagination, { pageSize: pageSize, current: current });
       this.setState({ pagination: nextPagination });
+      (_props5 = this.props).onChange.apply(_props5, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, {
+        pagination: nextPagination
+      }))));
     },
     renderPagination: function renderPagination() {
       // 强制不需要分页
@@ -4498,14 +4547,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return [pagination, filters, sorter];
     },
     findColumn: function findColumn(myKey) {
-      var _this9 = this;
+      var _this10 = this;
 
       return this.props.columns.filter(function (c) {
-        return _this9.getColumnKey(c) === myKey;
+        return _this10.getColumnKey(c) === myKey;
       })[0];
     },
-    getCurrentPageData: function getCurrentPageData(dataSource) {
-      var data = this.getLocalData(dataSource);
+    getCurrentPageData: function getCurrentPageData() {
+      var data = this.getLocalData();
       var current = undefined;
       var pageSize = undefined;
       var state = this.state;
@@ -4528,11 +4577,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       return data;
     },
-    getLocalData: function getLocalData(dataSource) {
-      var _this10 = this;
+    getFlatCurrentPageData: function getFlatCurrentPageData() {
+      return flatArray(this.getCurrentPageData());
+    },
+    getLocalData: function getLocalData() {
+      var _this11 = this;
 
       var state = this.state;
-      var data = dataSource || this.props.dataSource;
+      var data = this.props.dataSource || [];
       // 排序
       if (state.sortOrder && state.sorter) {
         data = data.slice(0);
@@ -4544,7 +4596,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       // 筛选
       if (state.filters) {
         Object.keys(state.filters).forEach(function (columnKey) {
-          var col = _this10.findColumn(columnKey);
+          var col = _this11.findColumn(columnKey);
           if (!col) {
             return;
           }
@@ -5855,6 +5907,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var TreeSelect = RC.TreeSelect;
 	var classNames = RC.classNames;
 	var TreeNode = TreeSelect.TreeNode;
+	var SHOW_ALL = TreeSelect.SHOW_ALL;
+	var SHOW_PARENT = TreeSelect.SHOW_PARENT;
+	var SHOW_CHILD = TreeSelect.SHOW_CHILD;
 
 	var AntTreeSelect = React.createClass({
 		displayName: 'AntTreeSelect',
@@ -5897,6 +5952,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	AntTreeSelect.TreeNode = TreeNode;
+	AntTreeSelect.SHOW_ALL = SHOW_ALL;
+	AntTreeSelect.SHOW_PARENT = SHOW_PARENT;
+	AntTreeSelect.SHOW_CHILD = SHOW_CHILD;
 	UI.TreeSelect = AntTreeSelect;
 })(Smart.UI, Smart.RC);
 'use strict';

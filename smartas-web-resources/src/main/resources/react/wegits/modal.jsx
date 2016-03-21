@@ -11,7 +11,7 @@
   let mousePositionEventBinded;
 
 
-  let AntModal = React.createClass({
+  const AntModal = React.createClass({
     getDefaultProps() {
       return {
         prefixCls: 'ant-modal',
@@ -25,6 +25,21 @@
         confirmLoading: false,
         visible: false,
       };
+    },
+    
+    propTypes: {
+      prefixCls: PropTypes.string,
+      onOk: PropTypes.func,
+      onCancel: PropTypes.func,
+      okText: PropTypes.node,
+      cancelText: PropTypes.node,
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      confirmLoading: PropTypes.bool,
+      visible: PropTypes.bool,
+      align: PropTypes.object,
+      footer: PropTypes.node,
+      title: PropTypes.node,
+      closable: PropTypes.bool,
     },
 
     handleCancel(e) {

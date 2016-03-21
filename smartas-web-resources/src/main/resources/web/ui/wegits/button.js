@@ -16,7 +16,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI) {
 	var findDOMNode = ReactDOM.findDOMNode;
-	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2,2}$/;
+	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 	var isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 	function isString(str) {
 		return typeof str === 'string';
@@ -112,10 +112,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	Button.propTypes = {
-		type: React.PropTypes.string,
-		shape: React.PropTypes.string,
-		size: React.PropTypes.string,
-		htmlType: React.PropTypes.string,
+		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+		shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
+		size: React.PropTypes.oneOf(['large', 'small']),
+		htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),
 		onClick: React.PropTypes.func,
 		loading: React.PropTypes.bool,
 		className: React.PropTypes.string
@@ -167,7 +167,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	ButtonGroup.propTypes = {
-		size: React.PropTypes.string
+		size: React.PropTypes.oneOf(['large', 'small'])
 	};
 	Button.Group = ButtonGroup;
 	UI.Button = Button;

@@ -1,4 +1,4 @@
-//v0.12.10 - 2016.3.14
+//v0.12.12 - 2016.3.21
 + function(Namespace) {
 	var UI = Namespace.register("Smart.UI");
 	

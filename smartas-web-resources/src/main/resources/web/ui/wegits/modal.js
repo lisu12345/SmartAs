@@ -30,6 +30,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      onOk: PropTypes.func,
+      onCancel: PropTypes.func,
+      okText: PropTypes.node,
+      cancelText: PropTypes.node,
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      confirmLoading: PropTypes.bool,
+      visible: PropTypes.bool,
+      align: PropTypes.object,
+      footer: PropTypes.node,
+      title: PropTypes.node,
+      closable: PropTypes.bool
+    },
+
     handleCancel: function handleCancel(e) {
       this.props.onCancel(e);
     },

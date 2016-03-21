@@ -36,12 +36,14 @@ public class QuerySqlNode implements SqlNode {
     boolean first = true;
     StringBuilder builder = new StringBuilder();
     for (Command command : filter.getCommands()) {
-      context.bind("item", command);
+      int uniqueNumber = context.getUniqueNumber();
+      context.bind("_fq_item_" + uniqueNumber, command);
       if (!first) {
-        builder.append("AND ");
+        builder.append(" AND ");
+      }else{
         first = false;
       }
-      builder.append(command.toSql(filterName));
+      builder.append(command.toSql(filterName,uniqueNumber));
     }
     context.appendSql(builder.toString());
     applyClose(context);

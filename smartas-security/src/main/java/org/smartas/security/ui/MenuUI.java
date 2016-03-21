@@ -10,7 +10,7 @@ import org.smartas.core.Subject;
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
 import org.smartas.core.ui.BaseUI;
-import org.smartas.core.util.SecurityUtil;
+import org.smartas.core.util.SecurityUtils;
 import org.smartas.security.Menu;
 import org.smartas.security.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class MenuUI extends BaseUI<Menu> {
 
     List<Menu> result = new ArrayList<>(50);
 
-    Subject subject = SecurityUtil.getSubject();
+    Subject subject = SecurityUtils.getSubject();
 
     /*
      * list.stream().filter(menu -> { return ; }).iterator(); return list;

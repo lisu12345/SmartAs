@@ -148,7 +148,7 @@
 							 }
 			        		 Smart.UI.message.error(vo.message);
 			        	 }else{
-			        		 Smart.UI.message.error(request.statusText);
+			        		 //Smart.UI.message.error(request.statusText);
 			        	 }
 			        } 
 					complete && complete(request, code);

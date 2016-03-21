@@ -7,7 +7,7 @@ import org.smartas.core.Subject;
 import org.smartas.core.annotation.Operation;
 import org.smartas.core.annotation.Resource;
 import org.smartas.core.util.Constants;
-import org.smartas.core.util.SessionUtil;
+import org.smartas.core.util.SessionUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
@@ -39,7 +39,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     Assert.notNull(res, handlerMethod.getBeanType() + " need @Resource");
 
     // 受控服务必须登录状态
-    Subject subject = SessionUtil.getSubject(req);
+    Subject subject = SessionUtils.getSubject(req);
     if (subject == null) {
       resp.setHeader(Constants.X_SESSION_STATUS, "timeout");// 在响应头设置session状态
       resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

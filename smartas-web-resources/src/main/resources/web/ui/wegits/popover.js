@@ -61,7 +61,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         ),
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           this.props.overlay
         )
       );
