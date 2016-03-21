@@ -108,4 +108,21 @@
 			}
 		};
 	};
+
+	var URL_REX = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+	UI.forward = function (url, qs) {
+		//location.hash = hash;
+		var inner = URL_REX.test(url);
+		if (qs) {
+			if ($.isPlainObject(qs)) {
+				qs = $.param(qs);
+			}
+			url += '?' + qs;
+		}
+		if (inner) {
+			location.href = url;
+		} else {
+			location.hash = url.charAt(0) != '!' ? '!' + url : url;
+		}
+	};
 })(Smart.Namespace);
