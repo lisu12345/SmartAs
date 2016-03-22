@@ -4,7 +4,7 @@
 install("web.demo.Test",function($S){
   	var logger = Log.getLogger("web.demo.Test");
   	const {UI,Service,Resource} = Smart,
-  		{Grid,Form,Icon,FormItem, Input,DatePicker} = UI;
+  		{Grid,Form,Icon,FormItem, Input,DatePicker,DateFormat} = UI;
   
   	const service = Service.New("/demo/test");
   	
@@ -32,6 +32,9 @@ install("web.demo.Test",function($S){
   	  {
   	  	title: '当前时间',
   		dataIndex: 'test',
+  		render(text, record, index){
+  			return DateFormat.format(text,'yyyy-MM-dd')
+  		}
   	  },
   	];
   	
@@ -42,11 +45,11 @@ install("web.demo.Test",function($S){
 	    
 	   
       	const name = getFieldProps('Q_name_S_LK');
-      	const test = getFieldProps('Q_test_D_GT');
+      	const test = getFieldProps('Q_test_D_GE');
 	    
 	    return (
 	      <Form inline onSubmit={this.props.querySubmit}>
-	      	  <FormItem label="用户名：">
+		      <FormItem label="用户名：">
 		         <Input placeholder="请输入用户名" {...name} />
 		      </FormItem>
 	      	  <FormItem label="当前时间：">

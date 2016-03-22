@@ -121,10 +121,8 @@
 		    e.preventDefault();
 
 		    const {service} = this.props;
-		    const qs = this.refs.qform.getFieldsValue();
-		    
-		    
-			//this.state.qs = 
+		    const qs = this.refs.qform.getFormatFieldsValue();
+			this.state.qs = qs
 		    service.refresh();
 
 		},

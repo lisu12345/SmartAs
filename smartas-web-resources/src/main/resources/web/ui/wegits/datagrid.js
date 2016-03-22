@@ -166,9 +166,8 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 			var service = this.props.service;
 
-			var qs = this.refs.qform.getFieldsValue();
-
-			//this.state.qs =
+			var qs = this.refs.qform.getFormatFieldsValue();
+			this.state.qs = qs;
 			service.refresh();
 		},
 
