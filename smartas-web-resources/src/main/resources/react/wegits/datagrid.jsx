@@ -59,6 +59,7 @@
 			pageSize : React.PropTypes.number,
 			toolbar : React.PropTypes.array,
 			rowSelection:React.PropTypes.object,
+			qs:React.PropTypes.object,
 			QForm:React.PropTypes.func,
 		},
 		getDefaultProps: function() {
@@ -66,6 +67,7 @@
 				rownumbers : true,
 				pageSize : 10,
 				current: 1,
+				qs : null,
 				toolbar:[],
 			}
 		},
@@ -89,7 +91,7 @@
    			 return {pagination : pagination,data : [],current,pageSize};
   		},
 		componentDidMount: function() {
-			const {service} = this.props;
+			const {service,qs} = this.props;
 			service.subscribe(function(action){
 				let {type,data,method} = action;
 				if(method === 'refresh'){
@@ -112,7 +114,7 @@
 					return;
 				}
 			}.bind(this));
-			service.listPage(1,10);
+			service.listPage(1,10,qs);
 		},
 		queryReset:function(e){
 			this.refs.qform.resetFields();

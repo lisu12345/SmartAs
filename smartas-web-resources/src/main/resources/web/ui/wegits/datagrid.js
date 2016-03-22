@@ -96,6 +96,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			pageSize: React.PropTypes.number,
 			toolbar: React.PropTypes.array,
 			rowSelection: React.PropTypes.object,
+			qs: React.PropTypes.object,
 			QForm: React.PropTypes.func
 		},
 		getDefaultProps: function getDefaultProps() {
@@ -103,6 +104,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 				rownumbers: true,
 				pageSize: 10,
 				current: 1,
+				qs: null,
 				toolbar: []
 			};
 		},
@@ -129,7 +131,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
 		},
 		componentDidMount: function componentDidMount() {
-			var service = this.props.service;
+			var _props2 = this.props;
+			var service = _props2.service;
+			var qs = _props2.qs;
 
 			service.subscribe((function (action) {
 				var type = action.type;
@@ -156,7 +160,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					return;
 				}
 			}).bind(this));
-			service.listPage(1, 10);
+			service.listPage(1, 10, qs);
 		},
 		queryReset: function queryReset(e) {
 			this.refs.qform.resetFields();
@@ -175,17 +179,17 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var _state = this.state;
 			var data = _state.data;
 			var pagination = _state.pagination;
-			var _props2 = this.props;
-			var service = _props2.service;
-			var _rowKey = _props2.rowKey;
-			var rownumbers = _props2.rownumbers;
-			var columns = _props2.columns;
-			var title = _props2.title;
-			var toolbar = _props2.toolbar;
-			var rowSelection = _props2.rowSelection;
-			var QForm = _props2.QForm;
+			var _props3 = this.props;
+			var service = _props3.service;
+			var _rowKey = _props3.rowKey;
+			var rownumbers = _props3.rownumbers;
+			var columns = _props3.columns;
+			var title = _props3.title;
+			var toolbar = _props3.toolbar;
+			var rowSelection = _props3.rowSelection;
+			var QForm = _props3.QForm;
 
-			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "rowSelection", "QForm"]);
+			var props = _objectWithoutProperties(_props3, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "rowSelection", "QForm"]);
 
 			var Form = null;
 			if (QForm) {
