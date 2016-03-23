@@ -1,5 +1,5 @@
 /*[[
- <script src="web/security/user/userList.js"></script>
+ <script src="web/smartas/security/user/userList.js"></script>
 ]]*/
 
 install("web.security.user",function($S){

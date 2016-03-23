@@ -136,7 +136,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 			service.listPage(1, 10, qs);
 		},
-		componentDidMount: function componentDidMount() {
+		componentWillMount: function componentWillMount() {
 			var _props2 = this.props;
 			var service = _props2.service;
 			var qs = _props2.qs;
@@ -148,10 +148,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 				if (method === 'refresh') {
 					if (data) {
-						service.listPage(data.page, data.pageSize, data.qs);
+						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
 						return;
 					}
-					service.listPage(this.state.current, this.state.pageSize, this.state.qs);
+					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
 					return;
 				}
 				if (method === 'listPage') {

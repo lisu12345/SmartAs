@@ -94,16 +94,16 @@
   			const {service,qs} = nextProps;
   			service.listPage(1,10,qs);
   		},
-		componentDidMount: function() {
+  		componentWillMount: function() {
 			const {service,qs} = this.props;
 			this.unsubscribe = service.subscribe(function(action){
 				let {type,data,method} = action;
 				if(method === 'refresh'){
 					if(data){
-						service.listPage(data.page,data.pageSize,data.qs);
+						service.listPage(data.page,data.pageSize,_.assign(data.qs,qs));
 						return;
 					}
-					service.listPage(this.state.current,this.state.pageSize,this.state.qs);
+					service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
 					return;
 				}
 				if(method === 'listPage'){
