@@ -18,29 +18,32 @@ import com.fiberhome.smartas.workflow.activiti.impl.FreeflowTaskServiceImpl;
 /**
  * @author chebing 扩展工作流引擎配置
  */
-public class ExtProcessEngineConfiguration extends SpringProcessEngineConfiguration implements InitializingBean {
+public class ExtProcessEngineConfiguration extends SpringProcessEngineConfiguration
+    implements
+      InitializingBean {
 
-	protected void initFormEngines() {
-		if (formEngines == null) {
-			formEngines = new HashMap<String, FormEngine>();
-			FormEngine defaultFormEngine = new HtmlFormEngine();
-			formEngines.put(null, defaultFormEngine); // default form engine is looked up with null
-			formEngines.put(defaultFormEngine.getName(), defaultFormEngine);
-		}
-	}
+  protected void initFormEngines() {
+    if (formEngines == null) {
+      formEngines = new HashMap<String, FormEngine>();
+      FormEngine defaultFormEngine = new HtmlFormEngine();
+      formEngines.put(null, defaultFormEngine); // default form engine is looked up with null
+      formEngines.put(defaultFormEngine.getName(), defaultFormEngine);
+    }
+  }
 
-	public void afterPropertiesSet() throws Exception {
-		List<BpmnParseHandler> bpmnParseHandlers = getPostBpmnParseHandlers();
-		if (bpmnParseHandlers == null) {
-			bpmnParseHandlers = new ArrayList<BpmnParseHandler>();
-		}
-		bpmnParseHandlers.addAll(BeansUtils.getBeansOfType(applicationContext, AbstractBpmnParseHandler.class));
-		setPostBpmnParseHandlers(bpmnParseHandlers);
+  public void afterPropertiesSet() throws Exception {
+    List<BpmnParseHandler> bpmnParseHandlers = getPostBpmnParseHandlers();
+    if (bpmnParseHandlers == null) {
+      bpmnParseHandlers = new ArrayList<BpmnParseHandler>();
+    }
+    bpmnParseHandlers
+        .addAll(BeansUtils.getBeansOfType(applicationContext, AbstractBpmnParseHandler.class));
+    setPostBpmnParseHandlers(bpmnParseHandlers);
 
-		setTaskService(new FreeflowTaskServiceImpl(this));
-	}
+    setTaskService(new FreeflowTaskServiceImpl(this));
+  }
 
-	public FreeflowTaskService getFreeflowTaskService() {
-		return (FreeflowTaskService) getTaskService();
-	}
+  public FreeflowTaskService getFreeflowTaskService() {
+    return (FreeflowTaskService) getTaskService();
+  }
 }

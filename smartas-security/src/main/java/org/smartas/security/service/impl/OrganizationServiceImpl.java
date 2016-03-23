@@ -1,11 +1,12 @@
 package org.smartas.security.service.impl;
 
-import org.smartas.core.service.BaseServiceImpl;
 import org.smartas.security.Organization;
 import org.smartas.security.dao.OrganizationDao;
 import org.smartas.security.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fiberhome.smartas.core.service.BaseServiceImpl;
 
 
 @Service
