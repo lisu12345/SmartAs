@@ -18,7 +18,10 @@ import com.fiberhome.smartas.core.util.ThreadContext;
 
 /**
  * 单点登录拦截器
+<<<<<<< HEAD
  * 
+=======
+>>>>>>> refs/remotes/upstream/develop
  * @author chenb
  *
  */

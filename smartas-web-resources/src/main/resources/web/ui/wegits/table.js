@@ -1,14 +1,14 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-+(function (UI, RC) {
++function (UI, RC) {
   var _ref = _;
   var noop = _ref.noop;
   var objectAssign = _.assign;
@@ -24,6 +24,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Spin = UI.Spin;
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
+
 
   function flatArray() {
     var data = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
@@ -117,7 +118,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var menuItems = items.map(function (item) {
         if (item.children && item.children.length > 0) {
-          var _ret = (function () {
+          var _ret = function () {
             var keyPathOfSelectedItem = _this.state.keyPathOfSelectedItem;
             var containSelected = Object.keys(keyPathOfSelectedItem).some(function (key) {
               var keyPath = keyPathOfSelectedItem[key];
@@ -133,7 +134,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
                 })
               )
             };
-          })();
+          }();
 
           if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
         }
@@ -254,6 +255,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       };
     },
 
+
     propTypes: {
       dataSource: React.PropTypes.array,
       prefixCls: React.PropTypes.string,
@@ -320,7 +322,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var sortColumn = this.state.sortColumn;
       var sortOrder = this.state.sortOrder;
-      var sorter = undefined;
+      var sorter = void 0;
       // 只同时允许一列进行排序，否则会导致排序顺序的逻辑问题
       var isSortColumn = this.isSortColumn(column);
       if (!isSortColumn) {
@@ -497,7 +499,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       if (this.props.rowSelection.getCheckboxProps) {
         props = this.props.rowSelection.getCheckboxProps.call(this, record);
       }
-      var checked = undefined;
+      var checked = void 0;
       if (this.state.selectionDirty) {
         checked = this.state.radioIndex === rowIndex;
       } else {
@@ -509,7 +511,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     },
     renderSelectionCheckBox: function renderSelectionCheckBox(value, record, index) {
       var rowIndex = this.getRecordKey(record, index); // 从 1 开始
-      var checked = undefined;
+      var checked = void 0;
       if (this.state.selectionDirty) {
         checked = this.state.selectedRowKeys.indexOf(rowIndex) >= 0;
       } else {
@@ -539,7 +541,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           }
           return true;
         });
-        var checked = undefined;
+        var checked = void 0;
         if (!data.length) {
           checked = false;
         } else {
@@ -551,7 +553,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             return _this8.props.rowSelection.getCheckboxProps && _this8.props.rowSelection.getCheckboxProps(item).defaultChecked;
           });
         }
-        var selectionColumn = undefined;
+        var selectionColumn = void 0;
         if (this.props.rowSelection.type === 'radio') {
           selectionColumn = {
             key: 'selection-column',
@@ -598,8 +600,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return columns.map(function (originColumn, i) {
         var column = objectAssign({}, originColumn);
         var key = _this9.getColumnKey(column, i);
-        var filterDropdown = undefined;
-        var sortButton = undefined;
+        var filterDropdown = void 0;
+        var sortButton = void 0;
         if (column.filters && column.filters.length > 0) {
           var colFilters = _this9.state.filters[key] || [];
           filterDropdown = React.createElement(FilterDropdown, { locale: locale, column: column,
@@ -694,8 +696,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     },
     getCurrentPageData: function getCurrentPageData() {
       var data = this.getLocalData();
-      var current = undefined;
-      var pageSize = undefined;
+      var current = void 0;
+      var pageSize = void 0;
       var state = this.state;
       // 如果没有分页的话，默认全部展示
       if (!this.hasPagination()) {
@@ -773,7 +775,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         newColumn.key = newColumn.key || newColumn.dataIndex || i;
         return newColumn;
       });
-      var emptyText = undefined;
+      var emptyText = void 0;
       var emptyClass = '';
       if (!data || data.length === 0) {
         emptyText = React.createElement(
@@ -817,4 +819,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   });
 
   UI.Table = AntTable;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

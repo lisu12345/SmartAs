@@ -4,13 +4,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Tooltip = RC.Tooltip;
   var _ref = _;
   var noop = _ref.noop;
   var Icon = UI.Icon;
   var Button = UI.Button;
   var getPlacements = UI.getPlacements;
+
 
   var placements = getPlacements();
   var prefixCls = 'ant-popover';
@@ -133,4 +134,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
       );
     }
   });
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

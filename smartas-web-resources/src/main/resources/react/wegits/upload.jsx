@@ -175,14 +175,10 @@
   }
 
   const AntUpload = React.createClass({
-	  propTypes: {
-		  handleType : React.PropTypes.string.isRequired,
-	  },
-	  
     getInitialState() {
       return {
         fileList: this.props.fileList || this.props.defaultFileList || [],
-        dragState: 'drop',
+        dragState: 'drop'
       };
     },
 
@@ -241,7 +237,7 @@
       // 否则视为失败
       try {
         if (typeof response === 'string') {
-        	JSON.parse(response);
+          JSON.parse(response);
         }
       } catch (e) {
         this.onError(new Error('No response'), response, file);
@@ -267,7 +263,7 @@
       targetItem.percent = e.percent;
       this.onChange({
         event: e,
-        file,
+        file: targetItem,
         fileList: this.state.fileList
       });
     },
@@ -319,7 +315,6 @@
         multiple: false,
         action: '',
         data: {},
-        handleType : 'attachment',
         accept: '',
         onChange: noop,
         beforeUpload: T,

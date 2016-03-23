@@ -8,10 +8,28 @@
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd       
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd   
 	http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+	
+	<beans profile="dev">
+		<!--bean name="sessionRepository" class="org.springframework.session.MapSessionRepository"></bean-->
+		<bean id="sessionRepository" class="org.springframework.session.jdbc.JdbcOperationsSessionRepository">
+			<constructor-arg>
+				<bean class="org.springframework.jdbc.core.JdbcTemplate">
+					<constructor-arg ref="dataSource"/>
+				</bean>
+			</constructor-arg>
+			<property name="defaultMaxInactiveInterval" value="1800" />
+			<property name="tableName" value="tpl_spring_session" />
+		</bean>
+	</beans>
+
+	<beans profile="sit,uat,pat,prod">
+		<bean name="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" />
+		<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+	</beans>
 
 	<beans>
 		
-		<bean id="appEnv" class="org.smartas.core.AppEnv">
+		<bean id="appEnv" class="com.fiberhome.smartas.core.AppEnv">
 			<property name="appName" value="smartas" />
 			<property name="dbName" value="smartas" />
 			<property name="scope" value="Smart" />

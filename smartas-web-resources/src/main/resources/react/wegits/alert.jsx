@@ -6,7 +6,8 @@
 		    return {
 		      prefixCls: 'ant-alert',
 		      showIcon: false,
-		      onClose() {}
+		      onClose() {},
+		      type: 'info',
 		    };
 		  },
 		  getInitialState() {

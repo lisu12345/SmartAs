@@ -6,10 +6,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+function (UI, RC) {
++(function (UI, RC) {
   var _ref = _;
   var assign = _ref.assign;
-
 
   var Card = function Card(props) {
     var _classNames;
@@ -82,4 +81,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   };
 
   UI.Card = Card;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

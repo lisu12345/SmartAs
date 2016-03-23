@@ -1,7 +1,7 @@
 //v0.14.1-2016.3.9
 + function(RC) {
 
-	const {AsyncValidate,Util,AsyncValidator} = RC,
+	const {AsyncValidate,Util,AsyncValidator,GregorianCalendar} = RC,
 		{hoistStatics,scrollIntoView} = Util,
 		{Component} = React;
 
@@ -301,6 +301,15 @@
 	        });
 	        return allValues;
 	      },
+	      
+	      getFormatFieldsValue(names) {
+	    	const fields = names || this.getValidFieldsName();
+	        const allValues = {};
+	        fields.forEach((f) => {
+	          allValues[f] = this.getFormatValue(f);
+	        });
+	        return allValues;
+	      },
 
 	      getFieldValue(name) {
 	        const { fields } = this;
@@ -311,14 +320,29 @@
 	        const { fields } = this;
 	        return fields[name] && fields[name].instance;
 	      },
+	      
+	      getFormatValue(name) {
+	        const { fieldsMeta,fields} = this;
+	        const field = fields[name];
+	        const fieldMeta = fieldsMeta[name];
+	        if (field && 'value' in field) {
+	        	if(field.instance.getFormatter){
+	        		let calendar = new GregorianCalendar();
+	        		calendar.setTime(field.value)
+	        		return field.instance.getFormatter().format(calendar);
+	        	}
+	        	return field.value;
+	        }
+	        return fieldMeta && fieldMeta.initialValue;
+	      },
 
 	      getValueFromFields(name, fields) {
 	        const { fieldsMeta } = this;
 	        const field = fields[name];
-	        if (field && 'value' in field) {
-	          return field.value;
-	        }
 	        const fieldMeta = fieldsMeta[name];
+	        if (field && 'value' in field) {
+	        	return field.value;
+	        }
 	        return fieldMeta && fieldMeta.initialValue;
 	      },
 

@@ -4,10 +4,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI, RC) {
++function (UI, RC) {
 	var Table = UI.Table;
 	var Button = UI.Button;
 	var Icon = UI.Icon;
+
 
 	var Header = React.createClass({
 		displayName: "Header",
@@ -57,7 +58,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 								"tr",
 								null,
 								_.map(toolbar, function (value, key) {
-									var bar = undefined;
+									var bar = void 0;
 									if (value === '-') {
 										bar = React.createElement("span", { className: "btn-separator" });
 									} else {
@@ -135,7 +136,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var service = _props2.service;
 			var qs = _props2.qs;
 
-			service.subscribe((function (action) {
+			service.subscribe(function (action) {
 				var type = action.type;
 				var data = action.data;
 				var method = action.method;
@@ -159,7 +160,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					});
 					return;
 				}
-			}).bind(this));
+			}.bind(this));
 			service.listPage(1, 10, qs);
 		},
 		queryReset: function queryReset(e) {
@@ -232,4 +233,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	});
 
 	UI.Grid = Grid;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

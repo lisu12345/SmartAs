@@ -6,7 +6,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   var Tooltip = RC.Tooltip;
   var getPlacements = UI.getPlacements;
 
-
   var placements = getPlacements();
   var prefixCls = 'ant-popover';
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans" 
 	xmlns:aop="http://www.springframework.org/schema/aop"
@@ -15,3 +16,22 @@
 	<bean id="ajaxLoginInterceptor" class="com.fiberhome.smartas.security.handler.AjaxLoginInterceptor" />
 	
 </beans>
+=======
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd      
+	http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd    
+	http://www.springframework.org/schema/context     http://www.springframework.org/schema/context/spring-context.xsd  
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	
+	<bean id="securityInterceptor" class="com.fiberhome.smartas.security.handler.SecurityInterceptor" />
+	<bean id="loginInterceptor" class="com.fiberhome.smartas.security.handler.LoginInterceptor" />
+	<bean id="ajaxLoginInterceptor" class="com.fiberhome.smartas.security.handler.AjaxLoginInterceptor" />
+	
+</beans>
+>>>>>>> refs/remotes/upstream/develop

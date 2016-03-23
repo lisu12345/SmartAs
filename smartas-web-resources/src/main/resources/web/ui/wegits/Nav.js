@@ -2,13 +2,12 @@
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+function (UI, RC) {
++(function (UI, RC) {
 	var Menu = UI.Menu;
 	var Icon = UI.Icon;
 	var Button = UI.Button;
 	var Dropdown = UI.Dropdown;
 	var SubMenu = UI.SubMenu;
-
 
 	var Nav = React.createClass({
 		displayName: 'Nav',
@@ -71,4 +70,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		}
 	});
 	UI.Nav = Nav;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

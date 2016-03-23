@@ -12,7 +12,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var SHOW_PARENT = TreeSelect.SHOW_PARENT;
 	var SHOW_CHILD = TreeSelect.SHOW_CHILD;
 
-
 	var AntTreeSelect = React.createClass({
 		displayName: 'AntTreeSelect',
 		getDefaultProps: function getDefaultProps() {

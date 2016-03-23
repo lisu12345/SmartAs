@@ -4,7 +4,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Upload = RC.Upload;
   var Animate = RC.Animate;
   var _ref = _;
@@ -13,6 +13,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var Icon = UI.Icon;
   var Progress = UI.Progress;
   var Line = Progress.Line;
+
 
   var prefixCls = 'ant-upload';
 
@@ -79,7 +80,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var list = this.props.items.map(function (file) {
         var _classNames;
 
-        var progress = undefined;
+        var progress = void 0;
         var icon = React.createElement(Icon, { type: 'paper-clip' });
 
         if (_this2.props.listType === 'picture' || _this2.props.listType === 'picture-card') {
@@ -206,7 +207,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onStart: function onStart(file) {
       if (this.recentUploadStatus === false) return;
 
-      var targetItem = undefined;
+      var targetItem = void 0;
       var nextFileList = this.state.fileList.concat();
       if (file.length > 0) {
         targetItem = file.map(function (f) {
@@ -360,7 +361,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         onSuccess: this.onSuccess,
         beforeUpload: this.beforeUpload
       });
-      var uploadList = undefined;
+      var uploadList = void 0;
       if (this.props.showUploadList) {
         uploadList = React.createElement(UploadList, { listType: this.props.listType,
           items: this.state.fileList,
@@ -437,4 +438,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
   UI.Upload = AntUpload;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);
