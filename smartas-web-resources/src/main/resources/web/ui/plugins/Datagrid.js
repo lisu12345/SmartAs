@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (Namespace, AT) {
++function (Namespace, AT) {
 	var NS = Namespace.register("Smart.ExtUI"),
 	    request = Smart.Resource.ajax;
 
@@ -66,6 +66,7 @@
 	var View1 = React.createClass({
 		displayName: 'View1',
 
+
 		render: function render() {
 			var props = this.props;
 			if (!props.rownumbers) {
@@ -112,6 +113,7 @@
 	var View1Row = React.createClass({
 		displayName: 'View1Row',
 
+
 		render: function render() {
 			return React.createElement(
 				'tr',
@@ -131,6 +133,7 @@
 
 	var View1Body = React.createClass({
 		displayName: 'View1Body',
+
 
 		render: function render() {
 			var rows = this.props.rows;
@@ -161,6 +164,7 @@
 
 	var ViewCell = React.createClass({
 		displayName: 'ViewCell',
+
 
 		render: function render() {
 			var props = this.props,
@@ -212,6 +216,7 @@
 
 	var View = React.createClass({
 		displayName: 'View',
+
 
 		getColumnsInfo: function getColumnsInfo(list) {
 			var cl = IGrid.Column;
@@ -281,6 +286,7 @@
 
 	var Pagination = React.createClass({
 		displayName: 'Pagination',
+
 
 		onPageNum: function onPageNum(e) {
 			if (e.key === 'Enter') {
@@ -558,6 +564,7 @@
 	var IGrid = NS.IGrid = React.createClass({
 		displayName: 'IGrid',
 
+
 		getDefaultProps: function getDefaultProps() {
 			return {
 				rownumbers: true,
@@ -721,6 +728,7 @@
 	NS.Grid = React.createClass({
 		displayName: 'Grid',
 
+
 		getDefaultProps: function getDefaultProps() {
 			return {
 				rownumbers: true,
@@ -789,4 +797,4 @@
 			);
 		}
 	});
-})(Smart.Namespace, Smart.ActionTypes);
+}(Smart.Namespace, Smart.ActionTypes);

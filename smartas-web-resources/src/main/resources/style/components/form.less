@@ -242,6 +242,12 @@ form {
   .@{css-prefix}form-item {
     display: inline-block;
     margin-right: 10px;
+    margin-bottom: 0;
+
+    &-with-help {
+      margin-bottom: 24px;
+    }
+    
     > div {
       display: inline-block;
     }
@@ -343,6 +349,7 @@ form {
     &-arrow {
       color: @warning-color;
     }
+
   }
 
   // ant-datepicker
@@ -382,6 +389,10 @@ form {
 
     &-arrow {
       color: @error-color;
+    }
+
+    .@{select-prefix-cls}-combobox .@{select-prefix-cls}-search__field:focus {
+      box-shadow: none;
     }
   }
 

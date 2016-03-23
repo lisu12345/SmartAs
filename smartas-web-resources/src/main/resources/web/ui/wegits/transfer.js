@@ -6,7 +6,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var _ref = _;
   var noop = _ref.noop;
   var classNames = RC.classNames;
@@ -17,6 +17,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _React = React;
   var Component = _React.Component;
   var PropTypes = _React.PropTypes;
+
 
   var Operation = React.createClass({
     displayName: 'Operation',
@@ -45,6 +46,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var leftActive = _props.leftActive;
       var rightActive = _props.rightActive;
       var className = _props.className;
+
 
       var moveToLeftButton = React.createElement(
         Button,
@@ -86,7 +88,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getDefaultProps: function getDefaultProps() {
       return {
-        placeholder: '请输入搜索内容',
+        placeholder: '',
         onChange: noop,
         handleClear: noop
       };
@@ -233,10 +235,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titleText = _props3.titleText;
       var filter = _props3.filter;
       var checkedKeys = _props3.checkedKeys;
+      var notFoundContent = _props3.notFoundContent;
       var checkStatus = _props3.checkStatus;
       var body = _props3.body;
       var footer = _props3.footer;
       var showSearch = _props3.showSearch;
+      var searchPlaceholder = _props3.searchPlaceholder;
 
       // Custom Layout
 
@@ -295,7 +299,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           showSearch ? React.createElement(
             'div',
             { className: prefixCls + '-body-search-wrapper' },
-            React.createElement(Search, { prefixCls: prefixCls + '-search', onChange: this.handleFilter, handleClear: this.handleClear, value: filter })
+            React.createElement(Search, { prefixCls: prefixCls + '-search',
+              onChange: this.handleFilter.bind(this),
+              handleClear: this.handleClear.bind(this),
+              placeholder: searchPlaceholder,
+              value: filter })
           ) : null,
           React.createElement(
             Animate,
@@ -305,7 +313,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             showItems.length > 0 ? showItems : React.createElement(
               'div',
               { className: prefixCls + '-body-not-found' },
-              'Not Found'
+              notFoundContent
             )
           )
         ),
@@ -344,6 +352,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       operations: PropTypes.array,
       showSearch: PropTypes.bool,
       searchPlaceholder: PropTypes.string,
+      notFoundContent: PropTypes.node,
       body: PropTypes.func,
       footer: PropTypes.func
     },
@@ -358,6 +367,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         operations: [],
         showSearch: false,
         searchPlaceholder: '请输入搜索内容',
+        notFoundContent: 'Not Found',
         body: noop,
         footer: noop
       };
@@ -375,6 +385,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _props4 = this.props;
       var targetKeys = _props4.targetKeys;
       var dataSource = _props4.dataSource;
+
 
       var leftDataSource = [].concat(_toConsumableArray(dataSource));
       var rightDataSource = [];
@@ -428,12 +439,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var leftCheckedKeys = _state2.leftCheckedKeys;
       var rightCheckedKeys = _state2.rightCheckedKeys;
 
+
       var dataSource = direction === 'left' ? leftDataSource : rightDataSource;
       var filter = direction === 'left' ? leftFilter : rightFilter;
       var checkedKeys = direction === 'left' ? leftCheckedKeys : rightCheckedKeys;
       var filteredDataSource = this.filterDataSource(dataSource, filter);
 
-      var globalCheckStatus = undefined;
+      var globalCheckStatus = void 0;
 
       if (checkedKeys.length > 0) {
         if (checkedKeys.length < filteredDataSource.length) {
@@ -496,7 +508,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var rightCheckedKeys = _state4.rightCheckedKeys;
 
       var holder = direction === 'left' ? leftCheckedKeys : rightCheckedKeys;
-      var index = undefined;
+      var index = void 0;
       holder.forEach(function (key, i) {
         if (key === selectedItem.key) {
           index = i;
@@ -519,6 +531,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titles = _props5.titles;
       var operations = _props5.operations;
       var showSearch = _props5.showSearch;
+      var notFoundContent = _props5.notFoundContent;
       var searchPlaceholder = _props5.searchPlaceholder;
       var body = _props5.body;
       var footer = _props5.footer;
@@ -560,6 +573,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' }),
@@ -584,6 +598,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' })
@@ -596,4 +611,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   Transfer.Search = Search;
 
   UI.Transfer = Transfer;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

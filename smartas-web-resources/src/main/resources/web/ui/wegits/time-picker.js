@@ -4,7 +4,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var DateTimeFormat = RC.DateTimeFormat;
   var TimePicker = RC.TimePicker;
   var classNames = RC.classNames;
@@ -39,6 +39,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return new DateTimeFormat(this.props.format);
     },
 
+
     /**
      * 获得输入框的 className
      */
@@ -51,6 +52,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
       return sizeClass;
     },
+
 
     /**
      * 获得输入框的默认值
@@ -105,4 +107,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
   UI.TimePicker = AntTimePicker;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

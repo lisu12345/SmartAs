@@ -4,6 +4,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
+
+  var placements = getPlacements({
+    verticalArrowShift: 8
+  });
 
   UI.Tooltip = React.createClass({
     displayName: 'Tooltip',
@@ -48,6 +53,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           overlay: this.props.title,
           visible: visible,
           onVisibleChange: this.onVisibleChange

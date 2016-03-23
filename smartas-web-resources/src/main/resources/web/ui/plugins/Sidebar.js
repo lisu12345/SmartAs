@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (Namespace) {
++function (Namespace) {
 	var UI = Namespace.register("Smart.LigerUI"),
 	    AT = Smart.UI.ActionTypes;
 	UI.Sidebar = React.createClass({
@@ -88,4 +88,4 @@
 			);
 		}
 	});
-})(Smart.Namespace);
+}(Smart.Namespace);

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fiberhome.smartas.registry.dao.RegistryDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+
+	<select id="getById" resultType="com.fiberhome.smartas.registry.Registry">
+		SELECT
+		T.*
+		FROM tpl_registry_t T
+		WHERE T.ID = #{id}
+	</select>
+
+	<select id="getCountAll" resultType="int">
+		SELECT
+		count(1)
+		FROM tpl_registry_t T
+	</select>
+
+	<select id="selectAll" resultType="com.fiberhome.smartas.registry.Registry">
+		SELECT
+		T.*
+		FROM tpl_registry_t T
+	</select>
+
+	<select id="select" resultType="com.fiberhome.smartas.registry.Registry" pageable="true">
+		SELECT T.* FROM tpl_registry_t T
+	</select>
+
+
+	<insert id="insert" parameterType="com.fiberhome.smartas.registry.Registry">
+		INSERT INTO tpl_registry_t
+		(code,
+		pcode,
+		value,
+		descr,
+		parentId,
+		enabled)
+		VALUES(
+		#{code,jdbcType=VARCHAR},
+		#{pcode,jdbcType=VARCHAR},
+		#{value,jdbcType=VARCHAR},
+		#{descr,jdbcType=VARCHAR},
+		#{parentId,jdbcType=NUMERIC},
+		#{enabled,jdbcType=CHAR}
+		)
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterType="com.fiberhome.smartas.registry.Registry">
+		UPDATE tpl_registry_t SET
+		code = #{code,jdbcType=VARCHAR},
+		value = #{value,jdbcType=VARCHAR},
+		descr = #{descr,jdbcType=VARCHAR},
+	<if test="parentId != null">
+		parentId = #{parentId,jdbcType=NUMERIC},
+	</if>
+		enabled = #{enabled,jdbcType=CHAR}
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+
+	<select id="deleteById">
+		DELETE FROM tpl_registry_t
+		WHERE ID = #{id}
+	</select>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+ 
+</mapper>
+

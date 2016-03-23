@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var Util = RC.Util;
 	var warning = Util.warning;
 	var uid = Util.uid;
@@ -113,7 +113,7 @@
 				return;
 			}
 			var props = this.props;
-			var response = undefined;
+			var response = void 0;
 			var eventFile = this.file;
 			try {
 				var doc = this.getIframeDocument();
@@ -192,7 +192,7 @@
 		initIframe: function initIframe() {
 			var iframeNode = this.getIframeNode();
 			var win = iframeNode.contentWindow;
-			var doc = undefined;
+			var doc = void 0;
 			this.domain = this.domain || '';
 			this.initIframeSrc();
 			try {
@@ -274,11 +274,13 @@
 			e.preventDefault();
 		},
 		uploadFiles: function uploadFiles(files) {
+			var batchNo = uid();
 			var len = files.length;
 			if (len > 0) {
 				for (var i = 0; i < len; i++) {
 					var file = files.item(i);
 					file.uid = uid();
+					file.batchNo = batchNo;
 					this.upload(file);
 				}
 				if (this.props.multiple) {
@@ -311,9 +313,11 @@
 			if (typeof data === 'function') {
 				data = data();
 			}
+			data.batchNo = file.batchNo;
+			data.fileUid = file.uid ? file.uid : uid();
 
 			request({
-				action: props.action,
+				action: props.action + "/" + props.handleType,
 				filename: props.name,
 				file: file,
 				data: data,
@@ -371,7 +375,8 @@
 			accept: PropTypes.string,
 			multiple: PropTypes.bool,
 			beforeUpload: PropTypes.func,
-			withCredentials: PropTypes.bool
+			withCredentials: PropTypes.bool,
+			handleType: PropTypes.string.isRequired
 		},
 
 		getDefaultProps: function getDefaultProps() {
@@ -402,4 +407,4 @@
 	});
 
 	RC.Upload = Upload;
-})(Smart.RC);
+}(Smart.RC);

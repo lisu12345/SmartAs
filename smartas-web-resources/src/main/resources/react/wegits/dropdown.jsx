@@ -7,6 +7,8 @@
 	    return {
 	      transitionName: 'slide-up',
 	      prefixCls: 'ant-dropdown',
+	      mouseEnterDelay: 0.15,
+          mouseLeaveDelay: 0.1,
 	    };
 	  },
 	  render() {
@@ -44,11 +46,11 @@
 	    return (
 	      <ButtonGroup {...restProps} className={cls}>
 	        <Button type={type}>{children}</Button>
-	        <Dropdown align={align} overlay={overlay} trigger={trigger}>
+	        <AntDropdown align={align} overlay={overlay} trigger={trigger}>
 	          <Button type={type}>
 	            <Icon type="down" />
 	          </Button>
-	        </Dropdown>
+	        </AntDropdown>
 	      </ButtonGroup>
 	    );
 	  }

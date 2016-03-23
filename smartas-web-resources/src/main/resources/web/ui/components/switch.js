@@ -2,9 +2,10 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
+
 
 	var Switch = React.createClass({
 		displayName: 'Switch',
@@ -83,4 +84,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	RC.Switch = Switch;
-})(Smart.RC);
+}(Smart.RC);

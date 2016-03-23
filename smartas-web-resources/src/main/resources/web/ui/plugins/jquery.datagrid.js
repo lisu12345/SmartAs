@@ -1,9 +1,10 @@
 'use strict';
 
-+(function (Namespace) {
++function (Namespace) {
 	var EasyUI = Namespace.register("Smart.EasyUI");
 	EasyUI.DataGrid = React.createClass({
 		displayName: 'DataGrid',
+
 
 		getDefaultProps: function getDefaultProps() {
 			return {
@@ -43,4 +44,4 @@
 			return null;
 		}
 	});
-})(Smart.Namespace);
+}(Smart.Namespace);

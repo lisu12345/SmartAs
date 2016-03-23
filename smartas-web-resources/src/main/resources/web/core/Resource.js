@@ -129,6 +129,9 @@
 			options.statusCode = {
 				403:function(){
 					 Smart.UI.message.error('无权操作');
+				},
+				400:function(request){
+					
 				}
 			}
 			options.complete = function(request, code) {
@@ -138,7 +141,15 @@
 			        	options.complete = complete;
 			        	lifecycle.fire('timeout',options);
 			        }else if(code === 'error'){
-			        	 Smart.UI.message.error(request.statusText);
+			        	 var vo = request.responseJSON;
+			        	 if(vo){
+			        		 if(vo.stackTrace){
+								logger.error(vo.stackTrace);
+							 }
+			        		 Smart.UI.message.error(vo.message);
+			        	 }else{
+			        		 //Smart.UI.message.error(request.statusText);
+			        	 }
 			        } 
 					complete && complete(request, code);
 				} finally {

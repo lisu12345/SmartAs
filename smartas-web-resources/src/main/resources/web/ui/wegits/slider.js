@@ -2,8 +2,9 @@
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Slider = RC.Slider;
+
 
   var AntSlider = React.createClass({
     displayName: 'AntSlider',
@@ -53,4 +54,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   });
 
   UI.Slider = AntSlider;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

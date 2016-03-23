@@ -1,11 +1,11 @@
 "use strict";
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	root["Slider"] = factory(root["React"], root["ReactDOM"]);
 })(window, function (__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_7__) {
-	return (/******/(function (modules) {
+	return (/******/function (modules) {
 			// webpackBootstrap
 			/******/ // The module cache
 			/******/var installedModules = {};
@@ -47,7 +47,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 			/******/ // Load entry module and return exports
 			/******/return __webpack_require__(0);
 			/******/
-		})(
+		}(
 		/************************************************************************/
 		/******/[
 		/* 0 */
@@ -1348,9 +1348,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 					module.exports = classNames;
 				} else if (true) {
 					// AMD. Register as an anonymous module.
-					!(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+					!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
 						return classNames;
-					}).call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+					}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 				} else {
 					window.classNames = classNames;
 				}
@@ -1825,9 +1825,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 				if (typeof module !== 'undefined' && module.exports) {
 					module.exports = factory(matchMedia);
 				} else if (true) {
-					!(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+					!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
 						return context[name] = factory(matchMedia);
-					}).call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+					}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 				} else {
 					context[name] = factory(matchMedia);
 				}

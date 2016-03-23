@@ -2,7 +2,7 @@
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-+(function (UI, RC) {
++function (UI, RC) {
 
 	var RcCheckbox = RC.Checkbox;
 
@@ -36,7 +36,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		},
 		getInitialState: function getInitialState() {
 			var props = this.props;
-			var value = undefined;
+			var value = void 0;
 			if ('value' in props) {
 				value = props.value;
 			} else if ('defaultValue' in props) {
@@ -87,4 +87,4 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 	Checkbox.Group = Group;
 	UI.Checkbox = Checkbox;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

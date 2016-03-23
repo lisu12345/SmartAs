@@ -9,6 +9,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var AsyncValidate = RC.AsyncValidate;
 	var Util = RC.Util;
 	var AsyncValidator = RC.AsyncValidator;
+	var GregorianCalendar = RC.GregorianCalendar;
 	var hoistStatics = Util.hoistStatics;
 	var scrollIntoView = Util.scrollIntoView;
 	var _React = React;
@@ -307,6 +308,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					});
 					return allValues;
 				},
+				getFormatFieldsValue: function getFormatFieldsValue(names) {
+					var _this3 = this;
+
+					var fields = names || this.getValidFieldsName();
+					var allValues = {};
+					fields.forEach(function (f) {
+						allValues[f] = _this3.getFormatValue(f);
+					});
+					return allValues;
+				},
 				getFieldValue: function getFieldValue(name) {
 					var fields = this.fields;
 
@@ -317,14 +328,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 					return fields[name] && fields[name].instance;
 				},
+				getFormatValue: function getFormatValue(name) {
+					var fieldsMeta = this.fieldsMeta;
+					var fields = this.fields;
+
+					var field = fields[name];
+					var fieldMeta = fieldsMeta[name];
+					if (field && 'value' in field) {
+						if (field.instance.getFormatter) {
+							var calendar = new GregorianCalendar();
+							calendar.setTime(field.value);
+							return field.instance.getFormatter().format(calendar);
+						}
+						return field.value;
+					}
+					return fieldMeta && fieldMeta.initialValue;
+				},
 				getValueFromFields: function getValueFromFields(name, fields) {
 					var fieldsMeta = this.fieldsMeta;
 
 					var field = fields[name];
+					var fieldMeta = fieldsMeta[name];
 					if (field && 'value' in field) {
 						return field.value;
 					}
-					var fieldMeta = fieldsMeta[name];
 					return fieldMeta && fieldMeta.initialValue;
 				},
 				getRules: function getRules(fieldMeta, action) {
@@ -336,21 +363,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					return flattenArray(actionRules);
 				},
 				setFields: function setFields(fields) {
-					var _this3 = this;
+					var _this4 = this;
 
 					var originalFields = this.fields;
 					var nowFields = _extends({}, originalFields, fields);
 					var fieldsMeta = this.fieldsMeta;
 					var nowValues = {};
 					Object.keys(fieldsMeta).forEach(function (f) {
-						nowValues[f] = _this3.getValueFromFields(f, nowFields);
+						nowValues[f] = _this4.getValueFromFields(f, nowFields);
 					});
 					var changedFieldsName = Object.keys(fields);
 					Object.keys(nowValues).forEach(function (f) {
 						var value = nowValues[f];
 						var fieldMeta = fieldsMeta[f];
 						if (fieldMeta && fieldMeta.normalize) {
-							var nowValue = fieldMeta.normalize(value, _this3.getValueFromFields(f, originalFields), nowValues);
+							var nowValue = fieldMeta.normalize(value, _this4.getValueFromFields(f, originalFields), nowValues);
 							if (nowValue !== value) {
 								nowFields[f] = _extends({}, nowFields[f], {
 									value: nowValue
@@ -368,7 +395,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 							changedFieldsName.forEach(function (f) {
 								changedFields[f] = nowFields[f];
 							});
-							onFieldsChange(_this3.props, changedFields);
+							onFieldsChange(_this4.props, changedFields);
 						})();
 					}
 					this.forceUpdate();
@@ -414,7 +441,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					this.fields[name].instance = component;
 				},
 				validateFieldsInternal: function validateFieldsInternal(fields, _ref, callback) {
-					var _this4 = this;
+					var _this5 = this;
 
 					var fieldNames = _ref.fieldNames;
 					var action = _ref.action;
@@ -436,12 +463,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 							}
 							return;
 						}
-						var fieldMeta = _this4.getFieldMeta(name);
+						var fieldMeta = _this5.getFieldMeta(name);
 						var newField = _extends({}, field);
 						newField.errors = undefined;
 						newField.validating = true;
 						newField.dirty = true;
-						allRules[name] = _this4.getRules(fieldMeta, action);
+						allRules[name] = _this5.getRules(fieldMeta, action);
 						allValues[name] = newField.value;
 						allFields[name] = newField;
 					});
@@ -477,7 +504,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 						var nowAllFields = {};
 						Object.keys(allRules).forEach(function (name) {
 							var fieldErrors = errorsGroup[name];
-							var nowField = _this4.getField(name, true);
+							var nowField = _this5.getField(name, true);
 							// avoid concurrency problems
 							if (nowField.value !== allValues[name]) {
 								expired.push({
@@ -495,7 +522,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 								fieldErrors.instance = nowField.instance;
 							}
 						});
-						_this4.setFields(nowAllFields);
+						_this5.setFields(nowAllFields);
 						if (callback) {
 							if (expired.length) {
 								expired.forEach(function (_ref2) {
@@ -513,12 +540,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 									};
 								});
 							}
-							callback(isEmptyObject(errorsGroup) ? null : errorsGroup, _this4.getFieldsValue(fieldNames));
+							callback(isEmptyObject(errorsGroup) ? null : errorsGroup, _this5.getFieldsValue(fieldNames));
 						}
 					});
 				},
 				validateFields: function validateFields(ns, opt, cb) {
-					var _this5 = this;
+					var _this6 = this;
 
 					var _getParams = getParams(ns, opt, cb);
 
@@ -528,12 +555,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 					var fieldNames = names || this.getValidFieldsName();
 					var fields = fieldNames.map(function (name) {
-						var fieldMeta = _this5.getFieldMeta(name);
+						var fieldMeta = _this6.getFieldMeta(name);
 						if (!hasRules(fieldMeta.validate)) {
 							return null;
 						}
-						var field = _this5.getField(name, true);
-						field.value = _this5.getFieldValue(name);
+						var field = _this6.getField(name, true);
+						field.value = _this6.getFieldValue(name);
 						return field;
 					}).filter(function (f) {
 						return !!f;
@@ -546,7 +573,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					}
 					if (!('firstFields' in options)) {
 						options.firstFields = fieldNames.filter(function (name) {
-							var fieldMeta = _this5.getFieldMeta(name);
+							var fieldMeta = _this6.getFieldMeta(name);
 							return !!fieldMeta.validateFirst;
 						});
 					}
@@ -566,10 +593,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					return this.state.submitting;
 				},
 				submit: function submit(callback) {
-					var _this6 = this;
+					var _this7 = this;
 
 					var fn = function fn() {
-						_this6.setState({
+						_this7.setState({
 							submitting: false
 						});
 					};

@@ -2452,7 +2452,7 @@
 	  },
 	});
 
-	DateTimeFormat.version = '@VERSION@';
+	DateTimeFormat.version = '2.0';
 
 	RC.DateTimeFormat = DateTimeFormat;
 	 

@@ -1,6 +1,6 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8,13 +8,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-+(function (RC) {
++function (RC) {
 	var KEYCODE = RC.KeyCode;
 	var LOCALE = RC.Locale.Pagination;
 	var _ref = _;
 	var noop = _ref.noop;
 
-	var Pager = (function (_React$Component) {
+	var Pager = function (_React$Component) {
 		_inherits(Pager, _React$Component);
 
 		function Pager() {
@@ -35,7 +35,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					cls = cls + ' ' + prefixCls + '-active';
 				}
 
-				var title = undefined;
+				var title = void 0;
 				if (props.page === 1) {
 					title = locale.first_page;
 				} else if (props.last) {
@@ -56,7 +56,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Pager;
-	})(React.Component);
+	}(React.Component);
 
 	Pager.propTypes = {
 		page: React.PropTypes.number,
@@ -65,7 +65,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		locale: React.PropTypes.object
 	};
 
-	var Options = (function (_React$Component2) {
+	var Options = function (_React$Component2) {
 		_inherits(Options, _React$Component2);
 
 		function Options(props) {
@@ -186,7 +186,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Options;
-	})(React.Component);
+	}(React.Component);
 
 	Options.propTypes = {
 		changeSize: React.PropTypes.func,
@@ -203,7 +203,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		pageSizeOptions: ['10', '20', '30', '40']
 	};
 
-	var Pagination = (function (_React$Component3) {
+	var Pagination = function (_React$Component3) {
 		_inherits(Pagination, _React$Component3);
 
 		function Pagination(props) {
@@ -277,7 +277,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			key: '_handleKeyUp',
 			value: function _handleKeyUp(evt) {
 				var _val = evt.target.value;
-				var val = undefined;
+				var val = void 0;
 
 				if (_val === '') {
 					val = _val;
@@ -455,11 +455,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						left = allPages - 4;
 					}
 
-					for (var i = left; i <= right; i++) {
-						var active = current === i;
+					for (var _i = left; _i <= right; _i++) {
+						var _active = current === _i;
 						pagerList.push(React.createElement(Pager, {
 							locale: props.locale,
-							rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, i), key: i, page: i, active: active }));
+							rootPrefixCls: prefixCls, onClick: this._handleChange.bind(this, _i), key: _i, page: _i, active: _active }));
 					}
 
 					if (current - 1 >= 4) {
@@ -518,7 +518,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Pagination;
-	})(React.Component);
+	}(React.Component);
 
 	Pagination.propTypes = {
 		current: React.PropTypes.number,
@@ -551,4 +551,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	RC.Pagination = Pagination;
-})(Smart.RC);
+}(Smart.RC);

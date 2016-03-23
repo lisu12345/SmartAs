@@ -4,10 +4,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
 	var TreeSelect = RC.TreeSelect;
 	var classNames = RC.classNames;
 	var TreeNode = TreeSelect.TreeNode;
+	var SHOW_ALL = TreeSelect.SHOW_ALL;
+	var SHOW_PARENT = TreeSelect.SHOW_PARENT;
+	var SHOW_CHILD = TreeSelect.SHOW_CHILD;
+
 
 	var AntTreeSelect = React.createClass({
 		displayName: 'AntTreeSelect',
@@ -31,6 +35,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var notFoundContent = _props.notFoundContent;
 			var prefixCls = _props.prefixCls;
 
+
 			var cls = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls + '-lg', size === 'large'), _defineProperty(_classNames, prefixCls + '-sm', size === 'small'), _defineProperty(_classNames, className, !!className), _classNames));
 
 			if (combobox) {
@@ -50,5 +55,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	AntTreeSelect.TreeNode = TreeNode;
+	AntTreeSelect.SHOW_ALL = SHOW_ALL;
+	AntTreeSelect.SHOW_PARENT = SHOW_PARENT;
+	AntTreeSelect.SHOW_CHILD = SHOW_CHILD;
 	UI.TreeSelect = AntTreeSelect;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

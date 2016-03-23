@@ -6,7 +6,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI) {
++function (UI) {
 
   var Col = React.createClass({
     displayName: "Col",
@@ -76,4 +76,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
   UI.Row = Row;
   UI.Col = Col;
-})(Smart.UI);
+}(Smart.UI);

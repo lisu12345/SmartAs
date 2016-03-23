@@ -1,6 +1,6 @@
 +function(UI){
 	let findDOMNode = ReactDOM.findDOMNode;
-	const rxTwoCNChar = /^[\u4e00-\u9fa5]{2,2}$/;
+	const rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 	const isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 	function isString(str) {
 	  return typeof str === 'string';
@@ -72,10 +72,10 @@
 	}
 
 	Button.propTypes = {
-	  type: React.PropTypes.string,
-	  shape: React.PropTypes.string,
-	  size: React.PropTypes.string,
-	  htmlType: React.PropTypes.string,
+	  type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+  	  shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
+      size: React.PropTypes.oneOf(['large', 'small']),
+      htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),
 	  onClick: React.PropTypes.func,
 	  loading: React.PropTypes.bool,
 	  className: React.PropTypes.string,
@@ -109,7 +109,7 @@
 	  }
 	}
 	ButtonGroup.propTypes = {
-	  size: React.PropTypes.string,
+	  size: React.PropTypes.oneOf(['large', 'small']),
 	};
 	Button.Group = ButtonGroup;
 	UI.Button = Button;

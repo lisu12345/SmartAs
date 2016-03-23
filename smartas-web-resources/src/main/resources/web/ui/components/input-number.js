@@ -2,10 +2,11 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (RC) {
++function (RC) {
 	var classNames = RC.classNames;
 	var _ref = _;
 	var noop = _ref.noop;
+
 
 	function preventDefault(e) {
 		e.preventDefault();
@@ -31,7 +32,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			};
 		},
 		getInitialState: function getInitialState() {
-			var value = undefined;
+			var value = void 0;
 			var props = this.props;
 			if ('value' in props) {
 				value = props.value;
@@ -186,7 +187,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 			// focus state, show input value
 			// unfocus state, show valid value
-			var inputDisplayValue = undefined;
+			var inputDisplayValue = void 0;
 			if (this.state.focused) {
 				inputDisplayValue = this.state.inputValue;
 			} else {
@@ -244,4 +245,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	RC.InputNumber = InputNumber;
-})(Smart.RC);
+}(Smart.RC);

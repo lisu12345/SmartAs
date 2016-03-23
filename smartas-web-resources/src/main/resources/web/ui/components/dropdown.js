@@ -1,9 +1,10 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var Trigger = RC.Trigger;
 	var _React = React;
 	var PropTypes = _React.PropTypes;
+
 
 	var autoAdjustOverflow = {
 		adjustX: 1,
@@ -161,4 +162,4 @@
 	});
 
 	RC.Dropdown = Dropdown;
-})(Smart.RC);
+}(Smart.RC);

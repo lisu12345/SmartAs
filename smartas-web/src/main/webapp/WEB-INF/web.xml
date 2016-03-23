@@ -69,7 +69,7 @@
 	
 	<filter>
 		<filter-name>SsoFilter</filter-name>
-		<filter-class>org.smartas.web.support.filter.SsoFilter</filter-class>
+		<filter-class>com.fiberhome.smartas.web.support.filter.SsoFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>SsoFilter</filter-name>

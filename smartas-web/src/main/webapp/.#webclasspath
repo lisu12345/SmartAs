@@ -10,6 +10,7 @@ smartas-web/target/classes
 smartas-demo/target/classes
 smartas-devops/target/classes
 smartas-registry/target/classes
+smartas-attachment/target/classes
 
 #以来的jar包
 smartas-lib/smart-lib/*.jar

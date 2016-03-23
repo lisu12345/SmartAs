@@ -2,10 +2,10 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 //V1.5.0 - 2016.2.15
-+(function (RC) {
++function (RC) {
   //message
 
   function newMessages() {
@@ -68,7 +68,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   ////util
   var formatRegExp = /%[sdj%]/g;
 
-  var util = (function () {
+  var util = function () {
 
     function format() {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -231,7 +231,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       asyncMap: asyncMap,
       complementError: complementError
     };
-  })();
+  }();
 
   var format = util.format;
   var isEmptyValue = util.isEmptyValue;
@@ -241,7 +241,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   //rule
 
-  var rules = (function () {
+  var rules = function () {
     var ENUM = 'enum';
 
     /**
@@ -452,11 +452,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       'enum': enumerable,
       pattern: pattern_r
     };
-  })();
+  }();
 
   /////////////////////////
 
-  var validators = (function () {
+  var validators = function () {
     /**
      *  Validates an array.
      *
@@ -797,13 +797,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       date: date,
       hex: type
     };
-  })();
+  }();
 
   //////////////////
 
   var error = rules;
   var _ref = _;
   var mergeWith = _ref.mergeWith;
+
 
   function mergeCustomizer(objValue, srcValue) {
     if ((typeof objValue === 'undefined' ? 'undefined' : _typeof(objValue)) !== 'object') {
@@ -838,8 +839,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         throw new Error('Rules must be an object');
       }
       this.rules = {};
-      var z = undefined;
-      var item = undefined;
+      var z = void 0;
+      var item = void 0;
       for (z in rules) {
         if (rules.hasOwnProperty(z)) {
           item = rules[z];
@@ -864,8 +865,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         options = {};
       }
       function complete(results) {
-        var i = undefined;
-        var field = undefined;
+        var i = void 0;
+        var field = void 0;
         var errors = [];
         var fields = {};
 
@@ -905,8 +906,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
 
       options.error = error;
-      var arr = undefined;
-      var value = undefined;
+      var arr = void 0;
+      var value = void 0;
       var series = {};
       var keys = options.keys || Object.keys(this.rules);
       keys.forEach(function (z) {
@@ -1031,4 +1032,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   Schema.messages = defaultMessages;
   RC.Schema = Schema;
   RC.AsyncValidator = Schema;
-})(Smart.RC);
+}(Smart.RC);

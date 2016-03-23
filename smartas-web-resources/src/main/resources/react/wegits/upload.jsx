@@ -4,6 +4,7 @@
     {Icon,Progress} = UI,
     {Line} = Progress;
 
+
   const prefixCls = 'ant-upload';
 
   function getFileItem(file, fileList) {
@@ -240,7 +241,7 @@
       // 否则视为失败
       try {
         if (typeof response === 'string') {
-          JSON.parse(response);
+        	JSON.parse(response);
         }
       } catch (e) {
         this.onError(new Error('No response'), response, file);

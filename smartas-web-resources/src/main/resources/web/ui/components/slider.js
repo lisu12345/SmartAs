@@ -1,6 +1,6 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -11,7 +11,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //v3.3.2 - 2016.2.14
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var objectAssign = _.assign;
@@ -34,7 +34,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		return React.createElement('div', { className: className, style: style });
 	};
 
-	var Handle = (function (_React$Component) {
+	var Handle = function (_React$Component) {
 		_inherits(Handle, _React$Component);
 
 		function Handle(props) {
@@ -74,6 +74,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var dragging = props.dragging;
 				var noTip = props.noTip;
 
+
 				var style = { left: offset + '%' };
 				var handle = React.createElement('div', { className: className, style: style,
 					onMouseUp: this.showTooltip.bind(this),
@@ -104,7 +105,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Handle;
-	})(React.Component);
+	}(React.Component);
 
 	Handle.propTypes = {
 		className: React.PropTypes.string,
@@ -215,7 +216,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		e.preventDefault();
 	}
 
-	var Slider = (function (_React$Component2) {
+	var Slider = function (_React$Component2) {
 		_inherits(Slider, _React$Component2);
 
 		function Slider(props) {
@@ -231,8 +232,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var defaultValue = 'defaultValue' in props ? props.defaultValue : initialValue;
 			var value = props.value !== undefined ? props.value : defaultValue;
 
-			var upperBound = undefined;
-			var lowerBound = undefined;
+			var upperBound = void 0;
+			var lowerBound = void 0;
 			if (props.range) {
 				lowerBound = _this2.trimAlignValue(value[0]);
 				upperBound = _this2.trimAlignValue(value[1]);
@@ -240,7 +241,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				upperBound = _this2.trimAlignValue(value);
 			}
 
-			var recent = undefined;
+			var recent = void 0;
 			if (props.range && upperBound === lowerBound) {
 				if (lowerBound === max) {
 					recent = 'lowerBound';
@@ -285,8 +286,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						this.props.onChange([nextLowerBound, nextUpperBound]);
 					}
 				} else {
-					var value = nextProps.value !== undefined ? nextProps.value : upperBound;
-					var nextValue = this.trimAlignValue(value, nextProps);
+					var _value = nextProps.value !== undefined ? nextProps.value : upperBound;
+					var nextValue = this.trimAlignValue(_value, nextProps);
 					if (nextValue === upperBound && lowerBound === nextProps.min) return;
 
 					this.setState({
@@ -395,6 +396,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var upperBound = state.upperBound;
 				var lowerBound = state.lowerBound;
 
+
 				var valueNeedChanging = 'upperBound';
 				if (this.props.range) {
 					var isLowerBoundCloser = Math.abs(upperBound - value) > Math.abs(lowerBound - value);
@@ -480,6 +482,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var min = _objectAssign.min;
 				var max = _objectAssign.max;
 				var allowCross = _objectAssign.allowCross;
+
 
 				var val = v;
 				if (val <= min) {
@@ -589,6 +592,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var tipFormatter = _props3.tipFormatter;
 				var children = _props3.children;
 
+
 				var upperOffset = this.calcOffset(upperBound);
 				var lowerOffset = this.calcOffset(lowerBound);
 
@@ -629,7 +633,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Slider;
-	})(React.Component);
+	}(React.Component);
 
 	Slider.propTypes = {
 		min: React.PropTypes.number,
@@ -675,4 +679,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	RC.Slider = Slider;
-})(Smart.RC);
+}(Smart.RC);

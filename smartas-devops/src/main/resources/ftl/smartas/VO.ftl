@@ -1,0 +1,7 @@
+/**
+ * 
+ * 
+ * @author ftl
+ *
+ */
+${beanInfo.formattedContent}

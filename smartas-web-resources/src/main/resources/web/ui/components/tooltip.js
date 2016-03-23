@@ -4,12 +4,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (RC) {
++function (RC) {
   var _ref = _;
   var noop = _ref.noop;
   var Trigger = RC.Trigger;
   var _React = React;
   var PropTypes = _React.PropTypes;
+
 
   var autoAdjustOverflow = {
     adjustX: 1,
@@ -202,4 +203,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   });
 
   RC.Tooltip = Tooltip;
-})(Smart.RC);
+}(Smart.RC);

@@ -282,7 +282,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       targetItem.percent = e.percent;
       this.onChange({
         event: e,
-        file: file,
+        file: targetItem,
         fileList: this.state.fileList
       });
     },

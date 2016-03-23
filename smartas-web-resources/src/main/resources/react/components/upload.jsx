@@ -354,7 +354,8 @@
 	      data = data();
 	    }
 	    data.batchNo = file.batchNo;
-
+	    data.fileUid = file.uid ? file.uid : uid();
+	    
 	    request({
 	      action: props.action+"/"+props.handleType,
 	      filename: props.name,

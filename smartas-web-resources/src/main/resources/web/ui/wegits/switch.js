@@ -4,8 +4,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Switch = RC.Switch;
+
 
   var AntSwitch = React.createClass({
     displayName: 'AntSwitch',
@@ -29,4 +30,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   });
 
   UI.Switch = AntSwitch;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

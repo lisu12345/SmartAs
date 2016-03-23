@@ -1,10 +1,11 @@
 'use strict';
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-+(function (RC) {
++function (RC) {
   var _ref = _;
   var assign = _ref.assign;
+
 
   var util = {};
   RC.Util = RC.util = util;
@@ -1198,7 +1199,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }
   };
 
-  var addDOMEventListener = (function () {
+  var addDOMEventListener = function () {
     /**
      * @ignore
      * base event object for custom and dom event.
@@ -1286,9 +1287,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       reg: /^(mousewheel|DOMMouseScroll)$/,
       props: [],
       fix: function fix(event, nativeEvent) {
-        var deltaX = undefined;
-        var deltaY = undefined;
-        var delta = undefined;
+        var deltaX = void 0;
+        var deltaY = void 0;
+        var delta = void 0;
         var wheelDelta = nativeEvent.wheelDelta;
         var axis = nativeEvent.axis;
         var wheelDeltaY = nativeEvent.wheelDeltaY;
@@ -1361,9 +1362,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       reg: /^mouse|contextmenu|click|mspointer|(^DOMMouseScroll$)/i,
       props: ['buttons', 'clientX', 'clientY', 'button', 'offsetX', 'relatedTarget', 'which', 'fromElement', 'toElement', 'offsetY', 'pageX', 'pageY', 'screenX', 'screenY'],
       fix: function fix(event, nativeEvent) {
-        var eventDoc = undefined;
-        var doc = undefined;
-        var body = undefined;
+        var eventDoc = void 0;
+        var doc = void 0;
+        var body = void 0;
         var target = event.target;
         var button = nativeEvent.button;
 
@@ -1430,9 +1431,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       this.isDefaultPrevented = isDefaultPrevented;
 
       var fixFns = [];
-      var fixFn = undefined;
-      var l = undefined;
-      var prop = undefined;
+      var fixFn = void 0;
+      var l = void 0;
+      var prop = void 0;
       var props = commonProps.concat();
 
       eventNormalizers.forEach(function (normalizer) {
@@ -1527,7 +1528,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         };
       }
     };
-  })();
+  }();
 
   util.Dom = {
     addEventListener: function addEventListener(target, eventType, cb) {
@@ -1597,7 +1598,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   util.hoistStatics = hoistNonReactStatics;
 
-  var hasOwn = ({}).hasOwnProperty;
+  var hasOwn = {}.hasOwnProperty;
 
   function classNames() {
     var classes = [];
@@ -1646,4 +1647,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     return result;
   }
   RC.arrayTreeFilter = util.arrayTreeFilter = arrayTreeFilter;
-})(Smart.RC);
+}(Smart.RC);

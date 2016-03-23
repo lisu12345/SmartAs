@@ -1,7 +1,10 @@
 "use strict";
 
-//v0.12.8 - 2016.3.7
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+//v0.12.12 - 2016.3.21
 +(function (Namespace) {
+	var logger = Log.getLogger("Smart.UI");
 	var UI = Namespace.register("Smart.UI");
 
 	// matchMedia polyfill for
@@ -16,6 +19,608 @@
 		};
 		window.matchMedia = window.matchMedia || matchMediaPolyfill;
 	}
+
+	var autoAdjustOverflow = {
+		adjustX: 1,
+		adjustY: 1
+	};
+
+	var targetOffset = [0, 0];
+
+	UI.getPlacements = function getPlacements() {
+		var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var _config$arrowWidth = config.arrowWidth;
+		var arrowWidth = _config$arrowWidth === undefined ? 5 : _config$arrowWidth;
+		var _config$horizontalArr = config.horizontalArrowShift;
+		var horizontalArrowShift = _config$horizontalArr === undefined ? 16 : _config$horizontalArr;
+		var _config$verticalArrow = config.verticalArrowShift;
+		var verticalArrowShift = _config$verticalArrow === undefined ? 12 : _config$verticalArrow;
+
+		return {
+			left: {
+				points: ['cr', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, 0],
+				targetOffset: targetOffset
+			},
+			right: {
+				points: ['cl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, 0],
+				targetOffset: targetOffset
+			},
+			top: {
+				points: ['bc', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [0, -4],
+				targetOffset: targetOffset
+			},
+			bottom: {
+				points: ['tc', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [0, 4],
+				targetOffset: targetOffset
+			},
+			topLeft: {
+				points: ['bl', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [-(horizontalArrowShift + arrowWidth), -4],
+				targetOffset: targetOffset
+			},
+			leftTop: {
+				points: ['tr', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, -(verticalArrowShift + arrowWidth)],
+				targetOffset: targetOffset
+			},
+			topRight: {
+				points: ['br', 'tc'],
+				overflow: autoAdjustOverflow,
+				offset: [horizontalArrowShift + arrowWidth, -4],
+				targetOffset: targetOffset
+			},
+			rightTop: {
+				points: ['tl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, -(verticalArrowShift + arrowWidth)],
+				targetOffset: targetOffset
+			},
+			bottomRight: {
+				points: ['tr', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [horizontalArrowShift + arrowWidth, 4],
+				targetOffset: targetOffset
+			},
+			rightBottom: {
+				points: ['bl', 'cr'],
+				overflow: autoAdjustOverflow,
+				offset: [4, verticalArrowShift + arrowWidth],
+				targetOffset: targetOffset
+			},
+			bottomLeft: {
+				points: ['tl', 'bc'],
+				overflow: autoAdjustOverflow,
+				offset: [-(horizontalArrowShift + arrowWidth), 4],
+				targetOffset: targetOffset
+			},
+			leftBottom: {
+				points: ['br', 'cl'],
+				overflow: autoAdjustOverflow,
+				offset: [-4, verticalArrowShift + arrowWidth],
+				targetOffset: targetOffset
+			}
+		};
+	};
+
+	var URL_REX = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+	UI.forward = function (url, qs) {
+		//location.hash = hash;
+		var inner = URL_REX.test(url);
+		if (qs) {
+			if ($.isPlainObject(qs)) {
+				qs = $.param(qs);
+			}
+			url += '?' + qs;
+		}
+		if (inner) {
+			location.href = url;
+		} else {
+			location.hash = '!' + url;
+		}
+	};
+	UI.url = function (url, qs) {
+		if (qs) {
+			if ($.isPlainObject(qs)) {
+				qs = $.param(qs);
+			}
+			url += '?' + qs;
+		}
+		return '#!' + url;
+	};
+
+	var daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	var shortDaysInWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	var shortMonthsInYear = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var longMonthsInYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	var shortMonthsToNumber = {
+		'Jan': '01',
+		'Feb': '02',
+		'Mar': '03',
+		'Apr': '04',
+		'May': '05',
+		'Jun': '06',
+		'Jul': '07',
+		'Aug': '08',
+		'Sep': '09',
+		'Oct': '10',
+		'Nov': '11',
+		'Dec': '12'
+	};
+
+	var YYYYMMDD_MATCHER = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,3}[Z\-+]?(\d{2}:?\d{2})?/;
+
+	var DateFormat = (function () {
+		function numberToLongDay(value) {
+			// 0 to Sunday
+			// 1 to Monday
+			return daysInWeek[parseInt(value, 10)] || value;
+		}
+
+		function numberToShortDay(value) {
+			// 0 to Sun
+			// 1 to Mon
+			return shortDaysInWeek[parseInt(value, 10)] || value;
+		}
+
+		function numberToShortMonth(value) {
+			// 1 to Jan
+			// 2 to Feb
+			var monthArrayIndex = parseInt(value, 10) - 1;
+			return shortMonthsInYear[monthArrayIndex] || value;
+		}
+
+		function numberToLongMonth(value) {
+			// 1 to January
+			// 2 to February
+			var monthArrayIndex = parseInt(value, 10) - 1;
+			return longMonthsInYear[monthArrayIndex] || value;
+		}
+
+		function shortMonthToNumber(value) {
+			// Jan to 01
+			// Feb to 02
+			return shortMonthsToNumber[value] || value;
+		}
+
+		function parseTime(value) {
+			// 10:54:50.546
+			// => hour: 10, minute: 54, second: 50, millis: 546
+			// 10:54:50
+			// => hour: 10, minute: 54, second: 50, millis: ''
+			var time = value,
+			    hour,
+			    minute,
+			    second,
+			    millis = '',
+			    delimited,
+			    timeArray;
+
+			if (time.indexOf('.') !== -1) {
+				delimited = time.split('.');
+				// split time and milliseconds
+				time = delimited[0];
+				millis = delimited[delimited.length - 1];
+			}
+
+			timeArray = time.split(':');
+
+			if (timeArray.length === 3) {
+				hour = timeArray[0];
+				minute = timeArray[1];
+				// '20 GMT-0200 (BRST)'.replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				// => 20
+				// '20Z'.replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				// => 20
+				second = timeArray[2].replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				// '01:10:20 GMT-0200 (BRST)'.replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				// => 01:10:20
+				// '01:10:20Z'.replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				// => 01:10:20
+				time = time.replace(/\s.+/, '').replace(/[a-z]/gi, '');
+				return {
+					time: time,
+					hour: hour,
+					minute: minute,
+					second: second,
+					millis: millis
+				};
+			}
+
+			return {
+				time: '',
+				hour: '',
+				minute: '',
+				second: '',
+				millis: ''
+			};
+		}
+
+		function padding(value, length) {
+			var paddingCount = length - String(value).length;
+			for (var i = 0; i < paddingCount; i++) {
+				value = '0' + value;
+			}
+			return value;
+		}
+
+		return {
+
+			parseDate: function parseDate(value) {
+				var values, subValues;
+
+				var parsedDate = {
+					date: null,
+					year: null,
+					month: null,
+					dayOfMonth: null,
+					dayOfWeek: null,
+					time: null
+				};
+
+				if (typeof value == 'number') {
+					return this.parseDate(new Date(value));
+				} else if (typeof value.getFullYear == 'function') {
+					parsedDate.year = String(value.getFullYear());
+					// d = new Date(1900, 1, 1) // 1 for Feb instead of Jan.
+					// => Thu Feb 01 1900 00:00:00
+					parsedDate.month = String(value.getMonth() + 1);
+					parsedDate.dayOfMonth = String(value.getDate());
+					parsedDate.time = parseTime(value.toTimeString() + '.' + value.getMilliseconds());
+				} else if (value.search(YYYYMMDD_MATCHER) != -1) {
+					/* 2009-04-19T16:11:05+02:00 || 2009-04-19T16:11:05Z */
+					values = value.split(/[T\+-]/);
+					parsedDate.year = values[0];
+					parsedDate.month = values[1];
+					parsedDate.dayOfMonth = values[2];
+					parsedDate.time = parseTime(values[3].split('.')[0]);
+				} else {
+					values = value.split(' ');
+					if (values.length === 6 && isNaN(values[5])) {
+						// values[5] == year
+						/*
+       * This change is necessary to make `Mon Apr 28 2014 05:30:00 GMT-0300` work
+       * like `case 7`
+       * otherwise it will be considered like `Wed Jan 13 10:43:41 CET 2010
+       * Fixes: https://github.com/phstc/jquery-dateFormat/issues/64
+       */
+						values[values.length] = '()';
+					}
+					switch (values.length) {
+						case 6:
+							/* Wed Jan 13 10:43:41 CET 2010 */
+							parsedDate.year = values[5];
+							parsedDate.month = shortMonthToNumber(values[1]);
+							parsedDate.dayOfMonth = values[2];
+							parsedDate.time = parseTime(values[3]);
+							break;
+						case 2:
+							/* 2009-12-18 10:54:50.546 */
+							subValues = values[0].split('-');
+							parsedDate.year = subValues[0];
+							parsedDate.month = subValues[1];
+							parsedDate.dayOfMonth = subValues[2];
+							parsedDate.time = parseTime(values[1]);
+							break;
+						case 7:
+						/* Tue Mar 01 2011 12:01:42 GMT-0800 (PST) */
+						case 9:
+						/* added by Larry, for Fri Apr 08 2011 00:00:00 GMT+0800 (China Standard Time) */
+						case 10:
+							/* added by Larry, for Fri Apr 08 2011 00:00:00 GMT+0200 (W. Europe Daylight Time) */
+							parsedDate.year = values[3];
+							parsedDate.month = shortMonthToNumber(values[1]);
+							parsedDate.dayOfMonth = values[2];
+							parsedDate.time = parseTime(values[4]);
+							break;
+						case 1:
+							/* added by Jonny, for 2012-02-07CET00:00:00 (Doctrine Entity -> Json Serializer) */
+							subValues = values[0].split('');
+							parsedDate.year = subValues[0] + subValues[1] + subValues[2] + subValues[3];
+							parsedDate.month = subValues[5] + subValues[6];
+							parsedDate.dayOfMonth = subValues[8] + subValues[9];
+							parsedDate.time = parseTime(subValues[13] + subValues[14] + subValues[15] + subValues[16] + subValues[17] + subValues[18] + subValues[19] + subValues[20]);
+							break;
+						default:
+							return null;
+					}
+				}
+
+				if (parsedDate.time) {
+					parsedDate.date = new Date(parsedDate.year, parsedDate.month - 1, parsedDate.dayOfMonth, parsedDate.time.hour, parsedDate.time.minute, parsedDate.time.second, parsedDate.time.millis);
+				} else {
+					parsedDate.date = new Date(parsedDate.year, parsedDate.month - 1, parsedDate.dayOfMonth);
+				}
+
+				parsedDate.dayOfWeek = String(parsedDate.date.getDay());
+
+				return parsedDate;
+			},
+
+			format: function format(value, _format) {
+				try {
+					var parsedDate = this.parseDate(value);
+
+					if (parsedDate === null) {
+						return value;
+					}
+
+					var year = parsedDate.year,
+					    month = parsedDate.month,
+					    dayOfMonth = parsedDate.dayOfMonth,
+					    dayOfWeek = parsedDate.dayOfWeek,
+					    time = parsedDate.time;
+					var hour;
+
+					var pattern = '',
+					    retValue = '',
+					    unparsedRest = '',
+					    inQuote = false;
+
+					/* Issue 1 - variable scope issue in format.date (Thanks jakemonO) */
+					for (var i = 0; i < _format.length; i++) {
+						var currentPattern = _format.charAt(i);
+						// Look-Ahead Right (LALR)
+						var nextRight = _format.charAt(i + 1);
+
+						if (inQuote) {
+							if (currentPattern == "'") {
+								retValue += pattern === '' ? "'" : pattern;
+								pattern = '';
+								inQuote = false;
+							} else {
+								pattern += currentPattern;
+							}
+							continue;
+						}
+						pattern += currentPattern;
+						unparsedRest = '';
+						switch (pattern) {
+							case 'ddd':
+								retValue += numberToLongDay(dayOfWeek);
+								pattern = '';
+								break;
+							case 'dd':
+								if (nextRight === 'd') {
+									break;
+								}
+								retValue += padding(dayOfMonth, 2);
+								pattern = '';
+								break;
+							case 'd':
+								if (nextRight === 'd') {
+									break;
+								}
+								retValue += parseInt(dayOfMonth, 10);
+								pattern = '';
+								break;
+							case 'D':
+								if (dayOfMonth == 1 || dayOfMonth == 21 || dayOfMonth == 31) {
+									dayOfMonth = parseInt(dayOfMonth, 10) + 'st';
+								} else if (dayOfMonth == 2 || dayOfMonth == 22) {
+									dayOfMonth = parseInt(dayOfMonth, 10) + 'nd';
+								} else if (dayOfMonth == 3 || dayOfMonth == 23) {
+									dayOfMonth = parseInt(dayOfMonth, 10) + 'rd';
+								} else {
+									dayOfMonth = parseInt(dayOfMonth, 10) + 'th';
+								}
+								retValue += dayOfMonth;
+								pattern = '';
+								break;
+							case 'MMMM':
+								retValue += numberToLongMonth(month);
+								pattern = '';
+								break;
+							case 'MMM':
+								if (nextRight === 'M') {
+									break;
+								}
+								retValue += numberToShortMonth(month);
+								pattern = '';
+								break;
+							case 'MM':
+								if (nextRight === 'M') {
+									break;
+								}
+								retValue += padding(month, 2);
+								pattern = '';
+								break;
+							case 'M':
+								if (nextRight === 'M') {
+									break;
+								}
+								retValue += parseInt(month, 10);
+								pattern = '';
+								break;
+							case 'y':
+							case 'yyy':
+								if (nextRight === 'y') {
+									break;
+								}
+								retValue += pattern;
+								pattern = '';
+								break;
+							case 'yy':
+								if (nextRight === 'y') {
+									break;
+								}
+								retValue += String(year).slice(-2);
+								pattern = '';
+								break;
+							case 'yyyy':
+								retValue += year;
+								pattern = '';
+								break;
+							case 'HH':
+								retValue += padding(time.hour, 2);
+								pattern = '';
+								break;
+							case 'H':
+								if (nextRight === 'H') {
+									break;
+								}
+								retValue += parseInt(time.hour, 10);
+								pattern = '';
+								break;
+							case 'hh':
+								/* time.hour is '00' as string == is used instead of === */
+								hour = parseInt(time.hour, 10) === 0 ? 12 : time.hour < 13 ? time.hour : time.hour - 12;
+								retValue += padding(hour, 2);
+								pattern = '';
+								break;
+							case 'h':
+								if (nextRight === 'h') {
+									break;
+								}
+								hour = parseInt(time.hour, 10) === 0 ? 12 : time.hour < 13 ? time.hour : time.hour - 12;
+								retValue += parseInt(hour, 10);
+								// Fixing issue https://github.com/phstc/jquery-dateFormat/issues/21
+								// retValue = parseInt(retValue, 10);
+								pattern = '';
+								break;
+							case 'mm':
+								retValue += padding(time.minute, 2);
+								pattern = '';
+								break;
+							case 'm':
+								if (nextRight === 'm') {
+									break;
+								}
+								retValue += time.minute;
+								pattern = '';
+								break;
+							case 'ss':
+								/* ensure only seconds are added to the return string */
+								retValue += padding(time.second.substring(0, 2), 2);
+								pattern = '';
+								break;
+							case 's':
+								if (nextRight === 's') {
+									break;
+								}
+								retValue += time.second;
+								pattern = '';
+								break;
+							case 'S':
+							case 'SS':
+								if (nextRight === 'S') {
+									break;
+								}
+								retValue += pattern;
+								pattern = '';
+								break;
+							case 'SSS':
+								retValue += padding(time.millis.substring(0, 3), 3);
+								pattern = '';
+								break;
+							case 'a':
+								retValue += time.hour >= 12 ? 'PM' : 'AM';
+								pattern = '';
+								break;
+							case 'p':
+								retValue += time.hour >= 12 ? 'p.m.' : 'a.m.';
+								pattern = '';
+								break;
+							case 'E':
+								retValue += numberToShortDay(dayOfWeek);
+								pattern = '';
+								break;
+							case "'":
+								pattern = '';
+								inQuote = true;
+								break;
+							default:
+								retValue += currentPattern;
+								pattern = '';
+								break;
+						}
+					}
+					retValue += unparsedRest;
+					return retValue;
+				} catch (e) {
+					logger.error('format error.', e);
+					return value;
+				}
+			},
+			/*
+    * JavaScript Pretty Date
+    * Copyright (c) 2011 John Resig (ejohn.org)
+    * Licensed under the MIT and GPL licenses.
+    *
+    * Takes an ISO time and returns a string representing how long ago the date
+    * represents
+    *
+    * ('2008-01-28T20:24:17Z') // => '2 hours ago'
+    * ('2008-01-27T22:24:17Z') // => 'Yesterday'
+    * ('2008-01-26T22:24:17Z') // => '2 days ago'
+    * ('2008-01-14T22:24:17Z') // => '2 weeks ago'
+    * ('2007-12-15T22:24:17Z') // => 'more than 5 weeks ago'
+    *
+    */
+			prettyDate: function prettyDate(time) {
+				var date;
+				var diff;
+				var abs_diff;
+				var day_diff;
+				var abs_day_diff;
+				var tense;
+
+				if (typeof time === 'string' || typeof time === 'number') {
+					date = new Date(time);
+				}
+
+				if ((typeof time === "undefined" ? "undefined" : _typeof(time)) === 'object') {
+					date = new Date(time.toString());
+				}
+
+				diff = (new Date().getTime() - date.getTime()) / 1000;
+
+				abs_diff = Math.abs(diff);
+				abs_day_diff = Math.floor(abs_diff / 86400);
+
+				if (isNaN(abs_day_diff)) {
+					return;
+				}
+
+				tense = diff < 0 ? 'from now' : 'ago';
+
+				if (abs_diff < 60) {
+					if (diff >= 0) return 'just now';else return 'in a moment';
+				} else if (abs_diff < 120) {
+					return '1 minute ' + tense;
+				} else if (abs_diff < 3600) {
+					return Math.floor(abs_diff / 60) + ' minutes ' + tense;
+				} else if (abs_diff < 7200) {
+					return '1 hour ' + tense;
+				} else if (abs_diff < 86400) {
+					return Math.floor(abs_diff / 3600) + ' hours ' + tense;
+				} else if (abs_day_diff === 1) {
+					if (diff >= 0) return 'Yesterday';else return 'Tomorrow';
+				} else if (abs_day_diff < 7) {
+					return abs_day_diff + ' days ' + tense;
+				} else if (abs_day_diff === 7) {
+					return '1 week ' + tense;
+				} else if (abs_day_diff < 31) {
+					return Math.ceil(abs_day_diff / 7) + ' weeks ' + tense;
+				} else {
+					return 'more than 5 weeks ' + tense;
+				}
+			},
+			toBrowserTimeZone: function toBrowserTimeZone(value, format) {
+				return this.format(new Date(value), format || 'MM/dd/yyyy HH:mm:ss');
+			}
+		};
+	})();
+	UI.DateFormat = DateFormat;
 })(Smart.Namespace);
 "use strict";
 
@@ -1149,8 +1754,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 				return React.createElement(
 					'form',
-					_extends({}, this.props, {
-						className: formClassName }),
+					_extends({}, this.props, { className: formClassName }),
 					this.props.children
 				);
 			}
@@ -1169,7 +1773,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	};
 
 	Form.defaultProps = {
-		prefixCls: 'ant-form'
+		prefixCls: 'ant-form',
+		onSubmit: function onSubmit(e) {
+			e.preventDefault();
+		}
 	};
 
 	Form.childContextTypes = {
@@ -1616,7 +2223,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			return {
 				prefixCls: 'ant-alert',
 				showIcon: false,
-				onClose: function onClose() {}
+				onClose: function onClose() {},
+
+				type: 'info'
 			};
 		},
 		getInitialState: function getInitialState() {
@@ -1827,6 +2436,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 					style: {
 						transition: removeTransition && 'none',
 						transform: 'translate3d(0, ' + -position * height + 'px, 0)',
+						WebkitTransform: 'translate3d(0, ' + -position * height + 'px, 0)',
 						height: height
 					},
 					key: i
@@ -1965,7 +2575,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 +(function (UI) {
 	var findDOMNode = ReactDOM.findDOMNode;
-	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2,2}$/;
+	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 	var isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 	function isString(str) {
 		return typeof str === 'string';
@@ -2061,10 +2671,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	Button.propTypes = {
-		type: React.PropTypes.string,
-		shape: React.PropTypes.string,
-		size: React.PropTypes.string,
-		htmlType: React.PropTypes.string,
+		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+		shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
+		size: React.PropTypes.oneOf(['large', 'small']),
+		htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),
 		onClick: React.PropTypes.func,
 		loading: React.PropTypes.bool,
 		className: React.PropTypes.string
@@ -2116,7 +2726,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	ButtonGroup.propTypes = {
-		size: React.PropTypes.string
+		size: React.PropTypes.oneOf(['large', 'small'])
 	};
 	Button.Group = ButtonGroup;
 	UI.Button = Button;
@@ -2292,7 +2902,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 		getDefaultProps: function getDefaultProps() {
 			return {
 				transitionName: 'slide-up',
-				prefixCls: 'ant-dropdown'
+				prefixCls: 'ant-dropdown',
+				mouseEnterDelay: 0.15,
+				mouseLeaveDelay: 0.1
 			};
 		},
 		render: function render() {
@@ -2348,7 +2960,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					children
 				),
 				React.createElement(
-					Dropdown,
+					AntDropdown,
 					{ align: align, overlay: overlay, trigger: trigger },
 					React.createElement(
 						Button,
@@ -2397,6 +3009,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      onOk: PropTypes.func,
+      onCancel: PropTypes.func,
+      okText: PropTypes.node,
+      cancelText: PropTypes.node,
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      confirmLoading: PropTypes.bool,
+      visible: PropTypes.bool,
+      align: PropTypes.object,
+      footer: PropTypes.node,
+      title: PropTypes.node,
+      closable: PropTypes.bool
+    },
+
     handleCancel: function handleCancel(e) {
       this.props.onCancel(e);
     },
@@ -2661,6 +3289,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
+
+  var placements = getPlacements({
+    verticalArrowShift: 8
+  });
 
   UI.Tooltip = React.createClass({
     displayName: 'Tooltip',
@@ -2705,6 +3338,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           overlay: this.props.title,
           visible: visible,
           onVisibleChange: this.onVisibleChange
@@ -2849,7 +3483,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   var noop = _ref.noop;
   var Icon = UI.Icon;
   var Button = UI.Button;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
   var transitionNames = {
     top: 'zoom-down',
@@ -2901,12 +3537,12 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
     },
     onVisibleChange: function onVisibleChange(visible) {
       this.setVisible(visible);
-      this.props.onVisibleChange(visible);
     },
     setVisible: function setVisible(visible) {
       if (!('visible' in this.props)) {
         this.setState({ visible: visible });
       }
+      this.props.onVisibleChange(visible);
     },
     render: function render() {
       var _props = this.props;
@@ -2924,12 +3560,16 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
         null,
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           React.createElement(
-            'p',
+            'div',
             { className: prefixCls + '-message' },
             React.createElement(Icon, { type: 'exclamation-circle' }),
-            title
+            React.createElement(
+              'div',
+              { className: prefixCls + '-message-title' },
+              title
+            )
           ),
           React.createElement(
             'div',
@@ -2952,7 +3592,9 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
       return React.createElement(
         Tooltip,
-        _extends({}, restProps, { placement: placement,
+        _extends({}, restProps, {
+          placement: placement,
+          builtinPlacements: placements,
           overlayStyle: overlayStyle,
           prefixCls: prefixCls,
           onVisibleChange: this.onVisibleChange,
@@ -3249,7 +3891,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       targetItem.percent = e.percent;
       this.onChange({
         event: e,
-        file: file,
+        file: targetItem,
         fileList: this.state.fileList
       });
     },
@@ -3587,7 +4229,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 +(function (UI, RC) {
   var Tooltip = RC.Tooltip;
+  var getPlacements = UI.getPlacements;
 
+  var placements = getPlacements();
   var prefixCls = 'ant-popover';
 
   var Popover = React.createClass({
@@ -3621,6 +4265,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       return React.createElement(
         Tooltip,
         _extends({ transitionName: transitionName,
+          builtinPlacements: placements,
           ref: 'tooltip'
         }, this.props, {
           overlay: this.getOverlay() }),
@@ -3641,7 +4286,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         ),
         React.createElement(
           'div',
-          { className: prefixCls + '-content' },
+          { className: prefixCls + '-inner-content' },
           this.props.overlay
         )
       );
@@ -3732,6 +4377,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 +(function (UI, RC) {
@@ -3750,6 +4397,25 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Spin = UI.Spin;
   var Dropdown = UI.Dropdown;
   var Checkbox = UI.Checkbox;
+
+  function flatArray() {
+    var data = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var childrenName = arguments.length <= 1 || arguments[1] === undefined ? 'children' : arguments[1];
+
+    var result = [];
+    var loop = function loop(array) {
+      array.forEach(function (item) {
+        var newItem = _extends({}, item);
+        delete newItem[childrenName];
+        result.push(newItem);
+        if (item[childrenName] && item[childrenName].length > 0) {
+          loop(item[childrenName]);
+        }
+      });
+    };
+    loop(data);
+    return result;
+  }
 
   var rownumberColumn = {
     title: '',
@@ -3878,6 +4544,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         React.createElement(
           Menu,
           { multiple: multiple,
+            onClick: this.handleMenuItemClick,
             prefixCls: 'ant-dropdown-menu',
             onSelect: this.setSelectedKeys,
             onDeselect: this.setSelectedKeys,
@@ -3980,7 +4647,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       if (!this.props.rowSelection || !this.props.rowSelection.getCheckboxProps) {
         return [];
       }
-      return this.getCurrentPageData().filter(function (item) {
+      return this.getFlatCurrentPageData().filter(function (item) {
         return _this2.props.rowSelection.getCheckboxProps(item).defaultChecked;
       }).map(function (record, rowIndex) {
         return _this2.getRecordKey(record, rowIndex);
@@ -3989,7 +4656,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
       if ('pagination' in nextProps && nextProps.pagination !== false) {
         this.setState({
-          pagination: objectAssign({}, this.state.pagination, nextProps.pagination)
+          pagination: objectAssign({}, defaultPagination, this.state.pagination, nextProps.pagination)
         });
       }
       // dataSource 的变化会清空选中项
@@ -4005,13 +4672,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
     },
     setSelectedRowKeys: function setSelectedRowKeys(selectedRowKeys) {
+      var _this3 = this;
+
       if (this.props.rowSelection && !('selectedRowKeys' in this.props.rowSelection)) {
         this.setState({ selectedRowKeys: selectedRowKeys });
       }
       if (this.props.rowSelection && this.props.rowSelection.onChange) {
-        var data = this.getCurrentPageData();
-        var selectedRows = data.filter(function (row) {
-          return selectedRowKeys.indexOf(row.key) >= 0;
+        var data = this.getFlatCurrentPageData();
+        var selectedRows = data.filter(function (row, i) {
+          return selectedRowKeys.indexOf(_this3.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onChange(selectedRowKeys, selectedRows);
       }
@@ -4020,6 +4689,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return this.props.pagination !== false;
     },
     toggleSortOrder: function toggleSortOrder(order, column) {
+      var _props2;
+
       var sortColumn = this.state.sortColumn;
       var sortOrder = this.state.sortOrder;
       var sorter = undefined;
@@ -4055,15 +4726,16 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         sorter: sorter
       };
       this.setState(newState);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props2 = this.props).onChange.apply(_props2, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     handleFilter: function handleFilter(column, nextFilters) {
-      var _this3 = this;
+      var _this4 = this,
+          _props3;
 
       var filters = objectAssign({}, this.state.filters, _defineProperty({}, this.getColumnKey(column), nextFilters));
       // Remove filters not in current columns
       var currentColumnKeys = this.props.columns.map(function (c) {
-        return _this3.getColumnKey(c);
+        return _this4.getColumnKey(c);
       });
       Object.keys(filters).forEach(function (columnKey) {
         if (currentColumnKeys.indexOf(columnKey) < 0) {
@@ -4076,10 +4748,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       };
       this.setState(newState);
       this.setSelectedRowKeys([]);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props3 = this.props).onChange.apply(_props3, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     handleSelect: function handleSelect(record, rowIndex, e) {
-      var _this4 = this;
+      var _this5 = this;
 
       var checked = e.target.checked;
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
@@ -4097,15 +4769,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelect) {
-        var data = this.getCurrentPageData();
+        var data = this.getFlatCurrentPageData();
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this4.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this5.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelect(record, checked, selectedRows);
       }
     },
     handleRadioSelect: function handleRadioSelect(record, rowIndex, e) {
-      var _this5 = this;
+      var _this6 = this;
 
       var checked = e.target.checked;
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
@@ -4118,24 +4790,24 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelect) {
-        var data = this.getCurrentPageData();
+        var data = this.getFlatCurrentPageData();
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this5.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelect(record, checked, selectedRows);
       }
     },
     handleSelectAllRow: function handleSelectAllRow(e) {
-      var _this6 = this;
+      var _this7 = this;
 
       var checked = e.target.checked;
-      var data = this.getCurrentPageData();
+      var data = this.getFlatCurrentPageData();
       var defaultSelection = this.state.selectionDirty ? [] : this.getDefaultSelection();
       var selectedRowKeys = this.state.selectedRowKeys.concat(defaultSelection);
       var changableRowKeys = data.filter(function (item) {
-        return !_this6.props.rowSelection.getCheckboxProps || !_this6.props.rowSelection.getCheckboxProps(item).disabled;
+        return !_this7.props.rowSelection.getCheckboxProps || !_this7.props.rowSelection.getCheckboxProps(item).disabled;
       }).map(function (item, i) {
-        return _this6.getRecordKey(item, i);
+        return _this7.getRecordKey(item, i);
       });
 
       // 记录变化的列
@@ -4161,15 +4833,17 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       this.setSelectedRowKeys(selectedRowKeys);
       if (this.props.rowSelection.onSelectAll) {
         var selectedRows = data.filter(function (row, i) {
-          return selectedRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+          return selectedRowKeys.indexOf(_this7.getRecordKey(row, i)) >= 0;
         });
         var changeRows = data.filter(function (row, i) {
-          return changeRowKeys.indexOf(_this6.getRecordKey(row, i)) >= 0;
+          return changeRowKeys.indexOf(_this7.getRecordKey(row, i)) >= 0;
         });
         this.props.rowSelection.onSelectAll(checked, selectedRows, changeRows);
       }
     },
     handlePageChange: function handlePageChange(current) {
+      var _props4;
+
       var pagination = objectAssign({}, this.state.pagination);
       if (current) {
         pagination.current = current;
@@ -4183,7 +4857,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
         pagination: pagination
       };
       this.setState(newState);
-      this.props.onChange.apply(this, this.prepareParamsArguments(objectAssign({}, this.state, newState)));
+      (_props4 = this.props).onChange.apply(_props4, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, newState))));
     },
     onRadioChange: function onRadioChange(ev) {
       this.setState({
@@ -4228,13 +4902,13 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return record.key || index;
     },
     renderRowSelection: function renderRowSelection() {
-      var _this7 = this;
+      var _this8 = this;
 
       var columns = this.props.columns.concat();
       if (this.props.rowSelection) {
-        var data = this.getCurrentPageData().filter(function (item) {
-          if (_this7.props.rowSelection.getCheckboxProps) {
-            return !_this7.props.rowSelection.getCheckboxProps(item).disabled;
+        var data = this.getFlatCurrentPageData().filter(function (item) {
+          if (_this8.props.rowSelection.getCheckboxProps) {
+            return !_this8.props.rowSelection.getCheckboxProps(item).disabled;
           }
           return true;
         });
@@ -4243,11 +4917,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           checked = false;
         } else {
           checked = this.state.selectionDirty ? data.every(function (item, i) {
-            return _this7.state.selectedRowKeys.indexOf(_this7.getRecordKey(item, i)) >= 0;
+            return _this8.state.selectedRowKeys.indexOf(_this8.getRecordKey(item, i)) >= 0;
           }) : data.every(function (item, i) {
-            return _this7.state.selectedRowKeys.indexOf(_this7.getRecordKey(item, i)) >= 0;
+            return _this8.state.selectedRowKeys.indexOf(_this8.getRecordKey(item, i)) >= 0;
           }) || data.every(function (item) {
-            return _this7.props.rowSelection.getCheckboxProps && _this7.props.rowSelection.getCheckboxProps(item).defaultChecked;
+            return _this8.props.rowSelection.getCheckboxProps && _this8.props.rowSelection.getCheckboxProps(item).defaultChecked;
           });
         }
         var selectionColumn = undefined;
@@ -4259,7 +4933,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           };
         } else {
           var checkboxAllDisabled = data.every(function (item) {
-            return _this7.props.rowSelection.getCheckboxProps && _this7.props.rowSelection.getCheckboxProps(item).disabled;
+            return _this8.props.rowSelection.getCheckboxProps && _this8.props.rowSelection.getCheckboxProps(item).disabled;
           });
           var checkboxAll = React.createElement(Checkbox, { checked: checked,
             disabled: checkboxAllDisabled,
@@ -4291,30 +4965,30 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return isSortColumn;
     },
     renderColumnsDropdown: function renderColumnsDropdown(columns) {
-      var _this8 = this;
+      var _this9 = this;
 
       var locale = objectAssign({}, defaultLocale, this.props.locale);
       return columns.map(function (originColumn, i) {
         var column = objectAssign({}, originColumn);
-        var key = _this8.getColumnKey(column, i);
+        var key = _this9.getColumnKey(column, i);
         var filterDropdown = undefined;
         var sortButton = undefined;
         if (column.filters && column.filters.length > 0) {
-          var colFilters = _this8.state.filters[key] || [];
+          var colFilters = _this9.state.filters[key] || [];
           filterDropdown = React.createElement(FilterDropdown, { locale: locale, column: column,
             selectedKeys: colFilters,
-            confirmFilter: _this8.handleFilter });
+            confirmFilter: _this9.handleFilter });
         }
         if (column.sorter) {
-          var isSortColumn = _this8.isSortColumn(column);
+          var isSortColumn = _this9.isSortColumn(column);
           if (isSortColumn) {
             column.className = column.className || '';
-            if (_this8.state.sortOrder) {
+            if (_this9.state.sortOrder) {
               column.className += ' ant-table-column-sort';
             }
           }
-          var isAscend = isSortColumn && _this8.state.sortOrder === 'ascend';
-          var isDescend = isSortColumn && _this8.state.sortOrder === 'descend';
+          var isAscend = isSortColumn && _this9.state.sortOrder === 'ascend';
+          var isDescend = isSortColumn && _this9.state.sortOrder === 'descend';
           sortButton = React.createElement(
             'div',
             { className: 'ant-table-column-sorter' },
@@ -4322,14 +4996,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
               'span',
               { className: 'ant-table-column-sorter-up ' + (isAscend ? 'on' : 'off'),
                 title: '↑',
-                onClick: _this8.toggleSortOrder.bind(_this8, 'ascend', column) },
+                onClick: _this9.toggleSortOrder.bind(_this9, 'ascend', column) },
               React.createElement(Icon, { type: 'caret-up' })
             ),
             React.createElement(
               'span',
               { className: 'ant-table-column-sorter-down ' + (isDescend ? 'on' : 'off'),
                 title: '↓',
-                onClick: _this8.toggleSortOrder.bind(_this8, 'descend', column) },
+                onClick: _this9.toggleSortOrder.bind(_this9, 'descend', column) },
               React.createElement(Icon, { type: 'caret-down' })
             )
           );
@@ -4345,13 +5019,15 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       });
     },
     handleShowSizeChange: function handleShowSizeChange(current, pageSize) {
+      var _props5;
+
       var pagination = this.state.pagination;
       pagination.onShowSizeChange(current, pageSize);
-
-      var nextPagination = objectAssign(pagination, {
-        pageSize: pageSize
-      });
+      var nextPagination = _extends({}, pagination, { pageSize: pageSize, current: current });
       this.setState({ pagination: nextPagination });
+      (_props5 = this.props).onChange.apply(_props5, _toConsumableArray(this.prepareParamsArguments(_extends({}, this.state, {
+        pagination: nextPagination
+      }))));
     },
     renderPagination: function renderPagination() {
       // 强制不需要分页
@@ -4383,14 +5059,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       return [pagination, filters, sorter];
     },
     findColumn: function findColumn(myKey) {
-      var _this9 = this;
+      var _this10 = this;
 
       return this.props.columns.filter(function (c) {
-        return _this9.getColumnKey(c) === myKey;
+        return _this10.getColumnKey(c) === myKey;
       })[0];
     },
-    getCurrentPageData: function getCurrentPageData(dataSource) {
-      var data = this.getLocalData(dataSource);
+    getCurrentPageData: function getCurrentPageData() {
+      var data = this.getLocalData();
       var current = undefined;
       var pageSize = undefined;
       var state = this.state;
@@ -4413,11 +5089,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
       return data;
     },
-    getLocalData: function getLocalData(dataSource) {
-      var _this10 = this;
+    getFlatCurrentPageData: function getFlatCurrentPageData() {
+      return flatArray(this.getCurrentPageData());
+    },
+    getLocalData: function getLocalData() {
+      var _this11 = this;
 
       var state = this.state;
-      var data = dataSource || this.props.dataSource;
+      var data = this.props.dataSource || [];
       // 排序
       if (state.sortOrder && state.sorter) {
         data = data.slice(0);
@@ -4429,7 +5108,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       // 筛选
       if (state.filters) {
         Object.keys(state.filters).forEach(function (columnKey) {
-          var col = _this10.findColumn(columnKey);
+          var col = _this11.findColumn(columnKey);
           if (!col) {
             return;
           }
@@ -5581,10 +6260,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return React.createElement(
           'span',
-          { className: pickerClass },
+          { className: pickerClass, style: this.props.style },
           React.createElement(
             DatePicker,
-            { transitionName: this.props.transitionName,
+            {
+              transitionName: this.props.transitionName,
               disabled: this.props.disabled,
               calendar: calendar,
               value: this.state.value,
@@ -5605,7 +6285,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   onChange: _this2.handleInputChange,
                   value: value && _this2.getFormatter().format(value),
                   placeholder: placeholder,
-                  style: _this2.props.style,
                   className: 'ant-calendar-picker-input ant-input' + sizeClass }),
                 React.createElement('span', { className: 'ant-calendar-picker-icon' })
               );
@@ -5740,6 +6419,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var TreeSelect = RC.TreeSelect;
 	var classNames = RC.classNames;
 	var TreeNode = TreeSelect.TreeNode;
+	var SHOW_ALL = TreeSelect.SHOW_ALL;
+	var SHOW_PARENT = TreeSelect.SHOW_PARENT;
+	var SHOW_CHILD = TreeSelect.SHOW_CHILD;
 
 	var AntTreeSelect = React.createClass({
 		displayName: 'AntTreeSelect',
@@ -5782,6 +6464,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	AntTreeSelect.TreeNode = TreeNode;
+	AntTreeSelect.SHOW_ALL = SHOW_ALL;
+	AntTreeSelect.SHOW_PARENT = SHOW_PARENT;
+	AntTreeSelect.SHOW_CHILD = SHOW_CHILD;
 	UI.TreeSelect = AntTreeSelect;
 })(Smart.UI, Smart.RC);
 'use strict';
@@ -5910,7 +6595,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getDefaultProps: function getDefaultProps() {
       return {
-        placeholder: '请输入搜索内容',
+        placeholder: '',
         onChange: noop,
         handleClear: noop
       };
@@ -6057,10 +6742,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titleText = _props3.titleText;
       var filter = _props3.filter;
       var checkedKeys = _props3.checkedKeys;
+      var notFoundContent = _props3.notFoundContent;
       var checkStatus = _props3.checkStatus;
       var body = _props3.body;
       var footer = _props3.footer;
       var showSearch = _props3.showSearch;
+      var searchPlaceholder = _props3.searchPlaceholder;
 
       // Custom Layout
 
@@ -6119,7 +6806,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           showSearch ? React.createElement(
             'div',
             { className: prefixCls + '-body-search-wrapper' },
-            React.createElement(Search, { prefixCls: prefixCls + '-search', onChange: this.handleFilter, handleClear: this.handleClear, value: filter })
+            React.createElement(Search, { prefixCls: prefixCls + '-search',
+              onChange: this.handleFilter.bind(this),
+              handleClear: this.handleClear.bind(this),
+              placeholder: searchPlaceholder,
+              value: filter })
           ) : null,
           React.createElement(
             Animate,
@@ -6129,7 +6820,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             showItems.length > 0 ? showItems : React.createElement(
               'div',
               { className: prefixCls + '-body-not-found' },
-              'Not Found'
+              notFoundContent
             )
           )
         ),
@@ -6168,6 +6859,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       operations: PropTypes.array,
       showSearch: PropTypes.bool,
       searchPlaceholder: PropTypes.string,
+      notFoundContent: PropTypes.node,
       body: PropTypes.func,
       footer: PropTypes.func
     },
@@ -6182,6 +6874,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         operations: [],
         showSearch: false,
         searchPlaceholder: '请输入搜索内容',
+        notFoundContent: 'Not Found',
         body: noop,
         footer: noop
       };
@@ -6343,6 +7036,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var titles = _props5.titles;
       var operations = _props5.operations;
       var showSearch = _props5.showSearch;
+      var notFoundContent = _props5.notFoundContent;
       var searchPlaceholder = _props5.searchPlaceholder;
       var body = _props5.body;
       var footer = _props5.footer;
@@ -6384,6 +7078,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' }),
@@ -6408,6 +7103,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           render: this.props.render,
           showSearch: showSearch,
           searchPlaceholder: searchPlaceholder,
+          notFoundContent: notFoundContent,
           body: body,
           footer: footer,
           prefixCls: prefixCls + '-list' })

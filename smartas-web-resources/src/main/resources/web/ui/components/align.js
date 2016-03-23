@@ -1,7 +1,7 @@
 'use strict';
 
 // export this package's api
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var Util = RC.Util;
@@ -11,8 +11,9 @@
 	var _React = React;
 	var PropTypes = _React.PropTypes;
 
+
 	function buffer(fn, ms) {
-		var timer = undefined;
+		var timer = void 0;
 		return function bufferFn() {
 			if (timer) {
 				clearTimeout(timer);
@@ -61,7 +62,7 @@
 		componentDidUpdate: function componentDidUpdate(prevProps) {
 			var reAlign = false;
 			var props = this.props;
-			var currentTarget = undefined;
+			var currentTarget = void 0;
 
 			if (!props.disabled) {
 				if (prevProps.disabled || prevProps.align !== props.align) {
@@ -129,4 +130,4 @@
 		}
 	});
 	RC.Align = Align;
-})(Smart.RC);
+}(Smart.RC);

@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var objectAssign = _.assign;
 
 	var TableRow = React.createClass({
@@ -37,11 +37,11 @@
 				var text = record[col.dataIndex];
 
 				var expandIcon = null;
-				var tdProps = undefined;
-				var colSpan = undefined;
-				var rowSpan = undefined;
+				var tdProps = void 0;
+				var colSpan = void 0;
+				var rowSpan = void 0;
 				var notRender = false;
-				var indentText = undefined;
+				var indentText = void 0;
 
 				if (i === 0 && expandable) {
 					expandIcon = React.createElement('span', {
@@ -254,7 +254,7 @@
 				var key = keyFn ? keyFn(record, i) : undefined;
 				var childrenColumn = record[childrenColumnName];
 				var isRowExpanded = this.isRowExpanded(record);
-				var expandedRowContent = undefined;
+				var expandedRowContent = void 0;
 				if (expandedRowRender && isRowExpanded) {
 					expandedRowContent = expandedRowRender(record, i);
 				}
@@ -420,7 +420,7 @@
 			if (props.columnsPageRange) {
 				className += ' ' + prefixCls + '-columns-paging';
 			}
-			var headerTable = undefined;
+			var headerTable = void 0;
 			var thead = React.createElement(
 				'thead',
 				{ className: prefixCls + '-thead' },
@@ -467,4 +467,4 @@
 	});
 
 	RC.Table = Table;
-})(Smart.RC);
+}(Smart.RC);

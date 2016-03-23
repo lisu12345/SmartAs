@@ -2,7 +2,7 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -14,9 +14,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-+(function (UI) {
++function (UI) {
 	var findDOMNode = ReactDOM.findDOMNode;
-	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2,2}$/;
+	var rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 	var isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 	function isString(str) {
 		return typeof str === 'string';
@@ -41,7 +41,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		button.className = button.className.replace(prefix + 'clicked', '');
 	}
 
-	var Button = (function (_React$Component) {
+	var Button = function (_React$Component) {
 		_inherits(Button, _React$Component);
 
 		function Button() {
@@ -86,10 +86,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				// large => lg
 				// small => sm
 
-				var sizeCls = ({
+
+				var sizeCls = {
 					'large': 'lg',
 					'small': 'sm'
-				})[size] || '';
+				}[size] || '';
 
 				var classes = classNames((_classNames = {
 					'ant-btn': true
@@ -109,13 +110,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Button;
-	})(React.Component);
+	}(React.Component);
 
 	Button.propTypes = {
-		type: React.PropTypes.string,
-		shape: React.PropTypes.string,
-		size: React.PropTypes.string,
-		htmlType: React.PropTypes.string,
+		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+		shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
+		size: React.PropTypes.oneOf(['large', 'small']),
+		htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),
 		onClick: React.PropTypes.func,
 		loading: React.PropTypes.bool,
 		className: React.PropTypes.string
@@ -127,7 +128,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 	var prefixGroup = 'ant-btn-group-';
 
-	var ButtonGroup = (function (_React$Component2) {
+	var ButtonGroup = function (_React$Component2) {
 		_inherits(ButtonGroup, _React$Component2);
 
 		function ButtonGroup() {
@@ -150,10 +151,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				// large => lg
 				// small => sm
 
-				var sizeCls = ({
+
+				var sizeCls = {
 					'large': 'lg',
 					'small': 'sm'
-				})[size] || '';
+				}[size] || '';
 
 				var classes = classNames((_classNames2 = {
 					'ant-btn-group': true
@@ -164,12 +166,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return ButtonGroup;
-	})(React.Component);
+	}(React.Component);
 
 	ButtonGroup.propTypes = {
-		size: React.PropTypes.string
+		size: React.PropTypes.oneOf(['large', 'small'])
 	};
 	Button.Group = ButtonGroup;
 	UI.Button = Button;
 	UI.ButtonGroup = ButtonGroup;
-})(Smart.UI);
+}(Smart.UI);

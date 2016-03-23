@@ -2,7 +2,7 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+(function (UI, RC) {
++function (UI, RC) {
   var noop = _.noop,
       PropTypes = React.PropTypes,
       rcUtil = RC.Util,
@@ -11,8 +11,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       Icon = UI.Icon,
       Button = UI.Button;
 
-  var mousePosition = undefined;
-  var mousePositionEventBinded = undefined;
+  var mousePosition = void 0;
+  var mousePositionEventBinded = void 0;
 
   var AntModal = React.createClass({
     displayName: 'AntModal',
@@ -30,6 +30,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         visible: false
       };
     },
+
+
+    propTypes: {
+      prefixCls: PropTypes.string,
+      onOk: PropTypes.func,
+      onCancel: PropTypes.func,
+      okText: PropTypes.node,
+      cancelText: PropTypes.node,
+      width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      confirmLoading: PropTypes.bool,
+      visible: PropTypes.bool,
+      align: PropTypes.object,
+      footer: PropTypes.node,
+      title: PropTypes.node,
+      closable: PropTypes.bool
+    },
+
     handleCancel: function handleCancel(e) {
       this.props.onCancel(e);
     },
@@ -82,7 +99,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     var div = document.createElement('div');
     document.body.appendChild(div);
 
-    var d = undefined;
+    var d = void 0;
     props = props || {};
     props.iconClassName = props.iconClassName || 'question-circle';
 
@@ -109,7 +126,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     function onCancel() {
       var cancelFn = props.onCancel;
       if (cancelFn) {
-        var ret = undefined;
+        var ret = void 0;
         if (cancelFn.length) {
           ret = cancelFn(close);
         } else {
@@ -129,7 +146,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     function onOk() {
       var okFn = props.onOk;
       if (okFn) {
-        var ret = undefined;
+        var ret = void 0;
         if (okFn.length) {
           ret = okFn(close);
         } else {
@@ -240,7 +257,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     var div = document.createElement('div');
     document.body.appendChild(div);
 
-    var d = undefined;
+    var d = void 0;
     props = props || {};
     props.iconClassName = props.iconClassName || 'question-circle';
 
@@ -287,4 +304,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   };
 
   UI.Modal = AntModal;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);
