@@ -1,6 +1,6 @@
 'use strict';
 
-+function (RC) {
++(function (RC) {
   var EVENT_NAME_MAP = {
     transitionend: {
       transition: 'transitionend',
@@ -68,7 +68,6 @@
         addEventListener(node, endEvent, eventListener);
       });
     },
-
 
     endEvents: endEvents,
 
@@ -256,4 +255,4 @@
 
   RC.cssAnimation = cssAnimation;
   RC.cssAnimate = cssAnimation;
-}(Smart.RC);
+})(Smart.RC);

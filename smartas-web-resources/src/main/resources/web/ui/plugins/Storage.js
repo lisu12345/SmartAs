@@ -1,6 +1,6 @@
 "use strict";
 
-+function (Namespace, Service) {
++(function (Namespace, Service) {
 	var UI = Namespace.register("Smart.UI"),
 	    AT = Smart.UI.ActionTypes;
 	UI.Storage = React.createClass({
@@ -48,4 +48,4 @@
 			});
 		}
 	});
-}(Smart.Namespace, Smart.Service);
+})(Smart.Namespace, Smart.Service);

@@ -1,13 +1,12 @@
 'use strict';
 
-+function (UI, RC) {
++(function (UI, RC) {
   var Icon = UI.Icon;
   var Notification = RC.Notification;
 
-
   var defaultDuration = 1.5;
-  var top = void 0;
-  var messageInstance = void 0;
+  var top = undefined;
+  var messageInstance = undefined;
   var key = 1;
 
   function getMessageInstance() {
@@ -26,21 +25,21 @@
     var type = arguments[2];
     var onClose = arguments[3];
 
-    var iconClass = {
+    var iconClass = ({
       info: 'ant-message-info',
       success: 'ant-message-success',
       error: 'ant-message-error',
       warn: 'ant-message-warn',
       loading: 'ant-message-loading'
-    }[type];
+    })[type];
 
-    var iconType = {
+    var iconType = ({
       info: 'info-circle',
       success: 'check-circle',
       error: 'exclamation-circle',
       warn: 'exclamation-circle',
       loading: 'loading'
-    }[type];
+    })[type];
 
     var instance = getMessageInstance();
     instance.notice({
@@ -59,12 +58,12 @@
       ),
       onClose: onClose
     });
-    return function () {
+    return (function () {
       var target = key++;
       return function () {
         instance.removeNotice(target);
       };
-    }();
+    })();
   }
 
   var message = {
@@ -97,4 +96,4 @@
   };
 
   UI.message = message;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

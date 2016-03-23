@@ -1,6 +1,6 @@
 'use strict';
 
-+function (Namespace) {
++(function (Namespace) {
   var RC = Namespace.register("Smart.RC");
   var locale = {
     Pagination: {
@@ -86,4 +86,4 @@
   locale.Calendar.format = DateTimeFormat;
 
   RC.Locale = locale;
-}(Smart.Namespace);
+})(Smart.Namespace);

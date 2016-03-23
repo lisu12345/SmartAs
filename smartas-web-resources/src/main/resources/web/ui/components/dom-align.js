@@ -1,17 +1,17 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 /**
  * align dom node flexibly
  * @author yiminghe@gmail.com
  */
 
-+function (RC) {
++(function (RC) {
 
   var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
 
-  var getComputedStyleX = void 0;
+  var getComputedStyleX = undefined;
 
   function css(el, name, v) {
     var value = v;
@@ -34,9 +34,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function getClientPosition(elem) {
-    var box = void 0;
-    var x = void 0;
-    var y = void 0;
+    var box = undefined;
+    var x = undefined;
+    var y = undefined;
     var doc = elem.ownerDocument;
     var body = doc.body;
     var docElem = doc && doc.documentElement;
@@ -218,7 +218,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     var old = getOffset(elem);
     var ret = {};
-    var key = void 0;
+    var key = undefined;
     for (key in offset) {
       if (offset.hasOwnProperty(key)) {
         var dir = getOffsetDirection(key, option);
@@ -252,7 +252,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function swap(elem, options, callback) {
     var old = {};
     var style = elem.style;
-    var name = void 0;
+    var name = undefined;
 
     // Remember the old values, and insert the new ones
     for (name in options) {
@@ -274,14 +274,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   function getPBMWidth(elem, props, which) {
     var value = 0;
-    var prop = void 0;
-    var j = void 0;
-    var i = void 0;
+    var prop = undefined;
+    var j = undefined;
+    var i = undefined;
     for (j = 0; j < props.length; j++) {
       prop = props[j];
       if (prop) {
         for (i = 0; i < which.length; i++) {
-          var cssProp = void 0;
+          var cssProp = undefined;
           if (prop === 'border') {
             cssProp = prop + which[i] + 'Width';
           } else {
@@ -387,7 +387,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       args[_key] = arguments[_key];
     }
 
-    var val = void 0;
+    var val = undefined;
     var elem = args[0];
     // in case elem is window
     // elem.offsetWidth === undefined
@@ -454,7 +454,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     each: each,
     css: css,
     clone: function clone(obj) {
-      var i = void 0;
+      var i = undefined;
       var ret = {};
       for (i in obj) {
         if (obj.hasOwnProperty(i)) {
@@ -520,7 +520,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // 统一的 offsetParent 方法
     var doc = element.ownerDocument;
     var body = doc.body;
-    var parent = void 0;
+    var parent = undefined;
     var positionStyle = utils.css(element, 'position');
     var skipStatic = positionStyle === 'fixed' || positionStyle === 'absolute';
 
@@ -589,9 +589,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       bottom: Infinity
     };
     var el = getOffsetParent(element);
-    var scrollX = void 0;
-    var scrollY = void 0;
-    var winSize = void 0;
+    var scrollX = undefined;
+    var scrollY = undefined;
+    var winSize = undefined;
     var doc = element.ownerDocument;
     var win = doc.defaultView || doc.parentWindow;
     var body = doc.body;
@@ -637,9 +637,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function getRegion(node) {
-    var offset = void 0;
-    var w = void 0;
-    var h = void 0;
+    var offset = undefined;
+    var w = undefined;
+    var h = undefined;
     if (!utils.isWindow(node) && node.nodeType !== 9) {
       offset = utils.offset(node);
       w = utils.outerWidth(node);
@@ -667,8 +667,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     var H = align.charAt(1);
     var w = region.width;
     var h = region.height;
-    var x = void 0;
-    var y = void 0;
+    var x = undefined;
+    var y = undefined;
 
     x = region.left;
     y = region.top;
@@ -692,10 +692,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function getElFuturePos(elRegion, refNodeRegion, points, offset, targetOffset) {
-    var xy = void 0;
-    var diff = void 0;
-    var p1 = void 0;
-    var p2 = void 0;
+    var xy = undefined;
+    var diff = undefined;
+    var p1 = undefined;
+    var p2 = undefined;
 
     xy = {
       left: elRegion.left,
@@ -739,7 +739,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }
 
   function convertOffset(str, offsetLen) {
-    var n = void 0;
+    var n = undefined;
     if (/%$/.test(str)) {
       n = parseInt(str.substring(0, str.length - 1), 10) / 100 * offsetLen;
     } else {
@@ -873,4 +873,4 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
    *  2011-07-13 yiminghe@gmail.com note:
    *   - 增加智能对齐，以及大小调整选项
    **/
-}(Smart.RC);
+})(Smart.RC);

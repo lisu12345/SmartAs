@@ -4,11 +4,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+function (UI, RC) {
++(function (UI, RC) {
 	var Table = UI.Table;
 	var Button = UI.Button;
 	var Icon = UI.Icon;
-
 
 	var Header = React.createClass({
 		displayName: "Header",
@@ -58,7 +57,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 								"tr",
 								null,
 								_.map(toolbar, function (value, key) {
-									var bar = void 0;
+									var bar = undefined;
 									if (value === '-') {
 										bar = React.createElement("span", { className: "btn-separator" });
 									} else {
@@ -131,12 +130,18 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			};
 			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
 		},
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			var service = nextProps.service;
+			var qs = nextProps.qs;
+
+			service.listPage(1, 10, qs);
+		},
 		componentDidMount: function componentDidMount() {
 			var _props2 = this.props;
 			var service = _props2.service;
 			var qs = _props2.qs;
 
-			service.subscribe(function (action) {
+			this.unsubscribe = service.subscribe((function (action) {
 				var type = action.type;
 				var data = action.data;
 				var method = action.method;
@@ -160,8 +165,14 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					});
 					return;
 				}
-			}.bind(this));
+			}).bind(this));
 			service.listPage(1, 10, qs);
+		},
+		componentWillUnmount: function componentWillUnmount() {
+			if (this.unsubscribe) {
+				this.unsubscribe();
+				this.unsubscribe = null;
+			}
 		},
 		queryReset: function queryReset(e) {
 			this.refs.qform.resetFields();
@@ -233,4 +244,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	});
 
 	UI.Grid = Grid;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

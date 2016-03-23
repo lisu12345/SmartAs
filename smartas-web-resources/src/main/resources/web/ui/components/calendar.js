@@ -1,8 +1,8 @@
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -14,7 +14,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-+function (RC) {
++(function (RC) {
 		var _ref = _;
 		var noop = _ref.noop;
 		var GregorianCalendar = RC.GregorianCalendar;
@@ -123,7 +123,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				DATE_COL_COUNT: 7
 		};
 
-		var DateTHead = function (_React$Component) {
+		var DateTHead = (function (_React$Component) {
 				_inherits(DateTHead, _React$Component);
 
 				function DateTHead() {
@@ -142,7 +142,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								var veryShortWeekdays = [];
 								var weekDays = [];
 								var firstDayOfWeek = value.getFirstDayOfWeek();
-								var showWeekNumberEl = void 0;
+								var showWeekNumberEl = undefined;
 
 								for (var dateColIndex = 0; dateColIndex < DateConstants.DATE_COL_COUNT; dateColIndex++) {
 										var index = (firstDayOfWeek + dateColIndex) % DateConstants.DATE_COL_COUNT;
@@ -186,7 +186,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}]);
 
 				return DateTHead;
-		}(React.Component);
+		})(React.Component);
 
 		function isSameDay(one, two) {
 				return one && two && one.compareToDay(two) === 0;
@@ -227,9 +227,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				},
 				render: function render() {
 						var props = this.props;
-						var iIndex = void 0;
-						var jIndex = void 0;
-						var current = void 0;
+						var iIndex = undefined;
+						var jIndex = undefined;
+						var current = undefined;
 						var dateTable = [];
 						var showWeekNumber = props.showWeekNumber;
 						var value = props.value;
@@ -272,7 +272,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						var tableHtml = [];
 						passed = 0;
 						for (iIndex = 0; iIndex < DateConstants.DATE_ROW_COUNT; iIndex++) {
-								var weekNumberCell = void 0;
+								var weekNumberCell = undefined;
 								var dateCells = [];
 								if (showWeekNumber) {
 										weekNumberCell = React.createElement(
@@ -352,7 +352,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 												cls += ' ' + disabledClass;
 										}
 
-										var dateHtml = void 0;
+										var dateHtml = undefined;
 										if (dateRender) {
 												dateHtml = dateRender(current, value);
 										} else {
@@ -396,7 +396,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}
 		});
 
-		var DateTable = function (_React$Component2) {
+		var DateTable = (function (_React$Component2) {
 				_inherits(DateTable, _React$Component2);
 
 				function DateTable() {
@@ -420,7 +420,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}]);
 
 				return DateTable;
-		}(React.Component);
+		})(React.Component);
 
 		function copyTime(target, source) {
 				if (source) {
@@ -466,7 +466,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						this.setState({
 								str: str
 						});
-						var value = void 0;
+						var value = undefined;
 						var _props = this.props;
 						var disabledDate = _props.disabledDate;
 						var formatter = _props.formatter;
@@ -611,7 +611,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				);
 		}
 
-		var DecadePanel = function () {
+		var DecadePanel = (function () {
 
 				var ROW = 4;
 				var COL = 3;
@@ -632,7 +632,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						event.preventDefault();
 				}
 
-				var DecadePanel = function (_React$Component3) {
+				var DecadePanel = (function (_React$Component3) {
 						_inherits(DecadePanel, _React$Component3);
 
 						function DecadePanel(props) {
@@ -688,8 +688,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 														var isLast = dStartDecade < startYear;
 														var isNext = dEndDecade > endYear;
 														var classNameMap = (_classNameMap = {}, _defineProperty(_classNameMap, prefixCls + '-cell', 1), _defineProperty(_classNameMap, prefixCls + '-selected-cell', dStartDecade <= currentYear && currentYear <= dEndDecade), _defineProperty(_classNameMap, prefixCls + '-last-century-cell', isLast), _defineProperty(_classNameMap, prefixCls + '-next-century-cell', isNext), _classNameMap);
-														var content = void 0;
-														var clickHandler = void 0;
+														var content = undefined;
+														var clickHandler = undefined;
 														if (isLast) {
 																clickHandler = _this4.previousCentury;
 														} else if (isNext) {
@@ -769,7 +769,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						}]);
 
 						return DecadePanel;
-				}(React.Component);
+				})(React.Component);
 
 				DecadePanel.propTypes = {
 						locale: PropTypes.object,
@@ -782,9 +782,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						onSelect: function onSelect() {}
 				};
 				return DecadePanel;
-		}();
+		})();
 
-		var YearPanel = function () {
+		var YearPanel = (function () {
 
 				var ROW = 4;
 				var COL = 3;
@@ -802,7 +802,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						this.props.onSelect(next);
 				}
 
-				var YearPanel = function (_React$Component4) {
+				var YearPanel = (function (_React$Component4) {
 						_inherits(YearPanel, _React$Component4);
 
 						function YearPanel(props) {
@@ -844,7 +844,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 												years[rowIndex] = [];
 												for (var colIndex = 0; colIndex < COL; colIndex++) {
 														var year = previousYear + index;
-														var content = void 0;
+														var content = undefined;
 														if (year < startYear) {
 																content = '';
 														} else if (year > endYear) {
@@ -888,7 +888,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 														var _classNameMap2;
 
 														var classNameMap = (_classNameMap2 = {}, _defineProperty(_classNameMap2, prefixCls + '-cell', 1), _defineProperty(_classNameMap2, prefixCls + '-selected-cell', yearData.year === currentYear), _defineProperty(_classNameMap2, prefixCls + '-last-decade-cell', yearData.year < startYear), _defineProperty(_classNameMap2, prefixCls + '-next-decade-cell', yearData.year > endYear), _classNameMap2);
-														var clickHandler = void 0;
+														var clickHandler = undefined;
 														if (yearData.year < startYear) {
 																clickHandler = _this6.previousDecade;
 														} else if (yearData.year > endYear) {
@@ -919,7 +919,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 												);
 										});
 
-										var decadePanel = void 0;
+										var decadePanel = undefined;
 										if (this.state.showDecadePanel) {
 												decadePanel = React.createElement(DecadePanel, { locale: locale, value: value, rootPrefixCls: props.rootPrefixCls,
 														onSelect: this.onDecadePanelSelect });
@@ -990,7 +990,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						}]);
 
 						return YearPanel;
-				}(React.Component);
+				})(React.Component);
 
 				YearPanel.propTypes = {
 						rootPrefixCls: PropTypes.string,
@@ -1003,9 +1003,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				};
 
 				return YearPanel;
-		}();
+		})();
 
-		var MonthTable = function () {
+		var MonthTable = (function () {
 
 				var ROW = 4;
 				var COL = 3;
@@ -1016,7 +1016,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						this.setAndSelectValue(next);
 				}
 
-				var MonthTable = function (_Component) {
+				var MonthTable = (function (_Component) {
 						_inherits(MonthTable, _Component);
 
 						function MonthTable(props) {
@@ -1096,7 +1096,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 																disabled = props.disabledDate(testValue);
 														}
 														var classNameMap = (_classNameMap3 = {}, _defineProperty(_classNameMap3, prefixCls + '-cell', 1), _defineProperty(_classNameMap3, prefixCls + '-cell-disabled', disabled), _defineProperty(_classNameMap3, prefixCls + '-selected-cell', monthData.value === currentMonth), _defineProperty(_classNameMap3, prefixCls + '-current-cell', today.getYear() === value.getYear() && monthData.value === today.getMonth()), _classNameMap3);
-														var cellEl = void 0;
+														var cellEl = undefined;
 														if (props.cellRender) {
 																var currentValue = value.clone();
 																currentValue.rollSetMonth(monthData.value);
@@ -1138,7 +1138,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						}]);
 
 						return MonthTable;
-				}(Component);
+				})(Component);
 
 				MonthTable.defaultProps = {
 						onSelect: noop
@@ -1150,9 +1150,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						value: PropTypes.object
 				};
 				return MonthTable;
-		}();
+		})();
 
-		var MonthPanel = function () {
+		var MonthPanel = (function () {
 
 				function goYear(direction) {
 						var next = this.state.value.clone();
@@ -1224,7 +1224,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								var locale = props.locale;
 								var year = value.getYear();
 								var prefixCls = this.prefixCls;
-								var yearPanel = void 0;
+								var yearPanel = undefined;
 								if (this.state.showYearPanel) {
 										yearPanel = React.createElement(YearPanel, { locale: locale, value: value, rootPrefixCls: props.rootPrefixCls,
 												onSelect: this.onYearPanelSelect });
@@ -1289,9 +1289,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return MonthPanel;
-		}();
+		})();
 
-		var CalendarHeader = function () {
+		var CalendarHeader = (function () {
 				function goMonth(direction) {
 						var next = this.props.value.clone();
 						next.addMonth(direction);
@@ -1410,7 +1410,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								} else if (state.showYearPanel) {
 										PanelClass = YearPanel;
 								}
-								var panel = void 0;
+								var panel = undefined;
 								if (PanelClass) {
 										panel = React.createElement(PanelClass, { locale: locale, defaultValue: value, rootPrefixCls: prefixCls, onSelect: this.onSelect });
 								}
@@ -1458,7 +1458,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return CalendarHeader;
-		}();
+		})();
 
 		var CalendarFooter = React.createClass({
 				displayName: 'CalendarFooter',
@@ -1488,15 +1488,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						var disabledTimeConfig = disabledTime && timePicker ? getTimeConfig(selectedValue, disabledTime) : null;
 						var footerEl = null;
 						if (props.showToday || timePicker) {
-								var nowEl = void 0;
+								var nowEl = undefined;
 								if (props.showToday) {
 										nowEl = React.createElement(TodayButton, _extends({}, props, { value: value }));
 								}
-								var okBtn = void 0;
+								var okBtn = undefined;
 								if (props.showOk) {
 										okBtn = React.createElement(OkButton, props);
 								}
-								var footerBtn = void 0;
+								var footerBtn = undefined;
 								if (nowEl || okBtn) {
 										footerBtn = React.createElement(
 												'span',
@@ -1526,7 +1526,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}
 		});
 
-		var CalendarMixin = function () {
+		var CalendarMixin = (function () {
 				function getNow() {
 						var value = new GregorianCalendar();
 						value.setTime(Date.now());
@@ -1534,7 +1534,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}
 
 				function getNowByCurrentStateValue(value) {
-						var ret = void 0;
+						var ret = undefined;
 						if (value) {
 								ret = value.clone();
 								ret.setTime(Date.now());
@@ -1631,9 +1631,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				};
 
 				return CalendarMixin;
-		}();
+		})();
 
-		var CommonMixin = function () {
+		var CommonMixin = (function () {
 				return {
 						propTypes: {
 								className: PropTypes.string,
@@ -1678,9 +1678,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								return this.showDateFormatter;
 						}
 				};
-		}();
+		})();
 
-		var Calendar = function () {
+		var Calendar = (function () {
 				function goStartMonth() {
 						var next = this.state.value.clone();
 						next.setDayOfMonth(1);
@@ -1914,10 +1914,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return Calendar;
-		}();
+		})();
 
-		var FullCalendar = function () {
-				var CalendarHeader = function (_Component2) {
+		var FullCalendar = (function () {
+				var CalendarHeader = (function (_Component2) {
 						_inherits(CalendarHeader, _Component2);
 
 						function CalendarHeader() {
@@ -2067,7 +2067,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						}]);
 
 						return CalendarHeader;
-				}(Component);
+				})(Component);
 
 				CalendarHeader.propTypes = {
 						value: PropTypes.object,
@@ -2117,7 +2117,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								};
 						},
 						getInitialState: function getInitialState() {
-								var type = void 0;
+								var type = undefined;
 								if ('type' in this.props) {
 										type = this.props.type;
 								} else {
@@ -2152,7 +2152,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								var _state2 = this.state;
 								var value = _state2.value;
 								var type = _state2.type;
-
 
 								var header = null;
 								if (showHeader) {
@@ -2199,9 +2198,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return FullCalendar;
-		}();
+		})();
 
-		var MonthCalendar = function () {
+		var MonthCalendar = (function () {
 				var MonthCalendar = React.createClass({
 						displayName: 'MonthCalendar',
 
@@ -2264,9 +2263,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								});
 						}
 				});
-		}();
+		})();
 
-		var RangeCalendar = function () {
+		var RangeCalendar = (function () {
 				var CalendarPart = React.createClass({
 						displayName: 'CalendarPart',
 						render: function render() {
@@ -2334,7 +2333,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}
 
 				function onValueChange(direction, current) {
-						var value = void 0;
+						var value = undefined;
 						value = current;
 						if (direction === 'right') {
 								value.addMonth(-1);
@@ -2520,8 +2519,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 										onDayHover: this.onDayHover
 								};
 
-								var placeholder1 = void 0;
-								var placeholder2 = void 0;
+								var placeholder1 = undefined;
+								var placeholder2 = undefined;
 
 								if (dateInputPlaceholder) {
 										if (Array.isArray(dateInputPlaceholder)) {
@@ -2570,9 +2569,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return RangeCalendar;
-		}();
+		})();
 
-		var Picker = function () {
+		var Picker = (function () {
 				var autoAdjustOverflow = {
 						adjustX: 1,
 						adjustY: 1
@@ -2645,7 +2644,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 						},
 						getInitialState: function getInitialState() {
 								var props = this.props;
-								var open = void 0;
+								var open = undefined;
 								if ('open' in props) {
 										open = props.open;
 								} else {
@@ -2707,7 +2706,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 								var calendarProp = props.calendar;
 								var value = state.value;
 
-								var defaultValue = void 0;
+								var defaultValue = undefined;
 								// RangeCalendar
 								if (Array.isArray(value)) {
 										defaultValue = value[0];
@@ -2790,11 +2789,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				});
 
 				return Picker;
-		}();
+		})();
 
 		RC.Calendar = Calendar;
 		RC.FullCalendar = FullCalendar;
 		RC.MonthCalendar = MonthCalendar;
 		RC.RangeCalendar = RangeCalendar;
 		RC.DatePicker = Picker;
-}(Smart.RC);
+})(Smart.RC);

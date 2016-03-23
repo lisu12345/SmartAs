@@ -6,9 +6,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+function (RC) {
++(function (RC) {
 	var classNames = RC.classNames;
-
 
 	var Step = React.createClass({
 		displayName: 'Step',
@@ -122,7 +121,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var len = $dom.children.length - 1;
 			this._itemsWidth = new Array(len + 1);
 
-			var i = void 0;
+			var i = undefined;
 			for (i = 0; i <= len - 1; i++) {
 				var $item = $dom.children[i].children;
 				this._itemsWidth[i] = Math.ceil($item[0].offsetWidth + $item[1].children[0].offsetWidth);
@@ -234,4 +233,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 	Steps.Step = Step;
 	RC.Steps = Steps;
-}(Smart.RC);
+})(Smart.RC);

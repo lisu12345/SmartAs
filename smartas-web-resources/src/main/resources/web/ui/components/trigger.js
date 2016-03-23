@@ -1,10 +1,10 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+function (RC) {
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
++(function (RC) {
   var PropTypes = React.PropTypes;
   var findDOMNode = ReactDOM.findDOMNode;
   var _ref = _;
@@ -15,7 +15,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   var Animate = RC.Animate;
   var Dom = Util.Dom;
   var createChainedFunction = Util.createChainedFunction;
-
 
   function isPointsEq(a1, a2) {
     return a1[0] === a2[0] && a1[1] === a2[1];
@@ -231,7 +230,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     getInitialState: function getInitialState() {
       var props = this.props;
-      var popupVisible = void 0;
+      var popupVisible = undefined;
       if ('popupVisible' in props) {
         popupVisible = !!props.popupVisible;
       } else {
@@ -257,7 +256,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       var props = this.props;
       var state = this.state;
       if (this.popupRendered) {
-        var _ret = function () {
+        var _ret = (function () {
           var self = _this;
           ReactDOM.unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function renderPopup() {
             if (this.isMounted()) {
@@ -276,7 +275,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this.touchOutsideHandler = Dom.addEventListener(document, 'touchstart', _this.onDocumentClick);
               }
               return {
-                v: void 0
+                v: undefined
               };
             }
           }
@@ -286,7 +285,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             _this.clickOutsideHandler = null;
             _this.touchOutsideHandler = null;
           }
-        }();
+        })();
 
         if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
       }
@@ -336,7 +335,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     onClick: function onClick(event) {
       // focus will trigger click
       if (this.focusTime) {
-        var preTime = void 0;
+        var preTime = undefined;
         if (this.preClickTime && this.preTouchTime) {
           preTime = Math.min(this.preClickTime, this.preTouchTime);
         } else if (this.preClickTime) {
@@ -479,7 +478,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       }
 
       ALL_HANDLERS.forEach(function (handler) {
-        var newFn = void 0;
+        var newFn = undefined;
         if (props[handler] && newChildProps[handler]) {
           newFn = createChainedFunction(props[handler], newChildProps[handler]);
         } else {
@@ -495,4 +494,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   });
 
   RC.Trigger = Trigger;
-}(Smart.RC);
+})(Smart.RC);

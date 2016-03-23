@@ -11742,11 +11742,13 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 			e.preventDefault();
 		},
 		uploadFiles: function uploadFiles(files) {
+			var batchNo = uid();
 			var len = files.length;
 			if (len > 0) {
 				for (var i = 0; i < len; i++) {
 					var file = files.item(i);
 					file.uid = uid();
+					file.batchNo = batchNo;
 					this.upload(file);
 				}
 				if (this.props.multiple) {
@@ -11779,9 +11781,11 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 			if (typeof data === 'function') {
 				data = data();
 			}
+			data.batchNo = file.batchNo;
+			data.fileUid = file.uid ? file.uid : uid();
 
 			request({
-				action: props.action,
+				action: props.action + "/" + props.handleType,
 				filename: props.name,
 				file: file,
 				data: data,
@@ -11839,7 +11843,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 			accept: PropTypes.string,
 			multiple: PropTypes.bool,
 			beforeUpload: PropTypes.func,
-			withCredentials: PropTypes.bool
+			withCredentials: PropTypes.bool,
+			handleType: PropTypes.string.isRequired
 		},
 
 		getDefaultProps: function getDefaultProps() {

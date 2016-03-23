@@ -1,8 +1,7 @@
 'use strict';
 
-+function (UI, RC) {
++(function (UI, RC) {
   var Steps = RC.Steps;
-
 
   var AntSteps = React.createClass({
     displayName: 'AntSteps',
@@ -36,4 +35,4 @@
   AntSteps.Step = Steps.Step;
 
   UI.Steps = AntSteps;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

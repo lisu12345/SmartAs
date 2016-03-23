@@ -1,6 +1,6 @@
 'use strict';
 
-+function (Namespace) {
++(function (Namespace) {
 	var UI = Namespace.register("Smart.LigerUI");
 	UI.Checkbox = React.createClass({
 		displayName: 'Checkbox',
@@ -74,4 +74,4 @@
 			);
 		}
 	});
-}(Smart.Namespace);
+})(Smart.Namespace);

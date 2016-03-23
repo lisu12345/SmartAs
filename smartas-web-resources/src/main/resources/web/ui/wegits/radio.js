@@ -4,9 +4,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
 	var Radio = RC.Radio;
-
 
 	var AntRadio = React.createClass({
 		displayName: 'AntRadio',
@@ -60,7 +59,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		getInitialState: function getInitialState() {
 			var props = this.props;
-			var value = void 0;
+			var value = undefined;
 			if ('value' in props) {
 				value = props.value;
 			} else if ('defaultValue' in props) {
@@ -138,4 +137,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	AntRadio.Button = RadioButton;
 	AntRadio.Group = RadioGroup;
 	UI.Radio = AntRadio;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

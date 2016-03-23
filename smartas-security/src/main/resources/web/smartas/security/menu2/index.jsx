@@ -5,9 +5,87 @@
 install("web.security.menu2",function($S){
 	var logger = Log.getLogger('web.security.menu2');
 	const {UI,Service} = Smart,
-		{TreeForm,Form,Input, Button, Checkbox, Row, Col,FormItem,InputNumber} = UI;
-
+		{TreeForm,Form,Input, Button, Checkbox, Row, Col,FormItem,InputNumber} = UI,
+		{Grid,url} = UI
 	const service = Service.New("security/menu");
+	
+	const userService = Service.New("security/user");
+	
+	const columns = [{
+		title: '账户',
+		dataIndex: 'acount',
+		render(text,record) {
+			return <a href={url('user.jsx',{id:record.id})}>{text}</a>;
+		}
+	}, {
+		title: 'Emai',
+		dataIndex: 'email'
+	}, {
+		title: 'First name',
+		dataIndex: 'firstname'
+	},{
+		title: 'Last name',
+		dataIndex: 'lastname'
+	},{
+		title: 'state',
+		dataIndex: '状态',
+		render(value) {
+			return value == 1 ? '有效':'锁定';
+		}
+	}];
+	
+	
+	var toolbar = [{
+        text:'Add',
+        icon:'add',
+        handler:function(){alert('add')}
+    },{
+        text:'Cut',
+        icon:'cut',
+        handler:function(){alert('cut')}
+    },'-',{
+        text:'Save',
+        icon:'save',
+        handler:function(){alert('save')}
+    },{
+	    text:'删除',
+	    icon:'delete',
+	    handler:function(){alert('删除')}
+	}];
+	
+	let UserQForm = React.createClass({
+	  render() {
+	    const { getFieldProps} = this.props.form;
+	    
+	    const acount = getFieldProps('Q_acount_S_LK');
+	    return (
+	      <Form inline onSubmit={this.props.querySubmit}>
+	        <FormItem label="账户：">
+	          <Input placeholder="请输入账户名" {...acount} />
+	        </FormItem>
+	        {this.props.children}
+	      </Form>
+	    );
+	  }
+	});
+
+	UserQForm = Form.create()(UserQForm);
+	
+	const rowSelection = {
+	  onChange(selectedRowKeys) {
+	    console.log(`selectedRowKeys changed: ${selectedRowKeys}`);
+	  },
+	  onSelect(record, selected, selectedRows) {
+	    console.log(record, selected, selectedRows);
+	  },
+	  onSelectAll(selected, selectedRows) {
+	    console.log(selected, selectedRows);
+	  }
+	};
+	
+	
+	var p_id = 1
+	
 
 	const MenuForm  = Form.create({mapPropsToFields:function(props){
 		const {data,parent} = props;
@@ -19,12 +97,11 @@ install("web.security.menu2",function($S){
 		render() {
 			const {linkState,form} = this.props,
 				{getFieldProps} = form;
+				
+			const qs = {id:p_id}
+			p_id++;
 			return (
-<<<<<<< HEAD
-	      <Form horizontal  form={this.props.form}>
-=======
 	      <Form horizontal >
->>>>>>> refs/remotes/upstream/develop
 	        <FormItem label="名称：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="名称" {...getFieldProps('name',{
 	              validate: [{
@@ -60,6 +137,18 @@ install("web.security.menu2",function($S){
 	          	<Input type="hidden" {...getFieldProps('id')} />
 	          	<Input type="hidden" {...getFieldProps('parentId')} />
 	            <Button type="primary" htmlType="submit" onClick={this.props.handleSubmit}>确定</Button>
+	          </Col>
+	        </Row>
+	        
+	        <Row>
+	          <Col span="16" offset="3">
+	          <Grid rowKey='id' 
+					columns={columns} 
+					rowSelection={rowSelection} 
+					toolbar={toolbar} 
+	          		qs={qs}
+					service={userService} 
+					title='用户列表' />
 	          </Col>
 	        </Row>
 	      </Form>

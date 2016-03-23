@@ -2,7 +2,7 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
 	var Animate = RC.Animate;
 	var Icon = UI.Icon;
 	UI.Alert = React.createClass({
@@ -52,7 +52,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var message = _props.message;
 			var closeText = _props.closeText;
 			var showIcon = _props.showIcon;
-
 
 			var iconType = '';
 			switch (type) {
@@ -113,4 +112,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			);
 		}
 	});
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

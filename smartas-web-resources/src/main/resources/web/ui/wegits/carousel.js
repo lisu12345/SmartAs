@@ -1,10 +1,9 @@
 'use strict';
 
-+function (UI, RC) {
++(function (UI, RC) {
   var Carousel = Slider;
   var _ref = _;
   var assign = _ref.assign;
-
 
   var AntCarousel = React.createClass({
     displayName: 'AntCarousel',
@@ -36,4 +35,4 @@
   });
 
   UI.Carousel = AntCarousel;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

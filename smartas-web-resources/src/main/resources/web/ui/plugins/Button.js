@@ -1,6 +1,6 @@
 'use strict';
 
-+function (Namespace) {
++(function (Namespace) {
 	var UI = Namespace.register("Smart.LigerUI");
 	UI.Button = React.createClass({
 		displayName: 'Button',
@@ -58,4 +58,4 @@
 			);
 		}
 	});
-}(Smart.Namespace);
+})(Smart.Namespace);

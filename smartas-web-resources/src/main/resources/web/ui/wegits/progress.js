@@ -1,6 +1,6 @@
 'use strict';
 
-+function (UI, RC) {
++(function (UI, RC) {
 		var _ref = _;
 		var assign = _ref.assign;
 		var Icon = UI.Icon;
@@ -42,7 +42,7 @@
 								props.status = 'success';
 						}
 
-						var progressInfo = void 0;
+						var progressInfo = undefined;
 						var fullCls = '';
 
 						if (props.format) {
@@ -134,7 +134,7 @@
 								height: props.width,
 								fontSize: props.width * 0.16 + 6
 						};
-						var progressInfo = void 0;
+						var progressInfo = undefined;
 						var text = props.format || props.percent + '%';
 
 						if (props.format) {
@@ -186,4 +186,4 @@
 				Line: Line,
 				Circle: Circle
 		};
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

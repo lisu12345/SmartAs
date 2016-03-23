@@ -13,7 +13,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //v1.1.5 - 2016.2.14
-+function (RC) {
++(function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var assign = _ref.assign;
@@ -25,7 +25,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	var Trigger = RC.Trigger;
 	var _React = React;
 	var PropTypes = _React.PropTypes;
-
 
 	function getValuePropValue(child) {
 		var props = child.props;
@@ -80,7 +79,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	function getCheckedKeys(node, checkedKeys, allCheckedNodesKeys) {
 		var nodeKey = node.props.eventKey;
 		var newCks = [].concat(_toConsumableArray(checkedKeys));
-		var nodePos = void 0;
+		var nodePos = undefined;
 		var unCheck = allCheckedNodesKeys.some(function (item) {
 			if (item.key === nodeKey) {
 				nodePos = item.pos;
@@ -228,7 +227,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return getCheckValues(treeNodesStates);
 	}
 
-	var _TreeNode = function (_React$Component) {
+	var _TreeNode = (function (_React$Component) {
 		_inherits(_TreeNode, _React$Component);
 
 		function _TreeNode() {
@@ -238,7 +237,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 
 		return _TreeNode;
-	}(React.Component);
+	})(React.Component);
 
 	_TreeNode.propTypes = {
 		value: React.PropTypes.string
@@ -468,7 +467,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				props.inputElement
 			);
 			var treeNodes = this.renderFilterOptionsFromChildren(props.treeData || props.treeNodes);
-			var notFoundContent = void 0;
+			var notFoundContent = undefined;
 			if (!treeNodes.length) {
 				if (props.notFoundContent) {
 					notFoundContent = React.createElement(
@@ -525,7 +524,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				value: item.value,
 				key: item.key || item.value || pos
 			};
-			var ret = void 0;
+			var ret = undefined;
 			if (item.children && item.children.length) {
 				ret = React.createElement(
 					_TreeNode,
@@ -672,7 +671,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		onDropdownVisibleChange: function onDropdownVisibleChange(open) {
 			this.setOpenState(open);
 		},
-
 
 		// combobox ignore
 		onKeyDown: function onKeyDown(event) {
@@ -1129,4 +1127,4 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 	Select.TreeNode = _TreeNode;
 	RC.TreeSelect = Select;
-}(Smart.RC);
+})(Smart.RC);

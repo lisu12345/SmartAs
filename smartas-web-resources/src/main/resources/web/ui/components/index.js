@@ -1,14 +1,14 @@
 'use strict';
 
 //2016.2.1
-+function (Namespace) {
++(function (Namespace) {
 	var RC = Namespace.register("Smart.RC");
 	var assign = _.assign;
 
 	var velocity = $.Velocity;
 
 	function animate(node, show, transitionName, done) {
-		var ok = void 0;
+		var ok = undefined;
 
 		function complete() {
 			if (!ok) {
@@ -70,4 +70,4 @@
 		}
 	});
 	RC.DOMWrap = DOMWrap;
-}(Smart.Namespace);
+})(Smart.Namespace);

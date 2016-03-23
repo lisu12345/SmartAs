@@ -4,11 +4,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
   var Select = RC.Select;
   var Option = Select.Option;
   var OptGroup = Select.OptGroup;
-
 
   var AntSelect = React.createClass({
     displayName: 'AntSelect',
@@ -27,7 +26,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var className = _props.className;
       var combobox = _props.combobox;
       var notFoundContent = _props.notFoundContent;
-
 
       var cls = classNames(_defineProperty({
         'ant-select-lg': size === 'large',
@@ -50,4 +48,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   UI.Select = AntSelect;
   UI.Option = Option;
   UI.OptGroup = OptGroup;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

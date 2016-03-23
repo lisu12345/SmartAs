@@ -2,7 +2,7 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+function (UI, RC) {
++(function (UI, RC) {
   var noop = _.noop,
       PropTypes = React.PropTypes,
       rcUtil = RC.Util,
@@ -11,8 +11,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       Icon = UI.Icon,
       Button = UI.Button;
 
-  var mousePosition = void 0;
-  var mousePositionEventBinded = void 0;
+  var mousePosition = undefined;
+  var mousePositionEventBinded = undefined;
 
   var AntModal = React.createClass({
     displayName: 'AntModal',
@@ -98,7 +98,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     var div = document.createElement('div');
     document.body.appendChild(div);
 
-    var d = void 0;
+    var d = undefined;
     props = props || {};
     props.iconClassName = props.iconClassName || 'question-circle';
 
@@ -125,7 +125,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     function onCancel() {
       var cancelFn = props.onCancel;
       if (cancelFn) {
-        var ret = void 0;
+        var ret = undefined;
         if (cancelFn.length) {
           ret = cancelFn(close);
         } else {
@@ -145,7 +145,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     function onOk() {
       var okFn = props.onOk;
       if (okFn) {
-        var ret = void 0;
+        var ret = undefined;
         if (okFn.length) {
           ret = okFn(close);
         } else {
@@ -256,7 +256,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     var div = document.createElement('div');
     document.body.appendChild(div);
 
-    var d = void 0;
+    var d = undefined;
     props = props || {};
     props.iconClassName = props.iconClassName || 'question-circle';
 
@@ -303,4 +303,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   };
 
   UI.Modal = AntModal;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

@@ -2,9 +2,8 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
   var isCssAnimationSupported = RC.cssAnimation.isCssAnimationSupported;
-
 
   var AntSpin = React.createClass({
     displayName: 'AntSpin',
@@ -14,7 +13,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         spining: true
       };
     },
-
 
     propTypes: {
       className: React.PropTypes.string,
@@ -32,10 +30,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var size = _props.size;
       var prefixCls = _props.prefixCls;
 
-
       var spinClassName = classNames((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-sm', size === 'small'), _defineProperty(_classNames, prefixCls + '-lg', size === 'large'), _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls + '-spining', this.props.spining), _classNames));
 
-      var spinElement = void 0;
+      var spinElement = undefined;
       if (!isCssAnimationSupported) {
         // not support for animation, just use text instead
         spinElement = React.createElement(
@@ -69,4 +66,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
   UI.Spin = AntSpin;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

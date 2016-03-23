@@ -1,6 +1,6 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -13,14 +13,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //V5.4.0 - 2016/3/8
-+function (RC) {
++(function (RC) {
   var _ref = _;
   var noop = _ref.noop;var Align = RC.Align;
   var Animate = RC.Animate;
   var DOMWrap = RC.DOMWrap;
   var Util = RC.Util;var KeyCode = Util.KeyCode;var _React = React;
   var PropTypes = _React.PropTypes;
-
 
   function getScroll(w, top) {
     var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
@@ -154,7 +153,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         dest.zIndex = props.zIndex;
       }
 
-      var footer = void 0;
+      var footer = undefined;
       if (props.footer) {
         footer = React.createElement(
           'div',
@@ -163,7 +162,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         );
       }
 
-      var header = void 0;
+      var header = undefined;
       if (props.title) {
         header = React.createElement(
           'div',
@@ -176,7 +175,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         );
       }
 
-      var closer = void 0;
+      var closer = undefined;
       if (closable) {
         closer = React.createElement(
           'a',
@@ -251,7 +250,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (props.zIndex) {
         maskProps.style = { zIndex: props.zIndex };
       }
-      var maskElement = void 0;
+      var maskElement = undefined;
       if (props.mask) {
         var maskTransition = this.getMaskTransitionName();
         maskElement = React.createElement(DOMWrap, _extends({}, maskProps, { key: 'mask',
@@ -317,7 +316,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return ret;
   }
 
-  var DialogWrap = function (_React$Component) {
+  var DialogWrap = (function (_React$Component) {
     _inherits(DialogWrap, _React$Component);
 
     function DialogWrap(props) {
@@ -426,7 +425,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }]);
 
     return DialogWrap;
-  }(React.Component);
+  })(React.Component);
 
   DialogWrap.defaultProps = {
     className: '',
@@ -455,4 +454,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onClose: React.PropTypes.func
   };
   RC.Dialog = DialogWrap;
-}(Smart.RC);
+})(Smart.RC);

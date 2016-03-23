@@ -2,9 +2,8 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
   var classNames = RC.classNames;
-
 
   var TimelineItem = React.createClass({
     displayName: 'TimelineItem',
@@ -77,4 +76,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
   Timeline.Item = TimelineItem;
   UI.Timeline = Timeline;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

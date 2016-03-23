@@ -1,12 +1,12 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (RC) {
++(function (RC) {
   var noop = _.noop,
       rcUtil = RC.util,
       PropTypes = React.PropTypes,
@@ -39,7 +39,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var children = props.children;
     var eventKey = props.eventKey;
     if (activeKey) {
-      var found = void 0;
+      var found = undefined;
       React.Children.forEach(children, function (c, i) {
         if (!c.props.disabled && activeKey === getKeyFromChildrenIndex(c, eventKey, i)) {
           found = true;
@@ -106,7 +106,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       };
     },
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-      var props = void 0;
+      var props = undefined;
       if (nextProps.activeKey) {
         props = {
           activeKey: getActiveKey(nextProps, nextProps.activeKey)
@@ -132,13 +132,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.instanceArray = [];
     },
 
-
     // all keyboard events callbacks run from here at first
     onKeyDown: function onKeyDown(e) {
       var _this = this;
 
       var keyCode = e.keyCode;
-      var handled = void 0;
+      var handled = undefined;
       this.getFlatInstanceArray().forEach(function (obj) {
         if (obj && obj.props.active) {
           handled = obj.onKeyDown(e);
@@ -947,7 +946,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return true;
       }
       if (keyCode === KeyCode.LEFT) {
-        var handled = void 0;
+        var handled = undefined;
         if (this.props.open) {
           handled = menu.onKeyDown(e);
         } else {
@@ -1159,4 +1158,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   RC.MenuItemGroup = MenuItemGroup;
   RC.SubMenu = SubMenu;
   RC.Menu = Menu;
-}(Smart.RC);
+})(Smart.RC);

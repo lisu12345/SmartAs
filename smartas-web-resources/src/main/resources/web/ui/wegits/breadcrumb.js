@@ -3,7 +3,7 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //扩展了paths属性,提供数组结构的面包屑控件
-+function (UI) {
++(function (UI) {
 		var _React = React;
 		var cloneElement = _React.cloneElement;
 
@@ -69,7 +69,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 						params: React.PropTypes.object
 				},
 				render: function render() {
-						var crumbs = void 0;
+						var crumbs = undefined;
 						var _props2 = this.props;
 						var separator = _props2.separator;
 						var prefixCls = _props2.prefixCls;
@@ -97,7 +97,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 														return params[key] || replacement;
 												});
 
-												var link = void 0;
+												var link = undefined;
 												var path = route.path.replace(/^\//, '');
 												Object.keys(params).forEach(function (key) {
 														path = path.replace(':' + key, params[key]);
@@ -144,4 +144,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 		Breadcrumb.Item = BreadcrumbItem;
 		UI.Breadcrumb = Breadcrumb;
-}(Smart.UI);
+})(Smart.UI);

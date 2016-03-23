@@ -4,7 +4,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (UI, RC) {
++(function (UI, RC) {
   var DatePicker = RC.DatePicker;
   var TimePicker = RC.TimePicker;
   var DateTimeFormat = RC.DateTimeFormat;
@@ -19,7 +19,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _React = React;
   var PropTypes = _React.PropTypes;
   var Component = _React.Component;
-
 
   var PickerMixin = {
     getLocale: function getLocale() {
@@ -49,7 +48,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
       return value;
     },
-
 
     // remove input readonly warning
     handleInputChange: function handleInputChange() {},
@@ -383,4 +381,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   AntDatePicker.MonthPicker = AntMonthPicker;
 
   UI.DatePicker = AntDatePicker;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);

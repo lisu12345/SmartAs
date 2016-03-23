@@ -2,7 +2,7 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+function (RC) {
++(function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var Locale = RC.Locale;
@@ -12,7 +12,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var classnames = RC.classnames;
 	var _React = React;
 	var PropTypes = _React.PropTypes;
-
 
 	function _getFormatter(format, locale) {
 		if (typeof format === 'string') {
@@ -179,7 +178,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 			var prefixCls = this.props.prefixCls;
 
-
 			return React.createElement(
 				'div',
 				{ className: prefixCls + '-select',
@@ -257,7 +255,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var disabledSeconds = _props3.disabledSeconds;
 			var onChange = _props3.onChange;
 			var allowEmpty = _props3.allowEmpty;
-
 
 			if (str) {
 				var originalValue = this.props.value;
@@ -878,7 +875,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var open = _state2.open;
 			var value = _state2.value;
 
-			var popupClassName = void 0;
+			var popupClassName = undefined;
 			if (!showHour || !showSecond) {
 				popupClassName = prefixCls + '-panel-narrow';
 			}
@@ -913,4 +910,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	RC.TimePicker = Picker;
-}(Smart.RC);
+})(Smart.RC);

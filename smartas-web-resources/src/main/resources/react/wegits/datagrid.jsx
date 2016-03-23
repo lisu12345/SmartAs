@@ -90,9 +90,13 @@
 			 };
    			 return {pagination : pagination,data : [],current,pageSize};
   		},
+  		componentWillReceiveProps:function(nextProps){
+  			const {service,qs} = nextProps;
+  			service.listPage(1,10,qs);
+  		},
 		componentDidMount: function() {
 			const {service,qs} = this.props;
-			service.subscribe(function(action){
+			this.unsubscribe = service.subscribe(function(action){
 				let {type,data,method} = action;
 				if(method === 'refresh'){
 					if(data){
@@ -115,6 +119,12 @@
 				}
 			}.bind(this));
 			service.listPage(1,10,qs);
+		},
+		componentWillUnmount:function(){
+			if(this.unsubscribe){
+				this.unsubscribe();
+				this.unsubscribe = null;
+			}
 		},
 		queryReset:function(e){
 			this.refs.qform.resetFields();

@@ -1,14 +1,13 @@
 'use strict';
 
-+function (UI, RC) {
++(function (UI, RC) {
   var Notification = RC.Notification;
   var Icon = UI.Icon;
   var _ref = _;
   var assign = _ref.assign;
 
-
   var top = 24;
-  var notificationInstance = void 0;
+  var notificationInstance = undefined;
 
   function getNotificationInstance() {
     if (notificationInstance) {
@@ -25,7 +24,7 @@
   }
 
   function notice(args) {
-    var duration = void 0;
+    var duration = undefined;
     if (args.duration === undefined) {
       duration = 4.5;
     } else {
@@ -75,7 +74,7 @@
         style: {}
       });
     } else {
-      var _prefixCls = 'ant-notification-notice-content-';
+      var prefixCls = 'ant-notification-notice-content-';
       if (!args.btn) {
         getNotificationInstance().notice({
           content: React.createElement(
@@ -83,12 +82,12 @@
             null,
             React.createElement(
               'div',
-              { className: _prefixCls + 'message' },
+              { className: prefixCls + 'message' },
               args.message
             ),
             React.createElement(
               'div',
-              { className: _prefixCls + 'description' },
+              { className: prefixCls + 'description' },
               args.description
             )
           ),
@@ -105,17 +104,17 @@
             null,
             React.createElement(
               'div',
-              { className: _prefixCls + 'message' },
+              { className: prefixCls + 'message' },
               args.message
             ),
             React.createElement(
               'div',
-              { className: _prefixCls + 'description' },
+              { className: prefixCls + 'description' },
               args.description
             ),
             React.createElement(
               'span',
-              { className: _prefixCls + 'btn' },
+              { className: prefixCls + 'btn' },
               args.btn
             )
           ),
@@ -159,4 +158,4 @@
   });
 
   UI.notification = api;
-}(Smart.UI, Smart.RC);
+})(Smart.UI, Smart.RC);
