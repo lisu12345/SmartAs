@@ -20,7 +20,7 @@ install("web.security.menu2",function($S){
 			const {linkState,form} = this.props,
 				{getFieldProps} = form;
 			return (
-	      <Form horizontal  form={this.props.form}>
+	      <Form horizontal >
 	        <FormItem label="名称：" labelCol={{ span: 3 }} wrapperCol={{ span: 14 }}>
 	          <Input type="input" placeholder="名称" {...getFieldProps('name',{
 	              validate: [{
