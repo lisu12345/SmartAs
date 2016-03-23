@@ -8,6 +8,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 	var Table = UI.Table;
 	var Button = UI.Button;
 	var Icon = UI.Icon;
+	var AT = Smart.ActionTypes;
 
 	var Header = React.createClass({
 		displayName: "Header",
@@ -146,14 +147,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 				var data = action.data;
 				var method = action.method;
 
-				if (method === 'refresh') {
-					if (data) {
-						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
-						return;
-					}
-					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
-					return;
-				}
 				if (method === 'listPage') {
 					this.setState({
 						data: data.data,
@@ -163,6 +156,14 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 							total: data.length
 						}
 					});
+					return;
+				}
+				if (type === AT.SERVICE.SUCCESS) {
+					if (data) {
+						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
+						return;
+					}
+					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
 					return;
 				}
 			}).bind(this));

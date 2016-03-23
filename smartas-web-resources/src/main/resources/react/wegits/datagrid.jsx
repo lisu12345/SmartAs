@@ -1,5 +1,6 @@
 + function(UI,RC) {
-	const {Table,Button,Icon} = UI;
+	const {Table,Button,Icon} = UI,
+	 AT = Smart.ActionTypes;
 	
 
 	const Header = React.createClass({
@@ -98,14 +99,6 @@
 			const {service,qs} = this.props;
 			this.unsubscribe = service.subscribe(function(action){
 				let {type,data,method} = action;
-				if(method === 'refresh'){
-					if(data){
-						service.listPage(data.page,data.pageSize,_.assign(data.qs,qs));
-						return;
-					}
-					service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
-					return;
-				}
 				if(method === 'listPage'){
 					this.setState({
 						data:data.data,
@@ -115,6 +108,14 @@
 							total : data.length
 						}
 					});
+					return;
+				}
+				if(type === AT.SERVICE.SUCCESS){
+					if(data){
+						service.listPage(data.page,data.pageSize,_.assign(data.qs,qs));
+						return;
+					}
+					service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
 					return;
 				}
 			}.bind(this));
