@@ -49,6 +49,11 @@
 		}
 
 		var method = function(method, type, notify, url, data, success, error) {
+			if (_.isFunction(data)) {
+				error = success;
+				success = data;
+				data = undefined;
+			}
 			return Resource.method(type, url, data, compose(type, function(data) {
 				_dispatch({
 					type : AT.SERVICE.SUCCESS,

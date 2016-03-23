@@ -158,11 +158,15 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					});
 					return;
 				}
-				if (type === AT.SERVICE.SUCCESS) {
+				if (method === 'refresh') {
 					if (data) {
 						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
 						return;
 					}
+					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
+					return;
+				}
+				if (type === AT.SERVICE.SUCCESS) {
 					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
 					return;
 				}
