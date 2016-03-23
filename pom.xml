@@ -243,6 +243,11 @@
 				<artifactId>smartas-workflow</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.fiberhome.smartas</groupId>
+				<artifactId>smartas-attachment</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- EMAIL -->
 			<dependency>
@@ -427,6 +432,7 @@
 		<module>smartas-env</module>
 	    <module>smartas-registry</module>
 	    <module>smartas-devops</module>
+	    <module>smartas-attachment</module>
   	</modules>
 
 	<profiles>

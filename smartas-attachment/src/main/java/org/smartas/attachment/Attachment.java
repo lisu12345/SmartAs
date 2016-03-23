@@ -1,22 +1,23 @@
 package org.smartas.attachment;
 
-import org.smartas.core.model.LongIdVO;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Attachment extends LongIdVO{
+import com.fiberhome.smartas.core.model.LongIdVO;
+
+public class Attachment extends LongIdVO {
 
   private static final long serialVersionUID = 8565107762409481819L;
 
   private MultipartFile file;
-  
+
   private String batchNo;
-  
+
   private String filePath;
-  
+
   private String fileName;
-  
+
   private String fileUid;
-  
+
   private int fileDownStatus;
 
   public int getFileDownStatus() {
@@ -66,5 +67,5 @@ public class Attachment extends LongIdVO{
   public void setFile(MultipartFile file) {
     this.file = file;
   }
-  
+
 }

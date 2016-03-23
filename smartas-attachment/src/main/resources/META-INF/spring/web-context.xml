@@ -9,15 +9,4 @@
 	http://www.springframework.org/schema/context     http://www.springframework.org/schema/context/spring-context.xsd  
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-	
-	<bean id="attachmentInterceptor" class="org.smartas.attachment.handler.AttachmentInterceptor" />
-	
-	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name = "beanNames">
-			<list><value>org.smartas.attachment.ui.AttachmentUI</value></list>
-		</property>
-		<property name = "interceptorNames">
-			<list><value>attachmentInterceptor</value></list>
-		</property>
-	</bean>
 </beans>

@@ -45,6 +45,14 @@
 			<groupId>com.fiberhome.smartas</groupId>
 			<artifactId>smartas-workflow</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.fiberhome.smartas</groupId>
+			<artifactId>smartas-demo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fiberhome.smartas</groupId>
+			<artifactId>smartas-attachment</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.alibaba</groupId>
