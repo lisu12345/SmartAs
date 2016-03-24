@@ -72,7 +72,7 @@ public abstract class ExceptionHandlerUI extends WebContentGenerator {
    * 
    * @return
    */
-  @ExceptionHandler({Exception.class})
+  @ExceptionHandler({BusinessAccessException.class})
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ErrorVO exception(BusinessAccessException e) {
     String message;

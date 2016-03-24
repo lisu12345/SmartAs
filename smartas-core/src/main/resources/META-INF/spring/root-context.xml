@@ -72,7 +72,7 @@
 		<bean id="messageSource" class="com.fiberhome.smartas.core.spring.MultipleMessageSource">
 			<property name="basenames">
 				<list>
-					<value>classpath:/META-INF/i18n/Messages</value>
+					<value>classpath*:/META-INF/i18n/Messages</value>
 				</list>
 			</property>
 			<property name="fileEncodings" value="UTF-8"/>
