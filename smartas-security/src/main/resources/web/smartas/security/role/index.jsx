@@ -1,7 +1,6 @@
 /*[[
- <script src="web/smartas/security/role/role.js"></script>
+ import "web/smartas/security/role/role.js"
 ]]*/
-
 install("web.security.role",function($S){
 	var pkg = this,dataSource = pkg.dataSource,eventBus = this.eventBus;
 	var logger = Log.getLogger('web.security.role');
