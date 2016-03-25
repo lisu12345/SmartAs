@@ -5,6 +5,8 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,6 +25,19 @@ import org.apache.catalina.LifecycleException;
 public class DevLoader extends WebappLoader {
   // private static final String info = "org.apache.catalina.loader.DevLoader/2.0";
   private static final List<String> IG = new ArrayList<String>();
+  private static Method CONTEXT_METHOD = getContextMethod();
+
+  private static Method getContextMethod() {
+    try {
+      return DevLoader.class.getMethod("getContainer");
+    } catch (NoSuchMethodException e) {
+      try {
+        return DevLoader.class.getMethod("getContext");
+      } catch (NoSuchMethodException e1) {
+        throw new IllegalStateException("getContainer / getContext method not found:");
+      }
+    }
+  }
 
   static {
     IG.add("servlet-api");
@@ -91,7 +106,8 @@ public class DevLoader extends WebappLoader {
     if (f.isDirectory() && entry.endsWith("/") == false) f = new File(f, "/");
     try {
       URL url = f.toURI().toURL();
-      devCl.addRepository(url.toString());
+      devCl.addURL(url);
+      // devCl.addRepository(url.toString());
       log("added " + url.toString());
     } catch (MalformedURLException e) {
       logError(entry + " invalid (MalformedURL)");
@@ -128,7 +144,8 @@ public class DevLoader extends WebappLoader {
     for (File file : f.listFiles(filter)) {
       try {
         URL url = file.toURI().toURL();
-        devCl.addRepository(url.toString());
+        devCl.addURL(url);
+        // devCl.addRepository(url.toString());
         log("added " + url.toString());
       } catch (MalformedURLException e) {
         logError(file + " invalid (MalformedURL)");
@@ -202,7 +219,11 @@ public class DevLoader extends WebappLoader {
   }
 
   protected ServletContext getServletContext() {
-    return ((Context) getContainer()).getServletContext();
+    try {
+      return ((Context) CONTEXT_METHOD.invoke(this)).getServletContext();
+    } catch (Exception ex) {
+      throw new UndeclaredThrowableException(ex);
+    }
   }
 
   protected File getWebappDir() {
