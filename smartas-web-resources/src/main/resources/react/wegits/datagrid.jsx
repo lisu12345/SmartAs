@@ -73,7 +73,7 @@
 			}
 		},
 		getInitialState: function() {
-			const {service,current,pageSize} = this.props,
+			const {service,current,pageSize,qs} = this.props,
 				_self = this;
 			const pagination = {
 				  total: 0,
@@ -83,10 +83,10 @@
 					  return `共 ${total} 条`;
 				  },
 				  onShowSizeChange(current, pageSize) {
-					  service.listPage(current,pageSize,_self.state.qs);
+					  service.listPage(current,pageSize,_.assign(_self.state.qs, qs));
 				  },
 				  onChange(current,pageSize) {
-					  service.listPage(current,pageSize,_self.state.qs);
+					  service.listPage(current,pageSize,_.assign(_self.state.qs, qs));
 				  }
 			 };
    			 return {pagination : pagination,data : [],current,pageSize};

@@ -340,7 +340,7 @@
 	// Bind an event handler.
 	var logger = Log.getLogger("core.resource.control");
 	var context = $("#content"), lifecycle = EventBus.New(true), qs = {}, info = Env.getInfo();
-
+	var script = info.profile == 'dev' ? 'babel' : 'javascript'
 	function $S(selector) {
 		return $(selector, context);
 	}
@@ -387,9 +387,16 @@
 				var start = data.indexOf('/*[['), end = data.indexOf(']]*/');
 				// 处理资源
 				if (start >= 0 && end > 0) {
+					var imports = _.split(data.substring(start + 4, end),'\n');
 					var html = [];
-					html.push(data.substring(start + 4, end));
-					html.push('<script type="text/{0}">'.format(info.profile == 'dev' ? 'babel' : 'javascript'))
+					for(var i = 0,length = imports.length; i <= length; i++){
+						var src = _.trim(imports[i]);
+						if(_.startsWith(src,'import ')){
+							src = _.trim(src.substr(7),' "');
+							html.push('<script type="text/{0}" src="{1}" />'.format(script,src))
+						}
+					}
+					html.push('<script type="text/{0}">'.format(script))
 					html.push(data.substr(end + 4));
 					html.push('</script>');
 					data = html.join("");
