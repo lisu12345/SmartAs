@@ -123,10 +123,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					return "共 " + total + " 条";
 				},
 				onShowSizeChange: function onShowSizeChange(current, pageSize) {
-					service.listPage(current, pageSize, _.assign(_self.state.qs, _self.props.qs));
+					service.listPage(current, pageSize, _.assign({}, _self.props.qs, _self.state.qs));
 				},
 				onChange: function onChange(current, pageSize) {
-					service.listPage(current, pageSize, _.assign(_self.state.qs, _self.props.qs));
+					service.listPage(current, pageSize, _.assign({}, _self.props.qs, _self.state.qs));
 				}
 			};
 			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
@@ -138,9 +138,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			service.listPage(1, 10, qs);
 		},
 		componentWillMount: function componentWillMount() {
-			var _props2 = this.props;
-			var service = _props2.service;
-			var qs = _props2.qs;
+			var service = this.service;
 
 			this.unsubscribe = service.subscribe((function (action) {
 				var type = action.type;
@@ -160,16 +158,12 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 				}
 				if (method === 'refresh') {
 					if (data) {
-						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
+						service.listPage(data.page, data.pageSize, _.assign({}, this.props.qs, data.qs));
 						return;
 					}
-					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
+					service.listPage(this.state.current, this.state.pageSize, _.assign({}, this.props.qs, this.state.qs));
 					return;
 				}
-				//if(type === AT.SERVICE.SUCCESS){
-				//	service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
-				//	return;
-				//}
 			}).bind(this));
 			service.listPage(1, 10, qs);
 		},
@@ -196,17 +190,17 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var _state = this.state;
 			var data = _state.data;
 			var pagination = _state.pagination;
-			var _props3 = this.props;
-			var service = _props3.service;
-			var _rowKey = _props3.rowKey;
-			var rownumbers = _props3.rownumbers;
-			var columns = _props3.columns;
-			var title = _props3.title;
-			var toolbar = _props3.toolbar;
-			var rowSelection = _props3.rowSelection;
-			var QForm = _props3.QForm;
+			var _props2 = this.props;
+			var service = _props2.service;
+			var _rowKey = _props2.rowKey;
+			var rownumbers = _props2.rownumbers;
+			var columns = _props2.columns;
+			var title = _props2.title;
+			var toolbar = _props2.toolbar;
+			var rowSelection = _props2.rowSelection;
+			var QForm = _props2.QForm;
 
-			var props = _objectWithoutProperties(_props3, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "rowSelection", "QForm"]);
+			var props = _objectWithoutProperties(_props2, ["service", "rowKey", "rownumbers", "columns", "title", "toolbar", "rowSelection", "QForm"]);
 
 			var Form = null;
 			if (QForm) {

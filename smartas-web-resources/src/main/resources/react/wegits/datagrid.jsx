@@ -83,10 +83,10 @@
 					  return `共 ${total} 条`;
 				  },
 				  onShowSizeChange(current, pageSize) {
-					  service.listPage(current,pageSize,_.assign(_self.state.qs, _self.props.qs));
+					  service.listPage(current,pageSize,_.assign({},_self.props.qs,_self.state.qs));
 				  },
 				  onChange(current,pageSize) {
-					  service.listPage(current,pageSize,_.assign(_self.state.qs, _self.props.qs));
+					  service.listPage(current,pageSize,_.assign({}, _self.props.qs,_self.state.qs));
 				  }
 			 };
    			 return {pagination : pagination,data : [],current,pageSize};
@@ -96,7 +96,7 @@
   			service.listPage(1,10,qs);
   		},
   		componentWillMount: function() {
-			const {service,qs} = this.props;
+			const {service} = this;
 			this.unsubscribe = service.subscribe(function(action){
 				let {type,data,method} = action;
 				if(method === 'listPage'){
@@ -112,16 +112,12 @@
 				}
 				if (method === 'refresh') {
 					if (data) {
-						service.listPage(data.page, data.pageSize, _.assign(data.qs, qs));
+						service.listPage(data.page, data.pageSize, _.assign({},this.props.qs,data.qs));
 						return;
 					}
-					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
+					service.listPage(this.state.current, this.state.pageSize, _.assign({},this.props.qs,this.state.qs));
 					return;
 				}
-				//if(type === AT.SERVICE.SUCCESS){
-				//	service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
-				//	return;
-				//}
 			}.bind(this));
 			service.listPage(1,10,qs);
 		},
