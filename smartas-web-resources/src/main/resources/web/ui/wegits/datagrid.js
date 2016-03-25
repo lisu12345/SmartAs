@@ -166,10 +166,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
 					return;
 				}
-				if (type === AT.SERVICE.SUCCESS) {
-					service.listPage(this.state.current, this.state.pageSize, _.assign(this.state.qs, qs));
-					return;
-				}
+				//if(type === AT.SERVICE.SUCCESS){
+				//	service.listPage(this.state.current,this.state.pageSize,_.assign(this.state.qs,qs));
+				//	return;
+				//}
 			}).bind(this));
 			service.listPage(1, 10, qs);
 		},

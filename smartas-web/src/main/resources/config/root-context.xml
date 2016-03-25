@@ -33,7 +33,7 @@
 			<property name="appName" value="smartas" />
 			<property name="dbName" value="smartas" />
 			<property name="scope" value="Smart" />
-			<property name="tablePrefix" value="tpl" />
+			<property name="tablePrefix" value="TPL" />
 		</bean>
 		
 		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
@@ -56,7 +56,7 @@
 	      <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
 	      <property name="minEvictableIdleTimeMillis" value="300000" />
 	
-	      <property name="validationQuery" value="SELECT 'x'" />
+	      <property name="validationQuery" value="${datasource.validationQuery}" />
 	      <property name="testWhileIdle" value="true" />
 	      <property name="testOnBorrow" value="false" />
 	      <property name="testOnReturn" value="false" />

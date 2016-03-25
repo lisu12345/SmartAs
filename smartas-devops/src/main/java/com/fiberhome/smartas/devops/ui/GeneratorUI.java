@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiberhome.smartas.core.AppEnv;
+import com.fiberhome.smartas.core.BusinessAccessException;
 import com.fiberhome.smartas.core.Pageable;
 import com.fiberhome.smartas.core.annotation.Operation;
 import com.fiberhome.smartas.core.annotation.Resource;
@@ -125,6 +126,9 @@ public class GeneratorUI extends ExceptionHandlerUI {
   @Operation(code = Operation.CREATE, desc = Operation.CREATE_DESC)
   public Serializable cteate(@RequestBody Module entity) throws Exception {
 
+    if (entity != null) {
+      throw new BusinessAccessException("error.devops.sys","aa");
+    }
 
     TableConfig config = new TableConfig();
 
@@ -174,9 +178,9 @@ public class GeneratorUI extends ExceptionHandlerUI {
       buildFile(tpl, file, data);
     }
 
-    //if (entity != null) {
-      //throw new RuntimeException();
-    //}
+    // if (entity != null) {
+    // throw new RuntimeException();
+    // }
     return true;
   }
 

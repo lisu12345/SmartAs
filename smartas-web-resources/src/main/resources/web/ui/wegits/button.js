@@ -112,7 +112,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	})(React.Component);
 
 	Button.propTypes = {
-		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed']),
+		type: React.PropTypes.oneOf(['primary', 'ghost', 'dashed', 'grid']),
 		shape: React.PropTypes.oneOf(['circle', 'circle-outline']),
 		size: React.PropTypes.oneOf(['large', 'small']),
 		htmlType: React.PropTypes.oneOf(['submit', 'button', 'reset']),

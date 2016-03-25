@@ -55,8 +55,7 @@ install("web.security.user",function($S){
 	let UserQForm = React.createClass({
 	  render() {
 	    const { getFieldProps} = this.props.form;
-	    
-	    const acount = getFieldProps('Q_acount_S_LK');
+	    const acount = getFieldProps('Q_id_L_IN',{initialValue:"1,2"});
 	    return (
 	      <Form inline onSubmit={this.props.querySubmit}>
 	        <FormItem label="账户：">

@@ -16,10 +16,16 @@
 	    DELETE FROM  tpl_app_role_perms_t
 	    WHERE role_id = #{id}
 	</delete>
-	<insert id="insertPerms">
+	<insert id="insertPerms" databaseId="mysql">
 	 	INSERT INTO tpl_app_role_perms_t VALUES
 		<foreach item="perm" collection="perms" separator="," >
        		(#{roleId}, #{perm})
+		</foreach>
+	</insert>
+	<insert id="insertPerms"  databaseId="oracle">
+		INSERT INTO tpl_app_role_perms_t
+		<foreach item="perm" collection="perms" separator="union">
+       		(SELECT #{roleId}, #{perm} FROM DUAL)
 		</foreach>
 	</insert>
 	<select id="getPermissionsByRoleId" resultType="string">
