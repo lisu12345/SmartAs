@@ -114,7 +114,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			var service = _props.service;
 			var current = _props.current;
 			var pageSize = _props.pageSize;
-			var qs = _props.qs;
 			var _self = this;
 			var pagination = {
 				total: 0,
@@ -124,10 +123,10 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					return "共 " + total + " 条";
 				},
 				onShowSizeChange: function onShowSizeChange(current, pageSize) {
-					service.listPage(current, pageSize, _.assign(_self.state.qs, qs));
+					service.listPage(current, pageSize, _.assign(_self.state.qs, _self.props.qs));
 				},
 				onChange: function onChange(current, pageSize) {
-					service.listPage(current, pageSize, _.assign(_self.state.qs, qs));
+					service.listPage(current, pageSize, _.assign(_self.state.qs, _self.props.qs));
 				}
 			};
 			return { pagination: pagination, data: [], current: current, pageSize: pageSize };
