@@ -138,7 +138,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 			service.listPage(1, 10, qs);
 		},
 		componentWillMount: function componentWillMount() {
-			var service = this.service;
+			var service = this.props.service;
 
 			this.unsubscribe = service.subscribe((function (action) {
 				var type = action.type;
@@ -165,7 +165,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 					return;
 				}
 			}).bind(this));
-			service.listPage(1, 10, qs);
+			service.listPage(1, 10, this.props.qs);
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			if (this.unsubscribe) {

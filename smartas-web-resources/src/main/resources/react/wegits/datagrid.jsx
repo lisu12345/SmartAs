@@ -96,7 +96,7 @@
   			service.listPage(1,10,qs);
   		},
   		componentWillMount: function() {
-			const {service} = this;
+			const {service} = this.props;
 			this.unsubscribe = service.subscribe(function(action){
 				let {type,data,method} = action;
 				if(method === 'listPage'){
@@ -119,7 +119,7 @@
 					return;
 				}
 			}.bind(this));
-			service.listPage(1,10,qs);
+			service.listPage(1,10,this.props.qs);
 		},
 		componentWillUnmount:function(){
 			if(this.unsubscribe){
