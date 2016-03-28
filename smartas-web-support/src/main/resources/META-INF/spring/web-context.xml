@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd      
@@ -36,9 +37,8 @@
 	<beans>
 
 		<context:component-scan base-package="com.fiberhome.smartas.**.ui"
-			name-generator="com.fiberhome.smartas.core.FullClassNameBeanNameGenerator">
-			<context:include-filter type="annotation"
-				expression="org.springframework.stereotype.Controller" />
+			name-generator="com.fiberhome.smartas.core.spring.FullClassNameBeanNameGenerator">
+			<context:include-filter type="annotation" expression="com.fiberhome.smartas.core.annotation.Resource" />
 		</context:component-scan>
 		
 		<bean id="staticResourcesHandler" class="com.fiberhome.smartas.web.support.handler.StaticResourcesHandler">
@@ -51,6 +51,7 @@
 		
 		<bean
 			class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+			<property name="order" value="1"></property>
 			<property name="urlMap">
 				<map>
 					<entry key="/" value-ref="indexHandler" />
@@ -61,8 +62,9 @@
 				</map>
 			</property>
 		</bean>
-
+		
 		<bean class="com.fiberhome.smartas.web.support.handler.ServiceHandlerMapping">
+			<property name="order" value="5"></property>
 			<property name="prefix" value="/services" />
 			<property name="interceptors">
 				<list>
@@ -70,6 +72,25 @@
 				</list>
 			</property>
 		</bean>
+		
+		<!-- Import basic SpringMVC Resteasy integration -->
+		<import resource="classpath:springmvc-resteasy.xml" />
+		<!-- override the bean definition for deployment -->
+		<bean id="resteasy.deployment" class="org.jboss.resteasy.spi.ResteasyDeployment" init-method="start" destroy-method="stop">
+			<property name="asyncJobServiceEnabled" value="true"/>
+			<property name="mediaTypeMappings">
+				<map>
+					<entry key="json" value="application/json" />
+					<entry key="xml" value="application/xml" />
+				</map>
+			</property>
+		</bean>
+		
+		<bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping" p:prefix="services" />
+		
+		
+		<bean class="com.fiberhome.smartas.core.fastjson.FastJsonProvider" />
+		
 		
 		<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
 			<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />

@@ -62,6 +62,7 @@ install('web.security.role', function($S) {
 			async : {
 				enable : true,
 				type : 'get',
+				contentType:'application/json',
 				url : "services/security/permission/scan",
 			},
 			check: {

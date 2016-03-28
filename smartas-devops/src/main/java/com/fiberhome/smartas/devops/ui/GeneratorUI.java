@@ -12,20 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.fiberhome.smartas.core.AppEnv;
+import com.fiberhome.smartas.core.BaseExceptionAwareResource;
 import com.fiberhome.smartas.core.BusinessAccessException;
 import com.fiberhome.smartas.core.Pageable;
 import com.fiberhome.smartas.core.annotation.Operation;
 import com.fiberhome.smartas.core.annotation.Resource;
-import com.fiberhome.smartas.core.ui.ExceptionHandlerUI;
 import com.fiberhome.smartas.core.util.StreamUtils;
 import com.fiberhome.smartas.devops.Module;
 import com.fiberhome.smartas.devops.Table;
@@ -46,10 +46,9 @@ import freemarker.template.Template;
  *
  */
 @Profile("dev")
-@RestController()
-@RequestMapping("/devops/generator")
-@Resource(code = 1901, model = "Smart", desc = "Generator UI")
-public class GeneratorUI extends ExceptionHandlerUI {
+@Path("/devops/generator")
+@Resource(code = 1901, model = "Smart", desc = "Generator Resource")
+public class GeneratorUI extends BaseExceptionAwareResource {
   private static final String[] IGNORED_COLUMNS = {"tenant_id", "app_name", "revision",
       "create_user_id", "last_update_user_id", "create_date", "last_update_date"};
 
@@ -91,15 +90,15 @@ public class GeneratorUI extends ExceptionHandlerUI {
     return rootDir;
   }
 
-  @RequestMapping(value = "/table/list/{page}/{pageSize}", method = RequestMethod.GET)
+  @GET
+  @Path(value = "/table/list/{page}/{pageSize}")
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
-  public Pageable<Table> getAll(@PathVariable("page") int page,
-      @PathVariable("pageSize") int pageSize) {
+  public Pageable<Table> getAll(@PathParam("page") int page, @PathParam("pageSize") int pageSize) {
     return service.getTable(appEnv.getDbName(), appEnv.getTablePrefix(), page, pageSize);
   }
 
-
-  @RequestMapping(value = "/project/list", method = RequestMethod.GET)
+  @GET
+  @Path(value = "/project/list")
   @Operation(code = Operation.READ, desc = Operation.READ_DESC)
   public List<Project> listAll() {
     File projectRootDir = getProjectRootDir();
@@ -121,13 +120,13 @@ public class GeneratorUI extends ExceptionHandlerUI {
     return result;
   }
 
-
-  @RequestMapping(value = "/table/single", method = RequestMethod.POST)
+  @POST
+  @Path(value = "/table/single")
   @Operation(code = Operation.CREATE, desc = Operation.CREATE_DESC)
-  public Serializable cteate(@RequestBody Module entity) throws Exception {
+  public Serializable cteate(Module entity) throws Exception {
 
     if (entity != null) {
-      throw new BusinessAccessException("error.devops.sys","aa");
+      throw new BusinessAccessException("error.devops.sys", "aa");
     }
 
     TableConfig config = new TableConfig();

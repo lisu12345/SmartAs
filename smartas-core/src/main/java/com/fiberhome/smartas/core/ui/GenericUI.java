@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fiberhome.smartas.core.AppEnv;
+import com.fiberhome.smartas.core.BaseExceptionAwareResource;
 import com.fiberhome.smartas.core.BusinessAccessException;
 import com.fiberhome.smartas.core.POJO;
 import com.fiberhome.smartas.core.Pageable;
@@ -20,12 +21,13 @@ import com.fiberhome.smartas.core.util.BeanContext;
 
 /**
  * @author chenb
- *
+ * {@link GenericResource}
  * @param <T>
  * @param <PK>
  */
+@Deprecated
 public abstract class GenericUI<T extends POJO, PK extends Serializable>
-    extends ExceptionHandlerUI {
+    extends BaseExceptionAwareResource {
 
   protected abstract Service<T, PK> getService();
 

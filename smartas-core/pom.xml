@@ -51,6 +51,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-spring</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 		</dependency>

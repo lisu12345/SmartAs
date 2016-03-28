@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fiberhome.smartas.security.dao.OrganizationDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+
+	<select id="getById" resultType="com.fiberhome.smartas.security.Organization">
+		SELECT
+		T.*
+		FROM oa_orgnazition_t T
+		WHERE T.ID = #{id}
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM oa_orgnazition_t T
+	</select>
+
+	<select id="selectAll" resultType="com.fiberhome.smartas.security.Organization">
+		SELECT
+		T.*
+		FROM oa_orgnazition_t T
+		<query open="where (" close=")" />
+	</select>
+
+	<select id="select" resultType="com.fiberhome.smartas.security.Organization">
+		${limitBefore}
+		SELECT T.* FROM oa_orgnazition_t T
+		<query open="where (" close=")" />
+		${limitAfter}
+	</select>
+
+
+	<insert id="insert" parameterType="com.fiberhome.smartas.security.Organization">
+		INSERT INTO oa_orgnazition_t
+		(p_id,org_name, org_code, org_note)
+		VALUES
+		(#{pId,jdbcType=NUMERIC},
+		#{orgName,jdbcType=VARCHAR},
+		#{orgCode,jdbcType=VARCHAR},
+		#{orgNote,jdbcType=VARCHAR})
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterType="com.fiberhome.smartas.security.Organization">
+		UPDATE oa_orgnazition_t SET
+		p_id = #{pId,jdbcType=NUMERIC},
+		org_name = #{orgName,jdbcType=VARCHAR},
+		org_code = #{orgCode,jdbcType=VARCHAR},
+		org_note = #{orgNote,jdbcType=VARCHAR}
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+
+	<select id="deleteById">
+		DELETE FROM oa_orgnazition_t
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- //////////////////////////////////////////////////////////// -->
+
+	<!-- 
+	<select id="findNavbarMenus" resultType="com.fiberhome.smartas.security.Organization">
+		SELECT
+		T.*
+		FROM oa_orgnazition_t T
+		WHERE T.org_code = ''
+	</select>
+	-->
+	
+	<select id="getByName" resultType="int">
+		SELECT
+		count(1)
+		FROM oa_orgnazition_t T
+		WHERE T.org_name = #{orgName}
+	</select>
+	
+</mapper>
+

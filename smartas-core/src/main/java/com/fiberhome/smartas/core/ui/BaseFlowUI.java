@@ -13,9 +13,10 @@ import com.fiberhome.smartas.core.annotation.Operation;
 
 /**
  * @author chenb
- *
+ * {@link BaseFlowResource}
  * @param <T>
  */
+@Deprecated
 public abstract class BaseFlowUI<T extends FlowAware> extends BaseUI<T> {
 
 	protected abstract BaseFlowService<T> getService();

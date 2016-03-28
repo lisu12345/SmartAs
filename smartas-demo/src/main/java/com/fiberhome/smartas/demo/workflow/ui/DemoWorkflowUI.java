@@ -3,15 +3,14 @@
  */
 package com.fiberhome.smartas.demo.workflow.ui;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.fiberhome.smartas.core.annotation.Operation;
 import com.fiberhome.smartas.core.annotation.Resource;
-import com.fiberhome.smartas.core.ui.BaseFlowUI;
+import com.fiberhome.smartas.core.ui.BaseFlowResource;
 import com.fiberhome.smartas.demo.workflow.DemoWorkflow;
 import com.fiberhome.smartas.demo.workflow.service.DemoWorkflowService;
 
@@ -19,21 +18,21 @@ import com.fiberhome.smartas.demo.workflow.service.DemoWorkflowService;
  * @author ftl
  *
  */
-@RestController()
-@RequestMapping("/demo/workflow")
-@Resource(code = 4001, model = "Smart", desc = "DemoWorkflow UI")
-public class DemoWorkflowUI extends BaseFlowUI<DemoWorkflow> {
-	@Autowired
-	private DemoWorkflowService service;
+@Path("/demo/workflow")
+@Resource(code = 4001, model = "Smart", desc = "DemoWorkflow Resource")
+public class DemoWorkflowUI extends BaseFlowResource<DemoWorkflow> {
+  @Autowired
+  private DemoWorkflowService service;
 
-	protected DemoWorkflowService getService() {
-		return service;
-	}
+  protected DemoWorkflowService getService() {
+    return service;
+  }
 
-	////
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	@Operation(code = Operation.READ, desc = Operation.READ_DESC)
-	public String index(Model model) {
-		return null;
-	}
+  ////
+  @GET
+  @Path(value = "/index")
+  @Operation(code = Operation.READ, desc = Operation.READ_DESC)
+  public String index() {
+    return null;
+  }
 }

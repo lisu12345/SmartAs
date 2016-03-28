@@ -128,11 +128,10 @@
 			lifecycle.fire('before');
 			var data = options.data,type = options.type
 			if ((type == 'put' || type == 'post') && data && !_.isString(data)) {
-				options.contentType = "application/json;charset=UTF-8";
 				options.data = JSON.stringify(data)
 			}
+			options.contentType || (options.contentType = "application/json");
 			var complete = options.complete;
-			
 			options.statusCode = {
 				403:function(){
 					 Smart.UI.message.error('无权操作');

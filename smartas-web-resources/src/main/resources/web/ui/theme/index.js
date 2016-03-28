@@ -3,8 +3,9 @@ $(function() {
 	var Breadcrumb=Smart.UI.Breadcrumb,Item = Breadcrumb.Item,Resource = Smart.Resource;
 	var setting = {
 		async : {
-			enable : true,
-			type : 'get',
+			enable: true,
+			type: 'get',
+			contentType:'application/json',
 			url : "services/security/menu/navbar",
 			dataFilter : function(treeId, parentNode, responseData) {
 				var url = Resource.getCurrentUrl(), currentNode = null,list = [];
