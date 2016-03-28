@@ -3,13 +3,13 @@
  */
 package com.fiberhome.smartas.env.ui;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fiberhome.smartas.core.BaseExceptionAwareResource;
 import com.fiberhome.smartas.core.spring.EventPublisher;
@@ -23,8 +23,8 @@ import com.fiberhome.smartas.core.util.SecurityUtils;
  * 
  *         ftl/info.ftl
  */
-@Controller()
-@RequestMapping("/env")
+@Controller
+@Path("env")
 public class EnvUI extends BaseExceptionAwareResource {
 
   @Autowired
@@ -35,16 +35,18 @@ public class EnvUI extends BaseExceptionAwareResource {
    * 
    * @return
    */
-  @RequestMapping(value = "workspace", method = RequestMethod.GET)
-  public String workspace(Model model) {
+  @GET
+  @Path(value = "workspace")
+  public ModelAndView workspace() {
+    ModelAndView modelAndView = new ModelAndView("smartas/info");
     String[] profiles = getApplicationContext().getEnvironment().getDefaultProfiles();
-    model.addAttribute("profile", StringUtils.join(profiles, ","));
-    model.addAttribute("user", SecurityUtils.getSubject().getPrincipal());
-    return "smartas/info";
+    modelAndView.addObject("profile", StringUtils.join(profiles, ","));
+    modelAndView.addObject("user", SecurityUtils.getSubject().getPrincipal());
+    return modelAndView;
   }
 
-  @RequestMapping(value = "dev/mybatis", method = RequestMethod.GET)
-  @ResponseBody
+  @GET
+  @Path(value = "dev/mybatis")
   public String mybatis() {
     MyBaitsRefreshEvent event = new MyBaitsRefreshEvent();
     eventPublisher.publish(event);

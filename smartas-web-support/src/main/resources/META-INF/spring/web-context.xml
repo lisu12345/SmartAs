@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd      
+	xsi:schemaLocation="http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd   
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd   
 	http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd    
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -62,18 +63,29 @@
 				</map>
 			</property>
 		</bean>
+		<!--默认处理适配器 -->
+		<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
 		
-		<bean class="com.fiberhome.smartas.web.support.handler.ServiceHandlerMapping">
-			<property name="order" value="5"></property>
-			<property name="prefix" value="/services" />
-			<property name="interceptors">
+		<util:list id="fastJsonSerializerFeatures" value-type="com.alibaba.fastjson.serializer.SerializerFeature">  
+            <value>WriteMapNullValue</value>
+			<value>WriteNullStringAsEmpty</value>
+			<value>WriteDateUseDateFormat</value>
+        </util:list>
+		
+		
+		<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+			<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
+			<property name="features" ref="fastJsonSerializerFeatures" />
+		</bean>
+		
+		<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+			<property name="messageConverters">
 				<list>
-					<ref bean="securityInterceptor" />
+					<ref bean="fastJsonHttpMessageConverter"/>
 				</list>
 			</property>
 		</bean>
 		
-		<!-- Import basic SpringMVC Resteasy integration -->
 		<import resource="classpath:springmvc-resteasy.xml" />
 		<!-- override the bean definition for deployment -->
 		<bean id="resteasy.deployment" class="org.jboss.resteasy.spi.ResteasyDeployment" init-method="start" destroy-method="stop">
@@ -86,38 +98,31 @@
 			</property>
 		</bean>
 		
-		<bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping" p:prefix="services" />
-		
-		
-		<bean class="com.fiberhome.smartas.core.fastjson.FastJsonProvider" />
-		
-		
-		<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-			<property name="supportedMediaTypes" value="application/json;charset=UTF-8" />
-			<property name="features">
-				<array>
-					<value>WriteMapNullValue</value>
-					<value>WriteNullStringAsEmpty</value>
-					<value>WriteDateUseDateFormat</value>
-				</array>
-			</property>
-		</bean>
-		
-		<bean
-			class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-			<property name="messageConverters">
+		<bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
+			<property name="order" value="5"></property>
+			<property name="prefix" value="/services" />
+			<property name="interceptors">
 				<list>
-					<ref bean="fastJsonHttpMessageConverter"/>
-				</list>
-			</property>
-			<property name="customArgumentResolvers">
-				<list>
-					<bean class="com.fiberhome.smartas.web.support.method.annotation.RequestQueryMethodArgumentResolver" />
+					<ref bean="securityInterceptor" />
 				</list>
 			</property>
 		</bean>
 		
-		<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
+		<bean class="com.fiberhome.smartas.core.fastjson.FastJsonProvider">
+			<property name="features" ref="fastJsonSerializerFeatures" />
+		</bean>
+		
+		
+		<bean class="com.fiberhome.smartas.web.support.handler.ServiceHandlerMapping">
+			<property name="order" value="10"></property>
+			<property name="prefix" value="/services" />
+			<property name="interceptors">
+				<list>
+					<ref bean="securityInterceptor" />
+				</list>
+			</property>
+		</bean>
+		
 		<mvc:interceptors>
 			<mvc:interceptor>
 				<mvc:mapping path="/" />
@@ -129,14 +134,6 @@
 				<ref bean="ajaxLoginInterceptor" />
 			</mvc:interceptor>
 		</mvc:interceptors>
-		
-		<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
-			<property name="messageConverters">
-				<list>
-					<ref bean="fastJsonHttpMessageConverter"/>
-				</list>
-			</property>
-		</bean>
 		
 		<!-- freemarker config -->
 		<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">

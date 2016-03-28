@@ -13,30 +13,31 @@ import org.springframework.web.util.UrlPathHelper;
  *
  */
 public class ServiceHandlerMapping extends RequestMappingHandlerMapping {
-	
-	private String prefix = "/servicecs";
-	
-	public ServiceHandlerMapping() {
-		setUrlPathHelper(new ServicePathHelper());
-	}
-	
-	public String getPrefix() {
-		return prefix;
-	}
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+  private String prefix = "/servicecs";
 
-	/**
-	 * 服務地址
-	 * @author chenb
-	 *
-	 */
-	class ServicePathHelper extends UrlPathHelper {
-		public String getLookupPathForRequest(HttpServletRequest request) {
-			String path = super.getLookupPathForRequest(request);
-			return path.substring(prefix.length());
-		}
-	}
+  public ServiceHandlerMapping() {
+    setUrlPathHelper(new ServicePathHelper());
+  }
+
+  public String getPrefix() {
+    return prefix;
+  }
+
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
+  }
+
+  /**
+   * 服務地址
+   * 
+   * @author chenb
+   *
+   */
+  class ServicePathHelper extends UrlPathHelper {
+    public String getLookupPathForRequest(HttpServletRequest request) {
+      String path = super.getLookupPathForRequest(request);
+      return path.substring(prefix.length());
+    }
+  }
 }
