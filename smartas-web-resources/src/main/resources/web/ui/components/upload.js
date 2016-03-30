@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var Util = RC.Util;
 	var warning = Util.warning;
 	var uid = Util.uid;
@@ -113,7 +113,7 @@
 				return;
 			}
 			var props = this.props;
-			var response = undefined;
+			var response = void 0;
 			var eventFile = this.file;
 			try {
 				var doc = this.getIframeDocument();
@@ -192,7 +192,7 @@
 		initIframe: function initIframe() {
 			var iframeNode = this.getIframeNode();
 			var win = iframeNode.contentWindow;
-			var doc = undefined;
+			var doc = void 0;
 			this.domain = this.domain || '';
 			this.initIframeSrc();
 			try {
@@ -407,4 +407,4 @@
 	});
 
 	RC.Upload = Upload;
-})(Smart.RC);
+}(Smart.RC);

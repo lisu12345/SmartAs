@@ -190,7 +190,7 @@
           {},
       };
     },
-
+	//传入高度，如果没有传入，则默认为303（显示10行）。
     getDefaultProps() {
       return {
         dataSource: [],
@@ -205,6 +205,7 @@
         onChange: noop,
         locale: {},
         rownumbers:false,
+        height:303,
       };
     },
 
@@ -741,7 +742,7 @@
       }
 
       let table = (
-        <div>
+        <div style={{overflow:"scroll",height:this.props.height}}>
           <Table {...this.props}
             data={data}
             columns={columns}

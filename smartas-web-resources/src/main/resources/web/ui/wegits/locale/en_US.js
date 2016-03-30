@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (Namespace, RC) {
++function (Namespace, RC) {
 	var UI = Namespace.register("Smart.UI");
 	var Locale = RC.Locale;
 	var GregorianCalendar = Locale.GregorianCalendar;
@@ -27,4 +27,4 @@
 	};
 
 	UI.Locale = locale;
-})(Smart.Namespace, Smart.RC);
+}(Smart.Namespace, Smart.RC);

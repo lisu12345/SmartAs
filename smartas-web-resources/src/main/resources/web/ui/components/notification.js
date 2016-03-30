@@ -4,11 +4,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (RC) {
++function (RC) {
 	var Animate = RC.Animate;
 	var Util = RC.Util;
 	var createChainedFunction = Util.createChainedFunction;
 	var getUuid = Util.getUuid;
+
 
 	var Notice = React.createClass({
 		displayName: 'Notice',
@@ -170,4 +171,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	};
 
 	RC.Notification = Notification;
-})(Smart.RC);
+}(Smart.RC);

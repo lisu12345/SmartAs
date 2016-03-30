@@ -4,12 +4,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;var Animate = RC.Animate;
 	var Util = RC.Util;var KeyCode = Util.KeyCode;
 	var offset = Util.offset;var _React = React;
 	var PropTypes = _React.PropTypes;
+
 
 	var tabBarExtraContentStyle = {
 		float: 'right'
@@ -150,6 +151,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			this.props.onTabClick(key);
 		},
 
+
 		// work around eslint warning
 		setNextPrev: function setNextPrev(nextPrev, callback) {
 			this.setState(nextPrev, callback);
@@ -282,8 +284,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			if (tabMovingDirection) {
 				inkBarClass += ' ' + prefixCls + '-ink-bar-transition-' + tabMovingDirection;
 			}
-			var nextButton = undefined;
-			var prevButton = undefined;
+			var nextButton = void 0;
+			var prevButton = void 0;
 
 			var showNextPrev = state.prev || state.next;
 
@@ -356,7 +358,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		}
 	});
 	function getDefaultActiveKey(props) {
-		var activeKey = undefined;
+		var activeKey = void 0;
 		React.Children.forEach(props.children, function (child) {
 			if (!activeKey && !child.props.disabled) {
 				activeKey = child.key;
@@ -392,7 +394,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		},
 		getInitialState: function getInitialState() {
 			var props = this.props;
-			var activeKey = undefined;
+			var activeKey = void 0;
 			if ('activeKey' in props) {
 				activeKey = props.activeKey;
 			} else if ('defaultActiveKey' in props) {
@@ -415,7 +417,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					return;
 				}
 			}
-			var found = undefined;
+			var found = void 0;
 			React.Children.forEach(nextProps.children, function (child) {
 				if (child.key === newActiveKey) {
 					found = true;
@@ -576,7 +578,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			}
 			var animation = this.props.animation;
 			var tabPanes = this.getTabPanes();
-			var transitionName = undefined;
+			var transitionName = void 0;
 			transitionName = props.transitionName && props.transitionName[tabMovingDirection || 'backward'];
 			if (!transitionName && animation) {
 				transitionName = prefixCls + '-' + animation + '-' + (tabMovingDirection || 'backward');
@@ -635,4 +637,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 	Tabs.TabPane = TabPane;
 	RC.Tabs = Tabs;
-})(Smart.RC);
+}(Smart.RC);

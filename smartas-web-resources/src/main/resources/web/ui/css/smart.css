@@ -5330,6 +5330,7 @@ textarea.ant-time-picker-input {
 }
 .ant-table-body {
   transition: opacity 0.3s ease;
+  overflow: auto;
 }
 .ant-table table {
   width: 100%;

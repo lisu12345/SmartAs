@@ -1,17 +1,17 @@
 'use strict';
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 /**
  * align dom node flexibly
  * @author yiminghe@gmail.com
  */
 
-+(function (RC) {
++function (RC) {
 
   var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
 
-  var getComputedStyleX = undefined;
+  var getComputedStyleX = void 0;
 
   function css(el, name, v) {
     var value = v;
@@ -34,9 +34,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   }
 
   function getClientPosition(elem) {
-    var box = undefined;
-    var x = undefined;
-    var y = undefined;
+    var box = void 0;
+    var x = void 0;
+    var y = void 0;
     var doc = elem.ownerDocument;
     var body = doc.body;
     var docElem = doc && doc.documentElement;
@@ -218,7 +218,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }
     var old = getOffset(elem);
     var ret = {};
-    var key = undefined;
+    var key = void 0;
     for (key in offset) {
       if (offset.hasOwnProperty(key)) {
         var dir = getOffsetDirection(key, option);
@@ -252,7 +252,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   function swap(elem, options, callback) {
     var old = {};
     var style = elem.style;
-    var name = undefined;
+    var name = void 0;
 
     // Remember the old values, and insert the new ones
     for (name in options) {
@@ -274,14 +274,14 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   function getPBMWidth(elem, props, which) {
     var value = 0;
-    var prop = undefined;
-    var j = undefined;
-    var i = undefined;
+    var prop = void 0;
+    var j = void 0;
+    var i = void 0;
     for (j = 0; j < props.length; j++) {
       prop = props[j];
       if (prop) {
         for (i = 0; i < which.length; i++) {
-          var cssProp = undefined;
+          var cssProp = void 0;
           if (prop === 'border') {
             cssProp = prop + which[i] + 'Width';
           } else {
@@ -387,7 +387,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       args[_key] = arguments[_key];
     }
 
-    var val = undefined;
+    var val = void 0;
     var elem = args[0];
     // in case elem is window
     // elem.offsetWidth === undefined
@@ -454,7 +454,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     each: each,
     css: css,
     clone: function clone(obj) {
-      var i = undefined;
+      var i = void 0;
       var ret = {};
       for (i in obj) {
         if (obj.hasOwnProperty(i)) {
@@ -520,7 +520,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     // 统一的 offsetParent 方法
     var doc = element.ownerDocument;
     var body = doc.body;
-    var parent = undefined;
+    var parent = void 0;
     var positionStyle = utils.css(element, 'position');
     var skipStatic = positionStyle === 'fixed' || positionStyle === 'absolute';
 
@@ -589,9 +589,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       bottom: Infinity
     };
     var el = getOffsetParent(element);
-    var scrollX = undefined;
-    var scrollY = undefined;
-    var winSize = undefined;
+    var scrollX = void 0;
+    var scrollY = void 0;
+    var winSize = void 0;
     var doc = element.ownerDocument;
     var win = doc.defaultView || doc.parentWindow;
     var body = doc.body;
@@ -637,9 +637,9 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   }
 
   function getRegion(node) {
-    var offset = undefined;
-    var w = undefined;
-    var h = undefined;
+    var offset = void 0;
+    var w = void 0;
+    var h = void 0;
     if (!utils.isWindow(node) && node.nodeType !== 9) {
       offset = utils.offset(node);
       w = utils.outerWidth(node);
@@ -667,8 +667,8 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     var H = align.charAt(1);
     var w = region.width;
     var h = region.height;
-    var x = undefined;
-    var y = undefined;
+    var x = void 0;
+    var y = void 0;
 
     x = region.left;
     y = region.top;
@@ -692,10 +692,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   }
 
   function getElFuturePos(elRegion, refNodeRegion, points, offset, targetOffset) {
-    var xy = undefined;
-    var diff = undefined;
-    var p1 = undefined;
-    var p2 = undefined;
+    var xy = void 0;
+    var diff = void 0;
+    var p1 = void 0;
+    var p2 = void 0;
 
     xy = {
       left: elRegion.left,
@@ -739,7 +739,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   }
 
   function convertOffset(str, offsetLen) {
-    var n = undefined;
+    var n = void 0;
     if (/%$/.test(str)) {
       n = parseInt(str.substring(0, str.length - 1), 10) / 100 * offsetLen;
     } else {
@@ -873,4 +873,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
    *  2011-07-13 yiminghe@gmail.com note:
    *   - 增加智能对齐，以及大小调整选项
    **/
-})(Smart.RC);
+}(Smart.RC);

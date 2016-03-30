@@ -1,10 +1,10 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-+(function (RC) {
++function (RC) {
   var PropTypes = React.PropTypes;
   var findDOMNode = ReactDOM.findDOMNode;
   var _ref = _;
@@ -15,6 +15,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   var Animate = RC.Animate;
   var Dom = Util.Dom;
   var createChainedFunction = Util.createChainedFunction;
+
 
   function isPointsEq(a1, a2) {
     return a1[0] === a2[0] && a1[1] === a2[1];
@@ -230,7 +231,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     },
     getInitialState: function getInitialState() {
       var props = this.props;
-      var popupVisible = undefined;
+      var popupVisible = void 0;
       if ('popupVisible' in props) {
         popupVisible = !!props.popupVisible;
       } else {
@@ -256,7 +257,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       var props = this.props;
       var state = this.state;
       if (this.popupRendered) {
-        var _ret = (function () {
+        var _ret = function () {
           var self = _this;
           ReactDOM.unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function renderPopup() {
             if (this.isMounted()) {
@@ -275,7 +276,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
                 _this.touchOutsideHandler = Dom.addEventListener(document, 'touchstart', _this.onDocumentClick);
               }
               return {
-                v: undefined
+                v: void 0
               };
             }
           }
@@ -285,7 +286,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             _this.clickOutsideHandler = null;
             _this.touchOutsideHandler = null;
           }
-        })();
+        }();
 
         if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
       }
@@ -335,7 +336,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     onClick: function onClick(event) {
       // focus will trigger click
       if (this.focusTime) {
-        var preTime = undefined;
+        var preTime = void 0;
         if (this.preClickTime && this.preTouchTime) {
           preTime = Math.min(this.preClickTime, this.preTouchTime);
         } else if (this.preClickTime) {
@@ -478,7 +479,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       }
 
       ALL_HANDLERS.forEach(function (handler) {
-        var newFn = undefined;
+        var newFn = void 0;
         if (props[handler] && newChildProps[handler]) {
           newFn = createChainedFunction(props[handler], newChildProps[handler]);
         } else {
@@ -494,4 +495,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
   });
 
   RC.Trigger = Trigger;
-})(Smart.RC);
+}(Smart.RC);

@@ -163,7 +163,7 @@
 					columns={columns}
 					rownumbers={rownumbers}
 					dataSource={data} 
-					pagination={pagination} />
+					pagination={pagination} height={this.props.height} />
 				</div>
 			);
 		}

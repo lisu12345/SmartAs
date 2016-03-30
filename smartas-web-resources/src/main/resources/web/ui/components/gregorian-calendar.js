@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var Locale = RC.Locale;
 	var Util = RC.Util;
 	var warning = Util.warning;
@@ -164,15 +164,15 @@
 	}
 
 	function getGregorianYearFromFixedDate(fixedDate) {
-		var d0 = undefined;
-		var d1 = undefined;
-		var d2 = undefined;
-		var d3 = undefined;
-		var n400 = undefined;
-		var n100 = undefined;
-		var n4 = undefined;
-		var n1 = undefined;
-		var year = undefined;
+		var d0 = void 0;
+		var d1 = void 0;
+		var d2 = void 0;
+		var d3 = void 0;
+		var n400 = void 0;
+		var n100 = void 0;
+		var n4 = void 0;
+		var n1 = void 0;
+		var year = void 0;
 		d0 = fixedDate - 1;
 
 		n400 = floor(d0 / DAYS_OF_400YEAR);
@@ -219,6 +219,7 @@
 			return x - y * floor(x / y);
 		},
 
+
 		// month: 0 based
 		getFixedDate: function getFixedDate(year, month, dayOfMonth) {
 			var prevYear = year - 1;
@@ -231,7 +232,7 @@
 			var isLeap = exports.isLeapYear(year);
 			var ACCUMULATED_DAYS = isLeap ? ACCUMULATED_DAYS_IN_MONTH_LEAP : ACCUMULATED_DAYS_IN_MONTH;
 			var daysDiff = fixedDate - jan1;
-			var month = undefined;
+			var month = void 0;
 
 			for (var i = 0; i < ACCUMULATED_DAYS.length; i++) {
 				if (ACCUMULATED_DAYS[i] <= daysDiff) {
@@ -517,6 +518,7 @@
 			return _isLeapYear(this.getYear());
 		},
 
+
 		/*
    * Return local info for current date instance
    * @returns {Object}
@@ -524,6 +526,7 @@
 		getLocale: function getLocale() {
 			return this.locale;
 		},
+
 
 		/*
    * Returns the minimum value for
@@ -549,6 +552,7 @@
 			throw new Error('minimum value not defined!');
 		},
 
+
 		/*
    * Returns the maximum value for the given calendar field
    * of this GregorianCalendar instance.
@@ -562,7 +566,7 @@
 			if (MAX_VALUES[field] !== undefined) {
 				return MAX_VALUES[field];
 			}
-			var value = undefined;
+			var value = void 0;
 			var fields = this.fields;
 			switch (field) {
 				case DAY_OF_MONTH:
@@ -602,6 +606,7 @@
 			return value;
 		},
 
+
 		/*
    * Determines if the given calendar field has a value set,
    * including cases that the value has been set by internal fields calculations
@@ -612,6 +617,7 @@
 		isSet: function isSet(field) {
 			return this.fields[field] !== undefined;
 		},
+
 
 		/*
    * Converts the time value (millisecond offset from the Epoch)
@@ -695,13 +701,14 @@
 			this.fieldsComputed = true;
 		},
 
+
 		/*
    * Converts calendar field values to the time value
    * (millisecond offset from the Epoch).
    * @protected
    */
 		computeTime: function computeTime() {
-			var year = undefined;
+			var year = void 0;
 			var fields = this.fields;
 			if (this.isSet(YEAR)) {
 				year = fields[YEAR];
@@ -727,6 +734,7 @@
 			this.time = millis;
 			this.computeFields();
 		},
+
 
 		/*
    * Fills in any unset fields in the calendar fields. First,
@@ -768,7 +776,7 @@
 			// Get the fixed date since Jan 1, 1 (Gregorian). We are on
 			// the first day of either `month' or January in 'year'.
 			var fixedDate = Utils.getFixedDate(year, month, 1);
-			var firstDayOfWeek = undefined;
+			var firstDayOfWeek = void 0;
 			var dayOfWeek = self.firstDayOfWeek;
 
 			if (self.isSet(DAY_OF_WEEK)) {
@@ -794,7 +802,7 @@
 
 						fixedDate = firstDayOfWeek + 7 * (fields[WEEK_OF_MONTH] - 1);
 					} else {
-						var dowim = undefined;
+						var dowim = void 0;
 						if (self.isSet(DAY_OF_WEEK_IN_MONTH)) {
 							dowim = fields[DAY_OF_WEEK_IN_MONTH];
 						} else {
@@ -828,6 +836,7 @@
 			return fixedDate;
 		},
 
+
 		/*
    * Returns this Calendar's time value in milliseconds
    * @member Date.Gregorian
@@ -840,6 +849,7 @@
 			return this.time;
 		},
 
+
 		/*
    * Sets this Calendar's current time from the given long value.
    * @param time the new time in UTC milliseconds from the epoch.
@@ -850,6 +860,7 @@
 			this.complete();
 		},
 
+
 		/*
    * Returns the value of the given calendar field.
    * @param field the given calendar field.
@@ -859,6 +870,7 @@
 			this.complete();
 			return this.fields[field];
 		},
+
 
 		/*
    * Returns the year of the given calendar field.
@@ -950,6 +962,7 @@
 			}
 			this.time = undefined;
 		},
+
 
 		/*
    * Set the year of the given calendar field.
@@ -1098,6 +1111,7 @@
 			}
 		},
 
+
 		/*
    * add the year of the given calendar field.
    * @method addYear
@@ -1182,6 +1196,7 @@
 			return min + (diff + amount + range) % range;
 		},
 
+
 		/*
    * Adds a signed amount to the specified calendar field without changing larger fields.
    * A negative roll amount means to subtract from field without changing
@@ -1228,6 +1243,7 @@
 			}
 		},
 
+
 		/*
    * keep field stable.
    *
@@ -1246,6 +1262,7 @@
 					break;
 			}
 		},
+
 
 		/*
    * roll the year of the given calendar field.
@@ -1339,6 +1356,7 @@
 			}
 		},
 
+
 		/*
    * get current date instance's timezone offset
    * @returns {Number}
@@ -1346,6 +1364,7 @@
 		getTimezoneOffset: function getTimezoneOffset() {
 			return this.timezoneOffset;
 		},
+
 
 		/*
    * set current date instance's timezone offset
@@ -1357,6 +1376,7 @@
 			}
 		},
 
+
 		/*
    * set first day of week for current date instance
    */
@@ -1367,6 +1387,7 @@
 			}
 		},
 
+
 		/*
    * Gets what the first day of the week is; e.g., SUNDAY in the U.S., MONDAY in France.
    * @returns {Number} the first day of the week.
@@ -1374,6 +1395,7 @@
 		getFirstDayOfWeek: function getFirstDayOfWeek() {
 			return this.firstDayOfWeek;
 		},
+
 
 		/*
    * Sets what the minimal days required in the first week of the year are; For example,
@@ -1389,6 +1411,7 @@
 			}
 		},
 
+
 		/*
    * Gets what the minimal days required in the first week of the year are; e.g.,
    * if the first week is defined as one that contains the first day of the first month of a year,
@@ -1399,6 +1422,7 @@
 		getMinimalDaysInFirstWeek: function getMinimalDaysInFirstWeek() {
 			return this.minimalDaysInFirstWeek;
 		},
+
 
 		/*
    * Returns the number of weeks in the week year
@@ -1424,6 +1448,7 @@
 			gc.setWeekDate(weekYear, 2, this.get(DAY_OF_WEEK));
 			return gc.getActualMaximum(WEEK_OF_YEAR);
 		},
+
 
 		/*
    * Returns the week year represented by this GregorianCalendar.
@@ -1503,6 +1528,7 @@
 			return cal;
 		},
 
+
 		/*
    * Compares this GregorianCalendar to the specified Object.
    * The result is true if and only if the argument is a GregorianCalendar object
@@ -1529,6 +1555,7 @@
 			}
 			return d1Day - d2Day;
 		},
+
 
 		/*
    * Sets all the calendar field values or specified field and the time value
@@ -1958,8 +1985,8 @@
 	}
 
 	function formatField(field, count, locale, calendar) {
-		var current = undefined;
-		var value = undefined;
+		var current = void 0;
+		var value = void 0;
 		switch (field) {
 			case 'G':
 				value = calendar.getYear() > 0 ? 1 : 0;
@@ -2041,7 +2068,7 @@
 	function matchField(dateStr, startIndex, matches) {
 		var matchedLen = -1;
 		var index = -1;
-		var i = undefined;
+		var i = void 0;
 		var len = matches.length;
 		for (i = 0; i < len; i++) {
 			var m = matches[i];
@@ -2058,8 +2085,8 @@
 	}
 
 	function getLeadingNumberLen(str) {
-		var i = undefined;
-		var c = undefined;
+		var i = void 0;
+		var c = void 0;
 		var len = str.length;
 		for (i = 0; i < len; i++) {
 			c = str.charAt(i);
@@ -2072,7 +2099,7 @@
 
 	function matchNumber(dateStr, startIndex, count, obeyCount) {
 		var str = dateStr;
-		var n = undefined;
+		var n = void 0;
 		if (obeyCount) {
 			if (dateStr.length < startIndex + count) {
 				return null;
@@ -2095,9 +2122,9 @@
 	}
 
 	function parseField(calendar, dateStr, startIndex_, field, count, obeyCount, tmp) {
-		var match = undefined;
-		var year = undefined;
-		var hour = undefined;
+		var match = void 0;
+		var year = void 0;
+		var hour = void 0;
 		var startIndex = startIndex_;
 		if (dateStr.length <= startIndex) {
 			return startIndex;
@@ -2130,7 +2157,7 @@
 				}
 				break;
 			case 'M':
-				var month = undefined;
+				var month = void 0;
 				if (count >= 3) {
 					match = matchField(dateStr, startIndex, locale[count === 3 ? 'shortMonths' : 'months']);
 					if (match) {
@@ -2248,7 +2275,7 @@
 			if (!calendar.isGregorianCalendar) {
 				throw new Error('calendar must be type of GregorianCalendar');
 			}
-			var i = undefined;
+			var i = void 0;
 			var ret = [];
 			var pattern = this.pattern;
 			var len = pattern.length;
@@ -2263,6 +2290,7 @@
 			return ret.join('');
 		},
 
+
 		/*
    * parse a formatted string of GregorianDate instance according to specified pattern
    * @param {String} dateStr formatted string of GregorianDate
@@ -2272,8 +2300,8 @@
 			var option = option_ || {};
 			var calendarLocale = option.locale;
 			var calendar = new GregorianCalendar(calendarLocale);
-			var i = undefined;
-			var j = undefined;
+			var i = void 0;
+			var j = void 0;
 			var tmp = {};
 			var obeyCount = option.obeyCount || false;
 			var dateStrLen = dateStr.length;
@@ -2286,8 +2314,8 @@
 			loopPattern: {
 				for (i = 0; errorIndex < 0 && i < len; i++) {
 					var comp = pattern[i];
-					var text = undefined;
-					var textLen = undefined;
+					var text = void 0;
+					var textLen = void 0;
 					oldStartIndex = startIndex;
 					text = comp.text;
 					if (text) {
@@ -2349,6 +2377,7 @@
 			return this.getDateTimeInstance(DateTimeStyle.SHORT, DateTimeStyle.SHORT, locale);
 		},
 
+
 		/*
    * get a formatter instance of specified date style.
    * @param {Date.Formatter.Style} dateStyle date format style
@@ -2359,6 +2388,7 @@
 		getDateInstance: function getDateInstance(dateStyle, locale) {
 			return this.getDateTimeInstance(dateStyle, undefined, locale);
 		},
+
 
 		/*
    * get a formatter instance of specified date style and time style.
@@ -2392,6 +2422,7 @@
 			return new DateTimeFormat(pattern, locale);
 		},
 
+
 		/*
    * get a formatter instance of specified time style.
    * @param {Date.Formatter.Style} timeStyle time format style
@@ -2407,4 +2438,4 @@
 	DateTimeFormat.version = '2.0';
 
 	RC.DateTimeFormat = DateTimeFormat;
-})(Smart.RC);
+}(Smart.RC);

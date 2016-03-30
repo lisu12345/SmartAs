@@ -6,7 +6,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var _ref = _;
   var noop = _ref.noop;
   var classNames = RC.classNames;
@@ -17,6 +17,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _React = React;
   var Component = _React.Component;
   var PropTypes = _React.PropTypes;
+
 
   var Operation = React.createClass({
     displayName: 'Operation',
@@ -45,6 +46,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var leftActive = _props.leftActive;
       var rightActive = _props.rightActive;
       var className = _props.className;
+
 
       var moveToLeftButton = React.createElement(
         Button,
@@ -384,6 +386,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var targetKeys = _props4.targetKeys;
       var dataSource = _props4.dataSource;
 
+
       var leftDataSource = [].concat(_toConsumableArray(dataSource));
       var rightDataSource = [];
 
@@ -436,12 +439,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var leftCheckedKeys = _state2.leftCheckedKeys;
       var rightCheckedKeys = _state2.rightCheckedKeys;
 
+
       var dataSource = direction === 'left' ? leftDataSource : rightDataSource;
       var filter = direction === 'left' ? leftFilter : rightFilter;
       var checkedKeys = direction === 'left' ? leftCheckedKeys : rightCheckedKeys;
       var filteredDataSource = this.filterDataSource(dataSource, filter);
 
-      var globalCheckStatus = undefined;
+      var globalCheckStatus = void 0;
 
       if (checkedKeys.length > 0) {
         if (checkedKeys.length < filteredDataSource.length) {
@@ -504,7 +508,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var rightCheckedKeys = _state4.rightCheckedKeys;
 
       var holder = direction === 'left' ? leftCheckedKeys : rightCheckedKeys;
-      var index = undefined;
+      var index = void 0;
       holder.forEach(function (key, i) {
         if (key === selectedItem.key) {
           index = i;
@@ -607,4 +611,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   Transfer.Search = Search;
 
   UI.Transfer = Transfer;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

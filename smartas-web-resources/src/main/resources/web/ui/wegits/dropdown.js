@@ -4,11 +4,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI, RC) {
++function (UI, RC) {
 	var Dropdown = RC.Dropdown;
 	var Button = UI.Button;
 	var ButtonGroup = UI.ButtonGroup;
 	var Icon = UI.Icon;
+
 
 	var AntDropdown = React.createClass({
 		displayName: 'AntDropdown',
@@ -89,4 +90,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 	UI.Dropdown = AntDropdown;
 	UI.DropdownButton = DropdownButton;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

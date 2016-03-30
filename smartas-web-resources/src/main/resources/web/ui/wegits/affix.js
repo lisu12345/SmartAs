@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (UI) {
++function (UI) {
 		function getScroll(w, top) {
 				var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
 				var method = 'scroll' + (top ? 'Top' : 'Left');
@@ -35,6 +35,7 @@
 								offset: 0
 						};
 				},
+
 
 				propTypes: {
 						offset: React.PropTypes.number
@@ -101,4 +102,4 @@
 						);
 				}
 		});
-})(Smart.UI);
+}(Smart.UI);

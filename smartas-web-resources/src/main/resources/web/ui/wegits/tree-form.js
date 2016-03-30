@@ -1,6 +1,6 @@
 'use strict';
 
-+(function (UI, RC) {
++function (UI, RC) {
 	var Tree = UI.Tree;
 	var TreeNode = UI.TreeNode;
 	var ButtonGroup = UI.ButtonGroup;
@@ -8,6 +8,7 @@
 	var Popconfirm = UI.Popconfirm;
 	var _React = React;
 	var PropTypes = _React.PropTypes;
+
 
 	var Nav = React.createClass({
 		displayName: 'Nav',
@@ -40,7 +41,7 @@
 			var treeData = this.state.treeData;
 
 			if (key && key > 0) {
-				service.get(key, (function (data) {
+				service.get(key, function (data) {
 					//如果查询不到结果，需要同步树结构？？
 					if (data) {
 						var index = _.findIndex(treeData, { id: data[parentKey] });
@@ -48,7 +49,7 @@
 						return;
 					}
 					this.props.onSelect({ id: -9999 });
-				}).bind(this));
+				}.bind(this));
 				return;
 			}
 			this.props.onSelect({ id: -9999 });
@@ -65,7 +66,7 @@
 			var nameKey = _props2.nameKey;
 			var snKey = _props2.snKey;
 
-			service.subscribe((function (action) {
+			service.subscribe(function (action) {
 				var type = action.type,
 				    data = action.data;
 				var treeData = null;
@@ -84,10 +85,10 @@
 				treeData != null && this.setState({
 					treeData: orderBy(treeData)
 				});
-			}).bind(this));
+			}.bind(this));
 
 			//获取导航树
-			service.list((function (data) {
+			service.list(function (data) {
 				//提取需要的属性
 				//data = _.map(data,function(a){
 				//	return _.pick(a,[idKey,parentKey,nameKey,snKey]);
@@ -97,7 +98,7 @@
 				this.setState({
 					treeData: orderBy(data)
 				});
-			}).bind(this));
+			}.bind(this));
 		},
 		render: function render() {
 			var _props3 = this.props;
@@ -186,10 +187,10 @@
 			var id = this.state.data.id;
 			var service = this.props.service;
 
-			service.remove(id, (function (data) {
+			service.remove(id, function (data) {
 				service.dispatch('remove', id);
 				this.setState({ data: { id: -9999 } });
-			}).bind(this));
+			}.bind(this));
 		},
 		handleSubmit: function handleSubmit(e) {
 			e.preventDefault();
@@ -291,4 +292,4 @@
 	});
 
 	UI.TreeForm = TreeForm;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

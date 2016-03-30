@@ -1,6 +1,6 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -13,8 +13,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //export default Form;
-+(function (UI, RC) {
++function (UI, RC) {
 	var createDOMForm = RC.createDOMForm;
+
 
 	var ValueMixin = {
 		setValue: function setValue(field, e) {
@@ -45,7 +46,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}).join(' ');
 	}
 
-	var FormItem = (function (_React$Component) {
+	var FormItem = function (_React$Component) {
 		_inherits(FormItem, _React$Component);
 
 		function FormItem() {
@@ -225,7 +226,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return FormItem;
-	})(React.Component);
+	}(React.Component);
 
 	FormItem.propTypes = {
 		prefixCls: React.PropTypes.string,
@@ -249,7 +250,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		form: React.PropTypes.object
 	};
 
-	var Form = (function (_React$Component2) {
+	var Form = function (_React$Component2) {
 		_inherits(Form, _React$Component2);
 
 		function Form() {
@@ -285,7 +286,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Form;
-	})(React.Component);
+	}(React.Component);
 
 	Form.propTypes = {
 		prefixCls: React.PropTypes.string,
@@ -329,4 +330,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	Form.Input = UI.Input;
 	UI.Form = Form;
 	UI.FormItem = FormItem;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

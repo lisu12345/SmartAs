@@ -6,11 +6,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-+(function (UI, RC) {
++function (UI, RC) {
   var InputNumber = RC.InputNumber;
   var classNames = RC.classNames;
   var _ref = _;
   var noop = _ref.noop;
+
 
   var AntInputNumber = React.createClass({
     displayName: 'AntInputNumber',
@@ -37,4 +38,4 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
   });
 
   UI.InputNumber = AntInputNumber;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

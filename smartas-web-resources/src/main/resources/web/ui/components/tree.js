@@ -1,12 +1,12 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -17,7 +17,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //v1.1.0 - 2016.2.14
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var assign = _ref.assign;
@@ -26,8 +26,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	var _React = React;
 	var PropTypes = _React.PropTypes;
 
+
 	function browser(ua) {
-		var tem = undefined;
+		var tem = void 0;
 		var M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
 		if (/trident/i.test(M[1])) {
 			tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
@@ -245,7 +246,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		handleCheckState(treeNodesStates, filterMinPosition(checkedPosition.sort()), true);
 
 		if (!checkIt && unCheckKey) {
-			var pos = undefined;
+			var pos = void 0;
 			Object.keys(treeNodesStates).forEach(function (item) {
 				var itemObj = treeNodesStates[item];
 				if (itemObj.key === unCheckKey) {
@@ -260,7 +261,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		return getCheckKeys(treeNodesStates);
 	}
 
-	var Tree = (function (_React$Component) {
+	var Tree = function (_React$Component) {
 		_inherits(Tree, _React$Component);
 
 		function Tree(props) {
@@ -475,7 +476,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var selectedKeys = [].concat(_toConsumableArray(this.state.selectedKeys));
 				var eventKey = treeNode.props.eventKey;
 				var index = selectedKeys.indexOf(eventKey);
-				var selected = undefined;
+				var selected = void 0;
 				if (index !== -1) {
 					selected = false;
 					selectedKeys.splice(index, 1);
@@ -646,7 +647,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				var key = treeNode.props.eventKey;
 				var expandedKeys = this.state.expandedKeys;
 				var expandedIndex = expandedKeys.indexOf(key);
-				var exKeys = undefined;
+				var exKeys = void 0;
 				if (expandedIndex > -1 && !expand) {
 					exKeys = [].concat(_toConsumableArray(expandedKeys));
 					exKeys.splice(expandedIndex, 1);
@@ -732,7 +733,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return Tree;
-	})(React.Component);
+	}(React.Component);
 
 	Tree.propTypes = {
 		prefixCls: PropTypes.string,
@@ -798,7 +799,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 	var defaultTitle = '---';
 
-	var TreeNode = (function (_React$Component2) {
+	var TreeNode = function (_React$Component2) {
 		_inherits(TreeNode, _React$Component2);
 
 		function TreeNode(props) {
@@ -982,7 +983,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 				}
 				var children = props.children;
 				var newChildren = children;
-				var allTreeNode = undefined;
+				var allTreeNode = void 0;
 				if (Array.isArray(children)) {
 					allTreeNode = children.every(function (item) {
 						return item.type === TreeNode;
@@ -1140,7 +1141,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}]);
 
 		return TreeNode;
-	})(React.Component);
+	}(React.Component);
 
 	TreeNode.isTreeNode = 1;
 
@@ -1161,4 +1162,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	Tree.TreeNode = TreeNode;
 	RC.TreeNode = TreeNode;
 	RC.Tree = Tree;
-})(Smart.RC);
+}(Smart.RC);

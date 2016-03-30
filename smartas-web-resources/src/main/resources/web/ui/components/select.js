@@ -1,10 +1,10 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12,7 +12,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var Menu = RC.Menu;
@@ -28,6 +28,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	var PropTypes = _React.PropTypes;
 	var _ReactDOM = ReactDOM;
 	var findDOMNode = _ReactDOM.findDOMNode;
+
 
 	function getValuePropValue(child) {
 		var props = child.props;
@@ -92,7 +93,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		return selectedKeys;
 	}
 
-	var OptGroup = (function (_React$Component) {
+	var OptGroup = function (_React$Component) {
 		_inherits(OptGroup, _React$Component);
 
 		function OptGroup() {
@@ -102,9 +103,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}
 
 		return OptGroup;
-	})(React.Component);
+	}(React.Component);
 
-	var Option = (function (_React$Component2) {
+	var Option = function (_React$Component2) {
 		_inherits(Option, _React$Component2);
 
 		function Option() {
@@ -114,7 +115,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		}
 
 		return Option;
-	})(React.Component);
+	}(React.Component);
 
 	var FilterMixin = {
 		filterOption: function filterOption(input, child) {
@@ -259,7 +260,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 			var onMenuSelect = props.onMenuSelect;
 
 			if (menuItems && menuItems.length) {
-				var _ret = (function () {
+				var _ret = function () {
 					var menuProps = {};
 					if (multiple) {
 						menuProps.onDeselect = onMenuDeselect;
@@ -317,7 +318,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 							clonedMenuItems
 						)
 					};
-				})();
+				}();
 
 				if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 			}
@@ -580,6 +581,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 		onDropdownVisibleChange: function onDropdownVisibleChange(open) {
 			this.setOpenState(open);
 		},
+
 
 		// combobox ignore
 		onKeyDown: function onKeyDown(event) {
@@ -1003,4 +1005,4 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 	Select.Option = Option;
 	Select.OptGroup = OptGroup;
 	RC.Select = Select;
-})(Smart.RC);
+}(Smart.RC);

@@ -113,7 +113,7 @@ install("web.security.role",function($S){
 
   						<div className="tab-content">
     						<div role="tabpanel" className="tab-pane fade in active" id="home">
-								<Grid rowKey='id' columns={columns} service={pkg.service} title='权限列表' />
+								<Grid rowKey='id' height={303} columns={columns} service={pkg.service} title='权限列表' />
 							</div>
    							<div role="tabpanel" className="tab-pane fade full-height" id="settings">
 							  <Edit id={this.state.id} name={this.state.name}/>

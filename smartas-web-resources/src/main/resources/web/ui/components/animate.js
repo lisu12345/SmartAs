@@ -2,11 +2,12 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var noop = _ref.noop;
 	var cssAnimate = RC.cssAnimate;
 	var isCssAnimationSupported = cssAnimate.isCssAnimationSupported;
+
 
 	var animUtil = {
 		isAppearSupported: function isAppearSupported(props) {
@@ -279,7 +280,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			if (showProp) {
 				currentChildren.forEach(function (currentChild) {
 					var nextChild = findChildInChildrenByKey(nextChildren, currentChild.key);
-					var newChild = undefined;
+					var newChild = void 0;
 					if ((!nextChild || !nextChild.props[showProp]) && currentChild.props[showProp]) {
 						newChild = React.cloneElement(nextChild || currentChild, _defineProperty({}, showProp, true));
 					} else {
@@ -477,4 +478,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	});
 
 	RC.Animate = Animate;
-})(Smart.RC);
+}(Smart.RC);

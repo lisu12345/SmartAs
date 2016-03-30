@@ -2,9 +2,10 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Tooltip = RC.Tooltip;
   var getPlacements = UI.getPlacements;
+
 
   var placements = getPlacements({
     verticalArrowShift: 8
@@ -29,7 +30,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       this.setState({ visible: visible });
     },
     render: function render() {
-      var transitionName = ({
+      var transitionName = {
         top: 'zoom-down',
         bottom: 'zoom-up',
         left: 'zoom-right',
@@ -42,7 +43,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         bottomRight: 'zoom-up',
         leftBottom: 'zoom-right',
         rightBottom: 'zoom-left'
-      })[this.props.placement];
+      }[this.props.placement];
 
       // Hide tooltip when there is no title
       var visible = this.state.visible;
@@ -62,4 +63,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       );
     }
   });
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

@@ -5,7 +5,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //v0.14.1-2016.3.9
-+(function (RC) {
++function (RC) {
 	var AsyncValidate = RC.AsyncValidate;
 	var Util = RC.Util;
 	var AsyncValidator = RC.AsyncValidator;
@@ -14,6 +14,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 	var scrollIntoView = Util.scrollIntoView;
 	var _React = React;
 	var Component = _React.Component;
+
 
 	function getDisplayName(WrappedComponent) {
 		return WrappedComponent.displayName || WrappedComponent.name || 'WrappedComponent';
@@ -117,6 +118,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 		var formPropName = _option$formPropName === undefined ? 'form' : _option$formPropName;
 		var withRef = option.withRef;
 
+
 		function decorate(WrappedComponent) {
 			var Form = React.createClass({
 				displayName: 'Form',
@@ -124,7 +126,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 				mixins: mixins,
 
 				getInitialState: function getInitialState() {
-					var fields = undefined;
+					var fields = void 0;
 					if (mapPropsToFields) {
 						fields = mapPropsToFields(this.props);
 					}
@@ -219,6 +221,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 					var validateTrigger = _fieldOption$validate === undefined ? defaultValidateTrigger : _fieldOption$validate;
 					var _fieldOption$validate2 = fieldOption.validate;
 					var validate = _fieldOption$validate2 === undefined ? [] : _fieldOption$validate2;
+
 
 					var fieldMeta = this.fieldsMeta[name] || {};
 
@@ -695,7 +698,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 	function getScrollableContainer(n) {
 		var node = n;
-		var nodeName = undefined;
+		var nodeName = void 0;
 		/* eslint no-cond-assign:0 */
 		while ((nodeName = node.nodeName.toLowerCase()) !== 'body') {
 			var overflowY = computedStyle(node, 'overflowY');
@@ -720,10 +723,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 			var callback = _getParams2.callback;
 			var options = _getParams2.options;
 
+
 			function newCb(error, values) {
 				if (error) {
-					var firstNode = undefined;
-					var firstTop = undefined;
+					var firstNode = void 0;
+					var firstTop = void 0;
 					for (var name in error) {
 						if (error.hasOwnProperty(name) && error[name].instance) {
 							var node = ReactDOM.findDOMNode(error[name].instance);
@@ -757,4 +761,4 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 	RC.createForm = createForm;
 	RC.createDOMForm = createDOMForm;
-})(Smart.RC);
+}(Smart.RC);

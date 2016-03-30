@@ -2,7 +2,9 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -12,12 +14,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-+(function (UI, RC) {
++function (UI, RC) {
   var _ref = _;
   var assign = _ref.assign;
   var classNames = RC.classNames;
+
 
   function ieGT9() {
     if ((typeof document === 'undefined' ? 'undefined' : _typeof(document)) === undefined) {
@@ -34,7 +35,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     return value;
   }
 
-  var Group = (function (_React$Component) {
+  var Group = function (_React$Component) {
     _inherits(Group, _React$Component);
 
     function Group() {
@@ -59,13 +60,13 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }]);
 
     return Group;
-  })(React.Component);
+  }(React.Component);
 
   Group.propTypes = {
     children: React.PropTypes.any
   };
 
-  var Input = (function (_React$Component2) {
+  var Input = function (_React$Component2) {
     _inherits(Input, _React$Component2);
 
     function Input() {
@@ -139,7 +140,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
     }]);
 
     return Input;
-  })(React.Component);
+  }(React.Component);
 
   Input.propTypes = {
     type: React.PropTypes.string,
@@ -163,4 +164,4 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
   UI.Input = Input;
   UI.Input.Group = Group;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);

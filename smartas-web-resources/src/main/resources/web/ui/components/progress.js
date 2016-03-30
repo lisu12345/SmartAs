@@ -1,8 +1,9 @@
 'use strict';
 
-+(function (RC) {
++function (RC) {
 	var _ref = _;
 	var assign = _ref.assign;
+
 
 	var defaultProps = {
 		strokeWidth: 1,
@@ -90,4 +91,4 @@
 		Line: Line,
 		Circle: Circle
 	};
-})(Smart.RC);
+}(Smart.RC);

@@ -1,9 +1,9 @@
 "use strict";
 
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 //v0.12.12 - 2016.3.21
-+(function (Namespace) {
++function (Namespace) {
 	var logger = Log.getLogger("Smart.UI");
 	var UI = Namespace.register("Smart.UI");
 
@@ -159,7 +159,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
 	var YYYYMMDD_MATCHER = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,3}[Z\-+]?(\d{2}:?\d{2})?/;
 
-	var DateFormat = (function () {
+	var DateFormat = function () {
 		function numberToLongDay(value) {
 			// 0 to Sunday
 			// 1 to Monday
@@ -619,6 +619,6 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 				return this.format(new Date(value), format || 'MM/dd/yyyy HH:mm:ss');
 			}
 		};
-	})();
+	}();
 	UI.DateFormat = DateFormat;
-})(Smart.Namespace);
+}(Smart.Namespace);

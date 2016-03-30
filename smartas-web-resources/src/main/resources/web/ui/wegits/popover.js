@@ -2,9 +2,10 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-+(function (UI, RC) {
++function (UI, RC) {
   var Tooltip = RC.Tooltip;
   var getPlacements = UI.getPlacements;
+
 
   var placements = getPlacements();
   var prefixCls = 'ant-popover';
@@ -22,7 +23,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       };
     },
     render: function render() {
-      var transitionName = ({
+      var transitionName = {
         top: 'zoom-down',
         bottom: 'zoom-up',
         left: 'zoom-right',
@@ -35,7 +36,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         bottomRight: 'zoom-up',
         leftBottom: 'zoom-right',
         rightBottom: 'zoom-left'
-      })[this.props.placement];
+      }[this.props.placement];
 
       return React.createElement(
         Tooltip,
@@ -69,4 +70,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   });
 
   UI.Popover = Popover;
-})(Smart.UI, Smart.RC);
+}(Smart.UI, Smart.RC);
